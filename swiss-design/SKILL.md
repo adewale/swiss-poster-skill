@@ -11,13 +11,14 @@ metadata:
 
 A design system rooted in the Swiss International Style of the 1950s–60s: grotesque typography, rigorous grid, bold geometric forms, generous whitespace, and restrained color.
 
-## Five Principles
+## Six Principles
 
 1. **Grid first.** Every layout lives on a 12-column grid with an 8px base unit.
-2. **Whitespace is structure.** Generous padding and margins are not waste — they are the design.
-3. **Opacity, not hue, creates hierarchy.** Never introduce a second color to indicate text weight or importance. Use opacity.
-4. **One accent.** Each project gets exactly one accent color, used sparingly at multiple opacities.
-5. **Narrow columns.** Body text never exceeds `max-w-[60ch]`. Wider columns hurt legibility.
+2. **Mobile first, always.** Design for the smallest viewport first, then expand. Every layout must work at 320px and at 1440px. Use `sm:`, `md:`, `lg:` Tailwind prefixes systematically.
+3. **Whitespace is structure.** Generous padding and margins are not waste — they are the design.
+4. **Opacity, not hue, creates hierarchy.** Never introduce a second color to indicate text weight or importance. Use opacity.
+5. **One accent.** Each project gets exactly one accent color, used sparingly at multiple opacities.
+6. **Narrow columns.** Body text never exceeds `max-w-[60ch]`. Wider columns hurt legibility.
 
 ---
 
@@ -133,14 +134,68 @@ Ghost:   bg-[#C8102E]/10       (very light tints)
 **Grid:**
 
 ```html
-<!-- 12-column grid wrapper -->
-<div class="grid grid-cols-12 gap-8">
+<!-- 12-column grid — always mobile-first, columns collapse to full-width on small screens -->
+<div class="grid grid-cols-12 gap-4 md:gap-8">
   <div class="col-span-12 md:col-span-8">...</div>
   <div class="col-span-12 md:col-span-4">...</div>
 </div>
 ```
 
-**Max content width:** `max-w-5xl` or `max-w-6xl` with `mx-auto px-8`.
+**Max content width:** `max-w-5xl` or `max-w-6xl` with `mx-auto px-4 md:px-8`.
+
+---
+
+## Responsive Design
+
+The Swiss grid adapts fluidly across viewports. Every layout decision must be made at two scales: mobile (single column, generous vertical rhythm) and desktop (multi-column, horizontal tension).
+
+**Breakpoint strategy:**
+
+| Prefix | Width | Use for |
+| ------ | ----- | ------- |
+| (none) | 0px+ | Mobile — single column, full width |
+| `sm:` | 640px+ | Large phones, small tablets |
+| `md:` | 768px+ | Tablets, narrow desktop — introduce 2-col layouts |
+| `lg:` | 1024px+ | Desktop — full 12-col grid, max content width |
+
+**Mobile layout rules:**
+- All grid columns collapse to `col-span-12`
+- Section padding reduces: `py-16 md:py-24 lg:py-32`
+- Horizontal padding tightens: `px-4 md:px-8`
+- Display type scales down: `text-5xl md:text-7xl lg:text-8xl`
+- Multi-column nav collapses to hamburger or hidden
+- Tables scroll horizontally: wrap in `overflow-x-auto`
+- Side-by-side cards stack vertically: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+
+**Fluid type pattern:**
+
+```html
+<!-- Scale display type fluidly across viewports -->
+<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight leading-none">
+  Swiss International Style
+</h1>
+
+<!-- Or use clamp() for truly fluid scaling -->
+<h1 class="text-[clamp(2rem,6vw,5rem)] font-normal tracking-tight leading-none">
+  Swiss International Style
+</h1>
+```
+
+**Responsive section pattern:**
+
+```html
+<section class="py-16 md:py-24 lg:py-32 border-b border-stone-200 dark:border-stone-800">
+  <div class="max-w-6xl mx-auto px-4 md:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      ...
+    </div>
+  </div>
+</section>
+```
+
+**Touch targets:** All interactive elements must be at least 44×44px on mobile. Use `min-h-[44px] min-w-[44px]` for buttons and nav links.
+
+**Navigation on mobile:** Collapse to a minimal top bar. Hide secondary nav links below `md:`. Never use hamburger menus with deeply nested hierarchies — the Swiss style favors flat, clear navigation.
 
 ---
 
@@ -167,6 +222,10 @@ Every color token has a `dark:` variant. See the stone palette table above. Neve
 - **Headings are light, not bold.** `font-light` for display and h1, `font-normal` for h2–h3.
 - **No border-radius on structural elements.** Inputs, cards, and containers use `rounded-none` or at most `rounded-sm`. The Swiss style is rectilinear.
 - **Section padding is generous.** Minimum `py-16`, standard `py-24`. Never less.
+- **Every layout must work on mobile.** Default (no prefix) classes are mobile. Always add `md:` and `lg:` variants for larger viewports. Never build desktop-first and try to retrofit mobile.
+- **Tables on mobile need `overflow-x-auto`.** Never let a wide table break mobile layout.
+- **Touch targets minimum 44px.** Buttons, links, and nav items must be tappable on mobile.
+- **Fluid type, not fixed.** Use responsive type classes (`text-3xl md:text-5xl`) or `clamp()` — never a single fixed size that works only at one viewport.
 
 ---
 

@@ -97,6 +97,7 @@ const Nav = () => html`
       <a href="#type" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Type</a>
       <a href="#color" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Color</a>
       <a href="#form" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Form</a>
+      <a href="#responsive" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Responsive</a>
     </div>
     <div class="flex items-center gap-4">
       <a href="${GITHUB_URL}" target="_blank" class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">
@@ -788,13 +789,128 @@ const SectionForm = () => html`
   </div>
 </section>`
 
-// ─── Section 10: Install / Footer ────────────────────────────────────────────
+// ─── Section 10: Responsive ──────────────────────────────────────────────────
+
+const SectionResponsive = () => html`
+<section id="responsive" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 lg:py-32">
+    <div class="flex items-center gap-4 mb-16 md:mb-20">
+      <span class="text-xs font-mono text-stone-50/40">10</span>
+      <span class="text-xs tracking-widest uppercase text-stone-50/60">Responsive</span>
+      <div class="flex-1 h-px bg-stone-800"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-16 md:mb-24">
+      <div>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight leading-tight text-stone-50 mb-6">
+          Mobile first.<br>Always.
+        </h2>
+        <p class="text-lg leading-relaxed text-stone-50/70 max-w-[52ch]">
+          The Swiss grid adapts from 320px to 1440px. Default classes target mobile. Breakpoint prefixes layer in structure as the viewport widens. Never build desktop-first and retrofit mobile.
+        </p>
+      </div>
+      <div class="space-y-4">
+        ${[
+          { bp: 'none', width: '0px+',   label: 'Mobile',  desc: 'Single column. px-4. py-16. Stacked layouts.' },
+          { bp: 'sm:', width: '640px+',  label: 'Large phone', desc: 'Wider gutters. 2-col grids begin to emerge.' },
+          { bp: 'md:', width: '768px+',  label: 'Tablet',  desc: 'Multi-column. px-8. py-24. Nav links visible.' },
+          { bp: 'lg:', width: '1024px+', label: 'Desktop', desc: 'Full 12-col grid. max-w-6xl. py-32.' },
+        ].map(({ bp, width, label, desc }) => html`
+        <div class="flex items-start gap-4 border-t border-stone-800 pt-4">
+          <div class="shrink-0 w-12">
+            <code class="font-mono text-xs text-[#C8102E]">${bp || '—'}</code>
+          </div>
+          <div class="shrink-0 w-16">
+            <span class="font-mono text-xs text-stone-50/40">${width}</span>
+          </div>
+          <div>
+            <span class="text-sm font-medium text-stone-50 block">${label}</span>
+            <span class="text-sm text-stone-50/60">${desc}</span>
+          </div>
+        </div>`)}
+      </div>
+    </div>
+
+    <!-- Code examples -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-stone-800">
+      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
+        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Responsive grid</span>
+        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;div class="
+  grid
+  grid-cols-1
+  md:grid-cols-2
+  lg:grid-cols-3
+  gap-4 md:gap-8
+"&gt;</code></pre>
+      </div>
+      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
+        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Fluid type</span>
+        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;h1 class="
+  text-4xl
+  md:text-6xl
+  lg:text-7xl
+  font-normal
+  tracking-tight
+"&gt;</code></pre>
+      </div>
+      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
+        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Section wrapper</span>
+        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;section class="
+  py-16 md:py-24 lg:py-32
+  border-b border-stone-200
+  dark:border-stone-800
+"&gt;
+  &lt;div class="
+    max-w-6xl mx-auto
+    px-4 md:px-8
+  "&gt;</code></pre>
+      </div>
+      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
+        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Mobile nav</span>
+        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;!-- Show only on md+ --&gt;
+&lt;div class="hidden md:flex
+  items-center gap-6"&gt;
+  &lt;a href="#"&gt;Link&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;!-- Touch target: min 44px --&gt;
+&lt;button class="min-h-[44px]
+  px-6"&gt;</code></pre>
+      </div>
+    </div>
+
+    <!-- Gotchas row -->
+    <div class="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-stone-800">
+      ${[
+        { rule: 'Always col-span-12 on mobile', bad: 'grid-cols-3', good: 'grid-cols-1 md:grid-cols-3' },
+        { rule: 'Wrap wide tables', bad: '<table>', good: '<div class="overflow-x-auto">' },
+        { rule: '44px touch targets', bad: 'py-1 px-2', good: 'min-h-[44px] px-4' },
+        { rule: 'Reduce padding at sm', bad: 'px-8 py-24', good: 'px-4 md:px-8 py-16 md:py-24' },
+      ].map(({ rule, bad, good }) => html`
+      <div class="bg-stone-900 dark:bg-stone-950 p-6">
+        <p class="text-sm font-medium text-stone-50 mb-4 leading-snug">${rule}</p>
+        <div class="space-y-2">
+          <div class="flex items-start gap-2">
+            <span class="text-stone-50/30 text-xs mt-0.5 shrink-0">✗</span>
+            <code class="font-mono text-xs text-stone-50/40 leading-relaxed">${bad}</code>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-[#C8102E] text-xs mt-0.5 shrink-0">✓</span>
+            <code class="font-mono text-xs text-stone-50/70 leading-relaxed">${good}</code>
+          </div>
+        </div>
+      </div>`)}
+    </div>
+  </div>
+</section>`
+
+// ─── Section 11: Install ─────────────────────────────────────────────────────
 
 const SectionInstall = () => html`
 <section id="install" class="border-b border-stone-200 dark:border-stone-800">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">10</span>
+      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">11</span>
       <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Install</span>
       <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
     </div>
@@ -904,6 +1020,7 @@ app.get('*', (c) => {
     SectionType() +
     SectionColor() +
     SectionForm() +
+    SectionResponsive() +
     SectionInstall() +
     `</main>` +
     Footer() +

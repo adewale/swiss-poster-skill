@@ -69,7 +69,40 @@ Replace decorative elements with simple geometric forms:
 <div class="h-1 bg-[#C8102E] mb-8 -mx-8 -mt-8"></div>
 ```
 
-### 6. Fix dark mode
+### 6. Fix responsiveness
+
+The Swiss grid must adapt gracefully from 320px to 1440px. Check:
+
+```
+Mobile (default):   Single column. px-4. py-16. text-3xl headings.
+Tablet (md:):       2-col layouts emerge. px-8. py-24. text-5xl headings.
+Desktop (lg:):      Full 12-col grid. max-w-6xl. py-32. text-7xl display.
+```
+
+Common fixes:
+```
+Before:  grid-cols-3 gap-8
+After:   grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8
+
+Before:  text-7xl font-normal
+After:   text-4xl md:text-6xl lg:text-7xl font-normal
+
+Before:  px-8
+After:   px-4 md:px-8
+
+Before:  <table class="w-full">
+After:   <div class="overflow-x-auto"><table class="w-full min-w-[640px]">
+
+Before:  flex items-center gap-8  (nav links)
+After:   hidden md:flex items-center gap-8
+```
+
+Touch targets on mobile:
+- Buttons: minimum `min-h-[44px]`
+- Nav links: minimum `py-3` to ensure tap area
+- Never rely on hover-only states for mobile users
+
+### 7. Fix dark mode
 
 Ensure every color has a `dark:` variant. Quick audit pattern:
 - Every `bg-stone-*` should have a `dark:bg-stone-*` counterpart
@@ -151,3 +184,13 @@ Before declaring a design done:
 - [ ] IBM Plex Sans Google Fonts `<link>` is present
 - [ ] No border-radius larger than `rounded-sm` on structural elements
 - [ ] Line height on body is `leading-relaxed` or greater
+- [ ] Tested at 375px (iPhone SE) — no horizontal scroll, no broken layouts
+- [ ] Tested at 768px (tablet) — 2-col layouts appear correctly
+- [ ] Tested at 1280px (desktop) — full grid, max-width container centered
+- [ ] All grid columns have `col-span-12` mobile fallback
+- [ ] Heading type scales down on mobile (`text-3xl md:text-5xl lg:text-7xl`)
+- [ ] Section padding reduces on mobile (`py-16 md:py-24`)
+- [ ] Horizontal padding reduces on mobile (`px-4 md:px-8`)
+- [ ] All tables wrapped in `overflow-x-auto`
+- [ ] All interactive elements at least 44×44px on mobile
+- [ ] Desktop-only nav links hidden below `md:` breakpoint
