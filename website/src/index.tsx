@@ -705,10 +705,10 @@ const SectionColor = () => html`
     </div>
 
     <!-- Opacity rule callout -->
-    <div class="bg-stone-900 p-8 border-l-2 border-[#C8102E]">
-      <h3 class="text-lg font-normal text-stone-50 mb-3">The opacity rule</h3>
+    <div class="bg-stone-900 p-8 border-l-2 border-stone-600">
+      <h3 class="text-lg font-medium text-stone-50 mb-3">The opacity rule</h3>
       <p class="text-base leading-relaxed text-stone-50/70 max-w-[60ch]">
-        To make text less dominant, reduce opacity — never change the hue. <code class="font-mono text-[#C8102E]">text-stone-900/70</code> is secondary text. <code class="font-mono text-[#C8102E]">text-stone-900/50</code> is tertiary. Never use mid-scale stone values (stone-400–700) for text hierarchy.
+        To make text less dominant, reduce opacity — never change the hue. <code class="font-mono font-semibold text-stone-50">text-stone-900/70</code> is secondary text. <code class="font-mono font-semibold text-stone-50">text-stone-900/50</code> is tertiary. Never use mid-scale stone values (stone-400–700) for text hierarchy.
       </p>
     </div>
   </div>
