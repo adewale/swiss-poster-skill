@@ -1,6 +1,6 @@
 ---
 name: swiss-poster
-description: Apply a Swiss Poster design system using Tailwind CSS. Use when asked to style a webpage with dramatic, expressive, poster-inspired layouts where elements break the grid, overlap, bleed off edges, and use extreme typographic scale contrast. Implements IBM Plex Sans typography, stone color palette, opacity-based hierarchy, and bold compositional techniques drawn from Weingart, Troxler, Odermatt & Tissi, and the expressive tradition of Swiss graphic design.
+description: Apply a Swiss Poster design system using Tailwind CSS. Use when asked to style a webpage with poster-style layouts where elements break the grid, overlap, bleed off edges, and use extreme typographic scale. Implements IBM Plex Sans, stone color palette, opacity hierarchy, and compositional techniques from Weingart, Troxler, Hofmann, and Odermatt & Tissi.
 license: MIT
 metadata:
   author: adewale
@@ -9,14 +9,14 @@ metadata:
 
 # Swiss Poster Design System
 
-A design system rooted in the expressive tradition of Swiss poster design: grotesque typography at extreme scales, compositions that escape the grid, overlapping layers, diagonal energy, dramatic cropping, and bold geometric tension. Informed by Wolfgang Weingart, Niklaus Troxler, Odermatt & Tissi, Armin Hofmann, and Emil Ruder.
+A design system based on Swiss poster design from the 1950s through 1980s: grotesque type at extreme scales, layouts that break the grid, overlapping layers, diagonal energy, and cropped forms. Draws on Weingart, Troxler, Odermatt & Tissi, Hofmann, and Ruder.
 
 ## Six Principles
 
 1. **Grid as launchpad.** Start with a 12-column grid, then let key elements escape it. Oversized type, images, and color blocks should break column boundaries, overlap neighbors, or bleed off the viewport edge. The grid exists so the breakout has meaning.
 2. **Extreme scale contrast.** Place 20rem display type next to 11px labels. A single word can fill the viewport width. The tension between massive and tiny *is* the hierarchy. Never settle for moderate size differences.
 3. **Overlap and layer.** Elements should collide — text over images, type over type, color blocks overlapping content. Use `relative`/`absolute` positioning, negative margins, and z-index stacking to create depth.
-4. **Bleed and crop.** Let elements escape their containers. Type cropped by the viewport edge, images that extend past the layout, color blocks that run off-screen — these create the feeling of a composition larger than its frame.
+4. **Bleed and crop.** Let elements escape their containers. Type cropped by the viewport edge, images that extend past the layout, color blocks that run off-screen. A composition that's cut off implies it continues beyond the frame.
 5. **One accent, used boldly.** Each project gets exactly one accent color, but where the International Style uses it sparingly, poster style uses it in large, confident fields — full-width bands, oversized shapes, dramatic backgrounds.
 6. **Tension over comfort.** Asymmetric whitespace, unexpected element placement, rotated text, diagonal compositions. The layout should feel dynamic and slightly unresolved, not settled and safe.
 
@@ -67,7 +67,7 @@ The poster style uses a wider range of sizes than the International Style, and t
 - **Bold is allowed — encouraged — at display sizes.** `font-bold` and even `font-thin` (100) create dramatic weight contrast. Use bold for mega/display type that dominates the composition.
 - **Extreme size jumps.** A 20rem heading next to 11px labels is correct. Moderate size differences feel timid.
 - **Tight leading at large sizes.** Display type uses `leading-[0.85]` or `leading-none` — letters should nearly collide vertically.
-- **Type as image.** At poster scale, letterforms are graphic elements, not just text to read.
+- **Type as image.** At poster scale, letterforms become graphic elements. A single word at 20rem is a shape, a texture, a compositional anchor.
 
 ---
 

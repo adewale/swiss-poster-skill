@@ -1,6 +1,6 @@
 # swiss-poster-skill
 
-A Swiss Poster design system for AI agents. Expressive typography at extreme scales, compositions that escape the grid, overlapping layers, dramatic cropping, and bold geometric tension — expressed through Tailwind CSS.
+A Swiss Poster design system for AI agents. Huge type, grid-breaking layouts, overlapping elements, and bold color fields — all in Tailwind CSS.
 
 ## Install
 
@@ -23,7 +23,7 @@ Once installed, tell your agent to apply it:
 - "Make this look dramatic — use the Swiss Poster style"
 - "Break the grid — give this page poster energy"
 
-The agent will apply IBM Plex Sans typography at extreme scales, the stone color palette, opacity-based hierarchy, grid-breaking compositions with overlap and bleed, and bold geometric decoration.
+The agent will use IBM Plex Sans, the stone color palette, opacity-based hierarchy, and grid-breaking compositions with overlap and bleed.
 
 ## What's included
 

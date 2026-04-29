@@ -8,7 +8,7 @@ Swiss graphic design contains two distinct lineages that this system draws from:
 
 The mathematical, rational tradition. Built the foundation that poster style later broke.
 
-- **Josef Muller-Brockmann** (1914–1996) — Mathematical grid systems, Musica Viva concert posters for Tonhalle Zurich, co-editor of *Neue Grafik* journal. His concentric arcs expressing musical rhythm are the most iconic Swiss poster compositions. Author of *Grid Systems in Graphic Design* (1961).
+- **Josef Muller-Brockmann** (1914–1996) — Mathematical grid systems, Musica Viva concert posters for Tonhalle Zurich, co-editor of *Neue Grafik* journal. His concentric arcs expressing musical rhythm are the most iconic Swiss poster compositions. Author of *Grid Systems in Graphic Design* (Arthur Niggli, 1981).
 - **Richard Paul Lohse** (1902–1988) — Concrete artist and designer. Co-editor of *Neue Grafik*. Used systematic color progressions and modular grids in both art and commercial work.
 - **Carlo Vivarelli** (1919–1986) — Co-editor of *Neue Grafik*. Applied mathematical precision to exhibition and cultural posters.
 - **Hans Neuburg** (1904–1983) — Co-editor of *Neue Grafik*. Advocated for the grid as a universal design tool.
@@ -20,12 +20,12 @@ The mathematical, rational tradition. Built the foundation that poster style lat
 The expressive tradition that took the grid as a starting point and learned when to break it.
 
 - **Armin Hofmann** (1920–2020) — Basel School of Design. Master of figure-ground ambiguity, high-contrast black-and-white compositions, and abstract geometric forms as primary imagery. His posters use circles, triangles, and photographic fragments as compositional anchors at massive scale.
-- **Emil Ruder** (1914–1970) — Basel School of Design. Typographic experiments with letterspacing, leading, and the expressive potential of type as texture. Author of *Typographie* (1967). His work pushed letterforms toward abstraction while maintaining readability.
+- **Emil Ruder** (1914–1970) — Basel School of Design. Typographic experiments with letterspacing, leading, and the expressive potential of type as texture. Author of *Typographie: A Manual of Design* (Arthur Niggli, 1967). His work pushed letterforms toward abstraction while maintaining readability.
 - **Wolfgang Weingart** (b. 1941) — The "father" of New Wave typography. Student of Ruder at Basel, then teacher there. Systematically dismantled Swiss International Style conventions: layered type, extreme letterspacing, halftone dot patterns, diagonal compositions, type as texture. His letterpress experiments in *Typografische Monatsblatter* (1970s) broke every rule the Swiss style established.
 - **Niklaus Troxler** (b. 1947) — Jazz Willisau festival posters (1975–present). Pushed Swiss design into fully expressive territory: optical vibration, rhythmic repetition, hand-drawn marks mixed with precise typography, color as energy. Each poster is a unique visual invention.
 - **Siegfried Odermatt** (1926–2024) and **Rosmarie Tissi** (b. 1937) — Odermatt & Tissi. Commercial work that brought poster expressiveness to corporate design. Bold type at unexpected scales, overlapping elements, accent colors on display typography, compositions that strain at the edges of their containers.
 - **Herbert Matter** (1907–1984) — Photomontage pioneer. Swiss tourism posters (1930s) that combined extreme scale juxtaposition (giant close-up face against distant landscape), diagonal compositions, and bold sans-serif type. Bridged photography and graphic design.
-- **Max Bill** (1908–1994) — Concrete artist and designer. His work established the principle that geometric forms (circles, squares, lines) are valid compositional elements in their own right — not decoration but structure. Flat, unshaded, mathematically precise.
+- **Max Bill** (1908–1994) — Concrete artist and designer. His work established that geometric forms (circles, squares, lines) are compositional elements in their own right. Flat, unshaded, mathematically precise — structure made visible.
 
 ---
 
@@ -35,14 +35,14 @@ The expressive tradition that took the grid as a starting point and learned when
 | ---- | -------- | ---- | ------------ |
 | Musica Viva concert posters | Muller-Brockmann | 1950s–70s | Concentric arcs expressing musical rhythm. Geometric forms as primary imagery. |
 | *Neue Grafik* journal | Lohse, Muller-Brockmann, Neuburg, Vivarelli | 1958–65 | 18-issue manifesto of the Zurich school. Trilingual (German, English, French). |
-| *Grid Systems in Graphic Design* (Raster Systeme) | Muller-Brockmann | 1961 | The definitive guide to the typographic grid. Still in print. |
+| *Grid Systems in Graphic Design* (Raster Systeme) | Muller-Brockmann | 1981 | The definitive guide to the typographic grid. Arthur Niggli, Niederteufen. Still in print. ISBN 9783721201451. |
 | Neue Haas Grotesk / Helvetica | Miedinger & Hoffmann | 1957/1960 | The typeface of the International Style. Renamed Helvetica for international distribution. |
 | Univers | Frutiger | 1957 | Systematic type family favored by the Basel school. |
-| *Typographie* | Ruder | 1967 | Exploration of type as expressive medium beyond mere information carrier. |
+| *Typographie: A Manual of Design* | Ruder | 1967 | Exploration of type as expressive medium. Arthur Niggli, Teufen. ISBN 3721200438. |
 | Kunsthalle Basel posters | Hofmann | 1950s–80s | Abstract geometric compositions, figure-ground reversal, high-contrast photography as graphic element. |
 | *Typografische Monatsblatter* experiments | Weingart | 1970s | Letterpress experiments that broke Swiss conventions: layered type, halftone patterns, extreme spacing. |
 | Jazz Willisau festival posters | Troxler | 1975–present | Optical vibration, rhythmic repetition, gestural marks, color as energy. Each a unique invention. |
-| Geigy pharmaceutical posters | Various (Basel influence) | 1950s–60s | Pharmaceutical advertising elevated to art. Demonstrated that commercial work could be expressive. |
+| Geigy pharmaceutical posters | Various (Basel influence) | 1950s–60s | Pharmaceutical advertising as graphic design. Showed that commercial work could be expressive. |
 | Swiss tourism posters | Matter | 1930s | Photomontage, extreme scale juxtaposition, diagonal compositions. |
 
 ---
@@ -71,7 +71,7 @@ The expressive tradition that took the grid as a starting point and learned when
 ### Publications
 
 - *Grid Systems in Graphic Design* by Josef Muller-Brockmann (1961) — https://archive.org/details/gridsystemsingra0000muml
-- *Typographie* by Emil Ruder (1967)
+- *Typographie: A Manual of Design* by Emil Ruder (Arthur Niggli, 1967; reprinted 2001, ISBN 3721200438)
 - *My Way to Typography* by Wolfgang Weingart (2000)
 - *Neue Grafik / New Graphic Design* journal, 18 issues (1958–1965) — https://designreviewed.com/series/neue-grafik-new-graphic-design-graphisme-actuel/
 
@@ -89,7 +89,7 @@ The expressive tradition that took the grid as a starting point and learned when
 | Rotation | Never. Strictly horizontal/vertical. | Selective. Rotated labels, diagonal bars, angled type (1-2 per section). |
 | Overlap | Avoided. Clean separation. | Encouraged. Elements collide with deliberate z-order. |
 | Bleed/crop | Elements stay within containers. | Elements escape containers. Type cropped by viewport edge. |
-| Whitespace | Generous and uniform. | Generous and asymmetric. Creates tension, not just breathing room. |
+| Whitespace | Generous and uniform. | Generous and asymmetric. The empty space creates tension. |
 | Geometry | Small decorative accents. | Large compositional anchors. Shapes at 25%+ of composition area. |
 | Texture | None. Clean surfaces. | Halftone dots, line patterns, background letterforms at 8-12% opacity. |
 | Entry point | Always top-left. Orderly reading flow. | Variable. Focal point can be center, right, or off-axis. |

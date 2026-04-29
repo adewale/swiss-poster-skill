@@ -287,7 +287,7 @@ The grid exists so the breakout has meaning. These patterns let elements escape:
 
 ## Geometric Decoration — Poster Scale
 
-The poster style uses geometric forms at dramatic scale — not as subtle accents but as compositional anchors.
+The poster style uses geometric forms at dramatic scale. These are compositional anchors — large enough to organize the layout around.
 
 ```html
 <!-- Oversized background numeral (poster scale — 8–12% opacity minimum to register) -->

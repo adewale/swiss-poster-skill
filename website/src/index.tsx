@@ -22,7 +22,7 @@ const HEAD = html`<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss Poster Design System</title>
-  <meta name="description" content="A Swiss Poster design system skill for AI agents. Expressive typography at extreme scales, grid-breaking compositions, overlap, bleed, and bold geometric tension — expressed through Tailwind CSS.">
+  <meta name="description" content="A Swiss Poster design system for AI agents. Huge type, grid-breaking layouts, overlapping elements, and bold color fields — all in Tailwind CSS.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a09'/%3E%3Ccircle cx='28' cy='28' r='18' fill='%23C8102E'/%3E%3Ccircle cx='28' cy='28' r='14' fill='none' stroke='%23C8102E' stroke-width='1' opacity='0.4'/%3E%3Cline x1='0' y1='10' x2='24' y2='0' stroke='%23fafaf9' stroke-width='1.5' opacity='0.3'/%3E%3Crect x='2' y='3' width='4' height='4' fill='%23003B8E' opacity='0.6'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,8 +45,45 @@ const HEAD = html`<!DOCTYPE html>
     }
   </script>
   <style>
-    body { -webkit-font-smoothing: antialiased; }
+    :root {
+      /* Easing — natural deceleration, never bounce/elastic */
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
     html { scroll-behavior: smooth; }
+    /* Typography polish */
+    h1, h2, h3, h4 { text-wrap: balance; }
+    p { text-wrap: pretty; }
+    /* Scroll-reveal entrance animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s var(--ease-out-quart), transform 0.6s var(--ease-out-quart);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Stagger children */
+    .reveal-stagger > .reveal:nth-child(2) { transition-delay: 80ms; }
+    .reveal-stagger > .reveal:nth-child(3) { transition-delay: 160ms; }
+    .reveal-stagger > .reveal:nth-child(4) { transition-delay: 240ms; }
+    .reveal-stagger > .reveal:nth-child(5) { transition-delay: 320ms; }
+    .reveal-stagger > .reveal:nth-child(6) { transition-delay: 400ms; }
+    /* Accessibility — respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
     /* Halftone dot pattern — lithographic heritage */
     .halftone {
       background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
@@ -104,7 +141,7 @@ const HEAD = html`<!DOCTYPE html>
     })();
   </script>
 </head>
-<body class="bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-50 font-sans transition-colors duration-200">`
+<body class="bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-50 font-sans transition-[background-color,color] duration-200" style="transition-timing-function: var(--ease-out-quart)">`
 
 const FOOT = html`
   <script>
@@ -119,12 +156,26 @@ const FOOT = html`
       }
     });
     function copyInstall() {
+      var btn = document.getElementById('copy-btn');
       navigator.clipboard.writeText(document.getElementById('install-cmd').textContent).then(function() {
-        var btn = document.getElementById('copy-btn');
         btn.textContent = 'copied';
-        setTimeout(function() { btn.textContent = 'copy'; }, 2000);
+        btn.style.color = '#C8102E';
+        setTimeout(function() { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
       });
     }
+    // Scroll-reveal: IntersectionObserver with staggered entrance
+    (function() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+    })();
   </script>
 </body>
 </html>`
@@ -138,14 +189,14 @@ const Nav = () => html`
       Swiss Poster
     </a>
     <div class="hidden md:flex items-center gap-6 text-xs tracking-widest uppercase">
-      <a href="#manifesto" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Manifesto</a>
-      <a href="#scale" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Scale</a>
-      <a href="#geometry" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Geometry</a>
-      <a href="#breakout" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Breakout</a>
-      <a href="#overlap" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Overlap</a>
-      <a href="#color" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Color</a>
-      <a href="#type" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Type</a>
-      <a href="#install" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Install</a>
+      <a href="#manifesto" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Manifesto</a>
+      <a href="#scale" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Scale</a>
+      <a href="#geometry" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Geometry</a>
+      <a href="#breakout" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Breakout</a>
+      <a href="#overlap" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Overlap</a>
+      <a href="#color" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Color</a>
+      <a href="#type" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Type</a>
+      <a href="#install" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-[color] duration-150">Install</a>
     </div>
     <div class="flex items-center gap-4">
       <a href="${GITHUB_URL}" target="_blank" class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">GitHub</a>
@@ -187,20 +238,20 @@ const SectionHero = () => html`
 
   <div class="max-w-6xl mx-auto px-4 md:px-8 pb-16 md:pb-24 pt-40 md:pt-48 relative z-10 w-full">
     <div class="grid grid-cols-12 gap-4 md:gap-8">
-      <div class="col-span-12 md:col-span-9">
-        <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/50 dark:text-stone-50/50">Swiss Poster Design System — A skill for AI agents</span>
-        <div class="w-16 h-1.5 bg-[#C8102E] mt-6 mb-10"></div>
-        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] text-stone-900 dark:text-stone-50">
+      <div class="col-span-12 md:col-span-9 reveal-stagger">
+        <span class="reveal text-[11px] tracking-widest uppercase font-medium text-stone-900/50 dark:text-stone-50/50">Swiss Poster Design System — A skill for AI agents</span>
+        <div class="reveal w-16 h-1.5 bg-[#C8102E] mt-6 mb-10"></div>
+        <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] text-stone-900 dark:text-stone-50">
           Elements<br><span class="text-[#C8102E]">escape</span> the<br>grid.
         </h1>
-        <p class="text-lg md:text-xl leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-10 max-w-[52ch]">
-          A design system rooted in the expressive tradition of Swiss poster design. Extreme typographic scale, overlapping layers, compositions that bleed past their containers — taught to your AI agent through Tailwind CSS.
+        <p class="reveal text-lg md:text-xl leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-10 max-w-[52ch]">
+          Swiss poster design for your AI agent, in Tailwind CSS. Extreme typographic scale, overlapping layers, compositions that bleed past their containers.
         </p>
-        <div class="mt-12 flex flex-col sm:flex-row items-start gap-4">
+        <div class="reveal mt-12 flex flex-col sm:flex-row items-start gap-4">
           <div class="bg-stone-900 dark:bg-stone-50 text-stone-50 dark:text-stone-900 px-6 py-3 font-mono text-sm select-all">
             npx skills add adewale/swiss-poster-skill
           </div>
-          <a href="${GITHUB_URL}" target="_blank" class="px-6 py-3 border border-stone-400 dark:border-stone-600 text-stone-900/80 dark:text-stone-50/80 text-sm tracking-wide hover:border-stone-900 dark:hover:border-stone-50 transition-colors">
+          <a href="${GITHUB_URL}" target="_blank" class="px-6 py-3 border border-stone-400 dark:border-stone-600 text-stone-900/80 dark:text-stone-50/80 text-sm tracking-wide hover:border-stone-900 dark:hover:border-stone-50 transition-[border-color] duration-200" style="transition-timing-function: var(--ease-out-quart)">
             View on GitHub &#8599;
           </a>
         </div>
@@ -231,15 +282,15 @@ const SectionManifesto = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-4 md:gap-8">
-      <div class="col-span-12 md:col-span-7 relative">
+      <div class="col-span-12 md:col-span-7 relative reveal-stagger">
         <div class="absolute -left-4 md:-left-8 top-2 w-1.5 h-20 bg-[#C8102E] hidden md:block"></div>
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-10">
+        <h2 class="reveal text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-10">
           The grid is a<br>launchpad, not<br>a prison.
         </h2>
-        <p class="text-lg leading-relaxed text-stone-900 dark:text-stone-50 max-w-[60ch] mb-6">
+        <p class="reveal text-lg leading-relaxed text-stone-900 dark:text-stone-50 max-w-[60ch] mb-6">
           The Swiss International Style built the grid. The Swiss Poster style learned when to break it. Weingart, Troxler, Odermatt &amp; Tissi took the rational foundations of Brockmann and Ruder and made them <em>move</em>.
         </p>
-        <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[60ch] mb-6">
+        <p class="reveal text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[60ch] mb-6">
           When type is large enough, it becomes image. When elements overlap, they create depth. When a composition bleeds past its edge, it implies a world larger than the frame. These are not violations of the grid — they are its ultimate expression.
         </p>
         <p class="text-lg leading-relaxed text-stone-900/50 dark:text-stone-50/50 max-w-[60ch]">
@@ -273,7 +324,7 @@ const SectionManifesto = () => html`
             <p class="text-2xl font-bold leading-snug tracking-tight text-stone-900 dark:text-stone-50">
               "Typography has one plain duty before it and that is to convey information in writing."
             </p>
-            <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 mt-3 block">Emil Ruder</span>
+            <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 mt-3 block">Emil Ruder, <em>Typographie</em>, 1967</span>
           </div>
         </div>
 
@@ -315,11 +366,11 @@ const SectionScale = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-4 md:gap-8 mb-24">
-      <div class="col-span-12 md:col-span-8">
-        <h2 class="text-4xl md:text-5xl font-light tracking-tight leading-tight mb-6">
+      <div class="col-span-12 md:col-span-8 reveal-stagger">
+        <h2 class="reveal text-4xl md:text-5xl font-light tracking-tight leading-tight mb-6">
           Extreme scale contrast<br>is the hierarchy.
         </h2>
-        <p class="text-base leading-relaxed text-stone-50/70 max-w-[52ch]">
+        <p class="reveal text-base leading-relaxed text-stone-50/70 max-w-[52ch]">
           Place 20rem display type next to 11px labels. The tension between massive and tiny <em>is</em> the design. Moderate size differences feel timid. Aim for 10&#215;+ ratio between your largest and smallest type.
         </p>
       </div>
@@ -355,7 +406,8 @@ const SectionScale = () => html`
       <!-- Body -->
       <div class="border-t border-stone-800 pt-8">
         <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Body &#8212; 16px normal leading-relaxed max-w-[60ch]</span>
-        <p class="text-base font-normal leading-relaxed max-w-[60ch] text-stone-50/80">The grid system is an aid, not a guarantee. It permits a number of possible uses and each designer can look for a solution appropriate to his personal style. But one must learn how to use the grid; it is an art that requires practice.</p>
+        <p class="text-base font-normal leading-relaxed max-w-[60ch] text-stone-50/80">&#8220;The grid system is an aid, not a guarantee. It permits a number of possible uses and each designer can look for a solution appropriate to his personal style. But one must learn how to use the grid; it is an art that requires practice.&#8221;</p>
+        <span class="text-[11px] font-mono font-medium text-stone-50/30 tracking-widest uppercase block mt-4">M&#252;ller-Brockmann, <em>Grid Systems in Graphic Design</em>, 1981</span>
       </div>
       <!-- Caption -->
       <div class="border-t border-stone-800 pt-8">
@@ -405,7 +457,7 @@ const SectionGeometry = () => html`
       Shapes as images.
     </h2>
     <p class="text-base leading-relaxed text-stone-900/60 dark:text-stone-50/60 max-w-[52ch] mb-16">
-      Geometric forms at poster scale are compositional anchors, not decoration. A circle cropped by the frame, a bar slicing across columns, a triangle escaping its container &#8212; these are the images of the Swiss poster tradition.
+      Geometric forms at poster scale are compositional anchors. A circle cropped by the frame, a bar slicing across columns, a triangle escaping its container. These are the images of the Swiss poster tradition.
     </p>
   </div>
 
@@ -495,7 +547,7 @@ const SectionGeometry = () => html`
     <div class="max-w-6xl mx-auto px-4 md:px-8 relative z-10 h-full flex items-end justify-end pb-8">
       <div class="text-right">
         <span class="text-[11px] tracking-widest uppercase text-stone-50/40 font-medium block">Geometric forms at poster scale are compositional anchors</span>
-        <span class="text-[11px] tracking-widest uppercase text-stone-50/20 font-medium block mt-1">Not ornament &#8212; not decoration &#8212; structure</span>
+        <span class="text-[11px] tracking-widest uppercase text-stone-50/20 font-medium block mt-1">Form follows tension</span>
       </div>
     </div>
   </div>
@@ -513,11 +565,11 @@ const SectionBreakout = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-4 md:gap-8 mb-24">
-      <div class="col-span-12 md:col-span-7">
-        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+      <div class="col-span-12 md:col-span-7 reveal-stagger">
+        <h2 class="reveal text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
           The grid exists so<br>the breakout has<br>meaning.
         </h2>
-        <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[52ch]">
+        <p class="reveal text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[52ch]">
           Every layout starts with <code class="font-mono text-sm bg-stone-100 dark:bg-stone-900 px-1.5 py-0.5">grid grid-cols-12</code>. Then key elements escape using negative margins, absolute positioning, or overflow. Without the grid, there is nothing to break.
         </p>
       </div>
@@ -625,8 +677,8 @@ const SectionOverlap = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-4 md:gap-8 mb-24">
-      <div class="col-span-12 md:col-span-7">
-        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+      <div class="col-span-12 md:col-span-7 reveal-stagger">
+        <h2 class="reveal text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
           Layers <span class="text-[#C8102E]">collide.</span>
         </h2>
         <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[52ch]">
@@ -684,10 +736,10 @@ const SectionOverlap = () => html`
           { num: '02', accent: '#003B8E', name: 'Neue Grafik', desc: 'Trilingual journal. 18 issues from 1958 to 1965. The voice of the Zurich school.', designer: 'Lohse, Vivarelli et al.', year: '1958' },
           { num: '03', accent: '#F0B429', name: 'Jazz Willisau', desc: 'Festival posters that pushed Swiss design into expressive new territory.', designer: 'Niklaus Troxler', year: '1975' },
           { num: '04', accent: '#2D6A4F', name: 'Raster Systeme', desc: 'The definitive guide to the typographic grid. Still in print.', designer: 'M\u00fcller-Brockmann', year: '1961' },
-          { num: '05', accent: '#E8431A', name: 'Geigy Posters', desc: 'Pharmaceutical advertising elevated to art. Basel school influence.', designer: 'Various designers', year: '1950s' },
+          { num: '05', accent: '#E8431A', name: 'Geigy Posters', desc: 'Pharmaceutical advertising as graphic design. Basel school influence.', designer: 'Various designers', year: '1950s' },
           { num: '06', accent: '#6B21A8', name: 'Weingart Type', desc: 'Post-punk typography that broke every rule the Swiss style established.', designer: 'Wolfgang Weingart', year: '1970s' },
         ].map(({ num, accent, name, desc, designer, year }) => html`
-        <div class="bg-stone-50 dark:bg-stone-950 p-6 md:p-8 relative overflow-hidden min-h-[240px] flex flex-col justify-between group hover:bg-white dark:hover:bg-stone-900 transition-colors">
+        <div class="bg-stone-50 dark:bg-stone-950 p-6 md:p-8 relative overflow-hidden min-h-[240px] flex flex-col justify-between group hover:bg-white dark:hover:bg-stone-900 hover:-translate-y-1 transition-[background-color,transform] duration-200" style="transition-timing-function: var(--ease-out-quart)">
           <span class="absolute -top-4 -left-1 text-7xl md:text-8xl font-bold leading-none select-none pointer-events-none" style="color: ${accent}; opacity: 0.15">${num}</span>
           <div class="relative z-10">
             <div class="w-6 h-1" style="background-color: ${accent}"></div>
@@ -714,8 +766,8 @@ const SectionColor = () => html`
 
     <div class="grid grid-cols-12 gap-4 md:gap-8 mb-16">
       <!-- Negative space on left creates active L-shape -->
-      <div class="col-span-12 md:col-span-5 md:col-start-8 md:text-right">
-        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+      <div class="col-span-12 md:col-span-5 md:col-start-8 md:text-right reveal-stagger">
+        <h2 class="reveal text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
           One accent.<br><span class="text-[#C8102E]">Used boldly.</span>
         </h2>
         <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 md:ml-auto max-w-[52ch]">
@@ -821,7 +873,7 @@ const SectionType = () => html`
                     <div class="w-16 h-1 bg-stone-200 dark:bg-stone-800 relative">
                       <div class="absolute left-0 top-0 h-full bg-[#C8102E]" style="width: ${score}%"></div>
                     </div>
-                    <span class="text-sm font-mono text-stone-900/50 dark:text-stone-50/50 w-6">${score}</span>
+                    <span class="text-sm font-mono text-stone-900/50 dark:text-stone-50/50 w-6 tabular-nums">${score}</span>
                   </div>
                 </td>
               </tr>`)}
@@ -916,7 +968,7 @@ const SectionPosters = () => html`
               <span class="text-sm text-stone-900 dark:text-stone-50">${value}</span>
             </div>`)}
           </div>
-          <button class="w-full py-3 bg-[#C8102E] text-white text-xs tracking-widest uppercase hover:bg-[#C8102E]/90 transition-colors">
+          <button class="w-full py-3 bg-[#C8102E] text-white text-xs tracking-widest uppercase hover:bg-[#C8102E]/90 active:scale-[0.96] transition-[background-color,transform] duration-150" style="transition-timing-function: var(--ease-out-quart)">
             Register Now
           </button>
         </div>
@@ -997,7 +1049,7 @@ const SectionForm = () => html`
             <input type="checkbox" class="mt-0.5 w-4 h-4 border border-stone-400 dark:border-stone-600 accent-[#F0B429]">
             <span class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">I agree to the symposium code of conduct.</span>
           </label>
-          <button type="submit" class="w-full py-4 bg-[#F0B429] text-stone-900 text-xs tracking-widest uppercase font-medium hover:bg-[#F0B429]/90 transition-colors">
+          <button type="submit" class="w-full py-4 bg-[#F0B429] text-stone-900 text-xs tracking-widest uppercase font-medium hover:bg-[#F0B429]/90 active:scale-[0.96] transition-[background-color,transform] duration-150" style="transition-timing-function: var(--ease-out-quart)">
             Submit Registration
           </button>
         </form>
@@ -1029,9 +1081,9 @@ const SectionInstall = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-4 md:gap-8 items-start">
-      <div class="col-span-12 md:col-span-6">
-        <div class="w-8 h-1.5 bg-[#C8102E] mb-8"></div>
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+      <div class="col-span-12 md:col-span-6 reveal-stagger">
+        <div class="reveal w-8 h-1.5 bg-[#C8102E] mb-8"></div>
+        <h2 class="reveal text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
           One command.<br>Every project.
         </h2>
         <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[48ch] mb-12">

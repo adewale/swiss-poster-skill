@@ -406,7 +406,7 @@ npx skills add adewale/swiss-poster-skill
       Elements <span class="text-[#C8102E]">escape</span><br>the grid.
     </h1>
     <p class="text-lg leading-relaxed text-stone-900/60 dark:text-stone-50/60 mt-8 max-w-[52ch]">
-      A design system built on the expressive tradition of Swiss poster design.
+      Swiss poster design for your AI agent, in Tailwind CSS.
     </p>
     <div class="flex flex-wrap items-center gap-4 mt-12">
       <button class="px-8 py-4 bg-stone-900 dark:bg-stone-50 text-stone-50 dark:text-stone-900 text-sm font-medium tracking-wide hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors">
