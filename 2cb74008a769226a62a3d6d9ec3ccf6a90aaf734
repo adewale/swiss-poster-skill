@@ -1,0 +1,23 @@
+website/src/index.tsx
+  5213f9d147c4348f 78-95,330-333,456,460,465-468,481,483-484
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "2cb74008a769226a62a3d6d9ec3ccf6a90aaf734",
+  "prompts": {
+    "5213f9d147c4348f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_225c2bff2ffeGCWyZx11tcY6c7",
+        "model": "anthropic/claude-opus-4-6"
+      },
+      "human_author": "Ade Oshineye",
+      "messages": [],
+      "total_additions": 31,
+      "total_deletions": 9,
+      "accepted_lines": 31,
+      "overriden_lines": 0
+    }
+  }
+}
