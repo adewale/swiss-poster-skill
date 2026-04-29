@@ -322,11 +322,11 @@ const SectionData = () => html`
         <table class="w-full text-sm">
           <thead>
             <tr class="border-t-2 border-stone-900 dark:border-stone-50 border-b border-b-stone-200 dark:border-b-stone-800">
-              <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Typeface</th>
+              <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6 pl-4">Typeface</th>
               <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Designer</th>
               <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Year</th>
               <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Source</th>
-              <th class="text-right text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3">Fidelity</th>
+              <th class="text-right text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-4">Fidelity</th>
             </tr>
           </thead>
           <tbody>
@@ -343,14 +343,14 @@ const SectionData = () => html`
               ['Univers',            'Adrian Frutiger',           '1957', 'Linotype',     '98', false],
             ].map(([name, designer, year, source, score, featured]) => html`
             <tr class="border-b border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors ${featured ? 'bg-[#C8102E]/5' : ''}">
-              <td class="py-4 pr-6">
+              <td class="py-4 pr-6 pl-4">
                 <span class="text-stone-900 dark:text-stone-50 font-normal">${name}</span>
                 ${featured ? html`<span class="ml-2 text-xs tracking-widest uppercase bg-[#C8102E]/10 text-[#C8102E] px-1.5 py-0.5">Primary</span>` : ''}
               </td>
               <td class="py-4 pr-6 text-stone-900/70 dark:text-stone-50/70">${designer}</td>
               <td class="py-4 pr-6 text-stone-900/70 dark:text-stone-50/70 font-mono text-sm">${year}</td>
               <td class="py-4 pr-6 text-stone-900/60 dark:text-stone-50/60 text-sm tracking-wide">${source}</td>
-              <td class="py-4 text-right">
+              <td class="py-4 pr-4 text-right">
                 <div class="flex items-center justify-end gap-2">
                   <div class="w-16 h-0.5 bg-stone-200 dark:bg-stone-800 relative">
                     <div class="absolute left-0 top-0 h-full bg-[#C8102E]" style="width: ${score}%"></div>
