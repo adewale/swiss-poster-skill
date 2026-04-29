@@ -930,22 +930,22 @@ const SectionInstall = () => html`
           Install the skill and your AI agent will apply Swiss design principles whenever you ask it to style a page, clean up a UI, or make something look great.
         </p>
 
-        <div class="space-y-4">
-          <div>
-            <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-3">Install with skills CLI</span>
-            <div class="bg-stone-900 dark:bg-stone-950 text-stone-50 px-5 py-4 font-mono text-sm flex items-center justify-between gap-4 border border-stone-800">
-              <span class="select-all">npx skills add zeke/swiss-design-skill</span>
-              <span class="text-stone-50/40 shrink-0 text-xs">copy</span>
-            </div>
-          </div>
-          <div>
-            <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-3">Or install manually</span>
-            <div class="bg-stone-100 dark:bg-stone-900 px-5 py-4 font-mono text-sm text-stone-900/70 dark:text-stone-50/70 border border-stone-200 dark:border-stone-800 space-y-1">
-              <div><span class="text-stone-900/40 dark:text-stone-50/40">$</span> gh repo clone zeke/swiss-design-skill</div>
-              <div><span class="text-stone-900/40 dark:text-stone-50/40">$</span> cp -r swiss-design-skill/swiss-design ~/.config/opencode/skills/</div>
-            </div>
+        <div>
+          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-3">Install with skills CLI</span>
+          <div class="bg-stone-900 dark:bg-stone-950 text-stone-50 px-5 py-4 font-mono text-sm flex items-center justify-between gap-4 border border-stone-800">
+            <span id="install-cmd">npx skills add zeke/swiss-design-skill</span>
+            <button onclick="copyInstall()" id="copy-btn" class="text-stone-50/50 hover:text-stone-50 shrink-0 text-xs tracking-widest uppercase transition-colors min-h-[44px] px-2">copy</button>
           </div>
         </div>
+        <script>
+          function copyInstall() {
+            navigator.clipboard.writeText(document.getElementById('install-cmd').textContent).then(function() {
+              var btn = document.getElementById('copy-btn');
+              btn.textContent = 'copied';
+              setTimeout(function() { btn.textContent = 'copy'; }, 2000);
+            });
+          }
+        </script>
       </div>
 
       <div class="col-span-12 md:col-span-5 md:col-start-8 space-y-6">
