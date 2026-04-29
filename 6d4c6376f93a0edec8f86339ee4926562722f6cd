@@ -1,0 +1,33 @@
+README.md
+  5213f9d147c4348f 3,26
+swiss-poster/references/design-system.md
+  5213f9d147c4348f 290
+swiss-poster/references/components.md
+  5213f9d147c4348f 409
+swiss-poster/SKILL.md
+  5213f9d147c4348f 3,12,19,70
+swiss-poster/references/research.md
+  5213f9d147c4348f 11,23,28,38,41,45,74,92
+website/src/index.tsx
+  5213f9d147c4348f 25,48-56,58-86,144,159,162-163,166-178,192-199,241-244,247-248,250,254,285,287,290,293,327,369-370,373,409-410,460,550,568-569,572,680-681,739,742,769-770,876,971,1052,1084-1086
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "6d4c6376f93a0edec8f86339ee4926562722f6cd",
+  "prompts": {
+    "5213f9d147c4348f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_225c2bff2ffeGCWyZx11tcY6c7",
+        "model": "anthropic/claude-opus-4-6"
+      },
+      "human_author": "Ade Oshineye",
+      "messages": [],
+      "total_additions": 115,
+      "total_deletions": 63,
+      "accepted_lines": 115,
+      "overriden_lines": 0
+    }
+  }
+}
