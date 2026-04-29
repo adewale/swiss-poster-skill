@@ -3,18 +3,17 @@ import { html } from 'hono/html'
 
 const app = new Hono()
 
-const GITHUB_URL = 'https://github.com/zeke/swiss-design-skill'
+const GITHUB_URL = 'https://github.com/adewale/swiss-poster-skill'
 
-// Four original + four new accent colors
 const ACCENTS = [
-  { name: 'Swiss Red',    hex: '#C8102E', label: 'Default',    desc: 'Bold and assertive. The classic Swiss poster red.' },
-  { name: 'Cobalt',       hex: '#003B8E', label: 'Technical',  desc: 'Corporate and trustworthy. Engineering and data.' },
-  { name: 'Golden',       hex: '#F0B429', label: 'Editorial',  desc: 'Warm and cultural. Print, arts, food.' },
-  { name: 'Forest',       hex: '#2D6A4F', label: 'Natural',    desc: 'Calm and grounded. Health, sustainability.' },
-  { name: 'Vermilion',    hex: '#E8431A', label: 'Energy',     desc: 'High-contrast orange-red. Motion and urgency.' },
-  { name: 'Violet',       hex: '#6B21A8', label: 'Creative',   desc: 'Deep purple. Fashion, beauty, luxury editorial.' },
-  { name: 'Magenta',      hex: '#C0186C', label: 'Bold',       desc: 'Hot pink-red. Vibrant, fearless, high-impact.' },
-  { name: 'Lavender',     hex: '#7C3AED', label: 'Electric',   desc: 'Electric purple. Digital, futuristic, cultural.' },
+  { name: 'Swiss Red',  hex: '#C8102E', label: 'Default',   desc: 'Bold and assertive. The classic Swiss poster red.' },
+  { name: 'Cobalt',     hex: '#003B8E', label: 'Technical', desc: 'Corporate and trustworthy. Engineering and data.' },
+  { name: 'Golden',     hex: '#F0B429', label: 'Editorial', desc: 'Warm and cultural. Print, arts, food.' },
+  { name: 'Forest',     hex: '#2D6A4F', label: 'Natural',   desc: 'Calm and grounded. Health, sustainability.' },
+  { name: 'Vermilion',  hex: '#E8431A', label: 'Energy',    desc: 'High-contrast orange-red. Motion and urgency.' },
+  { name: 'Violet',     hex: '#6B21A8', label: 'Creative',  desc: 'Deep purple. Fashion, beauty, luxury editorial.' },
+  { name: 'Magenta',    hex: '#C0186C', label: 'Bold',      desc: 'Hot pink-red. Vibrant, fearless, high-impact.' },
+  { name: 'Lavender',   hex: '#7C3AED', label: 'Electric',  desc: 'Electric purple. Digital, futuristic, cultural.' },
 ]
 
 const HEAD = html`<!DOCTYPE html>
@@ -22,11 +21,12 @@ const HEAD = html`<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Design System</title>
-  <meta name="description" content="A Swiss International Style design system skill for AI agents. Grotesque typography, grayscale palette, grid, whitespace.">
+  <title>Swiss Poster Design System</title>
+  <meta name="description" content="A Swiss Poster design system skill for AI agents. Expressive typography at extreme scales, grid-breaking compositions, overlap, bleed, and bold geometric tension — expressed through Tailwind CSS.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a09'/%3E%3Ccircle cx='28' cy='28' r='18' fill='%23C8102E'/%3E%3Ccircle cx='28' cy='28' r='14' fill='none' stroke='%23C8102E' stroke-width='1' opacity='0.4'/%3E%3Cline x1='0' y1='10' x2='24' y2='0' stroke='%23fafaf9' stroke-width='1.5' opacity='0.3'/%3E%3Crect x='2' y='3' width='4' height='4' fill='%23003B8E' opacity='0.6'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -37,8 +37,8 @@ const HEAD = html`<!DOCTYPE html>
             sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
             mono: ['IBM Plex Mono', 'monospace'],
           },
-          fontSize: {
-            'display': ['5rem', { lineHeight: '1', letterSpacing: '-0.03em' }],
+          lineHeight: {
+            'poster': '0.85',
           },
         },
       },
@@ -47,9 +47,36 @@ const HEAD = html`<!DOCTYPE html>
   <style>
     body { -webkit-font-smoothing: antialiased; }
     html { scroll-behavior: smooth; }
+    /* Halftone dot pattern — lithographic heritage */
+    .halftone {
+      background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+    .halftone-lg {
+      background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.5px);
+      background-size: 12px 12px;
+    }
+    /* Rhythmic line pattern */
+    .line-rhythm {
+      background-image: repeating-linear-gradient(
+        0deg,
+        currentColor 0px,
+        currentColor 1px,
+        transparent 1px,
+        transparent 8px
+      );
+    }
+    .line-rhythm-h {
+      background-image: repeating-linear-gradient(
+        90deg,
+        currentColor 0px,
+        currentColor 1px,
+        transparent 1px,
+        transparent 8px
+      );
+    }
   </style>
   <script>
-    // Apply stored preference or system preference immediately (no flash)
     (function() {
       const stored = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -63,19 +90,23 @@ const HEAD = html`<!DOCTYPE html>
 
 const FOOT = html`
   <script>
-    // Manual toggle — stores override in localStorage
     function toggleDark() {
-      const html = document.documentElement;
-      html.classList.toggle('dark');
-      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+      const h = document.documentElement;
+      h.classList.toggle('dark');
+      localStorage.setItem('theme', h.classList.contains('dark') ? 'dark' : 'light');
     }
-
-    // Listen for system preference changes and apply live, unless user has overridden
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
       if (!localStorage.getItem('theme')) {
         document.documentElement.classList.toggle('dark', e.matches);
       }
     });
+    function copyInstall() {
+      navigator.clipboard.writeText(document.getElementById('install-cmd').textContent).then(function() {
+        var btn = document.getElementById('copy-btn');
+        btn.textContent = 'copied';
+        setTimeout(function() { btn.textContent = 'copy'; }, 2000);
+      });
+    }
   </script>
 </body>
 </html>`
@@ -84,28 +115,25 @@ const FOOT = html`
 
 const Nav = () => html`
 <nav class="fixed top-0 left-0 right-0 z-50 border-b border-stone-200 dark:border-stone-800 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-sm">
-  <div class="max-w-6xl mx-auto px-8 flex items-center justify-between h-14">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 flex items-center justify-between h-14">
     <a href="/" class="text-xs tracking-widest uppercase font-medium text-stone-900 dark:text-stone-50">
-      Swiss Design
+      Swiss Poster
     </a>
     <div class="hidden md:flex items-center gap-6 text-xs tracking-widest uppercase">
-      <a href="#editorial" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Editorial</a>
-      <a href="#poster" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Poster</a>
-      <a href="#data" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Data</a>
-      <a href="#cards" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Cards</a>
-      <a href="#app" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">App</a>
-      <a href="#type" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Type</a>
+      <a href="#manifesto" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Manifesto</a>
+      <a href="#scale" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Scale</a>
+      <a href="#geometry" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Geometry</a>
+      <a href="#breakout" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Breakout</a>
+      <a href="#overlap" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Overlap</a>
       <a href="#color" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Color</a>
-      <a href="#form" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Form</a>
-      <a href="#responsive" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Responsive</a>
+      <a href="#type" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Type</a>
+      <a href="#install" class="text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">Install</a>
     </div>
     <div class="flex items-center gap-4">
-      <a href="${GITHUB_URL}" target="_blank" class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">
-        GitHub
-      </a>
+      <a href="${GITHUB_URL}" target="_blank" class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">GitHub</a>
       <button onclick="toggleDark()" class="w-8 h-8 flex items-center justify-center border border-stone-300 dark:border-stone-700 hover:border-stone-500 dark:hover:border-stone-500 transition-colors" aria-label="Toggle dark mode">
-        <span class="dark:hidden text-xs text-stone-900">○</span>
-        <span class="hidden dark:inline text-xs text-stone-50">●</span>
+        <span class="dark:hidden text-xs text-stone-900">&#9675;</span>
+        <span class="hidden dark:inline text-xs text-stone-50">&#9679;</span>
       </button>
     </div>
   </div>
@@ -114,193 +142,755 @@ const Nav = () => html`
 // ─── Section 01: Hero ────────────────────────────────────────────────────────
 
 const SectionHero = () => html`
-<section id="hero" class="relative min-h-screen flex items-center overflow-hidden border-b border-stone-200 dark:border-stone-800">
-  <!-- Large background numeral -->
-  <div class="absolute top-0 right-0 text-[clamp(10rem,28vw,26rem)] font-light leading-none text-stone-900/5 dark:text-stone-50/5 select-none pointer-events-none translate-x-8">
-    01
+<section id="hero" class="relative min-h-screen flex items-end overflow-hidden border-b border-stone-200 dark:border-stone-800">
+  <!-- Oversized background type — VISIBLE, cropped by left edge -->
+  <div class="absolute top-0 left-0 right-0 pointer-events-none select-none overflow-hidden">
+    <div class="text-[clamp(8rem,22vw,26rem)] font-bold leading-[0.85] text-stone-900/[0.08] dark:text-stone-50/[0.08] -ml-[8%] mt-12 tracking-tighter">
+      SWISS<br>POSTER
+    </div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-8 py-40 relative z-10 grid grid-cols-12 gap-8 w-full">
-    <div class="col-span-12 md:col-span-8">
-      <span class="text-sm tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Swiss Design System — A skill for AI agents</span>
-      <div class="w-8 h-px bg-[#C8102E] mt-6 mb-10"></div>
-      <h1 class="text-6xl md:text-8xl font-medium tracking-tight leading-none text-stone-900 dark:text-stone-50">
-        Swiss<br>International<br>Style.
-      </h1>
-      <p class="text-xl leading-relaxed text-stone-900/80 dark:text-stone-50/80 mt-10 max-w-[52ch]">
-        A design system rooted in the modernist movement that emerged from Zürich and Basel in the 1950s. Grotesque sans-serif typography, mathematical grid, generous whitespace, restrained color — taught to your AI agent through Tailwind CSS.
-      </p>
-      <div class="mt-12 flex flex-col sm:flex-row items-start gap-4">
-        <div class="bg-stone-900 dark:bg-stone-50 text-stone-50 dark:text-stone-900 px-6 py-3 font-mono text-sm select-all">
-          npx skills add zeke/swiss-design-skill
-        </div>
-        <a href="${GITHUB_URL}" target="_blank" class="px-6 py-3 border border-stone-400 dark:border-stone-600 text-stone-900/80 dark:text-stone-50/80 text-sm tracking-wide hover:border-stone-900 dark:hover:border-stone-50 transition-colors">
-          View on GitHub ↗
-        </a>
-      </div>
-    </div>
+  <!-- Rotated readable type along left edge — vertical axis -->
+  <div class="absolute top-[30%] left-6 z-20 pointer-events-none hidden md:block">
+    <span class="text-sm font-bold tracking-[0.3em] uppercase text-[#C8102E] -rotate-90 origin-top-left block whitespace-nowrap">Expressive Typography</span>
+  </div>
 
-    <!-- Column of vertical labels -->
-    <div class="hidden md:flex col-span-4 flex-col justify-end gap-6 pb-4">
-      ${['Grotesque sans-serif', 'Grayscale palette', 'Opacity hierarchy', '12-column grid', 'One accent color'].map((label, i) => html`
-      <div class="flex items-center gap-3 border-t border-stone-300 dark:border-stone-700 pt-4">
-        <span class="text-xs text-stone-900/60 dark:text-stone-50/60 font-mono font-medium">0${i + 1}</span>
-        <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">${label}</span>
-      </div>`)}
+  <!-- GEOMETRIC COMPOSITION — large shapes escaping the frame -->
+  <!-- Giant circle, half-cropped by the right edge -->
+  <div class="absolute -right-[15vw] top-[10%] w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] rounded-full border-[3px] border-[#C8102E]/30 pointer-events-none"></div>
+  <div class="absolute -right-[12vw] top-[13%] w-[50vw] h-[50vw] max-w-[580px] max-h-[580px] rounded-full border-[2px] border-[#C8102E]/15 pointer-events-none"></div>
+  <!-- Solid accent wedge — top-right, cropped -->
+  <div class="absolute top-0 right-0 w-[35vw] max-w-[500px] h-[45vh] bg-[#C8102E] pointer-events-none" style="clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 70%)"></div>
+  <!-- Bold diagonal bar cutting across -->
+  <div class="absolute top-[20%] -right-[10%] w-[80vw] h-3 bg-[#C8102E]/20 -rotate-[18deg] origin-right pointer-events-none hidden md:block"></div>
+  <div class="absolute top-[22%] -right-[10%] w-[80vw] h-px bg-stone-900/10 dark:bg-stone-50/10 -rotate-[18deg] origin-right pointer-events-none hidden md:block"></div>
+  <!-- Small solid square — offset accent -->
+  <div class="absolute top-[60%] right-[20%] w-16 h-16 bg-[#003B8E]/40 pointer-events-none hidden md:block"></div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 pb-16 md:pb-24 pt-40 md:pt-48 relative z-10 w-full">
+    <div class="grid grid-cols-12 gap-4 md:gap-8">
+      <div class="col-span-12 md:col-span-9">
+        <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/50 dark:text-stone-50/50">Swiss Poster Design System — A skill for AI agents</span>
+        <div class="w-16 h-1.5 bg-[#C8102E] mt-6 mb-10"></div>
+        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] text-stone-900 dark:text-stone-50">
+          Elements<br><span class="text-[#C8102E]">escape</span> the<br>grid.
+        </h1>
+        <p class="text-lg md:text-xl leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-10 max-w-[52ch]">
+          A design system rooted in the expressive tradition of Swiss poster design. Extreme typographic scale, overlapping layers, compositions that bleed past their containers — taught to your AI agent through Tailwind CSS.
+        </p>
+        <div class="mt-12 flex flex-col sm:flex-row items-start gap-4">
+          <div class="bg-stone-900 dark:bg-stone-50 text-stone-50 dark:text-stone-900 px-6 py-3 font-mono text-sm select-all">
+            npx skills add adewale/swiss-poster-skill
+          </div>
+          <a href="${GITHUB_URL}" target="_blank" class="px-6 py-3 border border-stone-400 dark:border-stone-600 text-stone-900/80 dark:text-stone-50/80 text-sm tracking-wide hover:border-stone-900 dark:hover:border-stone-50 transition-colors">
+            View on GitHub &#8599;
+          </a>
+        </div>
+      </div>
+
+      <div class="hidden md:flex col-span-3 flex-col justify-end gap-6 pb-4">
+        ${['Grid as launchpad', 'Extreme scale contrast', 'Overlap & layer', 'Bleed & crop', 'One accent, used boldly', 'Tension over comfort'].map((label, i) => html`
+        <div class="flex items-center gap-3 border-t border-stone-300 dark:border-stone-700 pt-4">
+          <span class="text-xs text-stone-900/50 dark:text-stone-50/50 font-mono font-medium">0${i + 1}</span>
+          <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70">${label}</span>
+        </div>`)}
+      </div>
     </div>
   </div>
 </section>`
 
-// ─── Section 02: Editorial ───────────────────────────────────────────────────
+// ─── Section 02: Manifesto ───────────────────────────────────────────────────
 
-const SectionEditorial = () => html`
-<section id="editorial" class="border-b border-stone-200 dark:border-stone-800">
-  <!-- Thin accent bar across the top -->
-  <div class="h-1 bg-[#C8102E]"></div>
+const SectionManifesto = () => html`
+<section id="manifesto" class="border-b border-stone-200 dark:border-stone-800 relative overflow-hidden">
+  <div class="h-1.5 bg-[#C8102E]"></div>
 
   <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
-    <!-- Section label -->
     <div class="flex items-center gap-4 mb-20">
       <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">02</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Editorial</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Manifesto</span>
       <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
-    <div class="grid grid-cols-12 gap-8">
-      <!-- Main essay column -->
+    <div class="grid grid-cols-12 gap-4 md:gap-8">
       <div class="col-span-12 md:col-span-7 relative">
-        <!-- Accent rectangle in the left margin, vertically centered on the heading -->
-        <div class="absolute -left-8 top-2 w-1 h-16 bg-[#C8102E] hidden md:block"></div>
-
-        <h2 class="text-4xl md:text-5xl font-normal tracking-tight text-stone-900 dark:text-stone-50 leading-tight mb-10">
-          The grid system is an aid, not a guarantee.
+        <div class="absolute -left-4 md:-left-8 top-2 w-1.5 h-20 bg-[#C8102E] hidden md:block"></div>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-10">
+          The grid is a<br>launchpad, not<br>a prison.
         </h2>
         <p class="text-lg leading-relaxed text-stone-900 dark:text-stone-50 max-w-[60ch] mb-6">
-          It permits a number of possible uses and each designer can look for a solution appropriate to his personal style. But one must learn how to use the grid; it is an art that requires practice.
+          The Swiss International Style built the grid. The Swiss Poster style learned when to break it. Weingart, Troxler, Odermatt &amp; Tissi took the rational foundations of Brockmann and Ruder and made them <em>move</em>.
         </p>
         <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[60ch] mb-6">
-          The grid system is used by the typographer, graphic designer, photographer and exhibition designer for solving visual problems in two and three dimensions. Today the grid system is the expression of a certain mental attitude inasmuch as it shows that the designer conceives his work in terms that are constructive and oriented to the future.
+          When type is large enough, it becomes image. When elements overlap, they create depth. When a composition bleeds past its edge, it implies a world larger than the frame. These are not violations of the grid — they are its ultimate expression.
         </p>
-        <p class="text-lg leading-relaxed text-stone-900/60 dark:text-stone-50/60 max-w-[60ch]">
-          This is the expression of a professional ethos: the designer's work should have the clearly intelligible, objective, functional and aesthetic quality of mathematical thinking.
+        <p class="text-lg leading-relaxed text-stone-900/50 dark:text-stone-50/50 max-w-[60ch]">
+          Every breakout must be earned. The grid exists so the escape has meaning. Without structure, there is no tension — only chaos.
         </p>
         <div class="mt-10 pt-10 border-t border-stone-200 dark:border-stone-800">
-          <span class="text-sm tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50">— Josef Müller-Brockmann, <em>Grid Systems in Graphic Design</em>, 1961</span>
+          <span class="text-sm tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40">Informed by Weingart, Troxler, Hofmann, Ruder, Odermatt &amp; Tissi</span>
         </div>
       </div>
 
-      <!-- Right column -->
       <div class="col-span-12 md:col-span-4 md:col-start-9 flex flex-col gap-8">
+        <!-- Geometric composition — Hofmann-style abstract figure -->
+        <div class="relative aspect-[3/4] bg-stone-900 dark:bg-stone-100 overflow-hidden">
+          <!-- Large circle escaping top-right -->
+          <div class="absolute -top-[20%] -right-[25%] w-[80%] h-0 pb-[80%] rounded-full bg-[#C8102E]"></div>
+          <!-- Horizontal bar -->
+          <div class="absolute top-[55%] left-0 w-full h-[4px] bg-stone-50/30 dark:bg-stone-900/30"></div>
+          <!-- Vertical bar escaping bottom -->
+          <div class="absolute bottom-0 left-[30%] w-[4px] h-[60%] bg-stone-50/20 dark:bg-stone-900/20"></div>
+          <!-- Small accent square -->
+          <div class="absolute bottom-[15%] left-[15%] w-[20%] h-0 pb-[20%] bg-[#003B8E]/60"></div>
+          <!-- Triangle, bottom-right -->
+          <div class="absolute bottom-0 right-0 w-[40%] h-[40%] bg-stone-50/10 dark:bg-stone-900/10" style="clip-path: polygon(100% 0, 100% 100%, 0 100%)"></div>
+          <!-- Label -->
+          <span class="absolute bottom-4 left-4 text-[11px] tracking-widest uppercase text-stone-50/40 dark:text-stone-900/40 font-medium">Komposition &#8212; 01</span>
+        </div>
 
-        <!-- Pull quote with left accent bar -->
         <div class="flex gap-4">
-          <div class="w-0.5 bg-[#C8102E] self-stretch shrink-0"></div>
+          <div class="w-1 bg-[#C8102E] self-stretch shrink-0"></div>
           <div>
-            <p class="text-2xl font-normal leading-snug tracking-tight text-stone-900 dark:text-stone-50">
-              "The will to order."
+            <p class="text-2xl font-bold leading-snug tracking-tight text-stone-900 dark:text-stone-50">
+              "Typography has one plain duty before it and that is to convey information in writing."
             </p>
-            <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 mt-3 block">Basel School of Design</span>
+            <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 mt-3 block">Emil Ruder</span>
           </div>
         </div>
 
-        <!-- Key principles — accent top bar only -->
         <div class="border-t-2 border-[#C8102E] pt-6 bg-stone-100 dark:bg-stone-900 p-6">
-          <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 block mb-5">Key principles</span>
+          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-5">Six principles</span>
           <ul class="space-y-3">
-            ${['Objective clarity', 'Visual order', 'Grid discipline', 'Functional beauty'].map(p => html`
+            ${['Grid as launchpad', 'Extreme scale contrast', 'Overlap and layer', 'Bleed and crop', 'One accent, used boldly', 'Tension over comfort'].map(p => html`
             <li class="text-base text-stone-900/80 dark:text-stone-50/80 flex items-start gap-2">
-              <span class="text-[#C8102E] mt-0.5 shrink-0">—</span>
+              <span class="text-[#C8102E] mt-0.5 shrink-0">&#8212;</span>
               <span>${p}</span>
             </li>`)}
           </ul>
         </div>
-
-        <!-- Two schools — accent top bar only -->
-        <div class="border-t-2 border-[#003B8E]">
-          <div class="pt-6 space-y-6">
-            <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 block">Two schools</span>
-            <div>
-              <p class="text-sm font-medium text-stone-900 dark:text-stone-50 mb-1">Zürich</p>
-              <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">Müller-Brockmann, Lohse, Neuburg, Vivarelli. Mathematical grid, Helvetica, <em>Neue Grafik</em> journal (1958–65).</p>
-            </div>
-            <div class="border-t border-stone-200 dark:border-stone-800 pt-4">
-              <p class="text-sm font-medium text-stone-900 dark:text-stone-50 mb-1">Basel</p>
-              <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">Armin Hofmann, Emil Ruder. Tonal contrast, Univers typeface, photography as primary element.</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </section>`
 
-// ─── Section 03: Poster ──────────────────────────────────────────────────────
+// ─── Section 03: Scale Contrast ──────────────────────────────────────────────
 
-const SectionPoster = () => html`
-<section id="poster" class="border-b border-stone-200 dark:border-stone-800">
-  <div class="max-w-6xl mx-auto px-8 py-32">
+const SectionScale = () => html`
+<section id="scale" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50 relative overflow-hidden">
+  <!-- Mega background type — VISIBLE, cropped off right edge -->
+  <div class="absolute -top-8 -right-[10%] pointer-events-none select-none">
+    <div class="text-[clamp(14rem,35vw,42rem)] font-bold leading-[0.85] text-stone-50/[0.07] tracking-tighter whitespace-nowrap">PLAKAT</div>
+  </div>
+  <!-- Halftone dot texture — lithographic reference -->
+  <div class="absolute bottom-0 right-0 w-1/3 h-1/4 text-stone-50/[0.04] halftone pointer-events-none"></div>
+  <!-- Rotated readable label on right edge -->
+  <div class="absolute top-[20%] right-6 z-20 pointer-events-none hidden md:block">
+    <span class="text-sm font-bold tracking-[0.3em] uppercase text-[#C8102E]/70 rotate-90 origin-top-right block whitespace-nowrap">Scale Contrast</span>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32 relative z-10">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">03</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Poster</span>
+      <span class="text-xs font-mono font-medium text-stone-50/60">03</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-50/80">Scale</span>
+      <div class="flex-1 h-px bg-stone-700"></div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 md:gap-8 mb-24">
+      <div class="col-span-12 md:col-span-8">
+        <h2 class="text-4xl md:text-5xl font-light tracking-tight leading-tight mb-6">
+          Extreme scale contrast<br>is the hierarchy.
+        </h2>
+        <p class="text-base leading-relaxed text-stone-50/70 max-w-[52ch]">
+          Place 20rem display type next to 11px labels. The tension between massive and tiny <em>is</em> the design. Moderate size differences feel timid. Aim for 10&#215;+ ratio between your largest and smallest type.
+        </p>
+      </div>
+    </div>
+
+    <!-- Type scale demonstration with extreme contrast -->
+    <div class="space-y-16">
+      <!-- Mega -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Mega &#8212; clamp(6rem, 15vw, 20rem) bold</span>
+        <p class="text-[clamp(4rem,12vw,14rem)] font-bold tracking-tighter leading-[0.85] text-[#C8102E]">Z&#220;RICH</p>
+      </div>
+      <!-- Mega thin -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Mega thin &#8212; clamp(6rem, 15vw, 20rem) weight 100</span>
+        <p class="text-[clamp(4rem,12vw,14rem)] font-thin tracking-tighter leading-[0.85]">FORME</p>
+      </div>
+      <!-- Display -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Display &#8212; 72&#8211;128px light</span>
+        <p class="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none">Form Folgt</p>
+      </div>
+      <!-- Display bold -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Display bold &#8212; weight contrast in one line</span>
+        <p class="text-6xl md:text-7xl lg:text-8xl tracking-tight leading-none"><span class="font-thin">Neue</span> <span class="font-bold">Grafik</span></p>
+      </div>
+      <!-- H1 -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">H1 &#8212; 48&#8211;64px light</span>
+        <p class="text-5xl md:text-6xl font-light tracking-tight leading-tight">Grid Systems in<br>Graphic Design</p>
+      </div>
+      <!-- Body -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Body &#8212; 16px normal leading-relaxed max-w-[60ch]</span>
+        <p class="text-base font-normal leading-relaxed max-w-[60ch] text-stone-50/80">The grid system is an aid, not a guarantee. It permits a number of possible uses and each designer can look for a solution appropriate to his personal style. But one must learn how to use the grid; it is an art that requires practice.</p>
+      </div>
+      <!-- Caption -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Caption &#8212; 12px tracking-widest uppercase</span>
+        <p class="text-xs tracking-widest uppercase text-stone-50/50">Figure 03 &#8212; Basel, Switzerland, 1961 &#8212; Offset Lithography</p>
+      </div>
+      <!-- Label -->
+      <div class="border-t border-stone-800 pt-8">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Label &#8212; 11px tracking-widest uppercase medium</span>
+        <p class="text-[11px] tracking-widest uppercase font-medium text-stone-50/50">Smallest text in the system</p>
+      </div>
+    </div>
+
+    <!-- Weight + opacity ladders side by side -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mt-24">
+      <div>
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6 border-t border-stone-800 pt-8">Weight ladder (poster range)</span>
+        ${[['Thin 100', 'font-thin'], ['Light 300', 'font-light'], ['Normal 400', 'font-normal'], ['Medium 500', 'font-medium'], ['Semi 600', 'font-semibold'], ['Bold 700', 'font-bold']].map(([label, cls]) => html`
+        <div class="mb-5">
+          <span class="text-xs font-medium text-stone-50/40 block mb-1">${label}</span>
+          <p class="text-3xl ${cls} text-stone-50">Grotesque</p>
+        </div>`)}
+      </div>
+      <div>
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6 border-t border-stone-800 pt-8">Opacity ladder</span>
+        ${[['100%', 'text-stone-50'], ['70%', 'text-stone-50/70'], ['50%', 'text-stone-50/50'], ['30%', 'text-stone-50/30'], ['20%', 'text-stone-50/20']].map(([pct, cls]) => html`
+        <div class="mb-4 flex items-baseline gap-3">
+          <span class="text-xs font-mono font-medium text-stone-50/40 w-8">${pct}</span>
+          <p class="text-base ${cls}">Primary text at ${pct}</p>
+        </div>`)}
+      </div>
+    </div>
+  </div>
+</section>`
+
+// ─── Section 03b: Geometry ────────────────────────────────────────────────────
+
+const SectionGeometry = () => html`
+<section id="geometry" class="border-b border-stone-200 dark:border-stone-800 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 pt-24 md:pt-32 pb-8">
+    <div class="flex items-center gap-4 mb-12">
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">03b</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Geometry</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
+    </div>
+    <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-4">
+      Shapes as images.
+    </h2>
+    <p class="text-base leading-relaxed text-stone-900/60 dark:text-stone-50/60 max-w-[52ch] mb-16">
+      Geometric forms at poster scale are compositional anchors, not decoration. A circle cropped by the frame, a bar slicing across columns, a triangle escaping its container &#8212; these are the images of the Swiss poster tradition.
+    </p>
+  </div>
+
+  <!-- Three poster compositions side by side, each straining at its frame -->
+  <div class="max-w-6xl mx-auto px-4 md:px-8 pb-24 md:pb-32">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Composition 1: Concentric arcs cropped by frame (Brockmann) -->
+      <div class="relative aspect-[3/4] bg-stone-900 dark:bg-stone-800 overflow-hidden group">
+        <!-- Concentric arcs — all escaping bottom-right -->
+        <div class="absolute -bottom-[30%] -right-[30%] w-[90%] h-0 pb-[90%] rounded-full border-[6px] border-[#C8102E] opacity-90"></div>
+        <div class="absolute -bottom-[20%] -right-[20%] w-[70%] h-0 pb-[70%] rounded-full border-[5px] border-[#C8102E]/60"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[50%] h-0 pb-[50%] rounded-full border-[4px] border-[#C8102E]/30"></div>
+        <div class="absolute -bottom-[2%] -right-[2%] w-[30%] h-0 pb-[30%] rounded-full border-[3px] border-[#C8102E]/15"></div>
+        <!-- Horizontal rules -->
+        <div class="absolute top-[15%] left-0 w-full h-px bg-stone-50/10"></div>
+        <div class="absolute top-[30%] left-0 w-[60%] h-px bg-stone-50/10"></div>
+        <!-- Label -->
+        <div class="absolute top-6 left-6 z-10">
+          <span class="text-[11px] tracking-widest uppercase text-stone-50/50 font-medium block">Musica Viva</span>
+          <span class="text-[11px] tracking-widest uppercase text-stone-50/30 font-medium block mt-1">Z&#252;rich / 1958</span>
+        </div>
+        <!-- Title escaping the bottom -->
+        <div class="absolute bottom-6 left-6 right-6 z-10">
+          <h3 class="text-3xl md:text-4xl font-bold text-stone-50 leading-[0.9]">Tonhalle</h3>
+        </div>
+      </div>
+
+      <!-- Composition 2: Diagonal slash with overlapping blocks (Weingart) -->
+      <div class="relative aspect-[3/4] bg-stone-100 dark:bg-stone-900 overflow-hidden border border-stone-200 dark:border-stone-800">
+        <!-- Large diagonal bar escaping both edges -->
+        <div class="absolute top-[10%] -left-[10%] w-[140%] h-12 bg-[#C8102E] -rotate-[25deg] origin-left"></div>
+        <div class="absolute top-[12%] -left-[10%] w-[140%] h-2 bg-[#003B8E]/40 -rotate-[25deg] origin-left"></div>
+        <!-- Overlapping rectangles -->
+        <div class="absolute top-[40%] left-[10%] w-[45%] h-[30%] bg-stone-900/10 dark:bg-stone-50/10"></div>
+        <div class="absolute top-[50%] left-[25%] w-[45%] h-[30%] bg-[#C8102E]/15 border-2 border-[#C8102E]/30"></div>
+        <!-- Large numeral escaping top-right — visible -->
+        <div class="absolute -top-4 -right-2 text-[10rem] font-bold leading-none text-stone-900/[0.12] dark:text-stone-50/[0.12] select-none">W</div>
+        <!-- Label -->
+        <div class="absolute top-6 left-6 z-10">
+          <span class="text-[11px] tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium block">Typografische Monatsbl&#228;tter</span>
+          <span class="text-[11px] tracking-widest uppercase text-stone-900/30 dark:text-stone-50/30 font-medium block mt-1">Basel / 1972</span>
+        </div>
+        <div class="absolute bottom-6 left-6 right-6 z-10">
+          <h3 class="text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-50 leading-[0.9]">Weingart</h3>
+        </div>
+      </div>
+
+      <!-- Composition 3: Large triangle + circle collision (Hofmann) -->
+      <div class="relative aspect-[3/4] bg-stone-950 overflow-hidden">
+        <!-- Massive triangle escaping the top-left corner -->
+        <div class="absolute -top-[10%] -left-[10%] w-[80%] h-[80%] bg-stone-50/90" style="clip-path: polygon(0 0, 100% 0, 0 100%)"></div>
+        <!-- Circle punching through the triangle -->
+        <div class="absolute top-[25%] left-[30%] w-[55%] h-0 pb-[55%] rounded-full bg-stone-950"></div>
+        <div class="absolute top-[27%] left-[32%] w-[51%] h-0 pb-[51%] rounded-full border-2 border-[#C8102E]/60"></div>
+        <!-- Accent bar across bottom -->
+        <div class="absolute bottom-[20%] left-0 w-full h-1 bg-[#C8102E]/40"></div>
+        <!-- Label -->
+        <div class="absolute top-6 right-6 z-10 text-right">
+          <span class="text-[11px] tracking-widest uppercase text-stone-50/50 font-medium block">Schule f&#252;r Gestaltung</span>
+          <span class="text-[11px] tracking-widest uppercase text-stone-50/30 font-medium block mt-1">Basel / 1960</span>
+        </div>
+        <div class="absolute bottom-6 left-6 right-6 z-10">
+          <h3 class="text-3xl md:text-4xl font-bold text-stone-50 leading-[0.9]">Hofmann</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-bleed geometric band — rhythmic repetition + shapes -->
+  <div class="relative h-56 md:h-72 bg-stone-900 dark:bg-stone-800 overflow-hidden">
+    <!-- Rhythmic horizontal line field — Troxler-style visual rhythm -->
+    <div class="absolute inset-0 text-stone-50/[0.06] line-rhythm pointer-events-none"></div>
+    <!-- Giant circle cropped by top and right edges -->
+    <div class="absolute -top-[50%] -right-[15%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full border-[8px] border-[#C8102E]/40 pointer-events-none"></div>
+    <!-- Halftone dot field — bottom-left corner -->
+    <div class="absolute bottom-0 left-0 w-1/3 h-2/3 text-stone-50/[0.05] halftone pointer-events-none"></div>
+    <!-- Small square accents -->
+    <div class="absolute top-[25%] left-[45%] w-12 h-12 bg-[#C8102E] opacity-60"></div>
+    <div class="absolute top-[30%] left-[47%] w-8 h-8 bg-[#003B8E] opacity-40"></div>
+    <!-- Diagonal accent bar across the band -->
+    <div class="absolute top-[40%] -left-[5%] w-[110%] h-1 bg-[#C8102E]/25 -rotate-2 pointer-events-none"></div>
+    <!-- Label — right-aligned (break top-left convention) -->
+    <div class="max-w-6xl mx-auto px-4 md:px-8 relative z-10 h-full flex items-end justify-end pb-8">
+      <div class="text-right">
+        <span class="text-[11px] tracking-widest uppercase text-stone-50/40 font-medium block">Geometric forms at poster scale are compositional anchors</span>
+        <span class="text-[11px] tracking-widest uppercase text-stone-50/20 font-medium block mt-1">Not ornament &#8212; not decoration &#8212; structure</span>
+      </div>
+    </div>
+  </div>
+</section>`
+
+// ─── Section 04: Grid Breakout ───────────────────────────────────────────────
+
+const SectionBreakout = () => html`
+<section id="breakout" class="border-b border-stone-200 dark:border-stone-800 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
+    <div class="flex items-center gap-4 mb-20">
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">04</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Breakout</span>
       <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
-    <div class="grid grid-cols-12 gap-8">
-      <!-- Dark full-bleed poster -->
-      <div class="col-span-12 md:col-span-7 bg-stone-950 dark:bg-stone-900 p-12 relative overflow-hidden min-h-[480px] flex flex-col justify-between">
-        <!-- Geometric: concentric circles top-right -->
-        <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
-        <div class="absolute -top-8 -right-8 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
-        <div class="absolute top-4 right-4 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
-        <!-- Geometric: triangle (CSS clip-path) bottom-left -->
+    <div class="grid grid-cols-12 gap-4 md:gap-8 mb-24">
+      <div class="col-span-12 md:col-span-7">
+        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+          The grid exists so<br>the breakout has<br>meaning.
+        </h2>
+        <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[52ch]">
+          Every layout starts with <code class="font-mono text-sm bg-stone-100 dark:bg-stone-900 px-1.5 py-0.5">grid grid-cols-12</code>. Then key elements escape using negative margins, absolute positioning, or overflow. Without the grid, there is nothing to break.
+        </p>
+      </div>
+    </div>
+
+    <!-- Demo 1: Negative margin breakout -->
+    <div class="mb-24">
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Pattern 01 &#8212; Negative margin breakout</span>
+      <div class="grid grid-cols-12 gap-4 md:gap-8 relative">
+        <div class="col-span-12 md:col-span-7">
+          <h3 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] text-stone-900 dark:text-stone-50 md:-mr-24 lg:-mr-32 relative z-10">Gestaltung</h3>
+          <p class="text-sm leading-relaxed text-stone-900/60 dark:text-stone-50/60 mt-6 max-w-[40ch]">
+            The heading escapes its column with a negative right margin, overlapping the neighboring column. The grid is visible. The escape is deliberate.
+          </p>
+        </div>
+        <div class="col-span-12 md:col-span-5 flex items-end">
+          <div class="border-t border-stone-200 dark:border-stone-800 pt-4 w-full">
+            <code class="font-mono text-xs text-stone-900/50 dark:text-stone-50/50 leading-relaxed block">md:-mr-24 lg:-mr-32 relative z-10</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo 2: Accent block escaping -->
+    <div class="mb-24">
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Pattern 02 &#8212; Absolute breakout</span>
+      <div class="relative min-h-[300px] md:min-h-[400px]">
+        <div class="grid grid-cols-12 gap-4 md:gap-8 relative z-10">
+          <div class="col-span-12 md:col-span-6 flex flex-col justify-end pb-8">
+            <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 mb-4">Kunsthaus Z&#252;rich / 1962</span>
+            <h3 class="text-3xl md:text-4xl font-light tracking-tight text-stone-900 dark:text-stone-50 leading-snug">Form und Farbe</h3>
+            <p class="text-sm leading-relaxed text-stone-900/60 dark:text-stone-50/60 mt-4 max-w-[36ch]">
+              An accent block floats above the grid with absolute positioning, creating a compositional anchor that the text works against.
+            </p>
+          </div>
+        </div>
+        <div class="absolute top-0 right-0 w-1/3 md:w-2/5 h-full bg-[#C8102E] z-0"></div>
+        <div class="absolute top-8 right-8 text-7xl md:text-9xl font-bold text-white/20 select-none pointer-events-none leading-none z-0">02</div>
+      </div>
+    </div>
+
+    <!-- Demo 3: Full-bleed band -->
+    <div class="mb-24">
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Pattern 03 &#8212; Full-bleed accent band</span>
+    </div>
+  </div>
+
+  <!-- Full-bleed: escapes the max-w container -->
+  <div class="bg-[#C8102E] py-16 md:py-24 relative overflow-hidden">
+    <div class="absolute top-0 left-0 text-[clamp(8rem,25vw,24rem)] font-bold leading-none text-white/10 select-none pointer-events-none -translate-y-1/4 -ml-4">CH</div>
+    <div class="max-w-6xl mx-auto px-4 md:px-8 relative z-10">
+      <span class="text-xs tracking-widest uppercase text-white/40">Helvetica / 1957</span>
+      <h3 class="text-4xl md:text-6xl lg:text-7xl font-light text-white mt-6 leading-tight">
+        The typeface that<br>defined a century.
+      </h3>
+      <p class="text-base leading-relaxed text-white/60 mt-6 max-w-[48ch]">
+        A full-bleed band ignores the content container entirely. The accent color runs edge to edge while content stays within <code class="font-mono text-sm text-white/80">max-w-6xl</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
+    <!-- Demo 4: Viewport-width type, VISIBLY cropped by right edge -->
+    <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Pattern 04 &#8212; Type cropped by the viewport edge</span>
+    <div class="overflow-hidden relative">
+      <div class="text-[clamp(5rem,16vw,18rem)] font-bold leading-[0.85] tracking-tighter text-stone-900/[0.12] dark:text-stone-50/[0.12] -ml-[2%] whitespace-nowrap select-none">
+        TYPOGRAPHIE
+      </div>
+      <!-- Rhythmic vertical line field — Troxler-style repetition -->
+      <div class="absolute top-0 left-[10%] w-[60%] h-full text-stone-900/[0.06] dark:text-stone-50/[0.06] line-rhythm-h pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 ml-4 mb-4">
+        <code class="font-mono text-xs text-stone-900/50 dark:text-stone-50/50 leading-relaxed block bg-stone-50/80 dark:bg-stone-950/80 px-2 py-1">Visible at 12% &#8212; type runs off the right edge</code>
+      </div>
+    </div>
+
+    <!-- Demo 5: Extreme letterspacing -->
+    <div class="mt-24">
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Pattern 05 &#8212; Extreme letterspacing</span>
+      <div class="overflow-hidden">
+        <p class="text-4xl md:text-6xl font-bold tracking-[0.3em] uppercase text-stone-900 dark:text-stone-50 whitespace-nowrap">B &nbsp;A &nbsp;S &nbsp;E &nbsp;L</p>
+        <p class="text-base leading-relaxed text-stone-900/60 dark:text-stone-50/60 mt-4 max-w-[40ch]">
+          Letters spaced to the point of disintegration. Each character becomes a solo figure. <code class="font-mono text-sm">tracking-[0.3em]</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>`
+
+// ─── Section 05: Overlap ─────────────────────────────────────────────────────
+
+const SectionOverlap = () => html`
+<section id="overlap" class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 relative overflow-hidden">
+  <!-- Halftone texture — top-left corner -->
+  <div class="absolute top-0 left-0 w-1/4 h-1/3 text-stone-900/[0.03] dark:text-stone-50/[0.03] halftone-lg pointer-events-none"></div>
+  <!-- Rotated readable type — right edge -->
+  <div class="absolute top-[15%] right-8 z-20 pointer-events-none hidden md:block">
+    <span class="text-base font-bold tracking-[0.2em] uppercase text-[#C8102E]/50 rotate-90 origin-top-right block whitespace-nowrap">Overlap &#8212; Depth &#8212; Collision</span>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
+    <div class="flex items-center gap-4 mb-20">
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">05</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Overlap</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 md:gap-8 mb-24">
+      <div class="col-span-12 md:col-span-7">
+        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+          Layers <span class="text-[#C8102E]">collide.</span>
+        </h2>
+        <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[52ch]">
+          Elements collide on purpose. Text over color blocks, cards stacked with offset, type crossing a dividing line. Every overlap has a clear z-index order &#8212; random collision looks like a bug.
+        </p>
+      </div>
+    </div>
+
+    <!-- Stacked cards with offset -->
+    <div class="mb-24">
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Stacked layers with offset</span>
+      <div class="relative h-[320px] md:h-[380px]">
+        <div class="absolute top-0 left-0 w-60 md:w-80 h-52 md:h-64 bg-stone-900 dark:bg-stone-100 p-6 md:p-8 z-10 flex flex-col justify-between">
+          <span class="text-[11px] tracking-widest uppercase text-stone-50/40 dark:text-stone-900/40 font-medium">Layer 01</span>
+          <h3 class="text-2xl font-light text-stone-50 dark:text-stone-900">Depth</h3>
+        </div>
+        <!-- Near-miss: only 6px offset — edges almost touching -->
+        <div class="absolute top-[6px] md:top-2 left-12 md:left-16 w-60 md:w-80 h-52 md:h-64 bg-[#C8102E] p-6 md:p-8 z-20 flex flex-col justify-between">
+          <span class="text-[11px] tracking-widest uppercase text-white/40 font-medium">Layer 02</span>
+          <h3 class="text-2xl font-light text-white">Through</h3>
+        </div>
+        <div class="absolute top-3 md:top-4 left-24 md:left-32 w-60 md:w-80 h-52 md:h-64 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 p-6 md:p-8 z-30 flex flex-col justify-between">
+          <span class="text-[11px] tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 font-medium">Layer 03</span>
+          <h3 class="text-2xl font-light text-stone-900 dark:text-stone-50">Overlap</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Split composition -->
+    <div class="mb-24">
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Split composition &#8212; type crossing the boundary</span>
+      <div class="relative min-h-[400px] md:min-h-[500px] overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 min-h-[400px] md:min-h-[500px]">
+          <div class="bg-stone-900 dark:bg-stone-100 p-8 md:p-16 flex items-end min-h-[200px]">
+            <span class="text-xs tracking-widest uppercase text-stone-50/40 dark:text-stone-900/40">Z&#252;rich 1959</span>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-950 p-8 md:p-16 flex items-end min-h-[200px]">
+            <p class="text-sm leading-relaxed text-stone-900/60 dark:text-stone-50/60 max-w-[36ch]">
+              Type uses <code class="font-mono text-xs">mix-blend-difference</code> to remain legible across both halves.
+            </p>
+          </div>
+        </div>
+        <h3 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl sm:text-6xl md:text-8xl font-bold text-white mix-blend-difference whitespace-nowrap z-10 pointer-events-none">
+          KONTRAST
+        </h3>
+      </div>
+    </div>
+
+    <!-- Poster cards grid -->
+    <div>
+      <span class="text-[11px] tracking-widest uppercase font-medium text-stone-900/40 dark:text-stone-50/40 block mb-8">Poster cards &#8212; oversized numerals escape their containers</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-stone-200 dark:bg-stone-800">
+        ${[
+          { num: '01', accent: '#C8102E', name: 'Musica Viva', desc: 'Concert posters for Tonhalle Z\u00fcrich. Geometric forms express musical rhythm.', designer: 'M\u00fcller-Brockmann', year: '1953' },
+          { num: '02', accent: '#003B8E', name: 'Neue Grafik', desc: 'Trilingual journal. 18 issues from 1958 to 1965. The voice of the Zurich school.', designer: 'Lohse, Vivarelli et al.', year: '1958' },
+          { num: '03', accent: '#F0B429', name: 'Jazz Willisau', desc: 'Festival posters that pushed Swiss design into expressive new territory.', designer: 'Niklaus Troxler', year: '1975' },
+          { num: '04', accent: '#2D6A4F', name: 'Raster Systeme', desc: 'The definitive guide to the typographic grid. Still in print.', designer: 'M\u00fcller-Brockmann', year: '1961' },
+          { num: '05', accent: '#E8431A', name: 'Geigy Posters', desc: 'Pharmaceutical advertising elevated to art. Basel school influence.', designer: 'Various designers', year: '1950s' },
+          { num: '06', accent: '#6B21A8', name: 'Weingart Type', desc: 'Post-punk typography that broke every rule the Swiss style established.', designer: 'Wolfgang Weingart', year: '1970s' },
+        ].map(({ num, accent, name, desc, designer, year }) => html`
+        <div class="bg-stone-50 dark:bg-stone-950 p-6 md:p-8 relative overflow-hidden min-h-[240px] flex flex-col justify-between group hover:bg-white dark:hover:bg-stone-900 transition-colors">
+          <span class="absolute -top-4 -left-1 text-7xl md:text-8xl font-bold leading-none select-none pointer-events-none" style="color: ${accent}; opacity: 0.15">${num}</span>
+          <div class="relative z-10">
+            <div class="w-6 h-1" style="background-color: ${accent}"></div>
+            <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 block mt-4 mb-2">${designer} / ${year}</span>
+            <h4 class="text-xl font-medium text-stone-900 dark:text-stone-50 leading-snug">${name}</h4>
+            <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed mt-2 max-w-[32ch]">${desc}</p>
+          </div>
+        </div>`)}
+      </div>
+    </div>
+  </div>
+</section>`
+
+// ─── Section 06: Color ───────────────────────────────────────────────────────
+
+const SectionColor = () => html`
+<section id="color" class="border-b border-stone-200 dark:border-stone-800">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
+    <div class="flex items-center gap-4 mb-20">
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">06</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Color</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 md:gap-8 mb-16">
+      <!-- Negative space on left creates active L-shape -->
+      <div class="col-span-12 md:col-span-5 md:col-start-8 md:text-right">
+        <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
+          One accent.<br><span class="text-[#C8102E]">Used boldly.</span>
+        </h2>
+        <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 md:ml-auto max-w-[52ch]">
+          The International Style limited accent to 10&#8211;15% of visual surface. Poster style can push to 30&#8211;40% &#8212; full-width bands, oversized shapes, dramatic backgrounds. The discipline of a single accent remains.
+        </p>
+      </div>
+    </div>
+
+    <!-- Grayscale -->
+    <div class="mb-20">
+      <h3 class="text-sm font-medium tracking-widest uppercase text-stone-900/70 dark:text-stone-50/70 mb-8">Stone palette</h3>
+      <div class="grid grid-cols-5 md:grid-cols-11 gap-px bg-stone-200 dark:bg-stone-800">
+        ${[
+          ['50', '#fafaf9'], ['100', '#f5f5f4'], ['200', '#e7e5e4'], ['300', '#d6d3d1'],
+          ['400', '#a8a29e'], ['500', '#78716c'], ['600', '#57534e'], ['700', '#44403c'],
+          ['800', '#292524'], ['900', '#1c1917'], ['950', '#0c0a09'],
+        ].map(([scale, hex]) => html`
+        <div class="aspect-square flex flex-col justify-end p-2" style="background-color: ${hex}">
+          <span class="text-[10px] font-mono" style="color: ${parseInt(scale) < 500 ? '#1c1917' : '#fafaf9'}; opacity: 0.6">${scale}</span>
+        </div>`)}
+      </div>
+    </div>
+
+    <!-- All accents x opacity -->
+    <div class="mb-20">
+      <h3 class="text-sm font-medium tracking-widest uppercase text-stone-900/70 dark:text-stone-50/70 mb-8">Accent palette &#215; opacity</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        ${ACCENTS.map(({ name, hex, label }) => html`
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm font-medium text-stone-900 dark:text-stone-50">${name}</span>
+            <span class="text-xs text-stone-900/40 dark:text-stone-50/40 tracking-widest uppercase">${label}</span>
+          </div>
+          <div class="space-y-1">
+            ${[['100%', 1], ['80%', 0.8], ['60%', 0.6], ['20%', 0.2], ['10%', 0.1]].map(([pct, opacity]) => html`
+            <div class="h-10 flex items-center px-3 relative overflow-hidden">
+              <div class="absolute inset-0" style="background-color: ${hex}; opacity: ${opacity};"></div>
+              <span class="relative text-xs font-mono" style="color: ${opacity >= 0.4 ? 'white' : hex}">${pct}</span>
+            </div>`)}
+          </div>
+          <code class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40 mt-2 block">${hex}</code>
+        </div>`)}
+      </div>
+    </div>
+
+    <!-- Opacity rule callout -->
+    <div class="bg-stone-900 p-8 border-l-4 border-[#C8102E]">
+      <h3 class="text-lg font-medium text-stone-50 mb-3">The opacity rule still holds</h3>
+      <p class="text-base leading-relaxed text-stone-50/70 max-w-[60ch]">
+        To make text less dominant, reduce opacity &#8212; never change the hue. <code class="font-mono font-semibold text-stone-50">text-stone-900/70</code> is secondary text. <code class="font-mono font-semibold text-stone-50">text-stone-900/40</code> is tertiary. The poster style uses accent more aggressively in <em>surfaces</em>, but text hierarchy still follows this rule.
+      </p>
+    </div>
+  </div>
+</section>`
+
+// ─── Section 07: Type Specimen ───────────────────────────────────────────────
+
+const SectionType = () => html`
+<section id="type" class="border-b border-stone-200 dark:border-stone-800">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
+    <div class="flex items-center gap-4 mb-20">
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">07</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Type</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 md:gap-8">
+      <div class="col-span-12 md:col-span-8">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50 mb-3">Font Specimen</h2>
+        <p class="text-base text-stone-900/70 dark:text-stone-50/70 mb-12 max-w-[52ch]">Grotesque typefaces in the Swiss tradition. The poster style uses the full weight range &#8212; 100 to 700 &#8212; for extreme contrast.</p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm min-w-[600px]">
+            <thead>
+              <tr class="border-t-2 border-stone-900 dark:border-stone-50 border-b border-b-stone-200 dark:border-b-stone-800">
+                <th class="text-left text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium py-3 pr-6 pl-4">Typeface</th>
+                <th class="text-left text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium py-3 pr-6">Designer</th>
+                <th class="text-left text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium py-3 pr-6">Year</th>
+                <th class="text-left text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium py-3 pr-6">Source</th>
+                <th class="text-right text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium py-3 pr-4">Fidelity</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${[
+                ['IBM Plex Sans',      'Mike Abbink / Bold Monday', '2017', 'Google Fonts', '96', true],
+                ['Hanken Grotesk',     'Hanken Design Co.',         '2021', 'Google Fonts', '92', false],
+                ['Barlow',             'Jeremy Tribby',             '2017', 'Google Fonts', '88', false],
+                ['Host Grotesk',       'Fraunhofer IAIS',           '2018', 'Google Fonts', '84', false],
+                ['DM Sans',            'Colophon Foundry',          '2019', 'Google Fonts', '79', false],
+                ['Neue Haas Grotesk',  'Miedinger & Hoffmann',      '1957', 'Linotype',     '100', false],
+                ['Univers',            'Adrian Frutiger',           '1957', 'Linotype',     '98', false],
+              ].map(([name, designer, year, source, score, featured]) => html`
+              <tr class="border-b border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors ${featured ? 'bg-[#C8102E]/5' : ''}">
+                <td class="py-4 pr-6 pl-4">
+                  <span class="text-stone-900 dark:text-stone-50 font-normal">${name}</span>
+                  ${featured ? html`<span class="ml-2 text-[11px] tracking-widest uppercase bg-[#C8102E]/10 text-[#C8102E] px-1.5 py-0.5">Primary</span>` : ''}
+                </td>
+                <td class="py-4 pr-6 text-stone-900/60 dark:text-stone-50/60">${designer}</td>
+                <td class="py-4 pr-6 text-stone-900/60 dark:text-stone-50/60 font-mono text-sm">${year}</td>
+                <td class="py-4 pr-6 text-stone-900/50 dark:text-stone-50/50 text-sm tracking-wide">${source}</td>
+                <td class="py-4 pr-4 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <div class="w-16 h-1 bg-stone-200 dark:bg-stone-800 relative">
+                      <div class="absolute left-0 top-0 h-full bg-[#C8102E]" style="width: ${score}%"></div>
+                    </div>
+                    <span class="text-sm font-mono text-stone-900/50 dark:text-stone-50/50 w-6">${score}</span>
+                  </div>
+                </td>
+              </tr>`)}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-span-12 md:col-span-4 flex flex-col gap-4">
+        ${ACCENTS.slice(0, 4).map(({ hex, name, desc }) => html`
+        <div class="border border-stone-200 dark:border-stone-800 p-5 flex items-start gap-4">
+          <div class="w-8 h-8 shrink-0 mt-0.5" style="background-color: ${hex}"></div>
+          <div>
+            <p class="text-sm font-medium text-stone-900 dark:text-stone-50">${name}</p>
+            <p class="text-xs text-stone-900/40 dark:text-stone-50/40 font-mono mt-0.5">${hex}</p>
+            <p class="text-sm text-stone-900/60 dark:text-stone-50/60 mt-2 leading-relaxed">${desc}</p>
+          </div>
+        </div>`)}
+      </div>
+    </div>
+  </div>
+</section>`
+
+// ─── Section 08: Poster Compositions ─────────────────────────────────────────
+
+const SectionPosters = () => html`
+<section id="posters" class="border-b border-stone-200 dark:border-stone-800 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
+    <div class="flex items-center gap-4 mb-20">
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">08</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Posters</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 md:gap-8">
+      <!-- Dark poster -->
+      <div class="col-span-12 md:col-span-7 bg-stone-950 dark:bg-stone-900 p-8 md:p-12 relative overflow-hidden min-h-[480px] flex flex-col justify-between">
+        <!-- Geometric: large circle -->
+        <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full border border-stone-700/50 pointer-events-none"></div>
+        <div class="absolute -top-8 -right-8 w-64 h-64 rounded-full border border-stone-700/30 pointer-events-none"></div>
+        <!-- Oversized numeral -->
+        <div class="absolute top-4 right-8 text-[10rem] md:text-[14rem] font-bold leading-none text-stone-50/[0.04] select-none pointer-events-none">03</div>
+        <!-- Triangle -->
         <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#003B8E]/30 pointer-events-none" style="clip-path: polygon(0 100%, 100% 100%, 0 0)"></div>
 
-        <div>
+        <div class="relative z-10">
           <div class="flex items-center gap-3 mb-12">
-            <div class="w-6 h-px bg-[#003B8E]"></div>
-            <span class="text-xs tracking-widest uppercase text-stone-50/60">Kunsthaus Zürich</span>
+            <div class="w-8 h-1.5 bg-[#003B8E]"></div>
+            <span class="text-xs tracking-widest uppercase text-stone-50/50">Kunsthaus Z&#252;rich</span>
           </div>
-          <p class="text-xs tracking-widest uppercase text-stone-50/50 mb-4">15. März — 30. April 1962</p>
-          <h2 class="text-5xl md:text-7xl font-normal tracking-tight text-stone-50 leading-none">
-            Form<br>und<br>Farbe
-          </h2>
+          <p class="text-xs tracking-widest uppercase text-stone-50/40 mb-4">15. M&#228;rz &#8212; 30. April 1962</p>
+          <h3 class="text-5xl md:text-7xl font-bold tracking-tight leading-[0.9]">
+            <span class="text-stone-50">Form</span><br><span class="text-stone-50">und</span><br><span class="text-[#003B8E]">Farbe</span>
+          </h3>
         </div>
 
         <div class="relative z-10">
           <div class="w-full h-px bg-stone-700 mb-6"></div>
           <div class="flex items-end justify-between">
-            <div>
-              <p class="text-sm text-stone-50/70 leading-relaxed max-w-[28ch]">
-                Eine Ausstellung über die Beziehung zwischen Form, Farbe und Raum in der modernen Kunst.
-              </p>
-            </div>
+            <p class="text-sm text-stone-50/60 leading-relaxed max-w-[28ch]">
+              Eine Ausstellung &#252;ber die Beziehung zwischen Form, Farbe und Raum in der modernen Kunst.
+            </p>
             <div class="text-right">
               <div class="w-8 h-8 bg-[#003B8E] mb-2"></div>
-              <span class="text-xs tracking-widest uppercase text-stone-50/40">Eintritt frei</span>
+              <span class="text-xs tracking-widest uppercase text-stone-50/30">Eintritt frei</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Light poster -->
-      <div class="col-span-12 md:col-span-5 bg-stone-100 dark:bg-stone-900 p-10 relative overflow-hidden min-h-[480px] flex flex-col justify-between border border-stone-200 dark:border-stone-800">
-        <div class="absolute top-0 left-0 w-full h-1 bg-[#C8102E]"></div>
+      <div class="col-span-12 md:col-span-5 bg-stone-100 dark:bg-stone-900 p-8 md:p-10 relative overflow-hidden min-h-[480px] flex flex-col justify-between border border-stone-200 dark:border-stone-800">
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-[#C8102E]"></div>
+        <!-- Background type bleed -->
+        <div class="absolute -bottom-4 -right-4 text-8xl md:text-9xl font-bold text-stone-900/[0.04] dark:text-stone-50/[0.04] leading-none select-none pointer-events-none">NT</div>
 
-        <div>
-          <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">International Typography</span>
-          <h2 class="text-4xl md:text-5xl font-normal tracking-tight text-stone-900 dark:text-stone-50 leading-tight mt-6">
+        <div class="relative z-10">
+          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50">International Typography</span>
+          <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mt-6">
             Neue<br>Typographie
-          </h2>
-          <p class="text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-6 max-w-[32ch]">
-            A symposium on the principles of modern Swiss typography and the mathematical grid.
+          </h3>
+          <p class="text-base leading-relaxed text-stone-900/60 dark:text-stone-50/60 mt-6 max-w-[32ch]">
+            A symposium on the expressive potential of modern Swiss typography beyond the grid.
           </p>
         </div>
 
-        <div>
+        <div class="relative z-10">
           <div class="grid grid-cols-2 gap-4 mb-8">
-            ${[['Date', 'April 12, 1962'], ['Venue', 'Kunstgewerbeschule Zürich'], ['Time', '14:00–18:00'], ['Entry', 'Free']].map(([label, value]) => html`
+            ${[['Date', 'April 12, 1962'], ['Venue', 'Kunstgewerbeschule'], ['Time', '14:00\u201318:00'], ['Entry', 'Free']].map(([label, value]) => html`
             <div>
-              <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 block mb-1">${label}</span>
+              <span class="text-xs tracking-widest uppercase text-stone-900/30 dark:text-stone-50/30 block mb-1">${label}</span>
               <span class="text-sm text-stone-900 dark:text-stone-50">${value}</span>
             </div>`)}
           </div>
@@ -313,468 +903,67 @@ const SectionPoster = () => html`
   </div>
 </section>`
 
-// ─── Section 04: Data / Table ────────────────────────────────────────────────
-
-const SectionData = () => html`
-<section id="data" class="border-b border-stone-200 dark:border-stone-800">
-  <div class="max-w-6xl mx-auto px-8 py-32">
-    <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">04</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Data</span>
-      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
-    </div>
-
-    <div class="grid grid-cols-12 gap-8">
-      <div class="col-span-12 md:col-span-8">
-        <h2 class="text-3xl md:text-4xl font-normal tracking-tight text-stone-900 dark:text-stone-50 mb-3">Font Specimen</h2>
-        <p class="text-base text-stone-900/70 dark:text-stone-50/70 mb-12 max-w-[52ch]">Grotesque typefaces in the Swiss tradition, ranked by fidelity to the International Style.</p>
-
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-t-2 border-stone-900 dark:border-stone-50 border-b border-b-stone-200 dark:border-b-stone-800">
-              <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6 pl-4">Typeface</th>
-              <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Designer</th>
-              <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Year</th>
-              <th class="text-left text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-6">Source</th>
-              <th class="text-right text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium py-3 pr-4">Fidelity</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${[
-              // Neue Haas Grotesk: Miedinger designed letterforms, Hoffmann (Haas) directed/commissioned — both credited
-              ['IBM Plex Sans',      'Mike Abbink / Bold Monday', '2017', 'Google Fonts', '96', true],
-              ['Hanken Grotesk',     'Hanken Design Co.',         '2021', 'Google Fonts', '92', false],
-              ['Barlow',             'Jeremy Tribby',             '2017', 'Google Fonts', '88', false],
-              ['Host Grotesk',       'Fraunhofer IAIS',           '2018', 'Google Fonts', '84', false],
-              ['DM Sans',            'Colophon Foundry',          '2019', 'Google Fonts', '79', false],
-              // Neue Haas Grotesk: launched 1957 as "Neue Haas Grotesk", renamed Helvetica 1960
-              ['Neue Haas Grotesk',  'Miedinger & Hoffmann',      '1957', 'Linotype',     '100', false],
-              // Univers: Frutiger, also 1957 — favored by Basel school
-              ['Univers',            'Adrian Frutiger',           '1957', 'Linotype',     '98', false],
-            ].map(([name, designer, year, source, score, featured]) => html`
-            <tr class="border-b border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors ${featured ? 'bg-[#C8102E]/5' : ''}">
-              <td class="py-4 pr-6 pl-4">
-                <span class="text-stone-900 dark:text-stone-50 font-normal">${name}</span>
-                ${featured ? html`<span class="ml-2 text-xs tracking-widest uppercase bg-[#C8102E]/10 text-[#C8102E] px-1.5 py-0.5">Primary</span>` : ''}
-              </td>
-              <td class="py-4 pr-6 text-stone-900/70 dark:text-stone-50/70">${designer}</td>
-              <td class="py-4 pr-6 text-stone-900/70 dark:text-stone-50/70 font-mono text-sm">${year}</td>
-              <td class="py-4 pr-6 text-stone-900/60 dark:text-stone-50/60 text-sm tracking-wide">${source}</td>
-              <td class="py-4 pr-4 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <div class="w-16 h-0.5 bg-stone-200 dark:bg-stone-800 relative">
-                    <div class="absolute left-0 top-0 h-full bg-[#C8102E]" style="width: ${score}%"></div>
-                  </div>
-                  <span class="text-sm font-mono text-stone-900/60 dark:text-stone-50/60 w-6">${score}</span>
-                </div>
-              </td>
-            </tr>`)}
-          </tbody>
-        </table>
-
-        <p class="text-sm text-stone-900/70 dark:text-stone-50/70 mt-6 leading-relaxed max-w-[60ch]">
-          Neue Haas Grotesk (1957) was the original name for what became Helvetica in 1960, when it was renamed for international distribution by Haas and D. Stempel AG. Univers, released the same year by Adrian Frutiger, was favored by the Basel school while the Zürich school championed Helvetica.
-        </p>
-      </div>
-
-      <!-- Side accent blocks -->
-      <div class="col-span-12 md:col-span-4 flex flex-col gap-4">
-        ${ACCENTS.slice(0, 4).map(({ hex, name, desc }) => html`
-        <div class="border border-stone-200 dark:border-stone-800 p-5 flex items-start gap-4">
-          <div class="w-8 h-8 shrink-0 mt-0.5" style="background-color: ${hex}"></div>
-          <div>
-            <p class="text-sm font-medium text-stone-900 dark:text-stone-50">${name}</p>
-            <p class="text-xs text-stone-900/50 dark:text-stone-50/50 font-mono mt-0.5">${hex}</p>
-            <p class="text-sm text-stone-900/60 dark:text-stone-50/60 mt-2 leading-relaxed">${desc}</p>
-          </div>
-        </div>`)}
-      </div>
-    </div>
-  </div>
-</section>`
-
-// ─── Section 05: Cards Grid ──────────────────────────────────────────────────
-
-const SectionCards = () => html`
-<section id="cards" class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900">
-  <div class="max-w-6xl mx-auto px-8 py-32">
-    <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">05</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Cards</span>
-      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
-    </div>
-
-    <div class="mb-12">
-      <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 dark:text-stone-50">Objects of Swiss Design</h2>
-      <p class="text-base text-stone-900/70 dark:text-stone-50/70 mt-3 max-w-[48ch]">Six artefacts that defined the modernist era in Swiss design.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-stone-200 dark:bg-stone-800">
-      ${[
-        {
-          accent: '#C8102E', label: 'Chair', year: '1938',
-          name: 'Landi Chair',
-          desc: 'Hans Coray\u2019s aluminium Landi chair, designed for the 1939 Swiss National Exhibition. A landmark of Swiss industrial design.',
-          tag: 'Furniture',
-          href: 'https://en.wikipedia.org/wiki/Hans_Coray'
-        },
-        {
-          accent: '#003B8E', label: 'Poster', year: '1953',
-          name: 'Musica Viva',
-          desc: 'Josef M\u00fcller-Brockmann\u2019s concert posters for Tonhalle Z\u00fcrich. Geometric forms used to express musical rhythm and structure.',
-          tag: 'Print',
-          href: 'https://www.stedelijk.nl/en/collection/57037-josef-muller-brockmann-volkskonzert-der-tonhalle-gesellschaft-zurich-musica-viva'
-        },
-        {
-          accent: '#F0B429', label: 'Clock', year: '1944',
-          name: 'SBB Railway Clock',
-          desc: 'Hans Hilfiker\u2019s station clock for Swiss Federal Railways. The iconic red sweep second hand was finalised in 1955.',
-          tag: 'Industrial',
-          href: 'https://www.eguide.ch/en/objekt/sbb-bahnhofsuhr/'
-        },
-        {
-          accent: '#2D6A4F', label: 'Type', year: '1957',
-          name: 'Neue Haas Grotesk',
-          desc: 'Max Miedinger and Eduard Hoffmann\u2019s neutral grotesque, designed at the Haas Type Foundry in M\u00fcnchenbuchsee. Renamed Helvetica in 1960.',
-          tag: 'Typography',
-          href: 'https://en.wikipedia.org/wiki/Max_Miedinger'
-        },
-        {
-          accent: '#C8102E', label: 'Journal', year: '1958',
-          name: 'Neue Grafik',
-          desc: 'Trilingual journal edited by Lohse, M\u00fcller-Brockmann, Neuburg, and Vivarelli. Published 18 issues from 1958 to 1965.',
-          tag: 'Publication',
-          href: 'https://designreviewed.com/series/neue-grafik-new-graphic-design-graphisme-actuel/'
-        },
-        {
-          accent: '#003B8E', label: 'Book', year: '1961',
-          name: 'Raster Systeme',
-          desc: 'M\u00fcller-Brockmann\u2019s definitive guide to the typographic grid system. Published in German, English, and French. Still in print.',
-          tag: 'Reference',
-          href: 'https://archive.org/details/gridsystemsingra0000muml'
-        },
-      ].map(({ accent, label, year, name, desc, tag, href }) => html`
-      <a href="${href}" target="_blank" rel="noopener" class="bg-stone-50 dark:bg-stone-950 p-8 flex flex-col gap-6 hover:bg-white dark:hover:bg-stone-900 transition-colors group relative overflow-hidden">
-        <!-- Geometric accent: small circle top-right corner -->
-        <div class="absolute top-4 right-4 w-12 h-12 rounded-full border-2 pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity" style="border-color: ${accent}"></div>
-        <div class="flex items-start justify-between">
-          <div class="w-10 h-10" style="background-color: ${accent};"></div>
-          <span class="text-sm font-mono font-medium text-stone-900/70 dark:text-stone-50/70">${year}</span>
-        </div>
-        <div>
-          <div class="w-6 h-px mb-4" style="background-color: ${accent}"></div>
-          <span class="text-xs tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70 block mb-2">${label}</span>
-          <h3 class="text-xl font-medium text-stone-900 dark:text-stone-50 leading-snug group-hover:text-[${accent}] transition-colors">${name}</h3>
-          <p class="text-sm text-stone-900/70 dark:text-stone-50/70 leading-relaxed mt-3 max-w-[32ch]">${desc}</p>
-        </div>
-        <div class="mt-auto pt-4 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
-          <span class="text-xs tracking-widest uppercase font-medium px-2 py-1" style="background-color: ${accent}25; color: ${accent}">${tag}</span>
-          <span class="text-stone-900/50 dark:text-stone-50/50 text-sm group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">↗</span>
-        </div>
-      </a>`)}
-    </div>
-  </div>
-</section>`
-
-// ─── Section 06: App Chrome ───────────────────────────────────────────────────
-
-const SectionApp = () => html`
-<section id="app" class="border-b border-stone-200 dark:border-stone-800">
-  <div class="max-w-6xl mx-auto px-8 py-32">
-    <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">06</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">App</span>
-      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
-    </div>
-
-    <!-- App shell -->
-    <div class="border border-stone-200 dark:border-stone-800 overflow-hidden">
-      <!-- App top bar -->
-      <div class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 px-6 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-6">
-          <span class="text-sm font-medium tracking-widest uppercase text-stone-900 dark:text-stone-50">Archiv</span>
-          <span class="text-sm text-stone-900/50 dark:text-stone-50/50">Design Collection</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700"></span>
-          <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700"></span>
-          <span class="w-2 h-2 rounded-full bg-[#C8102E]"></span>
-        </div>
-      </div>
-
-      <div class="flex">
-        <!-- Sidebar -->
-        <div class="w-48 border-r border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-950 p-6 min-h-72 shrink-0">
-          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-4">Collections</span>
-          <ul class="space-y-0.5">
-            ${[
-              { label: 'All items', count: '128', active: false },
-              { label: 'Typography', count: '34', active: true },
-              { label: 'Architecture', count: '22', active: false },
-              { label: 'Industrial', count: '41', active: false },
-              { label: 'Print', count: '31', active: false },
-            ].map(({ label, count, active }) => html`
-            <li>
-              <a href="#" class="flex items-center justify-between py-2 px-2 text-sm ${active ? 'text-[#C8102E] bg-[#C8102E]/5' : 'text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 hover:bg-stone-100 dark:hover:bg-stone-900'} transition-colors">
-                <span>${label}</span>
-                <span class="font-mono text-xs ${active ? 'text-[#C8102E]/70' : 'text-stone-900/40 dark:text-stone-50/40'}">${count}</span>
-              </a>
-            </li>`)}
-          </ul>
-        </div>
-
-        <!-- Main content -->
-        <div class="flex-1 p-8">
-          <!-- Breadcrumb -->
-          <div class="flex items-center gap-2 text-sm text-stone-900/50 dark:text-stone-50/50 mb-6">
-            <span>Collection</span>
-            <span>/</span>
-            <span class="text-stone-900 dark:text-stone-50">Typography</span>
-          </div>
-
-          <div class="flex items-start justify-between mb-8">
-            <div>
-              <h3 class="text-2xl font-normal text-stone-900 dark:text-stone-50">Typography</h3>
-              <p class="text-sm text-stone-900/60 dark:text-stone-50/60 mt-1">34 items in collection</p>
-            </div>
-            <button class="px-4 py-2 bg-[#C8102E] text-white text-xs tracking-widest uppercase hover:bg-[#C8102E]/90 transition-colors">
-              Add item
-            </button>
-          </div>
-
-          <!-- Item list -->
-          <div class="space-y-0">
-            ${[
-              // Helvetica released 1957 as Neue Haas Grotesk, renamed 1960
-              { name: 'Helvetica',         year: '1957/1960', designer: 'Miedinger & Hoffmann' },
-              // Univers 1957 — Frutiger ✓
-              { name: 'Univers',           year: '1957',      designer: 'Adrian Frutiger' },
-              // Akzidenz-Grotesk 1896 — Berthold ✓ (preceded Swiss Style, influenced it)
-              { name: 'Akzidenz-Grotesk',  year: '1896',      designer: 'H. Berthold AG' },
-              // Folio 1957 — Bauer & Baum (not just Bauer)
-              { name: 'Folio',             year: '1957',      designer: 'Bauer & Baum' },
-            ].map(({ name, year, designer }) => html`
-            <div class="border-t border-stone-200 dark:border-stone-800 py-4 flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-900/50 px-2 -mx-2 transition-colors cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-6 h-6 border border-stone-200 dark:border-stone-800 flex items-center justify-center">
-                  <span class="text-[9px] font-mono text-stone-900/50 dark:text-stone-50/50">Aa</span>
-                </div>
-                <span class="text-base text-stone-900 dark:text-stone-50">${name}</span>
-              </div>
-              <div class="flex items-center gap-8">
-                <span class="text-sm text-stone-900/60 dark:text-stone-50/60">${designer}</span>
-                <span class="text-sm font-mono text-stone-900/50 dark:text-stone-50/50">${year}</span>
-              </div>
-            </div>`)}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>`
-
-// ─── Section 07: Typography Specimen ─────────────────────────────────────────
-
-const SectionType = () => html`
-<section id="type" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50">
-  <div class="max-w-6xl mx-auto px-8 py-32">
-    <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-50/60">07</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-50/80">Type</span>
-      <div class="flex-1 h-px bg-stone-700"></div>
-    </div>
-
-    <div class="grid grid-cols-12 gap-8">
-      <div class="col-span-12 md:col-span-8 space-y-16">
-        <!-- Display -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Display — 80px normal tracking-tight leading-none</span>
-          <p class="text-8xl font-normal tracking-tight leading-none">Form Folgt</p>
-        </div>
-        <!-- H1 -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">H1 — 60px normal tracking-tight leading-tight</span>
-          <p class="text-6xl font-normal tracking-tight leading-tight">Grid Systems in<br>Graphic Design</p>
-        </div>
-        <!-- H2 -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">H2 — 48px normal tracking-tight leading-snug</span>
-          <p class="text-5xl font-normal tracking-tight leading-snug">The Typographic Grid</p>
-        </div>
-        <!-- H3 -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">H3 — 30px medium leading-snug</span>
-          <p class="text-3xl font-medium leading-snug">Alignment and Proportion</p>
-        </div>
-        <!-- Body -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Body — 18px normal leading-relaxed max-w-[60ch]</span>
-          <p class="text-lg font-normal leading-relaxed max-w-[60ch]">The grid system is an aid, not a guarantee. It permits a number of possible uses and each designer can look for a solution appropriate to his personal style. But one must learn how to use the grid; it is an art that requires practice.</p>
-        </div>
-        <!-- Small -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Small — 15px normal leading-relaxed</span>
-          <p class="text-[15px] font-normal leading-relaxed text-stone-50/70 max-w-[60ch]">Supporting text at reduced opacity. Used for descriptions, metadata, and secondary content that accompanies primary body copy.</p>
-        </div>
-        <!-- Caption -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Caption — 12px tracking-widest uppercase</span>
-          <p class="text-xs tracking-widest uppercase text-stone-50/50">Figure 03 — Basel, Switzerland, 1961 — Offset Lithography</p>
-        </div>
-        <!-- Mono -->
-        <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Mono — IBM Plex Mono 15px</span>
-          <p class="font-mono text-[15px] text-stone-50/80">npx skills add zeke/swiss-design-skill</p>
-        </div>
-      </div>
-
-      <!-- Right: weight / opacity ladder -->
-      <div class="col-span-12 md:col-span-4">
-        <div class="sticky top-24 space-y-8">
-          <div>
-            <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6 border-t border-stone-800 pt-8">Weight ladder</span>
-            ${[['Light 300', 'font-light'], ['Normal 400', 'font-normal'], ['Medium 500', 'font-medium'], ['Semi 600', 'font-semibold']].map(([label, cls]) => html`
-            <div class="mb-5">
-              <span class="text-xs font-medium text-stone-50/60 block mb-1">${label}</span>
-              <p class="text-3xl ${cls} text-stone-50">Grotesque</p>
-            </div>`)}
-          </div>
-          <div>
-            <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6 border-t border-stone-800 pt-8">Opacity ladder</span>
-            ${[['100%', 'text-stone-50'], ['70%', 'text-stone-50/70'], ['50%', 'text-stone-50/50'], ['30%', 'text-stone-50/30']].map(([pct, cls]) => html`
-            <div class="mb-4 flex items-baseline gap-3">
-              <span class="text-xs font-mono font-medium text-stone-50/60 w-8">${pct}</span>
-              <p class="text-base ${cls}">Primary text at ${pct}</p>
-            </div>`)}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>`
-
-// ─── Section 08: Color & Opacity ─────────────────────────────────────────────
-
-const SectionColor = () => html`
-<section id="color" class="border-b border-stone-200 dark:border-stone-800">
-  <div class="max-w-6xl mx-auto px-8 py-32">
-    <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">08</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Color</span>
-      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
-    </div>
-
-    <!-- Grayscale -->
-    <div class="mb-20">
-      <h3 class="text-sm font-medium tracking-widest uppercase text-stone-900/80 dark:text-stone-50/80 mb-8">Grayscale</h3>
-      <div class="grid grid-cols-5 md:grid-cols-11 gap-px bg-stone-200 dark:bg-stone-800">
-        ${[
-          ['50', '#fafaf9'],
-          ['100', '#f5f5f4'],
-          ['200', '#e7e5e4'],
-          ['300', '#d6d3d1'],
-          ['400', '#a8a29e'],
-          ['500', '#78716c'],
-          ['600', '#57534e'],
-          ['700', '#44403c'],
-          ['800', '#292524'],
-          ['900', '#1c1917'],
-          ['950', '#0c0a09'],
-        ].map(([scale, hex]) => html`
-        <div class="aspect-square flex flex-col justify-end p-2" style="background-color: ${hex}">
-          <span class="text-[10px] font-mono" style="color: ${parseInt(scale) < 500 ? '#1c1917' : '#fafaf9'}; opacity: 0.6">${scale}</span>
-        </div>`)}
-      </div>
-    </div>
-
-    <!-- All 8 accent colors + opacity -->
-    <div class="mb-20">
-      <h3 class="text-sm font-medium tracking-widest uppercase text-stone-900/80 dark:text-stone-50/80 mb-8">Accent palette × opacity</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        ${ACCENTS.map(({ name, hex, label }) => html`
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-sm font-medium text-stone-900 dark:text-stone-50">${name}</span>
-            <span class="text-xs text-stone-900/50 dark:text-stone-50/50 tracking-widest uppercase">${label}</span>
-          </div>
-          <div class="space-y-1">
-            ${[['100%', 1], ['60%', 0.6], ['20%', 0.2], ['10%', 0.1]].map(([pct, opacity]) => html`
-            <div class="h-10 flex items-center px-3 relative overflow-hidden">
-              <div class="absolute inset-0" style="background-color: ${hex}; opacity: ${opacity};"></div>
-              <span class="relative text-xs font-mono" style="color: ${opacity >= 0.4 ? 'white' : hex}">${pct}</span>
-            </div>`)}
-          </div>
-          <code class="text-xs font-mono text-stone-900/50 dark:text-stone-50/50 mt-2 block">${hex}</code>
-        </div>`)}
-      </div>
-    </div>
-
-    <!-- Opacity rule callout -->
-    <div class="bg-stone-900 p-8 border-l-2 border-stone-600">
-      <h3 class="text-lg font-medium text-stone-50 mb-3">The opacity rule</h3>
-      <p class="text-base leading-relaxed text-stone-50/70 max-w-[60ch]">
-        To make text less dominant, reduce opacity — never change the hue. <code class="font-mono font-semibold text-stone-50">text-stone-900/70</code> is secondary text. <code class="font-mono font-semibold text-stone-50">text-stone-900/50</code> is tertiary. Never use mid-scale stone values (stone-400–700) for text hierarchy.
-      </p>
-    </div>
-  </div>
-</section>`
-
 // ─── Section 09: Form ────────────────────────────────────────────────────────
 
 const SectionForm = () => html`
-<section id="form" class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900">
-  <div class="max-w-6xl mx-auto px-8 py-32">
+<section id="form" class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 relative overflow-hidden">
+  <!-- Rotated background text — VISIBLE -->
+  <div class="absolute -top-4 -right-8 text-[clamp(8rem,22vw,18rem)] font-bold leading-none text-stone-900/[0.08] dark:text-stone-50/[0.08] select-none pointer-events-none -rotate-12 origin-top-right">REG</div>
+  <!-- Rhythmic line texture — bottom-left -->
+  <div class="absolute bottom-0 left-0 w-1/4 h-1/3 text-stone-900/[0.04] dark:text-stone-50/[0.04] line-rhythm pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32 relative z-10">
     <div class="flex items-center gap-4 mb-20">
       <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">09</span>
       <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Form</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
-    <div class="grid grid-cols-12 gap-8">
+    <div class="grid grid-cols-12 gap-4 md:gap-8">
       <div class="col-span-12 md:col-span-5">
-        <div class="w-6 h-px bg-[#F0B429] mb-8"></div>
-        <h2 class="text-3xl md:text-4xl font-normal tracking-tight text-stone-900 dark:text-stone-50 mb-4">
+        <div class="w-8 h-1.5 bg-[#F0B429] mb-8"></div>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-4">
           Symposium<br>Registration
         </h2>
         <p class="text-base leading-relaxed text-stone-900/60 dark:text-stone-50/60 max-w-[36ch]">
-          International Typographic Symposium. Zürich, 12–14 April 1962. Capacity limited to 120 participants.
+          International Typographic Symposium. Z&#252;rich, 12&#8211;14 April 1962. Capacity limited to 120 participants.
         </p>
         <div class="mt-12 space-y-4">
           ${[
-            ['Venue',    'Kunstgewerbeschule Zürich'],
+            ['Venue', 'Kunstgewerbeschule Z\u00fcrich'],
             ['Language', 'German, French, English'],
-            ['Fee',      'CHF 45 / Students CHF 20'],
+            ['Fee', 'CHF 45 / Students CHF 20'],
             ['Deadline', '1 March 1962']
           ].map(([k, v]) => html`
           <div class="flex gap-4 border-t border-stone-200 dark:border-stone-800 pt-4">
-            <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 w-20 shrink-0 pt-0.5">${k}</span>
+            <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 w-20 shrink-0 pt-0.5">${k}</span>
             <span class="text-sm text-stone-900/80 dark:text-stone-50/80">${v}</span>
           </div>`)}
         </div>
       </div>
 
       <div class="col-span-12 md:col-span-6 md:col-start-7">
-        <form class="space-y-6 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 p-8" onsubmit="return false">
+        <form class="space-y-6 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 p-6 md:p-8" onsubmit="return false">
           <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
-              <label class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium">First name</label>
-              <input type="text" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="Josef">
+              <label class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium">First name</label>
+              <input type="text" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="Wolfgang">
             </div>
             <div class="flex flex-col gap-2">
-              <label class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium">Last name</label>
-              <input type="text" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="Müller-Brockmann">
+              <label class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium">Last name</label>
+              <input type="text" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="Weingart">
             </div>
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium">Email address</label>
-            <input type="email" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="jmb@schule.ch">
+            <label class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium">Email</label>
+            <input type="email" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="ww@schule.ch">
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium">Institution</label>
-            <input type="text" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="Kunstgewerbeschule Zürich">
+            <label class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium">Institution</label>
+            <input type="text" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30 transition-colors" placeholder="Kunstgewerbeschule Basel">
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium">Attendance</label>
+            <label class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 font-medium">Attendance</label>
             <select class="border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 appearance-none">
               <option>Full symposium (3 days)</option>
               <option>Day 1 only</option>
@@ -782,13 +971,9 @@ const SectionForm = () => html`
               <option>Day 3 only</option>
             </select>
           </div>
-          <div class="flex flex-col gap-2">
-            <label class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 font-medium">Message (optional)</label>
-            <textarea rows="3" class="border border-stone-300 dark:border-stone-700 bg-transparent text-stone-900 dark:text-stone-50 text-base px-4 py-3 outline-none focus:border-stone-900 dark:focus:border-stone-50 resize-none transition-colors placeholder:text-stone-900/30 dark:placeholder:text-stone-50/30" placeholder="Dietary requirements, accessibility needs, etc."></textarea>
-          </div>
           <label class="flex items-start gap-3 cursor-pointer">
             <input type="checkbox" class="mt-0.5 w-4 h-4 border border-stone-400 dark:border-stone-600 accent-[#F0B429]">
-            <span class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">I agree to the symposium code of conduct and confirm that my registration fee will be paid by the deadline.</span>
+            <span class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">I agree to the symposium code of conduct.</span>
           </label>
           <button type="submit" class="w-full py-4 bg-[#F0B429] text-stone-900 text-xs tracking-widest uppercase font-medium hover:bg-[#F0B429]/90 transition-colors">
             Submit Registration
@@ -799,191 +984,74 @@ const SectionForm = () => html`
   </div>
 </section>`
 
-// ─── Section 10: Responsive ──────────────────────────────────────────────────
-
-const SectionResponsive = () => html`
-<section id="responsive" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50 relative overflow-hidden">
-  <!-- Geometric: large triangle top-right -->
-  <div class="absolute -top-24 -right-24 w-96 h-96 pointer-events-none opacity-10" style="clip-path: polygon(100% 0, 0 0, 100% 100%); background-color: #C8102E;"></div>
-  <!-- Geometric: circle bottom-left -->
-  <div class="absolute -bottom-16 -left-16 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
-
-  <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 lg:py-32 relative z-10">
-    <div class="flex items-center gap-4 mb-16 md:mb-20">
-      <span class="text-xs font-mono font-medium text-stone-50/60">10</span>
-      <span class="text-xs tracking-widest uppercase font-medium text-stone-50/80">Responsive</span>
-      <div class="flex-1 h-px bg-stone-700"></div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-16 md:mb-24">
-      <div>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-tight text-stone-50 mb-6">
-          Mobile first.<br>Always.
-        </h2>
-        <p class="text-lg leading-relaxed text-stone-50/80 max-w-[52ch]">
-          The Swiss grid adapts from 320px to 1440px. Default classes target mobile. Breakpoint prefixes layer in structure as the viewport widens. Never build desktop-first and retrofit mobile.
-        </p>
-      </div>
-      <div class="space-y-4">
-        ${[
-          { bp: 'none', width: '0px+',   label: 'Mobile',  desc: 'Single column. px-4. py-16. Stacked layouts.' },
-          { bp: 'sm:', width: '640px+',  label: 'Large phone', desc: 'Wider gutters. 2-col grids begin to emerge.' },
-          { bp: 'md:', width: '768px+',  label: 'Tablet',  desc: 'Multi-column. px-8. py-24. Nav links visible.' },
-          { bp: 'lg:', width: '1024px+', label: 'Desktop', desc: 'Full 12-col grid. max-w-6xl. py-32.' },
-        ].map(({ bp, width, label, desc }) => html`
-        <div class="flex items-start gap-4 border-t border-stone-800 pt-4">
-          <div class="shrink-0 w-12">
-            <code class="font-mono text-xs text-[#C8102E]">${bp || '—'}</code>
-          </div>
-          <div class="shrink-0 w-16">
-            <span class="font-mono text-xs text-stone-50/40">${width}</span>
-          </div>
-          <div>
-            <span class="text-sm font-medium text-stone-50 block">${label}</span>
-            <span class="text-sm text-stone-50/60">${desc}</span>
-          </div>
-        </div>`)}
-      </div>
-    </div>
-
-    <!-- Code examples -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-stone-800">
-      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
-        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Responsive grid</span>
-        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;div class="
-  grid
-  grid-cols-1
-  md:grid-cols-2
-  lg:grid-cols-3
-  gap-4 md:gap-8
-"&gt;</code></pre>
-      </div>
-      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
-        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Fluid type</span>
-        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;h1 class="
-  text-4xl
-  md:text-6xl
-  lg:text-7xl
-  font-normal
-  tracking-tight
-"&gt;</code></pre>
-      </div>
-      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
-        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Section wrapper</span>
-        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;section class="
-  py-16 md:py-24 lg:py-32
-  border-b border-stone-200
-  dark:border-stone-800
-"&gt;
-  &lt;div class="
-    max-w-6xl mx-auto
-    px-4 md:px-8
-  "&gt;</code></pre>
-      </div>
-      <div class="bg-stone-900 dark:bg-stone-950 p-6 md:p-8">
-        <span class="text-xs tracking-widest uppercase text-stone-50/40 block mb-4">Mobile nav</span>
-        <pre class="font-mono text-sm text-stone-50/80 leading-relaxed overflow-x-auto"><code>&lt;!-- Show only on md+ --&gt;
-&lt;div class="hidden md:flex
-  items-center gap-6"&gt;
-  &lt;a href="#"&gt;Link&lt;/a&gt;
-&lt;/div&gt;
-
-&lt;!-- Touch target: min 44px --&gt;
-&lt;button class="min-h-[44px]
-  px-6"&gt;</code></pre>
-      </div>
-    </div>
-
-    <!-- Gotchas row -->
-    <div class="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-stone-800">
-      ${[
-        { rule: 'Always col-span-12 on mobile', bad: 'grid-cols-3', good: 'grid-cols-1 md:grid-cols-3' },
-        { rule: 'Wrap wide tables', bad: '<table>', good: '<div class="overflow-x-auto">' },
-        { rule: '44px touch targets', bad: 'py-1 px-2', good: 'min-h-[44px] px-4' },
-        { rule: 'Reduce padding at sm', bad: 'px-8 py-24', good: 'px-4 md:px-8 py-16 md:py-24' },
-      ].map(({ rule, bad, good }) => html`
-      <div class="bg-stone-900 dark:bg-stone-950 p-6">
-        <p class="text-sm font-medium text-stone-50 mb-4 leading-snug">${rule}</p>
-        <div class="space-y-2">
-          <div class="flex items-start gap-2">
-            <span class="text-stone-50/30 text-xs mt-0.5 shrink-0">✗</span>
-            <code class="font-mono text-xs text-stone-50/40 leading-relaxed">${bad}</code>
-          </div>
-          <div class="flex items-start gap-2">
-            <span class="text-[#C8102E] text-xs mt-0.5 shrink-0">✓</span>
-            <code class="font-mono text-xs text-stone-50/70 leading-relaxed">${good}</code>
-          </div>
-        </div>
-      </div>`)}
-    </div>
-  </div>
-</section>`
-
-// ─── Section 11: Install ─────────────────────────────────────────────────────
+// ─── Section 10: Install ─────────────────────────────────────────────────────
 
 const SectionInstall = () => html`
-<section id="install" class="border-b border-stone-200 dark:border-stone-800">
-  <div class="max-w-6xl mx-auto px-8 py-32">
+<section id="install" class="border-b border-stone-200 dark:border-stone-800 relative overflow-hidden">
+  <!-- Background accent block -->
+  <div class="absolute top-0 right-0 w-1/4 h-full bg-[#C8102E]/[0.06] pointer-events-none hidden md:block"></div>
+  <!-- Visible type cropped by right edge -->
+  <div class="absolute -right-[5%] top-[20%] pointer-events-none select-none hidden md:block">
+    <div class="text-[clamp(6rem,15vw,14rem)] font-bold leading-[0.85] text-stone-900/[0.06] dark:text-stone-50/[0.06] tracking-tighter whitespace-nowrap">INSTALL</div>
+  </div>
+  <!-- Rotated label — left edge -->
+  <div class="absolute bottom-[20%] left-6 z-20 pointer-events-none hidden md:block">
+    <span class="text-xs font-bold tracking-[0.25em] uppercase text-[#C8102E]/40 -rotate-90 origin-bottom-left block whitespace-nowrap">One Command</span>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32 relative z-10">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">11</span>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">10</span>
       <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Install</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
-    <div class="grid grid-cols-12 gap-8 items-start">
+    <div class="grid grid-cols-12 gap-4 md:gap-8 items-start">
       <div class="col-span-12 md:col-span-6">
-        <div class="w-6 h-px bg-[#C8102E] mb-8"></div>
-        <h2 class="text-4xl md:text-5xl font-medium tracking-tight text-stone-900 dark:text-stone-50 mb-6">
+        <div class="w-8 h-1.5 bg-[#C8102E] mb-8"></div>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-[0.95] mb-6">
           One command.<br>Every project.
         </h2>
-        <p class="text-lg leading-relaxed text-stone-900/80 dark:text-stone-50/80 max-w-[48ch] mb-12">
-          Install the skill and your AI agent will apply Swiss design principles whenever you ask it to style a page, clean up a UI, or make something look great.
+        <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[48ch] mb-12">
+          Install the skill and your AI agent will apply Swiss Poster design principles &#8212; grid-breaking compositions, extreme scale, overlap, and bold accent usage.
         </p>
 
         <div>
-          <span class="text-xs tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70 block mb-3">Install with skills CLI</span>
+          <span class="text-xs tracking-widest uppercase font-medium text-stone-900/60 dark:text-stone-50/60 block mb-3">Install with skills CLI</span>
           <div class="bg-stone-900 dark:bg-stone-950 text-stone-50 px-5 py-4 font-mono text-sm flex items-center justify-between gap-4 border border-stone-800">
-            <span id="install-cmd">npx skills add zeke/swiss-design-skill</span>
+            <span id="install-cmd">npx skills add adewale/swiss-poster-skill</span>
             <button onclick="copyInstall()" id="copy-btn" class="text-stone-50/50 hover:text-stone-50 shrink-0 text-xs tracking-widest uppercase transition-colors min-h-[44px] px-2">copy</button>
           </div>
         </div>
-        <script>
-          function copyInstall() {
-            navigator.clipboard.writeText(document.getElementById('install-cmd').textContent).then(function() {
-              var btn = document.getElementById('copy-btn');
-              btn.textContent = 'copied';
-              setTimeout(function() { btn.textContent = 'copy'; }, 2000);
-            });
-          }
-        </script>
       </div>
 
       <div class="col-span-12 md:col-span-5 md:col-start-8 space-y-6">
         <div class="border border-stone-200 dark:border-stone-800 p-6">
-          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-4">Works with</span>
+          <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 block mb-4">Works with</span>
           <div class="grid grid-cols-2 gap-3">
             ${['OpenCode', 'Claude Code', 'GitHub Copilot', 'Cursor', 'Windsurf', 'Cline', 'Codex', 'Gemini CLI'].map(agent => html`
             <div class="text-sm text-stone-900/70 dark:text-stone-50/70 flex items-center gap-2">
-              <div class="w-1 h-1 bg-[#C8102E]"></div>
+              <div class="w-1.5 h-1.5 bg-[#C8102E]"></div>
               ${agent}
             </div>`)}
           </div>
         </div>
 
         <div class="border border-stone-200 dark:border-stone-800 p-6">
-          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-4">What the skill teaches</span>
+          <span class="text-xs tracking-widest uppercase text-stone-900/40 dark:text-stone-50/40 block mb-4">What the skill teaches</span>
           <ul class="space-y-3">
             ${[
-              'Grotesque sans-serif typography system',
-              'Grayscale palette + opacity hierarchy',
-              'Eight accent colors at multiple opacities',
-              '12-column grid with 8px base unit',
-              'Generous whitespace rules',
+              'Extreme typographic scale contrast',
+              'Grid-breaking compositions with overlap',
+              'Bleed, crop, and diagonal energy',
+              'Stone palette + opacity hierarchy',
+              'Eight accent colors at poster scale',
+              'Bold/thin weight contrast at display sizes',
               'Light/dark mode via system preference',
-              'Tailwind component patterns',
+              'Tailwind component + composition patterns',
             ].map(item => html`
             <li class="text-sm text-stone-900/70 dark:text-stone-50/70 flex items-start gap-2">
-              <span class="text-[#C8102E] mt-0.5 shrink-0">—</span>
+              <span class="text-[#C8102E] mt-0.5 shrink-0">&#8212;</span>
               ${item}
             </li>`)}
           </ul>
@@ -997,142 +1065,36 @@ const SectionInstall = () => html`
 
 const Footer = () => html`
 <footer class="border-t border-stone-200 dark:border-stone-800">
-  <div class="max-w-6xl mx-auto px-8 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-    <div>
-      <span class="text-sm tracking-widest uppercase font-medium text-stone-900 dark:text-stone-50">Swiss Design System</span>
-      <p class="text-sm text-stone-900/50 dark:text-stone-50/50 mt-2">
-        Grotesque typography · Grayscale palette · Tailwind CSS
-      </p>
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+    <div class="flex items-center gap-4">
+      <!-- Poster mark — circle escaping its square -->
+      <svg width="36" height="36" viewBox="0 0 32 32" class="shrink-0">
+        <rect width="32" height="32" class="fill-stone-900 dark:fill-stone-100"/>
+        <circle cx="28" cy="28" r="18" fill="#C8102E"/>
+        <circle cx="28" cy="28" r="14" fill="none" stroke="#C8102E" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="10" x2="24" y2="0" class="stroke-stone-50 dark:stroke-stone-900" stroke-width="1.5" opacity="0.3"/>
+        <rect x="2" y="3" width="4" height="4" fill="#003B8E" opacity="0.6"/>
+      </svg>
+      <div>
+        <span class="text-sm tracking-widest uppercase font-medium text-stone-900 dark:text-stone-50">Swiss Poster</span>
+        <p class="text-sm text-stone-900/40 dark:text-stone-50/40 mt-1">
+          Expressive typography &#183; Grid-breaking compositions &#183; Tailwind CSS
+        </p>
+      </div>
     </div>
     <div class="flex items-center gap-8 flex-wrap">
-      <a href="/inspiration" class="text-sm tracking-widest uppercase text-stone-900/70 dark:text-stone-50/70 hover:text-stone-900 dark:hover:text-stone-50 transition-colors font-medium">
-        Inspiration
-      </a>
       <a href="${GITHUB_URL}" target="_blank" class="text-sm tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">
-        GitHub ↗
-      </a>
-      <a href="https://skills.sh/zeke/swiss-design-skill" target="_blank" class="text-sm tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">
-        skills.sh ↗
+        GitHub &#8599;
       </a>
       <a href="https://fonts.google.com/specimen/IBM+Plex+Sans" target="_blank" class="text-sm tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">
-        IBM Plex Sans ↗
+        IBM Plex Sans &#8599;
       </a>
       <span class="text-sm text-stone-900/30 dark:text-stone-50/30">MIT</span>
     </div>
   </div>
 </footer>`
 
-// ─── Inspiration page data ────────────────────────────────────────────────────
-
-const INSPIRATION = [
-  { filename: 'josef-m-ller-brockmann-josef-m-ller-brockmann-pos-1.jpg', title: 'Tonhalle Quartett', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: '1958', category: 'Posters', source: 'Sgustok Design', source_url: 'https://sgustokdesign.com/josef-muller-brockmann-posters' },
-  { filename: 'josef-m-ller-brockmann-josef-m-ller-brockmann-swi-2.jpg', title: 'Beethoven / Brahms / Strauss', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: 'c.1955', category: 'Posters', source: 'Graphéine', source_url: 'https://grapheine.com/en/magazine/graphic-designer-muller-brockmann-swiss-style/' },
-  { filename: 'josef-m-ller-brockmann-m-ller-brockmann-poster-an-3.jpg', title: 'Anthologie de Musique Suisse', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: null, category: 'Posters', source: 'Grafa Gallery', source_url: 'https://grafagallery.com/products/muller-brockmann-josef-anthologie-de-musique-suisse' },
-  { filename: 'josef-m-ller-brockmann-josef-m-ller-brockmann-pos-5.jpg', title: 'Beethoven', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: '1955', category: 'Posters', source: 'Sgustok Design', source_url: 'https://sgustokdesign.com/josef-muller-brockmann-posters' },
-  { filename: 'josef-m-ller-brockmann-graphic-giants-josef-m-lle-6.jpg', title: 'Architectonic Composition', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: null, category: 'Posters', source: 'Sessions College', source_url: 'https://www.sessions.edu/notes-on-design/graphic-giants-josef-muller-brockman/' },
-  { filename: 'emil-ruder-in-grid-we-trust-emil-ruder-aka-the-ic-9.jpg', title: 'Typography Specimen', designer: 'Emil Ruder', designer_url: 'https://en.wikipedia.org/wiki/Emil_Ruder', year: null, category: 'Typography', source: 'TypeRoom', source_url: 'https://www.typeroom.eu/in-grid-we-trust-emil-ruder-aka-the-iconic-pioneer-of-swiss-style' },
-  { filename: 'armin-hofmann-the-daily-heller-armin-hofmann-turn-17.jpg', title: 'Poster (centenary retrospective)', designer: 'Armin Hofmann', designer_url: 'https://en.wikipedia.org/wiki/Armin_Hofmann', year: null, category: 'Posters', source: 'PRINT Magazine', source_url: 'https://www.printmag.com/daily-heller/the-daily-heller-armin-hofmann-turns-100/' },
-  { filename: 'armin-hofmann-heroes-armin-hofmann-designers-j-22.jpg', title: 'Poster Collection', designer: 'Armin Hofmann', designer_url: 'https://en.wikipedia.org/wiki/Armin_Hofmann', year: null, category: 'Posters', source: 'Designers Journal', source_url: 'http://www.designersjournal.net/jottings/designheroes/heroes-armin-hofmann' },
-  { filename: 'armin-hofmann-swiss-original-poster-by-armin-hofma-24.jpg', title: 'Möbel unserer Zeit — Contura / Herman Miller', designer: 'Armin Hofmann', designer_url: 'https://en.wikipedia.org/wiki/Armin_Hofmann', year: '1962', category: 'Posters', source: 'Placart', source_url: 'https://placart.ch/en/artwork/original-vintage-poster-hofmann-herman-miller/' },
-  { filename: 'posters-swiss-style-and-grid-systems-graphic-des-25.png', title: 'Swiss Style Grid Systems', designer: null, designer_url: null, year: null, category: 'Grid', source: 'Graphic Design @ Farringtons', source_url: 'https://farringtonsgraphics.edublogs.org/swiss-tour-poster/' },
-  { filename: 'lohse-m-ller-brockmann-neuburg-vivarelli-neue-g-33.jpg', title: 'Neue Grafik No. 9', designer: 'Lohse, Müller-Brockmann, Neuburg, Vivarelli', designer_url: 'https://en.wikipedia.org/wiki/Neue_Grafik', year: '1961', category: 'Publications', source: 'Design Reviewed', source_url: 'https://designreviewed.com/series/neue-grafik-new-graphic-design-graphisme-actuel/' },
-  { filename: 'grid-4-quick-ways-to-bring-swiss-style-to-your-web-43.png', title: 'Swiss Style Posters Overview', designer: null, designer_url: null, year: null, category: 'Grid', source: 'Justinmind', source_url: 'https://www.justinmind.com/blog/swiss-style-web-design-everything-you-need-to-know/' },
-  { filename: 'posters-swiss-style-the-principles-the-typefaces-47.jpg', title: 'Swiss Style Principles', designer: null, designer_url: null, year: null, category: 'Posters', source: 'PRINT Magazine', source_url: 'https://www.printmag.com/featured/swiss-style-principles-typefaces-designers/' },
-  { filename: 'posters-swiss-design-design-is-history-48.jpg', title: 'Swiss Design', designer: null, designer_url: null, year: null, category: 'Posters', source: 'Design Is History', source_url: 'http://www.designishistory.com/home/swiss/' },
-  { filename: 'posters-international-typographic-style-in-web-des-51.png', title: 'International Typographic Style', designer: null, designer_url: null, year: null, category: 'Posters', source: 'Medium / Bootcamp', source_url: 'https://medium.com/design-bootcamp/international-typographic-style-in-web-design-a23fddd599f5' },
-  { filename: 'posters-swiss-style-15-art-print-for-sale-by-proc-52.jpg', title: 'Swiss Style No. 15', designer: null, designer_url: null, year: null, category: 'Posters', source: 'Redbubble / process22', source_url: 'https://www.redbubble.com/i/art-print/Swiss-Style-15-by-process22/49430015.1G4ZT' },
-  { filename: 'max-miedinger-thesbcreative-type-study-helvetic-55.jpg', title: 'Type Study: Helvetica', designer: 'Max Miedinger', designer_url: 'https://en.wikipedia.org/wiki/Max_Miedinger', year: null, category: 'Typography', source: 'THESBCREATIVE', source_url: 'https://thesbcreative.com/helvetica' },
-  { filename: 'batch2-richard-paul-lohse-vintage-posters-by-richard-paul-41.jpg', title: 'Juni-Festwochen Zürich', designer: 'Richard Paul Lohse', designer_url: 'https://en.wikipedia.org/wiki/Richard_Paul_Lohse', year: null, category: 'Posters', source: 'Galerie 1 2 3', source_url: 'https://www.galerie123.com/en/artists/14128/richard-paul-lohse-original-vintage-poster/' },
-  { filename: 'batch2-richard-paul-lohse-plastic-and-its-uses-original-42.jpg', title: 'Kunststoffe / Plastics Basel', designer: 'Richard Paul Lohse', designer_url: 'https://en.wikipedia.org/wiki/Richard_Paul_Lohse', year: '1958', category: 'Posters', source: 'Placart', source_url: 'https://placart.ch/en/artwork/original-swiss-style-poster-plastics-lohse/' },
-  { filename: 'batch2-richard-paul-lohse-richard-paul-lohse-1902-1988-e-47.jpg', title: 'Richard Paul Lohse 1902–1988', designer: 'Richard Paul Lohse', designer_url: 'https://en.wikipedia.org/wiki/Richard_Paul_Lohse', year: '1992', category: 'Publications', source: 'Design Reviewed', source_url: 'https://designreviewed.com/artefacts/richard-paul-lohse-1902-1988-edition-braus-heidelberg-1992/' },
-  { filename: 'batch2-siegfried-odermatt-swiss-posters-book-alliance-g-50.jpg', title: 'Swiss Posters Book — AGI', designer: 'Siegfried Odermatt', designer_url: 'https://en.wikipedia.org/wiki/Siegfried_Odermatt', year: '1998', category: 'Publications', source: 'AGI', source_url: 'https://a-g-i.org/design/swiss-posters-book' },
-  { filename: 'batch2-grid-the-swiss-grid-designobserver-76.png', title: 'The Swiss Grid', designer: null, designer_url: null, year: null, category: 'Grid', source: 'Design Observer', source_url: 'https://designobserver.com/the-swiss-grid/' },
-]
-
-const CATEGORIES = ['All', 'Posters', 'Typography', 'Grid', 'Publications']
-
-// ─── Inspiration page ─────────────────────────────────────────────────────────
-
-const InspirationPage = () => html`
-${HEAD.toString().replace('<title>Swiss Design System</title>', '<title>Inspiration — Swiss Design System</title>')}
-${Nav()}
-<main class="pt-14">
-  <!-- Header -->
-  <div class="h-1 bg-[#C8102E]"></div>
-  <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
-    <div class="flex items-center gap-4 mb-12">
-      <a href="/" class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">← Back</a>
-      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
-    </div>
-    <div class="grid grid-cols-12 gap-8 items-end mb-16">
-      <div class="col-span-12 md:col-span-8">
-        <span class="text-xs tracking-widest uppercase font-medium text-stone-900/60 dark:text-stone-50/60 block mb-6">Historical specimens</span>
-        <h1 class="text-5xl md:text-7xl font-medium tracking-tight leading-none text-stone-900 dark:text-stone-50">
-          Inspiration
-        </h1>
-        <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-8 max-w-[56ch]">
-          A curated collection of Swiss International Style design — posters, typography specimens, grid systems, and publications from the 1950s–80s. Each piece informed the design principles of this system.
-        </p>
-      </div>
-      <div class="col-span-12 md:col-span-4 flex flex-col gap-3 md:text-right">
-        <div class="text-5xl font-light tracking-tight text-stone-900/10 dark:text-stone-50/10 leading-none">${INSPIRATION.length}</div>
-        <span class="text-xs tracking-widest uppercase font-medium text-stone-900/50 dark:text-stone-50/50">specimens</span>
-      </div>
-    </div>
-
-    <!-- Category filter -->
-    <div class="flex items-center gap-2 flex-wrap mb-16 border-t border-stone-200 dark:border-stone-800 pt-8">
-      ${CATEGORIES.map(cat => html`
-      <a href="${cat === 'All' ? '/inspiration' : '/inspiration?cat=' + encodeURIComponent(cat)}"
-         class="px-4 py-2 text-xs tracking-widest uppercase font-medium border border-stone-300 dark:border-stone-700 text-stone-900/70 dark:text-stone-50/70 hover:bg-stone-900 hover:text-stone-50 dark:hover:bg-stone-50 dark:hover:text-stone-900 transition-colors">
-        ${cat}
-      </a>`)}
-    </div>
-
-    <!-- Masonry grid -->
-    <div class="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
-      ${INSPIRATION.map(item => html`
-      <div class="break-inside-avoid">
-        <a href="${item.source_url}" target="_blank" rel="noopener" class="group block">
-          <div class="overflow-hidden bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
-            <img
-              src="/inspiration/${item.filename}"
-              alt="${item.title}"
-              loading="lazy"
-              class="w-full block group-hover:opacity-90 transition-opacity duration-200"
-            >
-          </div>
-          <div class="mt-4 pb-8 border-b border-stone-200 dark:border-stone-800">
-            <div class="flex items-start justify-between gap-4 mb-1">
-              <h3 class="text-sm font-medium text-stone-900 dark:text-stone-50 leading-snug group-hover:text-[#C8102E] transition-colors">
-                ${item.title}
-              </h3>
-              <span class="text-stone-900/40 dark:text-stone-50/40 text-xs shrink-0 mt-0.5 group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">↗</span>
-            </div>
-            ${item.designer ? html`
-            <a href="${item.designer_url}" target="_blank" rel="noopener" class="text-xs text-[#C8102E] hover:text-[#C8102E]/70 transition-colors block mb-1" onclick="event.stopPropagation()">
-              ${item.designer}
-            </a>` : html`
-            <span class="text-xs text-stone-900/40 dark:text-stone-50/40 block mb-1">Designer unknown</span>`}
-            <div class="flex items-center gap-3">
-              ${item.year ? html`<span class="text-xs font-mono text-stone-900/50 dark:text-stone-50/50">${item.year}</span>` : ''}
-              <span class="text-xs tracking-widest uppercase font-medium px-1.5 py-0.5 bg-stone-100 dark:bg-stone-900 text-stone-900/60 dark:text-stone-50/60">${item.category}</span>
-              <span class="text-xs text-stone-900/40 dark:text-stone-50/40 truncate">${item.source}</span>
-            </div>
-          </div>
-        </a>
-      </div>`)}
-    </div>
-  </div>
-</main>
-${Footer()}
-${FOOT}`
-
 // ─── Routes ───────────────────────────────────────────────────────────────────
-
-app.get('/inspiration', (c) => {
-  return c.html(InspirationPage())
-})
 
 app.get('*', (c) => {
   return c.html(
@@ -1140,15 +1102,14 @@ app.get('*', (c) => {
     Nav() +
     `<main class="pt-14">` +
     SectionHero() +
-    SectionEditorial() +
-    SectionPoster() +
-    SectionData() +
-    SectionCards() +
-    SectionApp() +
-    SectionType() +
+    SectionManifesto() +
+    SectionScale() +
+    SectionBreakout() +
+    SectionOverlap() +
     SectionColor() +
+    SectionType() +
+    SectionPosters() +
     SectionForm() +
-    SectionResponsive() +
     SectionInstall() +
     `</main>` +
     Footer() +

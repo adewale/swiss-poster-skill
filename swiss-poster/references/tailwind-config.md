@@ -1,4 +1,4 @@
-# Swiss Design System — Tailwind Configuration
+# Swiss Poster Design System — Tailwind Configuration
 
 ## Tailwind v3 (`tailwind.config.js`)
 
@@ -31,12 +31,16 @@ module.exports = {
         'prose-wide': '72ch',
       },
       lineHeight: {
-        'display': '1',
+        'display': '0.85',
         'heading': '1.15',
       },
       letterSpacing: {
-        'display': '-0.02em',
+        'display': '-0.03em',
         'label': '0.08em',
+      },
+      fontSize: {
+        'mega': 'clamp(6rem, 15vw, 20rem)',
+        'mega-sm': 'clamp(3rem, 10vw, 10rem)',
       },
     },
   },
@@ -60,11 +64,14 @@ Add to your main CSS file:
   --max-width-prose: 60ch;
   --max-width-prose-wide: 72ch;
 
-  --line-height-display: 1;
+  --line-height-display: 0.85;
   --line-height-heading: 1.15;
 
-  --letter-spacing-display: -0.02em;
+  --letter-spacing-display: -0.03em;
   --letter-spacing-label: 0.08em;
+
+  --font-size-mega: clamp(6rem, 15vw, 20rem);
+  --font-size-mega-sm: clamp(3rem, 10vw, 10rem);
 }
 ```
 
@@ -75,8 +82,10 @@ Add to your main CSS file:
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
 ```
+
+Note: The poster style loads weight 100 (thin) and 700 (bold) in addition to the International Style's 300/400/500/600. These extreme weights are essential for poster-scale type contrast.
 
 ---
 
@@ -95,6 +104,9 @@ For prototypes and demos:
           sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
           mono: ['IBM Plex Mono', 'monospace'],
         },
+        lineHeight: {
+          'display': '0.85',
+        },
       },
     },
   }
@@ -108,13 +120,14 @@ For prototypes and demos:
 Paste after your Tailwind imports:
 
 ```css
-/* Swiss Design System — global tokens */
+/* Swiss Poster Design System — global tokens */
 :root {
   --font-sans: 'IBM Plex Sans', 'Hanken Grotesk', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
   /* Accent — override this per project */
   --accent: #C8102E;
+  --accent-80: rgba(200, 16, 46, 0.80);
   --accent-60: rgba(200, 16, 46, 0.60);
   --accent-20: rgba(200, 16, 46, 0.20);
   --accent-10: rgba(200, 16, 46, 0.10);
@@ -127,7 +140,7 @@ body {
 }
 
 /* Swap accent globally: just update this block */
-/* 
+/*
 :root { --accent: #003B8E; }  Cobalt
 :root { --accent: #F0B429; }  Golden
 :root { --accent: #2D6A4F; }  Forest
@@ -145,3 +158,32 @@ To change the accent for a project, update both the CSS variable and the Tailwin
 ```
 
 And in your HTML use `bg-[#003B8E]`, `text-[#003B8E]`, `border-[#003B8E]` consistently. Since there is only one accent per project, a global find-replace is safe.
+
+---
+
+## Utility classes for poster compositions
+
+These custom utilities are useful for poster-style layouts. Add to your global CSS:
+
+```css
+/* Prevent breakout elements from causing horizontal scroll */
+.poster-section {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Full-bleed container escape */
+.full-bleed {
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+}
+
+/* Decorative text that should not be read or selected */
+.poster-bg-text {
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+}
+```

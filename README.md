@@ -1,56 +1,55 @@
-# swiss-design-skill
+# swiss-poster-skill
 
-A Swiss International Style design system for AI agents. Grotesque typography, rigorous grid, generous whitespace, restrained color — expressed through Tailwind CSS.
-
-[swiss.ziki.boo](https://swiss.ziki.boo)
+A Swiss Poster design system for AI agents. Expressive typography at extreme scales, compositions that escape the grid, overlapping layers, dramatic cropping, and bold geometric tension — expressed through Tailwind CSS.
 
 ## Install
 
 ```sh
-npx skills add zeke/swiss-design-skill
+npx skills add adewale/swiss-poster-skill
 ```
 
 Or manually copy the skill directory:
 
 ```sh
-gh repo clone zeke/swiss-design-skill
-cp -r swiss-design-skill/swiss-design ~/.config/opencode/skills/
+gh repo clone adewale/swiss-poster-skill
+cp -r swiss-poster-skill/swiss-poster ~/.config/opencode/skills/
 ```
 
 ## Usage
 
 Once installed, tell your agent to apply it:
 
-- "Apply the swiss-design skill to this page"
-- "Clean up this UI using swiss design principles"
-- "Make this look great — use the Swiss style"
+- "Apply the swiss-poster skill to this page"
+- "Make this look dramatic — use the Swiss Poster style"
+- "Break the grid — give this page poster energy"
 
-The agent will apply IBM Plex Sans typography, the stone color palette, opacity-based hierarchy, a 12-column grid, and generous whitespace.
+The agent will apply IBM Plex Sans typography at extreme scales, the stone color palette, opacity-based hierarchy, grid-breaking compositions with overlap and bleed, and bold geometric decoration.
 
 ## What's included
 
 ```
-swiss-design/
+swiss-poster/
 ├── SKILL.md                    # Quick reference (always loaded)
 └── references/
     ├── design-system.md        # Full token reference, CSS variables
-    ├── components.md           # Tailwind component patterns
+    ├── components.md           # Tailwind component patterns + poster compositions
     ├── tailwind-config.md      # Paste-ready tailwind.config.js
-    └── prompting.md            # Applying the system to existing pages
+    ├── prompting.md            # Applying the system + 71-point checklist
+    └── research.md             # Designer profiles, key works, source URLs
 ```
 
 ## Design principles
 
-- **Grid first.** 12-column, 8px base unit
-- **Whitespace is structure.** Sections get `py-24` minimum
-- **Opacity, not hue, creates hierarchy.** `text-stone-900/70`, never `text-stone-500`
-- **One accent.** Swiss red (`#C8102E`) by default; swap to cobalt, golden, or forest per project
-- **Narrow columns.** Body text never exceeds `max-w-[60ch]`
-- **Light and dark mode** via `prefers-color-scheme`
+- **Grid as launchpad.** Start with a 12-column grid, then let key elements escape it
+- **Extreme scale contrast.** 20rem display type next to 11px labels — 10x+ size ratio
+- **Overlap and layer.** Elements collide: text over images, type over type, z-index stacking
+- **Bleed and crop.** Type cropped by the viewport edge, elements that run off-screen
+- **One accent, used boldly.** Swiss red (`#C8102E`) by default, in large confident fields
+- **Tension over comfort.** Asymmetric whitespace, rotation, diagonal energy
 
 ## Typography
 
-Primary: **IBM Plex Sans** (Google Fonts)
+Primary: **IBM Plex Sans** (Google Fonts) — weights 100 through 700
 
 Fallbacks: Hanken Grotesk · Barlow · Host Grotesk · DM Sans
 
