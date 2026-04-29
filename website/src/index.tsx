@@ -75,6 +75,24 @@ const HEAD = html`<!DOCTYPE html>
         transparent 8px
       );
     }
+    /* Moiré — two line grids at slightly different angles create optical vibration */
+    .moire {
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          currentColor 0px,
+          currentColor 1px,
+          transparent 1px,
+          transparent 6px
+        ),
+        repeating-linear-gradient(
+          3deg,
+          currentColor 0px,
+          currentColor 1px,
+          transparent 1px,
+          transparent 6px
+        );
+    }
   </style>
   <script>
     (function() {
@@ -309,10 +327,10 @@ const SectionScale = () => html`
 
     <!-- Type scale demonstration with extreme contrast -->
     <div class="space-y-16">
-      <!-- Mega -->
-      <div class="border-t border-stone-800 pt-8">
-        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-6">Mega &#8212; clamp(6rem, 15vw, 20rem) bold</span>
-        <p class="text-[clamp(4rem,12vw,14rem)] font-bold tracking-tighter leading-[0.85] text-[#C8102E]">Z&#220;RICH</p>
+      <!-- Mega — single word fills the entire composition -->
+      <div class="border-t border-stone-800 pt-8 -mx-4 md:-mx-8 px-0 overflow-hidden relative">
+        <span class="text-[11px] font-mono font-medium text-stone-50/40 tracking-widest uppercase block mb-4 px-4 md:px-8">Mega &#8212; single word fills the frame, cropped by edges</span>
+        <p class="text-[clamp(6rem,19vw,22rem)] font-bold tracking-[-0.04em] leading-[0.78] text-[#C8102E] whitespace-nowrap -ml-[0.03em]">Z&#220;RICH</p>
       </div>
       <!-- Mega thin -->
       <div class="border-t border-stone-800 pt-8">
@@ -435,15 +453,19 @@ const SectionGeometry = () => html`
         </div>
       </div>
 
-      <!-- Composition 3: Large triangle + circle collision (Hofmann) -->
+      <!-- Composition 3: Large triangle + circle collision (Hofmann) — figure-ground ambiguity -->
       <div class="relative aspect-[3/4] bg-stone-950 overflow-hidden">
         <!-- Massive triangle escaping the top-left corner -->
         <div class="absolute -top-[10%] -left-[10%] w-[80%] h-[80%] bg-stone-50/90" style="clip-path: polygon(0 0, 100% 0, 0 100%)"></div>
-        <!-- Circle punching through the triangle -->
+        <!-- Circle punching through the triangle — figure-ground reversal -->
         <div class="absolute top-[25%] left-[30%] w-[55%] h-0 pb-[55%] rounded-full bg-stone-950"></div>
         <div class="absolute top-[27%] left-[32%] w-[51%] h-0 pb-[51%] rounded-full border-2 border-[#C8102E]/60"></div>
         <!-- Accent bar across bottom -->
         <div class="absolute bottom-[20%] left-0 w-full h-1 bg-[#C8102E]/40"></div>
+        <!-- Figure-ground text — mix-blend makes it reverse across the triangle/dark boundary -->
+        <div class="absolute top-[38%] left-[8%] z-10 pointer-events-none">
+          <span class="text-5xl md:text-6xl font-bold text-white mix-blend-difference leading-none tracking-tight">Bild</span>
+        </div>
         <!-- Label -->
         <div class="absolute top-6 right-6 z-10 text-right">
           <span class="text-[11px] tracking-widest uppercase text-stone-50/50 font-medium block">Schule f&#252;r Gestaltung</span>
@@ -456,10 +478,10 @@ const SectionGeometry = () => html`
     </div>
   </div>
 
-  <!-- Full-bleed geometric band — rhythmic repetition + shapes -->
+  <!-- Full-bleed geometric band — moiré optical vibration + shapes -->
   <div class="relative h-56 md:h-72 bg-stone-900 dark:bg-stone-800 overflow-hidden">
-    <!-- Rhythmic horizontal line field — Troxler-style visual rhythm -->
-    <div class="absolute inset-0 text-stone-50/[0.06] line-rhythm pointer-events-none"></div>
+    <!-- Moiré interference pattern — two grids at 0° and 3° create optical shimmer -->
+    <div class="absolute inset-0 text-stone-50/[0.08] moire pointer-events-none"></div>
     <!-- Giant circle cropped by top and right edges -->
     <div class="absolute -top-[50%] -right-[15%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full border-[8px] border-[#C8102E]/40 pointer-events-none"></div>
     <!-- Halftone dot field — bottom-left corner -->
