@@ -402,64 +402,64 @@ const SectionCards = () => html`
     <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-stone-200 dark:bg-stone-800">
       ${[
         {
-          accent: '#C8102E', label: 'Chair', year: '1952',
-          name: 'Ulm Stacking Chair',
-          // The famous Swiss stacking chair is better associated with Hans Coray's Landi (1938)
-          // or the Ulm school. Let's use the Landi chair which is definitively Swiss.
-          desc: 'Hans Coray\u2019s aluminium Landi chair, designed for the 1939 Swiss National Exhibition. Became an icon of Swiss industrial design.',
-          tag: 'Furniture'
+          accent: '#C8102E', label: 'Chair', year: '1938',
+          name: 'Landi Chair',
+          desc: 'Hans Coray\u2019s aluminium Landi chair, designed for the 1939 Swiss National Exhibition. A landmark of Swiss industrial design.',
+          tag: 'Furniture',
+          href: 'https://en.wikipedia.org/wiki/Hans_Coray'
         },
         {
           accent: '#003B8E', label: 'Poster', year: '1953',
           name: 'Musica Viva',
-          // Müller-Brockmann's concert posters for Tonhalle Zürich — started ~1950, well documented
-          desc: 'Josef M\u00fcller-Brockmann\u2019s concert posters for Tonhalle Z\u00fcrich. Geometric forms used to express musical rhythm.',
-          tag: 'Print'
+          desc: 'Josef M\u00fcller-Brockmann\u2019s concert posters for Tonhalle Z\u00fcrich. Geometric forms used to express musical rhythm and structure.',
+          tag: 'Print',
+          href: 'https://www.stedelijk.nl/en/collection/57037-josef-muller-brockmann-volkskonzert-der-tonhalle-gesellschaft-zurich-musica-viva'
         },
         {
           accent: '#F0B429', label: 'Clock', year: '1944',
-          // Hans Hilfiker designed it 1944; the red second hand was added 1953
           name: 'SBB Railway Clock',
-          desc: 'Hans Hilfiker\u2019s station clock for Swiss Federal Railways. The distinctive red sweep second hand was added in 1953.',
-          tag: 'Industrial'
+          desc: 'Hans Hilfiker\u2019s station clock for Swiss Federal Railways. The iconic red sweep second hand was finalised in 1955.',
+          tag: 'Industrial',
+          href: 'https://www.eguide.ch/en/objekt/sbb-bahnhofsuhr/'
         },
         {
           accent: '#2D6A4F', label: 'Type', year: '1957',
           name: 'Neue Haas Grotesk',
-          // Designed by Miedinger with direction from Eduard Hoffmann at the Haas Type Foundry
           desc: 'Max Miedinger and Eduard Hoffmann\u2019s neutral grotesque, designed at the Haas Type Foundry in M\u00fcnchenbuchsee. Renamed Helvetica in 1960.',
-          tag: 'Typography'
+          tag: 'Typography',
+          href: 'https://en.wikipedia.org/wiki/Max_Miedinger'
         },
         {
-          accent: '#C8102E', label: 'Journal', year: '1959',
-          // Neue Grafik — the journal that spread Swiss style internationally
+          accent: '#C8102E', label: 'Journal', year: '1958',
           name: 'Neue Grafik',
-          desc: 'Trilingual design journal edited by Lohse, Müller-Brockmann, Neuburg, and Vivarelli. Published 18 issues from 1959 to 1965.',
-          tag: 'Publication'
+          desc: 'Trilingual journal edited by Lohse, M\u00fcller-Brockmann, Neuburg, and Vivarelli. Published 18 issues from 1958 to 1965.',
+          tag: 'Publication',
+          href: 'https://designreviewed.com/series/neue-grafik-new-graphic-design-graphisme-actuel/'
         },
         {
           accent: '#003B8E', label: 'Book', year: '1961',
           name: 'Raster Systeme',
           desc: 'M\u00fcller-Brockmann\u2019s definitive guide to the typographic grid system. Published in German, English, and French. Still in print.',
-          tag: 'Reference'
+          tag: 'Reference',
+          href: 'https://archive.org/details/gridsystemsingra0000muml'
         },
-      ].map(({ accent, label, year, name, desc, tag }) => html`
-      <div class="bg-stone-50 dark:bg-stone-950 p-8 flex flex-col gap-6 hover:bg-white dark:hover:bg-stone-900 transition-colors">
+      ].map(({ accent, label, year, name, desc, tag, href }) => html`
+      <a href="${href}" target="_blank" rel="noopener" class="bg-stone-50 dark:bg-stone-950 p-8 flex flex-col gap-6 hover:bg-white dark:hover:bg-stone-900 transition-colors group">
         <div class="flex items-start justify-between">
-          <div class="w-10 h-10" style="background-color: ${accent}; opacity: 0.15;"></div>
+          <div class="w-10 h-10" style="background-color: ${accent};"></div>
           <span class="text-sm font-mono text-stone-900/50 dark:text-stone-50/50">${year}</span>
         </div>
         <div>
           <div class="w-6 h-px mb-4" style="background-color: ${accent}"></div>
           <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 block mb-2">${label}</span>
-          <h3 class="text-xl font-normal text-stone-900 dark:text-stone-50 leading-snug">${name}</h3>
+          <h3 class="text-xl font-normal text-stone-900 dark:text-stone-50 leading-snug group-hover:text-[${accent}] transition-colors">${name}</h3>
           <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed mt-3 max-w-[32ch]">${desc}</p>
         </div>
         <div class="mt-auto pt-4 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
           <span class="text-xs tracking-widest uppercase px-2 py-1" style="background-color: ${accent}20; color: ${accent}">${tag}</span>
-          <span class="text-stone-900/30 dark:text-stone-50/30 text-sm">→</span>
+          <span class="text-stone-900/40 dark:text-stone-50/40 text-sm group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">↗</span>
         </div>
-      </div>`)}
+      </a>`)}
     </div>
   </div>
 </section>`
