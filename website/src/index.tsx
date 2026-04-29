@@ -155,17 +155,10 @@ const SectionHero = () => html`
 
 const SectionEditorial = () => html`
 <section id="editorial" class="border-b border-stone-200 dark:border-stone-800">
-  <!-- Full-bleed red pull-quote bar -->
-  <div class="bg-[#C8102E] px-8 py-12">
-    <div class="max-w-6xl mx-auto flex items-start justify-between gap-8">
-      <p class="text-3xl md:text-4xl font-normal text-white leading-snug tracking-tight max-w-2xl">
-        "The will to order."
-      </p>
-      <span class="text-xs tracking-widest uppercase text-white/60 mt-2 shrink-0 hidden md:block">Basel School of Design</span>
-    </div>
-  </div>
+  <!-- Thin accent bar across the top -->
+  <div class="h-1 bg-[#C8102E]"></div>
 
-  <div class="max-w-6xl mx-auto px-8 py-32">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
     <!-- Section label -->
     <div class="flex items-center gap-4 mb-20">
       <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">02</span>
@@ -174,8 +167,11 @@ const SectionEditorial = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-8">
-      <!-- Main essay column — flush left, no indent -->
-      <div class="col-span-12 md:col-span-7">
+      <!-- Main essay column -->
+      <div class="col-span-12 md:col-span-7 relative">
+        <!-- Accent rectangle in the left margin, vertically centered on the heading -->
+        <div class="absolute -left-8 top-2 w-1 h-16 bg-[#C8102E] hidden md:block"></div>
+
         <h2 class="text-4xl md:text-5xl font-normal tracking-tight text-stone-900 dark:text-stone-50 leading-tight mb-10">
           The grid system is an aid, not a guarantee.
         </h2>
@@ -194,32 +190,41 @@ const SectionEditorial = () => html`
       </div>
 
       <!-- Right column -->
-      <div class="col-span-12 md:col-span-4 md:col-start-9 flex flex-col gap-6">
+      <div class="col-span-12 md:col-span-4 md:col-start-9 flex flex-col gap-8">
 
-        <!-- Bold cobalt block: key principles -->
-        <div class="bg-[#003B8E] p-6">
-          <span class="text-xs tracking-widest uppercase text-white/60 block mb-5">Key principles</span>
+        <!-- Pull quote with left accent bar -->
+        <div class="flex gap-4">
+          <div class="w-0.5 bg-[#C8102E] self-stretch shrink-0"></div>
+          <div>
+            <p class="text-2xl font-normal leading-snug tracking-tight text-stone-900 dark:text-stone-50">
+              "The will to order."
+            </p>
+            <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 mt-3 block">Basel School of Design</span>
+          </div>
+        </div>
+
+        <!-- Key principles — accent top bar only -->
+        <div class="border-t-2 border-[#C8102E] pt-6 bg-stone-100 dark:bg-stone-900 p-6">
+          <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 block mb-5">Key principles</span>
           <ul class="space-y-3">
             ${['Objective clarity', 'Visual order', 'Grid discipline', 'Functional beauty'].map(p => html`
-            <li class="text-base text-white flex items-start gap-2">
-              <span class="text-white/50 mt-0.5">—</span>
+            <li class="text-base text-stone-900/80 dark:text-stone-50/80 flex items-start gap-2">
+              <span class="text-[#C8102E] mt-0.5 shrink-0">—</span>
               <span>${p}</span>
             </li>`)}
           </ul>
         </div>
 
-        <!-- Two schools -->
-        <div class="border border-stone-200 dark:border-stone-800">
-          <div class="bg-stone-900 dark:bg-stone-800 px-6 py-4">
-            <span class="text-xs tracking-widest uppercase text-stone-50/60">Two schools</span>
-          </div>
-          <div class="divide-y divide-stone-200 dark:divide-stone-800">
-            <div class="p-6">
-              <p class="text-sm font-medium text-stone-900 dark:text-stone-50 mb-2">Zürich</p>
+        <!-- Two schools — accent top bar only -->
+        <div class="border-t-2 border-[#003B8E]">
+          <div class="pt-6 space-y-6">
+            <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 block">Two schools</span>
+            <div>
+              <p class="text-sm font-medium text-stone-900 dark:text-stone-50 mb-1">Zürich</p>
               <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">Müller-Brockmann, Lohse, Neuburg, Vivarelli. Mathematical grid, Helvetica, <em>Neue Grafik</em> journal (1958–65).</p>
             </div>
-            <div class="p-6">
-              <p class="text-sm font-medium text-stone-900 dark:text-stone-50 mb-2">Basel</p>
+            <div class="border-t border-stone-200 dark:border-stone-800 pt-4">
+              <p class="text-sm font-medium text-stone-900 dark:text-stone-50 mb-1">Basel</p>
               <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed">Armin Hofmann, Emil Ruder. Tonal contrast, Univers typeface, photography as primary element.</p>
             </div>
           </div>
