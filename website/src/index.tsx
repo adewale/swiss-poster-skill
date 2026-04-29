@@ -12,9 +12,9 @@ const ACCENTS = [
   { name: 'Golden',       hex: '#F0B429', label: 'Editorial',  desc: 'Warm and cultural. Print, arts, food.' },
   { name: 'Forest',       hex: '#2D6A4F', label: 'Natural',    desc: 'Calm and grounded. Health, sustainability.' },
   { name: 'Vermilion',    hex: '#E8431A', label: 'Energy',     desc: 'High-contrast orange-red. Motion and urgency.' },
-  { name: 'Ink',          hex: '#1B2A4A', label: 'Authority',  desc: 'Deep navy. Finance, law, publishing.' },
-  { name: 'Sienna',       hex: '#A0522D', label: 'Craft',      desc: 'Earthy brown. Artisanal, material, tactile.' },
-  { name: 'Slate',        hex: '#4A5568', label: 'Neutral',    desc: 'Cool grey with blue undertone. Tech, minimal.' },
+  { name: 'Violet',       hex: '#6B21A8', label: 'Creative',   desc: 'Deep purple. Fashion, beauty, luxury editorial.' },
+  { name: 'Magenta',      hex: '#C0186C', label: 'Bold',       desc: 'Hot pink-red. Vibrant, fearless, high-impact.' },
+  { name: 'Lavender',     hex: '#7C3AED', label: 'Electric',   desc: 'Electric purple. Digital, futuristic, cultural.' },
 ]
 
 const HEAD = html`<!DOCTYPE html>
