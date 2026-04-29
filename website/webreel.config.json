@@ -1,0 +1,26 @@
+{
+  "$schema": "https://webreel.dev/schema/v1.json",
+  "outDir": "./videos",
+  "videos": {
+    "swiss-design-nav": {
+      "url": "https://swiss.ziki.boo",
+      "viewport": "macbook-pro",
+      "waitFor": { "selector": "nav" },
+      "defaultDelay": 800,
+      "quality": 90,
+      "steps": [
+        { "action": "pause", "ms": 1500 },
+        { "action": "click", "text": "Editorial",  "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Poster",     "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Data",       "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Cards",      "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "App",        "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Type",       "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Color",      "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Form",       "within": "nav", "delay": 1200 },
+        { "action": "click", "text": "Responsive", "within": "nav", "delay": 1200 },
+        { "action": "pause", "ms": 2000 }
+      ]
+    }
+  }
+}
