@@ -49,61 +49,76 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="relative overflow-hidden">
-    <!-- Ghost background type -->
-    <div aria-hidden="true" class="absolute -top-10 -left-10 -rotate-12 select-none pointer-events-none text-[12rem] sm:text-[16rem] md:text-[22rem] font-bold leading-[0.85] text-stone-900/[0.06] dark:text-stone-50/[0.06] whitespace-nowrap">
+  <!-- HERO with photo -->
+  <section class="relative overflow-hidden bg-stone-950 text-stone-50">
+    <!-- Photo: shot from the venue (County Hall, looking at Westminster) -->
+    <img src="tweet-photo.jpg"
+         alt="Sunset view of Big Ben and Westminster from a window at Cloudflare's County Hall office, posted by @ade_oshineye"
+         class="absolute inset-0 w-full h-full object-cover object-center opacity-70" />
+
+    <!-- Dark gradient for legibility -->
+    <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-stone-950/85 via-stone-950/40 to-stone-950/70"></div>
+
+    <!-- Ghost background type, layered over photo -->
+    <div aria-hidden="true" class="absolute -top-12 -left-10 -rotate-12 select-none pointer-events-none text-[12rem] sm:text-[16rem] md:text-[22rem] font-bold leading-[0.85] text-stone-50/[0.07] whitespace-nowrap z-[1]">
       LONDON LONDON
     </div>
 
-    <!-- Diagonal accent bar -->
-    <div aria-hidden="true" class="absolute top-24 -right-10 w-[120%] h-3 bg-[#F38020] -rotate-3 origin-right z-0"></div>
+    <!-- Diagonal accent bar bleeding off-edge -->
+    <div aria-hidden="true" class="absolute top-28 -right-10 w-[120%] h-3 bg-[#F38020] -rotate-3 origin-right z-[2]"></div>
 
-    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 pt-10 md:pt-16 pb-24 md:pb-40">
-      <div class="grid grid-cols-12 gap-4 md:gap-8 relative">
+    <!-- Cropped accent block (escapes the layout) -->
+    <div aria-hidden="true" class="absolute -bottom-8 left-[8%] w-40 h-40 bg-[#F38020] z-[2]"></div>
+
+    <div class="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 pt-12 md:pt-20 pb-28 md:pb-44">
+      <div class="grid grid-cols-12 gap-4 md:gap-8">
 
         <!-- Tiny rotated rail label -->
         <div class="hidden md:flex col-span-1 items-start justify-start pt-2">
-          <span class="text-[11px] tracking-[0.3em] uppercase text-stone-900/60 dark:text-stone-50/60 -rotate-90 origin-top-left translate-y-32 font-medium whitespace-nowrap">
-            Inaugural · Meet · 2026
+          <span class="text-[11px] tracking-[0.3em] uppercase text-stone-50/70 -rotate-90 origin-top-left translate-y-40 font-medium whitespace-nowrap">
+            Inaugural · Meet · 2026 · A View from Waterloo
           </span>
         </div>
 
         <!-- Main copy -->
-        <div class="col-span-12 md:col-span-7 relative z-20">
-          <p class="text-xs tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70 mb-6">
+        <div class="col-span-12 md:col-span-7 relative">
+          <p class="text-xs tracking-[0.3em] uppercase font-medium text-stone-50/80 mb-6">
             Cloudflare London User Group / Inaugural Meeting
           </p>
-          <h1 class="text-[clamp(3.5rem,13vw,17rem)] font-bold leading-[0.82] tracking-tight -ml-[0.05em]">
+          <h1 class="text-[clamp(3.5rem,13vw,17rem)] font-bold leading-[0.82] tracking-tight -ml-[0.05em] drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
             <span class="block">CLOUD</span>
             <span class="block text-[#F38020]">FLARE.</span>
             <span class="block font-thin">LONDON</span>
           </h1>
         </div>
 
-        <!-- Right rail: date stack -->
-        <div class="col-span-12 md:col-span-4 md:col-start-9 relative z-20 mt-8 md:mt-2">
-          <div class="border-t-2 border-stone-900 dark:border-stone-50 pt-4">
-            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70">When</div>
+        <!-- Right rail: date / where -->
+        <div class="col-span-12 md:col-span-4 md:col-start-9 relative mt-8 md:mt-2">
+          <div class="border-t-2 border-stone-50 pt-4">
+            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-50/80">When</div>
             <div class="mt-2 font-mono text-2xl md:text-3xl leading-none">
               WED · 29 · APR · 26
             </div>
             <div class="mt-3 text-7xl md:text-8xl font-bold leading-[0.85] tracking-tight">
               18:30
             </div>
-            <div class="mt-2 text-stone-900/70 dark:text-stone-50/70 text-sm font-mono">
+            <div class="mt-2 text-stone-50/80 text-sm font-mono">
               → 21:00 · GMT+1
             </div>
           </div>
 
-          <div class="mt-8 border-t-2 border-stone-900 dark:border-stone-50 pt-4">
-            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70">Where</div>
+          <div class="mt-8 border-t-2 border-stone-50 pt-4">
+            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-50/80">Where</div>
             <div class="mt-2 text-xl font-light leading-snug">
               Cloudflare<br/>
               <span class="font-bold">County Hall, 6F</span><br/>
               Belvedere Rd, SE1 7PB<br/>
-              <span class="text-stone-900/70 dark:text-stone-50/70">Waterloo · London</span>
+              <span class="text-stone-50/80">Waterloo · London</span>
             </div>
+          </div>
+
+          <div class="mt-6 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-50/60 italic font-light">
+            ↑ Photo: the view from inside.
           </div>
         </div>
 
