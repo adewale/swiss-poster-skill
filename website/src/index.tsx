@@ -120,11 +120,6 @@ const SectionHero = () => html`
     01
   </div>
 
-  <!-- Geometric accent: circle in upper-left quadrant -->
-  <div class="absolute left-[10%] top-[15%] w-48 h-48 rounded-full border-2 border-[#C8102E]/20 dark:border-[#C8102E]/15 pointer-events-none hidden lg:block"></div>
-  <!-- Smaller filled circle -->
-  <div class="absolute left-[13%] top-[18%] w-8 h-8 rounded-full bg-[#C8102E] pointer-events-none hidden lg:block"></div>
-
   <div class="max-w-6xl mx-auto px-8 py-40 relative z-10 grid grid-cols-12 gap-8 w-full">
     <div class="col-span-12 md:col-span-8">
       <span class="text-sm tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Swiss Design System — A skill for AI agents</span>
@@ -936,9 +931,7 @@ const SectionInstall = () => html`
     </div>
 
     <div class="grid grid-cols-12 gap-8 items-start">
-      <div class="col-span-12 md:col-span-6 relative">
-        <!-- Geometric: triangle in top-right of this column -->
-        <div class="absolute top-0 right-0 w-16 h-16 pointer-events-none hidden md:block" style="clip-path: polygon(100% 0, 0 0, 100% 100%); background-color: #C8102E; opacity: 0.12;"></div>
+      <div class="col-span-12 md:col-span-6">
         <div class="w-6 h-px bg-[#C8102E] mb-8"></div>
         <h2 class="text-4xl md:text-5xl font-medium tracking-tight text-stone-900 dark:text-stone-50 mb-6">
           One command.<br>Every project.
