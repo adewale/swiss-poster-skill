@@ -23,7 +23,7 @@ const HEAD = html`<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss Design System</title>
-  <meta name="description" content="A Swiss International Style design system skill for AI agents. IBM Plex Sans, stone palette, grid, whitespace.">
+  <meta name="description" content="A Swiss International Style design system skill for AI agents. Grotesque typography, grayscale palette, grid, whitespace.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
@@ -120,21 +120,26 @@ const SectionHero = () => html`
     01
   </div>
 
+  <!-- Geometric accent: circle in upper-left quadrant -->
+  <div class="absolute left-[10%] top-[15%] w-48 h-48 rounded-full border-2 border-[#C8102E]/20 dark:border-[#C8102E]/15 pointer-events-none hidden lg:block"></div>
+  <!-- Smaller filled circle -->
+  <div class="absolute left-[13%] top-[18%] w-8 h-8 rounded-full bg-[#C8102E] pointer-events-none hidden lg:block"></div>
+
   <div class="max-w-6xl mx-auto px-8 py-40 relative z-10 grid grid-cols-12 gap-8 w-full">
     <div class="col-span-12 md:col-span-8">
-      <span class="text-sm tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Swiss Design System — A skill for AI agents</span>
+      <span class="text-sm tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Swiss Design System — A skill for AI agents</span>
       <div class="w-8 h-px bg-[#C8102E] mt-6 mb-10"></div>
-      <h1 class="text-6xl md:text-8xl font-normal tracking-tight leading-none text-stone-900 dark:text-stone-50">
+      <h1 class="text-6xl md:text-8xl font-medium tracking-tight leading-none text-stone-900 dark:text-stone-50">
         Swiss<br>International<br>Style.
       </h1>
-      <p class="text-xl leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-10 max-w-[52ch]">
-        A design system rooted in the modernist movement that emerged from Zürich and Basel in the 1950s. Grotesque typography, mathematical grid, generous whitespace, restrained color — taught to your AI agent through Tailwind CSS.
+      <p class="text-xl leading-relaxed text-stone-900/80 dark:text-stone-50/80 mt-10 max-w-[52ch]">
+        A design system rooted in the modernist movement that emerged from Zürich and Basel in the 1950s. Grotesque sans-serif typography, mathematical grid, generous whitespace, restrained color — taught to your AI agent through Tailwind CSS.
       </p>
       <div class="mt-12 flex flex-col sm:flex-row items-start gap-4">
         <div class="bg-stone-900 dark:bg-stone-50 text-stone-50 dark:text-stone-900 px-6 py-3 font-mono text-sm select-all">
           npx skills add zeke/swiss-design-skill
         </div>
-        <a href="${GITHUB_URL}" target="_blank" class="px-6 py-3 border border-stone-300 dark:border-stone-700 text-stone-900/70 dark:text-stone-50/70 text-sm tracking-wide hover:border-stone-900 dark:hover:border-stone-50 transition-colors">
+        <a href="${GITHUB_URL}" target="_blank" class="px-6 py-3 border border-stone-400 dark:border-stone-600 text-stone-900/80 dark:text-stone-50/80 text-sm tracking-wide hover:border-stone-900 dark:hover:border-stone-50 transition-colors">
           View on GitHub ↗
         </a>
       </div>
@@ -142,10 +147,10 @@ const SectionHero = () => html`
 
     <!-- Column of vertical labels -->
     <div class="hidden md:flex col-span-4 flex-col justify-end gap-6 pb-4">
-      ${['IBM Plex Sans', 'Stone Palette', 'Opacity Hierarchy', '12-Column Grid', 'One Accent'].map((label, i) => html`
-      <div class="flex items-center gap-3 border-t border-stone-200 dark:border-stone-800 pt-4">
-        <span class="text-xs text-stone-900/40 dark:text-stone-50/40 font-mono">0${i + 1}</span>
-        <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">${label}</span>
+      ${['Grotesque sans-serif', 'Grayscale palette', 'Opacity hierarchy', '12-column grid', 'One accent color'].map((label, i) => html`
+      <div class="flex items-center gap-3 border-t border-stone-300 dark:border-stone-700 pt-4">
+        <span class="text-xs text-stone-900/60 dark:text-stone-50/60 font-mono font-medium">0${i + 1}</span>
+        <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">${label}</span>
       </div>`)}
     </div>
   </div>
@@ -161,9 +166,9 @@ const SectionEditorial = () => html`
   <div class="max-w-6xl mx-auto px-4 md:px-8 py-24 md:py-32">
     <!-- Section label -->
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">02</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Editorial</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">02</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Editorial</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
     <div class="grid grid-cols-12 gap-8">
@@ -240,17 +245,20 @@ const SectionPoster = () => html`
 <section id="poster" class="border-b border-stone-200 dark:border-stone-800">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">03</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Poster</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">03</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Poster</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
     <div class="grid grid-cols-12 gap-8">
       <!-- Dark full-bleed poster -->
       <div class="col-span-12 md:col-span-7 bg-stone-950 dark:bg-stone-900 p-12 relative overflow-hidden min-h-[480px] flex flex-col justify-between">
-        <!-- Geometric background elements -->
-        <div class="absolute bottom-0 right-0 w-64 h-64 border border-stone-700 translate-x-16 translate-y-16"></div>
-        <div class="absolute bottom-8 right-8 w-64 h-64 border border-stone-700"></div>
+        <!-- Geometric: concentric circles top-right -->
+        <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
+        <div class="absolute -top-8 -right-8 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
+        <div class="absolute top-4 right-4 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
+        <!-- Geometric: triangle (CSS clip-path) bottom-left -->
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#003B8E]/30 pointer-events-none" style="clip-path: polygon(0 100%, 100% 100%, 0 0)"></div>
 
         <div>
           <div class="flex items-center gap-3 mb-12">
@@ -316,15 +324,15 @@ const SectionData = () => html`
 <section id="data" class="border-b border-stone-200 dark:border-stone-800">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">04</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Data</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">04</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Data</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
     <div class="grid grid-cols-12 gap-8">
       <div class="col-span-12 md:col-span-8">
         <h2 class="text-3xl md:text-4xl font-normal tracking-tight text-stone-900 dark:text-stone-50 mb-3">Font Specimen</h2>
-        <p class="text-base text-stone-900/60 dark:text-stone-50/60 mb-12 max-w-[52ch]">Grotesque typefaces in the Swiss tradition, ranked by fidelity to the International Style.</p>
+        <p class="text-base text-stone-900/70 dark:text-stone-50/70 mb-12 max-w-[52ch]">Grotesque typefaces in the Swiss tradition, ranked by fidelity to the International Style.</p>
 
         <table class="w-full text-sm">
           <thead>
@@ -369,7 +377,7 @@ const SectionData = () => html`
           </tbody>
         </table>
 
-        <p class="text-sm text-stone-900/50 dark:text-stone-50/50 mt-6 leading-relaxed max-w-[60ch]">
+        <p class="text-sm text-stone-900/70 dark:text-stone-50/70 mt-6 leading-relaxed max-w-[60ch]">
           Neue Haas Grotesk (1957) was the original name for what became Helvetica in 1960, when it was renamed for international distribution by Haas and D. Stempel AG. Univers, released the same year by Adrian Frutiger, was favored by the Basel school while the Zürich school championed Helvetica.
         </p>
       </div>
@@ -396,14 +404,14 @@ const SectionCards = () => html`
 <section id="cards" class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">05</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Cards</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">05</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Cards</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
     <div class="mb-12">
-      <h2 class="text-3xl md:text-4xl font-normal tracking-tight text-stone-900 dark:text-stone-50">Objects of Swiss Design</h2>
-      <p class="text-base text-stone-900/60 dark:text-stone-50/60 mt-3 max-w-[48ch]">Six artefacts that defined the modernist era in Swiss design.</p>
+      <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 dark:text-stone-50">Objects of Swiss Design</h2>
+      <p class="text-base text-stone-900/70 dark:text-stone-50/70 mt-3 max-w-[48ch]">Six artefacts that defined the modernist era in Swiss design.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-stone-200 dark:bg-stone-800">
@@ -451,20 +459,22 @@ const SectionCards = () => html`
           href: 'https://archive.org/details/gridsystemsingra0000muml'
         },
       ].map(({ accent, label, year, name, desc, tag, href }) => html`
-      <a href="${href}" target="_blank" rel="noopener" class="bg-stone-50 dark:bg-stone-950 p-8 flex flex-col gap-6 hover:bg-white dark:hover:bg-stone-900 transition-colors group">
+      <a href="${href}" target="_blank" rel="noopener" class="bg-stone-50 dark:bg-stone-950 p-8 flex flex-col gap-6 hover:bg-white dark:hover:bg-stone-900 transition-colors group relative overflow-hidden">
+        <!-- Geometric accent: small circle top-right corner -->
+        <div class="absolute top-4 right-4 w-12 h-12 rounded-full border-2 pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity" style="border-color: ${accent}"></div>
         <div class="flex items-start justify-between">
           <div class="w-10 h-10" style="background-color: ${accent};"></div>
-          <span class="text-sm font-mono text-stone-900/50 dark:text-stone-50/50">${year}</span>
+          <span class="text-sm font-mono font-medium text-stone-900/70 dark:text-stone-50/70">${year}</span>
         </div>
         <div>
           <div class="w-6 h-px mb-4" style="background-color: ${accent}"></div>
-          <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 block mb-2">${label}</span>
-          <h3 class="text-xl font-normal text-stone-900 dark:text-stone-50 leading-snug group-hover:text-[${accent}] transition-colors">${name}</h3>
-          <p class="text-sm text-stone-900/60 dark:text-stone-50/60 leading-relaxed mt-3 max-w-[32ch]">${desc}</p>
+          <span class="text-xs tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70 block mb-2">${label}</span>
+          <h3 class="text-xl font-medium text-stone-900 dark:text-stone-50 leading-snug group-hover:text-[${accent}] transition-colors">${name}</h3>
+          <p class="text-sm text-stone-900/70 dark:text-stone-50/70 leading-relaxed mt-3 max-w-[32ch]">${desc}</p>
         </div>
         <div class="mt-auto pt-4 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
-          <span class="text-xs tracking-widest uppercase px-2 py-1" style="background-color: ${accent}20; color: ${accent}">${tag}</span>
-          <span class="text-stone-900/40 dark:text-stone-50/40 text-sm group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">↗</span>
+          <span class="text-xs tracking-widest uppercase font-medium px-2 py-1" style="background-color: ${accent}25; color: ${accent}">${tag}</span>
+          <span class="text-stone-900/50 dark:text-stone-50/50 text-sm group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">↗</span>
         </div>
       </a>`)}
     </div>
@@ -477,9 +487,9 @@ const SectionApp = () => html`
 <section id="app" class="border-b border-stone-200 dark:border-stone-800">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">06</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">App</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">06</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">App</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
     <!-- App shell -->
@@ -574,51 +584,51 @@ const SectionType = () => html`
 <section id="type" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-50/40">07</span>
-      <span class="text-xs tracking-widest uppercase text-stone-50/60">Type</span>
-      <div class="flex-1 h-px bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-50/60">07</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-50/80">Type</span>
+      <div class="flex-1 h-px bg-stone-700"></div>
     </div>
 
     <div class="grid grid-cols-12 gap-8">
       <div class="col-span-12 md:col-span-8 space-y-16">
         <!-- Display -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">Display — 80px normal tracking-tight leading-none</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Display — 80px normal tracking-tight leading-none</span>
           <p class="text-8xl font-normal tracking-tight leading-none">Form Folgt</p>
         </div>
         <!-- H1 -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">H1 — 60px normal tracking-tight leading-tight</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">H1 — 60px normal tracking-tight leading-tight</span>
           <p class="text-6xl font-normal tracking-tight leading-tight">Grid Systems in<br>Graphic Design</p>
         </div>
         <!-- H2 -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">H2 — 48px normal tracking-tight leading-snug</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">H2 — 48px normal tracking-tight leading-snug</span>
           <p class="text-5xl font-normal tracking-tight leading-snug">The Typographic Grid</p>
         </div>
         <!-- H3 -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">H3 — 30px medium leading-snug</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">H3 — 30px medium leading-snug</span>
           <p class="text-3xl font-medium leading-snug">Alignment and Proportion</p>
         </div>
         <!-- Body -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">Body — 18px normal leading-relaxed max-w-[60ch]</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Body — 18px normal leading-relaxed max-w-[60ch]</span>
           <p class="text-lg font-normal leading-relaxed max-w-[60ch]">The grid system is an aid, not a guarantee. It permits a number of possible uses and each designer can look for a solution appropriate to his personal style. But one must learn how to use the grid; it is an art that requires practice.</p>
         </div>
         <!-- Small -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">Small — 15px normal leading-relaxed</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Small — 15px normal leading-relaxed</span>
           <p class="text-[15px] font-normal leading-relaxed text-stone-50/70 max-w-[60ch]">Supporting text at reduced opacity. Used for descriptions, metadata, and secondary content that accompanies primary body copy.</p>
         </div>
         <!-- Caption -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">Caption — 12px tracking-widest uppercase</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Caption — 12px tracking-widest uppercase</span>
           <p class="text-xs tracking-widest uppercase text-stone-50/50">Figure 03 — Basel, Switzerland, 1961 — Offset Lithography</p>
         </div>
         <!-- Mono -->
         <div class="border-t border-stone-800 pt-8">
-          <span class="text-xs font-mono text-stone-50/40 block mb-6">Mono — IBM Plex Mono 15px</span>
+          <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6">Mono — IBM Plex Mono 15px</span>
           <p class="font-mono text-[15px] text-stone-50/80">npx skills add zeke/swiss-design-skill</p>
         </div>
       </div>
@@ -627,18 +637,18 @@ const SectionType = () => html`
       <div class="col-span-12 md:col-span-4">
         <div class="sticky top-24 space-y-8">
           <div>
-            <span class="text-xs font-mono text-stone-50/40 block mb-6 border-t border-stone-800 pt-8">Weight ladder</span>
+            <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6 border-t border-stone-800 pt-8">Weight ladder</span>
             ${[['Light 300', 'font-light'], ['Normal 400', 'font-normal'], ['Medium 500', 'font-medium'], ['Semi 600', 'font-semibold']].map(([label, cls]) => html`
             <div class="mb-5">
-              <span class="text-xs text-stone-50/40 block mb-1">${label}</span>
+              <span class="text-xs font-medium text-stone-50/60 block mb-1">${label}</span>
               <p class="text-3xl ${cls} text-stone-50">Grotesque</p>
             </div>`)}
           </div>
           <div>
-            <span class="text-xs font-mono text-stone-50/40 block mb-6 border-t border-stone-800 pt-8">Opacity ladder</span>
+            <span class="text-xs font-mono font-medium text-stone-50/60 block mb-6 border-t border-stone-800 pt-8">Opacity ladder</span>
             ${[['100%', 'text-stone-50'], ['70%', 'text-stone-50/70'], ['50%', 'text-stone-50/50'], ['30%', 'text-stone-50/30']].map(([pct, cls]) => html`
             <div class="mb-4 flex items-baseline gap-3">
-              <span class="text-xs font-mono text-stone-50/30 w-8">${pct}</span>
+              <span class="text-xs font-mono font-medium text-stone-50/60 w-8">${pct}</span>
               <p class="text-base ${cls}">Primary text at ${pct}</p>
             </div>`)}
           </div>
@@ -654,14 +664,14 @@ const SectionColor = () => html`
 <section id="color" class="border-b border-stone-200 dark:border-stone-800">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">08</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Color</span>
-      <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">08</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Color</span>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
     </div>
 
-    <!-- Stone scale -->
+    <!-- Grayscale -->
     <div class="mb-20">
-      <h3 class="text-sm tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 mb-8">Stone scale</h3>
+      <h3 class="text-sm font-medium tracking-widest uppercase text-stone-900/80 dark:text-stone-50/80 mb-8">Grayscale</h3>
       <div class="grid grid-cols-5 md:grid-cols-11 gap-px bg-stone-200 dark:bg-stone-800">
         ${[
           ['50', '#fafaf9'],
@@ -684,7 +694,7 @@ const SectionColor = () => html`
 
     <!-- All 8 accent colors + opacity -->
     <div class="mb-20">
-      <h3 class="text-sm tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60 mb-8">Accent palette × opacity</h3>
+      <h3 class="text-sm font-medium tracking-widest uppercase text-stone-900/80 dark:text-stone-50/80 mb-8">Accent palette × opacity</h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
         ${ACCENTS.map(({ name, hex, label }) => html`
         <div>
@@ -720,8 +730,8 @@ const SectionForm = () => html`
 <section id="form" class="border-b border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">09</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Form</span>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">09</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Form</span>
       <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
     </div>
 
@@ -797,20 +807,25 @@ const SectionForm = () => html`
 // ─── Section 10: Responsive ──────────────────────────────────────────────────
 
 const SectionResponsive = () => html`
-<section id="responsive" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50">
-  <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 lg:py-32">
+<section id="responsive" class="border-b border-stone-200 dark:border-stone-800 bg-stone-900 dark:bg-stone-950 text-stone-50 relative overflow-hidden">
+  <!-- Geometric: large triangle top-right -->
+  <div class="absolute -top-24 -right-24 w-96 h-96 pointer-events-none opacity-10" style="clip-path: polygon(100% 0, 0 0, 100% 100%); background-color: #C8102E;"></div>
+  <!-- Geometric: circle bottom-left -->
+  <div class="absolute -bottom-16 -left-16 w-64 h-64 rounded-full border border-stone-700 pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 lg:py-32 relative z-10">
     <div class="flex items-center gap-4 mb-16 md:mb-20">
-      <span class="text-xs font-mono text-stone-50/40">10</span>
-      <span class="text-xs tracking-widest uppercase text-stone-50/60">Responsive</span>
-      <div class="flex-1 h-px bg-stone-800"></div>
+      <span class="text-xs font-mono font-medium text-stone-50/60">10</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-50/80">Responsive</span>
+      <div class="flex-1 h-px bg-stone-700"></div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-16 md:mb-24">
       <div>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight leading-tight text-stone-50 mb-6">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-tight text-stone-50 mb-6">
           Mobile first.<br>Always.
         </h2>
-        <p class="text-lg leading-relaxed text-stone-50/70 max-w-[52ch]">
+        <p class="text-lg leading-relaxed text-stone-50/80 max-w-[52ch]">
           The Swiss grid adapts from 320px to 1440px. Default classes target mobile. Breakpoint prefixes layer in structure as the viewport widens. Never build desktop-first and retrofit mobile.
         </p>
       </div>
@@ -915,23 +930,25 @@ const SectionInstall = () => html`
 <section id="install" class="border-b border-stone-200 dark:border-stone-800">
   <div class="max-w-6xl mx-auto px-8 py-32">
     <div class="flex items-center gap-4 mb-20">
-      <span class="text-xs font-mono text-stone-900/40 dark:text-stone-50/40">11</span>
-      <span class="text-xs tracking-widest uppercase text-stone-900/60 dark:text-stone-50/60">Install</span>
+      <span class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60">11</span>
+      <span class="text-xs tracking-widest uppercase font-medium text-stone-900/80 dark:text-stone-50/80">Install</span>
       <div class="flex-1 h-px bg-stone-200 dark:bg-stone-800"></div>
     </div>
 
     <div class="grid grid-cols-12 gap-8 items-start">
-      <div class="col-span-12 md:col-span-6">
+      <div class="col-span-12 md:col-span-6 relative">
+        <!-- Geometric: triangle in top-right of this column -->
+        <div class="absolute top-0 right-0 w-16 h-16 pointer-events-none hidden md:block" style="clip-path: polygon(100% 0, 0 0, 100% 100%); background-color: #C8102E; opacity: 0.12;"></div>
         <div class="w-6 h-px bg-[#C8102E] mb-8"></div>
-        <h2 class="text-4xl md:text-5xl font-normal tracking-tight text-stone-900 dark:text-stone-50 mb-6">
+        <h2 class="text-4xl md:text-5xl font-medium tracking-tight text-stone-900 dark:text-stone-50 mb-6">
           One command.<br>Every project.
         </h2>
-        <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[48ch] mb-12">
+        <p class="text-lg leading-relaxed text-stone-900/80 dark:text-stone-50/80 max-w-[48ch] mb-12">
           Install the skill and your AI agent will apply Swiss design principles whenever you ask it to style a page, clean up a UI, or make something look great.
         </p>
 
         <div>
-          <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-3">Install with skills CLI</span>
+          <span class="text-xs tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70 block mb-3">Install with skills CLI</span>
           <div class="bg-stone-900 dark:bg-stone-950 text-stone-50 px-5 py-4 font-mono text-sm flex items-center justify-between gap-4 border border-stone-800">
             <span id="install-cmd">npx skills add zeke/swiss-design-skill</span>
             <button onclick="copyInstall()" id="copy-btn" class="text-stone-50/50 hover:text-stone-50 shrink-0 text-xs tracking-widest uppercase transition-colors min-h-[44px] px-2">copy</button>
@@ -964,8 +981,8 @@ const SectionInstall = () => html`
           <span class="text-xs tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 block mb-4">What the skill teaches</span>
           <ul class="space-y-3">
             ${[
-              'IBM Plex Sans typography system',
-              'Stone color palette + opacity hierarchy',
+              'Grotesque sans-serif typography system',
+              'Grayscale palette + opacity hierarchy',
               'Eight accent colors at multiple opacities',
               '12-column grid with 8px base unit',
               'Generous whitespace rules',
