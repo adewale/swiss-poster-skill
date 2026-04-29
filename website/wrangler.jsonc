@@ -3,6 +3,9 @@
   "main": "src/index.tsx",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public"
+  },
   "routes": [
     {
       "pattern": "swiss.ziki.boo/*",

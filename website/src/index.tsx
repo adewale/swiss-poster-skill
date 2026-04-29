@@ -1001,10 +1001,13 @@ const Footer = () => html`
     <div>
       <span class="text-sm tracking-widest uppercase font-medium text-stone-900 dark:text-stone-50">Swiss Design System</span>
       <p class="text-sm text-stone-900/50 dark:text-stone-50/50 mt-2">
-        IBM Plex Sans · Stone palette · Tailwind CSS
+        Grotesque typography · Grayscale palette · Tailwind CSS
       </p>
     </div>
-    <div class="flex items-center gap-8">
+    <div class="flex items-center gap-8 flex-wrap">
+      <a href="/inspiration" class="text-sm tracking-widest uppercase text-stone-900/70 dark:text-stone-50/70 hover:text-stone-900 dark:hover:text-stone-50 transition-colors font-medium">
+        Inspiration
+      </a>
       <a href="${GITHUB_URL}" target="_blank" class="text-sm tracking-widest uppercase text-stone-900/50 dark:text-stone-50/50 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">
         GitHub ↗
       </a>
@@ -1019,7 +1022,117 @@ const Footer = () => html`
   </div>
 </footer>`
 
-// ─── Route ────────────────────────────────────────────────────────────────────
+// ─── Inspiration page data ────────────────────────────────────────────────────
+
+const INSPIRATION = [
+  { filename: 'josef-m-ller-brockmann-josef-m-ller-brockmann-pos-1.jpg', title: 'Tonhalle Quartett', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: '1958', category: 'Posters', source: 'Sgustok Design', source_url: 'https://sgustokdesign.com/josef-muller-brockmann-posters' },
+  { filename: 'josef-m-ller-brockmann-josef-m-ller-brockmann-swi-2.jpg', title: 'Beethoven / Brahms / Strauss', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: 'c.1955', category: 'Posters', source: 'Graphéine', source_url: 'https://grapheine.com/en/magazine/graphic-designer-muller-brockmann-swiss-style/' },
+  { filename: 'josef-m-ller-brockmann-m-ller-brockmann-poster-an-3.jpg', title: 'Anthologie de Musique Suisse', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: null, category: 'Posters', source: 'Grafa Gallery', source_url: 'https://grafagallery.com/products/muller-brockmann-josef-anthologie-de-musique-suisse' },
+  { filename: 'josef-m-ller-brockmann-josef-m-ller-brockmann-pos-5.jpg', title: 'Beethoven', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: '1955', category: 'Posters', source: 'Sgustok Design', source_url: 'https://sgustokdesign.com/josef-muller-brockmann-posters' },
+  { filename: 'josef-m-ller-brockmann-graphic-giants-josef-m-lle-6.jpg', title: 'Architectonic Composition', designer: 'Josef Müller-Brockmann', designer_url: 'https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann', year: null, category: 'Posters', source: 'Sessions College', source_url: 'https://www.sessions.edu/notes-on-design/graphic-giants-josef-muller-brockman/' },
+  { filename: 'emil-ruder-in-grid-we-trust-emil-ruder-aka-the-ic-9.jpg', title: 'Typography Specimen', designer: 'Emil Ruder', designer_url: 'https://en.wikipedia.org/wiki/Emil_Ruder', year: null, category: 'Typography', source: 'TypeRoom', source_url: 'https://www.typeroom.eu/in-grid-we-trust-emil-ruder-aka-the-iconic-pioneer-of-swiss-style' },
+  { filename: 'armin-hofmann-the-daily-heller-armin-hofmann-turn-17.jpg', title: 'Poster (centenary retrospective)', designer: 'Armin Hofmann', designer_url: 'https://en.wikipedia.org/wiki/Armin_Hofmann', year: null, category: 'Posters', source: 'PRINT Magazine', source_url: 'https://www.printmag.com/daily-heller/the-daily-heller-armin-hofmann-turns-100/' },
+  { filename: 'armin-hofmann-heroes-armin-hofmann-designers-j-22.jpg', title: 'Poster Collection', designer: 'Armin Hofmann', designer_url: 'https://en.wikipedia.org/wiki/Armin_Hofmann', year: null, category: 'Posters', source: 'Designers Journal', source_url: 'http://www.designersjournal.net/jottings/designheroes/heroes-armin-hofmann' },
+  { filename: 'armin-hofmann-swiss-original-poster-by-armin-hofma-24.jpg', title: 'Möbel unserer Zeit — Contura / Herman Miller', designer: 'Armin Hofmann', designer_url: 'https://en.wikipedia.org/wiki/Armin_Hofmann', year: '1962', category: 'Posters', source: 'Placart', source_url: 'https://placart.ch/en/artwork/original-vintage-poster-hofmann-herman-miller/' },
+  { filename: 'posters-swiss-style-and-grid-systems-graphic-des-25.png', title: 'Swiss Style Grid Systems', designer: null, designer_url: null, year: null, category: 'Grid', source: 'Graphic Design @ Farringtons', source_url: 'https://farringtonsgraphics.edublogs.org/swiss-tour-poster/' },
+  { filename: 'lohse-m-ller-brockmann-neuburg-vivarelli-neue-g-33.jpg', title: 'Neue Grafik No. 9', designer: 'Lohse, Müller-Brockmann, Neuburg, Vivarelli', designer_url: 'https://en.wikipedia.org/wiki/Neue_Grafik', year: '1961', category: 'Publications', source: 'Design Reviewed', source_url: 'https://designreviewed.com/series/neue-grafik-new-graphic-design-graphisme-actuel/' },
+  { filename: 'grid-4-quick-ways-to-bring-swiss-style-to-your-web-43.png', title: 'Swiss Style Posters Overview', designer: null, designer_url: null, year: null, category: 'Grid', source: 'Justinmind', source_url: 'https://www.justinmind.com/blog/swiss-style-web-design-everything-you-need-to-know/' },
+  { filename: 'posters-swiss-style-the-principles-the-typefaces-47.jpg', title: 'Swiss Style Principles', designer: null, designer_url: null, year: null, category: 'Posters', source: 'PRINT Magazine', source_url: 'https://www.printmag.com/featured/swiss-style-principles-typefaces-designers/' },
+  { filename: 'posters-swiss-design-design-is-history-48.jpg', title: 'Swiss Design', designer: null, designer_url: null, year: null, category: 'Posters', source: 'Design Is History', source_url: 'http://www.designishistory.com/home/swiss/' },
+  { filename: 'posters-international-typographic-style-in-web-des-51.png', title: 'International Typographic Style', designer: null, designer_url: null, year: null, category: 'Posters', source: 'Medium / Bootcamp', source_url: 'https://medium.com/design-bootcamp/international-typographic-style-in-web-design-a23fddd599f5' },
+  { filename: 'posters-swiss-style-15-art-print-for-sale-by-proc-52.jpg', title: 'Swiss Style No. 15', designer: null, designer_url: null, year: null, category: 'Posters', source: 'Redbubble / process22', source_url: 'https://www.redbubble.com/i/art-print/Swiss-Style-15-by-process22/49430015.1G4ZT' },
+  { filename: 'max-miedinger-thesbcreative-type-study-helvetic-55.jpg', title: 'Type Study: Helvetica', designer: 'Max Miedinger', designer_url: 'https://en.wikipedia.org/wiki/Max_Miedinger', year: null, category: 'Typography', source: 'THESBCREATIVE', source_url: 'https://thesbcreative.com/helvetica' },
+  { filename: 'batch2-richard-paul-lohse-vintage-posters-by-richard-paul-41.jpg', title: 'Juni-Festwochen Zürich', designer: 'Richard Paul Lohse', designer_url: 'https://en.wikipedia.org/wiki/Richard_Paul_Lohse', year: null, category: 'Posters', source: 'Galerie 1 2 3', source_url: 'https://www.galerie123.com/en/artists/14128/richard-paul-lohse-original-vintage-poster/' },
+  { filename: 'batch2-richard-paul-lohse-plastic-and-its-uses-original-42.jpg', title: 'Kunststoffe / Plastics Basel', designer: 'Richard Paul Lohse', designer_url: 'https://en.wikipedia.org/wiki/Richard_Paul_Lohse', year: '1958', category: 'Posters', source: 'Placart', source_url: 'https://placart.ch/en/artwork/original-swiss-style-poster-plastics-lohse/' },
+  { filename: 'batch2-richard-paul-lohse-richard-paul-lohse-1902-1988-e-47.jpg', title: 'Richard Paul Lohse 1902–1988', designer: 'Richard Paul Lohse', designer_url: 'https://en.wikipedia.org/wiki/Richard_Paul_Lohse', year: '1992', category: 'Publications', source: 'Design Reviewed', source_url: 'https://designreviewed.com/artefacts/richard-paul-lohse-1902-1988-edition-braus-heidelberg-1992/' },
+  { filename: 'batch2-siegfried-odermatt-swiss-posters-book-alliance-g-50.jpg', title: 'Swiss Posters Book — AGI', designer: 'Siegfried Odermatt', designer_url: 'https://en.wikipedia.org/wiki/Siegfried_Odermatt', year: '1998', category: 'Publications', source: 'AGI', source_url: 'https://a-g-i.org/design/swiss-posters-book' },
+  { filename: 'batch2-grid-the-swiss-grid-designobserver-76.png', title: 'The Swiss Grid', designer: null, designer_url: null, year: null, category: 'Grid', source: 'Design Observer', source_url: 'https://designobserver.com/the-swiss-grid/' },
+]
+
+const CATEGORIES = ['All', 'Posters', 'Typography', 'Grid', 'Publications']
+
+// ─── Inspiration page ─────────────────────────────────────────────────────────
+
+const InspirationPage = () => html`
+${HEAD.toString().replace('<title>Swiss Design System</title>', '<title>Inspiration — Swiss Design System</title>')}
+${Nav()}
+<main class="pt-14">
+  <!-- Header -->
+  <div class="h-1 bg-[#C8102E]"></div>
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
+    <div class="flex items-center gap-4 mb-12">
+      <a href="/" class="text-xs font-mono font-medium text-stone-900/60 dark:text-stone-50/60 hover:text-stone-900 dark:hover:text-stone-50 transition-colors">← Back</a>
+      <div class="flex-1 h-px bg-stone-300 dark:bg-stone-700"></div>
+    </div>
+    <div class="grid grid-cols-12 gap-8 items-end mb-16">
+      <div class="col-span-12 md:col-span-8">
+        <span class="text-xs tracking-widest uppercase font-medium text-stone-900/60 dark:text-stone-50/60 block mb-6">Historical specimens</span>
+        <h1 class="text-5xl md:text-7xl font-medium tracking-tight leading-none text-stone-900 dark:text-stone-50">
+          Inspiration
+        </h1>
+        <p class="text-lg leading-relaxed text-stone-900/70 dark:text-stone-50/70 mt-8 max-w-[56ch]">
+          A curated collection of Swiss International Style design — posters, typography specimens, grid systems, and publications from the 1950s–80s. Each piece informed the design principles of this system.
+        </p>
+      </div>
+      <div class="col-span-12 md:col-span-4 flex flex-col gap-3 md:text-right">
+        <div class="text-5xl font-light tracking-tight text-stone-900/10 dark:text-stone-50/10 leading-none">${INSPIRATION.length}</div>
+        <span class="text-xs tracking-widest uppercase font-medium text-stone-900/50 dark:text-stone-50/50">specimens</span>
+      </div>
+    </div>
+
+    <!-- Category filter -->
+    <div class="flex items-center gap-2 flex-wrap mb-16 border-t border-stone-200 dark:border-stone-800 pt-8">
+      ${CATEGORIES.map(cat => html`
+      <a href="${cat === 'All' ? '/inspiration' : '/inspiration?cat=' + encodeURIComponent(cat)}"
+         class="px-4 py-2 text-xs tracking-widest uppercase font-medium border border-stone-300 dark:border-stone-700 text-stone-900/70 dark:text-stone-50/70 hover:bg-stone-900 hover:text-stone-50 dark:hover:bg-stone-50 dark:hover:text-stone-900 transition-colors">
+        ${cat}
+      </a>`)}
+    </div>
+
+    <!-- Masonry grid -->
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+      ${INSPIRATION.map(item => html`
+      <div class="break-inside-avoid">
+        <a href="${item.source_url}" target="_blank" rel="noopener" class="group block">
+          <div class="overflow-hidden bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
+            <img
+              src="/inspiration/${item.filename}"
+              alt="${item.title}"
+              loading="lazy"
+              class="w-full block group-hover:opacity-90 transition-opacity duration-200"
+            >
+          </div>
+          <div class="mt-4 pb-8 border-b border-stone-200 dark:border-stone-800">
+            <div class="flex items-start justify-between gap-4 mb-1">
+              <h3 class="text-sm font-medium text-stone-900 dark:text-stone-50 leading-snug group-hover:text-[#C8102E] transition-colors">
+                ${item.title}
+              </h3>
+              <span class="text-stone-900/40 dark:text-stone-50/40 text-xs shrink-0 mt-0.5 group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">↗</span>
+            </div>
+            ${item.designer ? html`
+            <a href="${item.designer_url}" target="_blank" rel="noopener" class="text-xs text-[#C8102E] hover:text-[#C8102E]/70 transition-colors block mb-1" onclick="event.stopPropagation()">
+              ${item.designer}
+            </a>` : html`
+            <span class="text-xs text-stone-900/40 dark:text-stone-50/40 block mb-1">Designer unknown</span>`}
+            <div class="flex items-center gap-3">
+              ${item.year ? html`<span class="text-xs font-mono text-stone-900/50 dark:text-stone-50/50">${item.year}</span>` : ''}
+              <span class="text-xs tracking-widest uppercase font-medium px-1.5 py-0.5 bg-stone-100 dark:bg-stone-900 text-stone-900/60 dark:text-stone-50/60">${item.category}</span>
+              <span class="text-xs text-stone-900/40 dark:text-stone-50/40 truncate">${item.source}</span>
+            </div>
+          </div>
+        </a>
+      </div>`)}
+    </div>
+  </div>
+</main>
+${Footer()}
+${FOOT}`
+
+// ─── Routes ───────────────────────────────────────────────────────────────────
+
+app.get('/inspiration', (c) => {
+  return c.html(InspirationPage())
+})
 
 app.get('*', (c) => {
   return c.html(
