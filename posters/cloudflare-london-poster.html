@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloudflare London User Group — Inaugural Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --accent: #F38020;
+    --cobalt: #003B8E;
+    --stone-50: #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+  }
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: var(--stone-50);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px;
+  }
+  .poster {
+    width: 1200px;
+    height: 1800px;
+    background: var(--stone-50);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  /* Moiré pattern */
+  .moire {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(0deg, var(--stone-900) 0, var(--stone-900) 1px, transparent 1px, transparent 6px),
+      repeating-linear-gradient(3deg, var(--stone-900) 0, var(--stone-900) 1px, transparent 1px, transparent 6px);
+    opacity: 0.04;
+  }
+  /* Halftone dots */
+  .halftone {
+    position: absolute;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.4px);
+    background-size: 10px 10px;
+  }
+  /* Typography */
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .label-light { color: var(--stone-900); opacity: 0.5; }
+  .label-dark { color: var(--stone-50); opacity: 0.6; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  /* Grid overlay for design */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    padding: 48px;
+    gap: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+  <!-- ═══ BACKGROUND LAYERS ═══ -->
+  <!-- Top dark band -->
+  <div style="position:absolute; top:0; left:0; width:100%; height:52%; background:var(--stone-950); z-index:0;"></div>
+  
+  <!-- Moiré on dark band -->
+  <div class="moire" style="height:52%; z-index:1;"></div>
+  
+  <!-- Halftone dots — right side, light area -->
+  <div class="halftone" style="top:52%; right:0; width:45%; height:48%; opacity:0.15; z-index:1;"></div>
+  
+  <!-- Concentric circles (Brockmann) — escaping top right -->
+  <div style="position:absolute; top:-6%; right:-10%; width:520px; height:520px; border:6px solid var(--accent); border-radius:50%; opacity:0.35; z-index:2;"></div>
+  <div style="position:absolute; top:2%; right:-2%; width:380px; height:380px; border:3px solid var(--stone-50); border-radius:50%; opacity:0.15; z-index:2;"></div>
+  <div style="position:absolute; top:10%; right:6%; width:260px; height:260px; border:2px solid var(--accent); border-radius:50%; opacity:0.2; z-index:2;"></div>
+
+  <!-- Accent wedge — top left -->
+  <div style="position:absolute; top:0; left:0; width:280px; height:240px; background:var(--accent); clip-path:polygon(0 0, 100% 0, 0 70%); z-index:2;"></div>
+
+  <!-- Diagonal bar -->
+  <div style="position:absolute; top:28%; left:-5%; width:110%; height:3px; background:var(--accent); opacity:0.25; transform:rotate(-2deg); z-index:2;"></div>
+
+  <!-- Cobalt square — offset accent -->
+  <div style="position:absolute; top:42%; right:18%; width:16px; height:16px; background:var(--cobalt); opacity:0.5; z-index:3;"></div>
+
+  <!-- ═══ TYPOGRAPHIC BACKGROUND TEXT ═══ -->
+  <div style="position:absolute; top:3%; left:-2%; font-size:280px; font-weight:700; line-height:0.82; color:var(--stone-50); opacity:0.05; letter-spacing:-0.03em; white-space:nowrap; z-index:2; pointer-events:none; select:none;">
+    LONDON
+  </div>
+
+  <!-- ═══ MAIN CONTENT GRID ═══ -->
+  <div class="grid-overlay" style="z-index:10;">
+
+    <!-- Row 1-2: Meta bar -->
+    <div style="grid-column:1 / -1; grid-row:1; display:flex; justify-content:space-between; align-items:end; padding-bottom:16px;">
+      <span class="label label-dark">Cloudflare London User Group · Inaugural</span>
+      <span class="label label-dark">29.04.26</span>
+    </div>
+
+    <!-- Row 2-5: MEGA TYPE — LONDON -->
+    <div style="grid-column:1 / 10; grid-row:2 / 5; display:flex; align-items:end;">
+      <div style="font-size:clamp(140px, 16vw, 200px); font-weight:700; line-height:0.78; letter-spacing:-0.04em; color:var(--accent); margin-left:-8px;">
+        LONDON
+      </div>
+    </div>
+
+    <!-- Row 3-4: Subtitle -->
+    <div style="grid-column:1 / 8; grid-row:4; display:flex; align-items:start; padding-top:8px;">
+      <div style="font-size:52px; font-weight:300; line-height:0.95; letter-spacing:-0.02em; color:var(--stone-50);">
+        The first meeting.
+      </div>
+    </div>
+
+    <!-- Row 2-5: Right rail info -->
+    <div style="grid-column:10 / 13; grid-row:2 / 5; display:flex; flex-direction:column; justify-content:end; gap:24px; padding-bottom:8px;">
+      <div style="border-top:2px solid var(--stone-50); padding-top:12px;">
+        <div class="label label-dark" style="margin-bottom:8px;">When</div>
+        <div class="mono" style="font-size:22px; color:var(--stone-50); line-height:1;">29 APR 26</div>
+        <div style="font-size:48px; font-weight:700; color:var(--stone-50); line-height:0.85; margin-top:4px;">18:30</div>
+      </div>
+      <div style="border-top:2px solid var(--stone-50); padding-top:12px;">
+        <div class="label label-dark" style="margin-bottom:8px;">Where</div>
+        <div style="font-size:16px; font-weight:300; color:var(--stone-50); line-height:1.4;">
+          Cloudflare<br/>
+          <span style="font-weight:700;">County Hall, 6F</span><br/>
+          <span style="opacity:0.6;">Waterloo, SE1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 5: Divider line -->
+    <div style="grid-column:1 / 8; grid-row:5; display:flex; align-items:center;">
+      <div style="width:64px; height:4px; background:var(--accent);"></div>
+    </div>
+
+    <!-- Row 5-6: Description -->
+    <div style="grid-column:1 / 8; grid-row:5 / 7; display:flex; align-items:start; padding-top:24px;">
+      <p style="font-size:16px; line-height:1.6; color:var(--stone-50); opacity:0.75; max-width:42ch;">
+        The inaugural meeting of the Cloudflare London User Group at our offices in Waterloo. Three talks on agents, orchestration, and sandboxed workflows. Demos. Community.
+      </p>
+    </div>
+
+    <!-- Row 5-6: Rotated label -->
+    <div style="grid-column:1; grid-row:5 / 8; display:flex; align-items:start; padding-top:40px;">
+      <div style="transform:rotate(-90deg); transform-origin:left top; white-space:nowrap;">
+        <span class="label" style="color:var(--accent); font-weight:700;">Vol. 01 — Inaugural</span>
+      </div>
+    </div>
+
+    <!-- ═══ LIGHT SECTION: TALKS ═══ -->
+    <!-- Accent band divider -->
+    <div style="grid-column:1 / -1; grid-row:8; background:var(--accent); display:flex; align-items:center; padding:0 48px; margin:0 -48px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+        <span class="label" style="color:var(--stone-950); opacity:0.8;">Three talks</span>
+        <span style="font-size:clamp(24px, 3vw, 40px); font-weight:300; color:var(--stone-950); line-height:1;">Agents. Orchestration. <span style="font-weight:700;">Sandboxes.</span></span>
+        <span class="label" style="color:var(--stone-950); opacity:0.8;">Programme</span>
+      </div>
+    </div>
+
+    <!-- Talk 01 — Adewale's demos -->
+    <div style="grid-column:1 / 5; grid-row:9 / 13; padding-top:32px;">
+      <div style="font-size:clamp(80px, 8vw, 120px); font-weight:700; line-height:0.82; color:var(--accent); margin-left:-4px;">01</div>
+      <div class="label label-light" style="margin-top:16px; margin-bottom:8px;">Adewale Oshineye · Host</div>
+      <div style="font-size:22px; font-weight:300; line-height:1.2; color:var(--stone-900); letter-spacing:-0.01em;">
+        <span style="font-weight:700;">Demos</span> of Cloudflare tools and workflows
+      </div>
+      <p style="font-size:13px; line-height:1.5; color:var(--stone-900); opacity:0.6; margin-top:12px; max-width:28ch;">
+        Live demonstrations of the latest Cloudflare products and integrations.
+      </p>
+    </div>
+
+    <!-- Talk 02 — Alpesh -->
+    <div style="grid-column:5 / 9; grid-row:9 / 13; padding-top:48px;">
+      <div style="font-size:clamp(80px, 8vw, 120px); font-weight:700; line-height:0.82; color:var(--stone-900); margin-left:-4px;">02</div>
+      <div class="label label-light" style="margin-top:16px; margin-bottom:8px;">Alpesh Doshi · Speaker</div>
+      <div style="font-size:22px; font-weight:300; line-height:1.2; color:var(--stone-900); letter-spacing:-0.01em;">
+        <span style="font-weight:700;">Agent Orchestration</span> — LLMs and swarms
+      </div>
+      <p style="font-size:13px; line-height:1.5; color:var(--stone-900); opacity:0.6; margin-top:12px; max-width:28ch;">
+        Building production systems with orchestrated agent swarms and language models.
+      </p>
+    </div>
+
+    <!-- Talk 03 — Yigit -->
+    <div style="grid-column:9 / 13; grid-row:9 / 13; padding-top:64px;">
+      <div style="font-size:clamp(80px, 8vw, 120px); font-weight:300; line-height:0.82; color:var(--accent); margin-left:-4px;">03</div>
+      <div class="label label-light" style="margin-top:16px; margin-bottom:8px;">Yigit Erol · Speaker</div>
+      <div style="font-size:22px; font-weight:300; line-height:1.2; color:var(--stone-900); letter-spacing:-0.01em;">
+        <span style="font-weight:700;">Safer Workflows</span> — sandboxes and zero-trust egress
+      </div>
+      <p style="font-size:13px; line-height:1.5; color:var(--stone-900); opacity:0.6; margin-top:12px; max-width:28ch;">
+        Isolated agent environments and programmable egress controls for secure AI.
+      </p>
+    </div>
+
+    <!-- ═══ BOTTOM: QUOTE + META ═══ -->
+    <!-- Key quote -->
+    <div style="grid-column:1 / 9; grid-row:13 / 16; display:flex; flex-direction:column; justify-content:center; padding-top:24px;">
+      <div class="label label-light" style="margin-bottom:16px;">Source · @ade_oshineye · 29 Apr 2026</div>
+      <blockquote style="font-size:28px; font-weight:300; line-height:1.2; color:var(--stone-900); letter-spacing:-0.01em; max-width:36ch;">
+        <span style="color:var(--accent); font-weight:700;">"</span>Thanks to our organizers and we are looking for people from the community with <span style="font-weight:700;">fun and interesting demos</span>. We will be having sessions <span style="font-weight:700;">roughly every month</span> from now on.<span style="color:var(--accent); font-weight:700;">"</span>
+      </blockquote>
+    </div>
+
+    <!-- Right column: geometric shapes + call to action -->
+    <div style="grid-column:9 / 13; grid-row:13 / 16; display:flex; flex-direction:column; justify-content:center; align-items:end; padding-top:24px;">
+      <!-- Overlapping rectangles -->
+      <div style="position:relative; width:200px; height:160px;">
+        <div style="position:absolute; top:0; right:0; width:140px; height:140px; background:var(--accent); opacity:0.8;"></div>
+        <div style="position:absolute; top:20px; right:30px; width:140px; height:140px; background:var(--accent); opacity:0.5;"></div>
+        <div style="position:absolute; top:40px; right:60px; width:100px; height:100px; background:var(--cobalt); opacity:0.4;"></div>
+      </div>
+      <div style="margin-top:24px; text-align:right;">
+        <div class="label label-light" style="margin-bottom:8px;">Next Session</div>
+        <div style="font-size:32px; font-weight:700; color:var(--stone-900); line-height:0.9;">Monthly</div>
+        <div class="mono" style="font-size:14px; color:var(--stone-900); opacity:0.6; margin-top:4px;">#CFLondon</div>
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <div style="grid-column:1 / -1; grid-row:17 / 19; border-top:1px solid var(--stone-200); display:flex; justify-content:space-between; align-items:end; padding-top:24px;">
+      <div class="label label-light">Set in IBM Plex Sans · Accent #F38020</div>
+      <div class="label label-light">Swiss Poster Skill · adewale</div>
+    </div>
+
+    <!-- Figure-ground text — large numeral -->
+    <div style="grid-column:1 / 6; grid-row:15 / 19; display:flex; align-items:end; z-index:0; pointer-events:none;">
+      <div style="font-size:clamp(200px, 22vw, 320px); font-weight:700; line-height:0.78; color:var(--stone-900); opacity:0.06; margin-left:-20px; margin-bottom:-40px;">
+        1<span style="color:var(--accent);">.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Giant ghost type — bottom right -->
+  <div style="position:absolute; bottom:-4%; right:-2%; font-size:180px; font-weight:700; line-height:0.82; color:var(--stone-900); opacity:0.04; letter-spacing:-0.02em; white-space:nowrap; z-index:1; pointer-events:none; select:none; transform:rotate(-3deg);">
+    MEETING
+  </div>
+
+</div>
+
+</body>
+</html>
