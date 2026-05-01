@@ -169,14 +169,18 @@
   }
 
   /* ---------- Globe ---------- */
+  /* Reference: Hans Erni, "Atomkrieg Nein!" (1955) — globe as a
+     monochrome dominant form; here it sits behind the composition
+     as a structural field rather than a glowing icon. */
   .globe {
     position: absolute;
-    top: -40px;
-    right: -80px;
-    width: 620px;
-    height: 620px;
-    z-index: 5;
-    filter: drop-shadow(0 0 40px rgba(255,106,26,0.45));
+    top: 220px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1080px;
+    height: 1080px;
+    z-index: 2;
+    pointer-events: none;
   }
 
   /* ---------- Manifesto strip ---------- */
@@ -477,40 +481,20 @@
       <span class="out">› <span style="color:var(--lime)">✓</span> ACCESS GRANTED // hack the planet, fork the planet</span>
     </div>
 
-    <!-- Wireframe orange globe -->
+    <!-- Monochrome wireframe globe — after Hans Erni, 1955 -->
     <svg class="globe" viewBox="-310 -310 620 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <radialGradient id="globeBg" cx="0.35" cy="0.35" r="0.7">
-          <stop offset="0%" stop-color="#FFA350" stop-opacity="0.22"/>
-          <stop offset="60%" stop-color="#FF6A1A" stop-opacity="0.10"/>
-          <stop offset="100%" stop-color="#FF6A1A" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="hi" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#FFD2A8"/>
-          <stop offset="100%" stop-color="#FF6A1A"/>
-        </linearGradient>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      <!-- inner glow disk -->
-      <circle r="270" fill="url(#globeBg)"/>
-
-      <!-- latitude lines (horizontal ellipses) -->
-      <g fill="none" stroke="#FF6A1A" stroke-width="1.2" filter="url(#glow)" opacity="0.85">
-        <ellipse rx="270" ry="20"/>
-        <ellipse rx="262" ry="68"/>
-        <ellipse rx="245" ry="115"/>
-        <ellipse rx="220" ry="160"/>
-        <ellipse rx="186" ry="200"/>
-        <ellipse rx="142" ry="232"/>
-        <ellipse rx="92" ry="256"/>
+      <!-- latitude lines -->
+      <g fill="none" stroke="#ECECF1" stroke-width="0.9" opacity="0.30">
+        <ellipse rx="270" ry="22"/>
+        <ellipse rx="262" ry="72"/>
+        <ellipse rx="245" ry="120"/>
+        <ellipse rx="220" ry="165"/>
+        <ellipse rx="186" ry="205"/>
+        <ellipse rx="142" ry="236"/>
+        <ellipse rx="92"  ry="258"/>
       </g>
-
-      <!-- longitude lines (vertical ellipses, rotated) -->
-      <g fill="none" stroke="#FF6A1A" stroke-width="1.2" filter="url(#glow)" opacity="0.85">
+      <!-- longitude lines -->
+      <g fill="none" stroke="#ECECF1" stroke-width="0.9" opacity="0.30">
         <ellipse rx="20"  ry="270"/>
         <ellipse rx="68"  ry="270"/>
         <ellipse rx="115" ry="270"/>
@@ -519,29 +503,13 @@
         <ellipse rx="232" ry="270"/>
         <ellipse rx="256" ry="270"/>
       </g>
-
-      <!-- outer ring (heaviest) -->
-      <circle r="270" fill="none" stroke="url(#hi)" stroke-width="2.4" filter="url(#glow)"/>
-
-      <!-- glowing dots (cities / nodes) -->
-      <g filter="url(#glow)">
-        <circle cx="-110" cy="-180" r="3.5" fill="#FFD2A8"/>
-        <circle cx="60"   cy="-90"  r="3.5" fill="#FFD2A8"/>
-        <circle cx="-30"  cy="40"   r="3.5" fill="#FFD2A8"/>
-        <circle cx="155"  cy="80"   r="3.5" fill="#FFD2A8"/>
-        <circle cx="-180" cy="120"  r="3.5" fill="#FFD2A8"/>
-        <circle cx="90"   cy="200"  r="3.5" fill="#FFD2A8"/>
-        <circle cx="-220" cy="-60"  r="3.5" fill="#FFD2A8"/>
-        <circle cx="200"  cy="-150" r="3.5" fill="#FFD2A8"/>
+      <!-- equator + prime meridian, slightly heavier for structure -->
+      <g fill="none" stroke="#ECECF1" stroke-width="1.1" opacity="0.45">
+        <line x1="-270" y1="0" x2="270" y2="0"/>
+        <line x1="0" y1="-270" x2="0" y2="270"/>
       </g>
-
-      <!-- crosshair -->
-      <g stroke="#FFA350" stroke-width="1" opacity="0.7">
-        <line x1="-300" y1="0" x2="-275" y2="0"/>
-        <line x1="275"  y1="0" x2="300"  y2="0"/>
-        <line x1="0" y1="-300" x2="0" y2="-275"/>
-        <line x1="0" y1="275"  x2="0" y2="300"/>
-      </g>
+      <!-- outer ring -->
+      <circle r="270" fill="none" stroke="#ECECF1" stroke-width="1.6" opacity="0.55"/>
     </svg>
 
     <div class="title">
@@ -616,7 +584,7 @@
     </div>
     <div class="right">
       <b>HACK · FORK · MERGE</b><br>
-      © 2026 — by anyone, for everyone<br>
+      Globe after H. Erni, 1955<br>
       gibson.local // 31337
     </div>
   </div>
