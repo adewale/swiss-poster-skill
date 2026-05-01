@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Breaking the 35</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* URW free clones of the PostScript 35 — from Artifex urw-base35-fonts (AGPL) */
+  @font-face { font-family: 'PS Times';     src: url('fonts/NimbusRoman-Regular.otf')      format('opentype'); }
+  @font-face { font-family: 'PS Helv';      src: url('fonts/NimbusSans-Regular.otf')       format('opentype'); }
+  @font-face { font-family: 'PS HelvN';     src: url('fonts/NimbusSansNarrow-Regular.otf') format('opentype'); }
+  @font-face { font-family: 'PS Courier';   src: url('fonts/NimbusMonoPS-Regular.otf')     format('opentype'); }
+  @font-face { font-family: 'PS Avant';     src: url('fonts/URWGothic-Book.otf')           format('opentype'); }
+  @font-face { font-family: 'PS Bookman';   src: url('fonts/URWBookman-Light.otf')         format('opentype'); }
+  @font-face { font-family: 'PS Schoolbk';  src: url('fonts/C059-Roman.otf')               format('opentype'); }
+  @font-face { font-family: 'PS Palatino';  src: url('fonts/P052-Roman.otf')               format('opentype'); }
+  @font-face { font-family: 'PS Chancery';  src: url('fonts/Z003-MediumItalic.otf')        format('opentype'); }
+  @font-face { font-family: 'PS Symbol';    src: url('fonts/StandardSymbolsPS.otf')        format('opentype'); }
+  @font-face { font-family: 'PS Dingbats';  src: url('fonts/D050000L.otf')                 format('opentype'); }
+
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --red:       #C8102E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-feature-settings: "ss01", "ss02";
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 64px 64px 56px 64px;
+  }
+
+  /* Frame marks */
+  .corner {
+    position: absolute;
+    width: 24px; height: 24px;
+    border: 2px solid var(--stone-900);
+  }
+  .corner.tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 36px;
+  }
+  .topbar .right { text-align: right; }
+  .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
+
+  /* Title block */
+  .title {
+    position: relative;
+    margin-left: -8px;
+    margin-bottom: 24px;
+  }
+  .title h1 {
+    font-weight: 700;
+    font-size: 200px;
+    line-height: 0.82;
+    letter-spacing: -0.045em;
+    color: var(--stone-900);
+  }
+  .title h1 .row { display: block; }
+  .title h1 .num {
+    color: var(--red);
+    display: inline-block;
+    margin-left: 12px;
+  }
+  .title .redbar {
+    position: absolute;
+    left: -64px;
+    right: -64px;
+    top: 64px;
+    height: 26px;
+    background: var(--red);
+    z-index: 2;
+  }
+
+  .subtitle {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 8px;
+    margin-bottom: 28px;
+  }
+  .subtitle .lede {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.18;
+    max-width: 560px;
+    color: var(--stone-900);
+  }
+  .subtitle .dates {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.6);
+    text-align: right;
+    line-height: 1.4;
+  }
+  .subtitle .dates strong {
+    display: block;
+    font-size: 56px;
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    text-transform: none;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  /* Main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(28,25,23,0.55);
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .label .num { color: var(--red); }
+
+  /* Block: The 35 */
+  .b-35 { grid-column: span 7; }
+  .b-35 h2 {
+    font-size: 64px;
+    font-weight: 200;
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+  }
+  .fontlist {
+    columns: 2;
+    column-gap: 28px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--stone-900);
+  }
+  .fontlist .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    break-inside: avoid;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .fontlist .row:last-child { border-bottom: 0; }
+  .fontlist .row .name { font-weight: 400; }
+  .fontlist .row .n { color: rgba(28,25,23,0.4); font-family: 'IBM Plex Mono', monospace; font-size: 11px; flex: 0 0 auto; }
+  .fontlist hr { display: none; }
+
+  /* Each name typeset in its own PostScript face */
+  .f-times    { font-family: 'PS Times', serif; }
+  .f-helv     { font-family: 'PS Helv', 'Helvetica', sans-serif; }
+  .f-helvn    { font-family: 'PS HelvN', 'Helvetica', sans-serif; letter-spacing: -0.01em; }
+  .f-courier  { font-family: 'PS Courier', monospace; font-size: 0.9em; }
+  .f-avant    { font-family: 'PS Avant', sans-serif; letter-spacing: 0.01em; }
+  .f-bookman  { font-family: 'PS Bookman', serif; }
+  .f-school   { font-family: 'PS Schoolbk', serif; }
+  .f-palatino { font-family: 'PS Palatino', serif; }
+  .f-chancery { font-family: 'PS Chancery', cursive; font-size: 1.25em; line-height: 1; }
+  .f-symbol   { font-family: 'PS Symbol', serif; font-size: 1.05em; }
+  .f-dingbats { font-family: 'PS Dingbats', serif; font-size: 1.1em; letter-spacing: 0.05em; }
+  /* Translation labels for the unreadable ones (Symbol, Dingbats) */
+  .fn-trans { display: block; font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; color: rgba(28,25,23,0.45); letter-spacing: 0.16em; text-transform: uppercase; margin-top: 2px; line-height: 1; }
+
+  /* Block: nicknames */
+  .b-nick { grid-column: span 5; position: relative; }
+  .b-nick .stack {
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    color: var(--stone-900);
+  }
+  .b-nick .stack li {
+    list-style: none;
+    font-size: 28px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .b-nick .stack li:first-child { padding-top: 0; }
+  .b-nick .stack li.hot {
+    color: var(--red);
+    font-weight: 500;
+  }
+  .b-nick .footnote {
+    margin-top: 14px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(28,25,23,0.55);
+    max-width: 320px;
+  }
+
+  /* Red field — the rebellion */
+  .b-rebel {
+    grid-column: span 12;
+    background: var(--red);
+    color: var(--stone-50);
+    padding: 26px 36px 24px 36px;
+    margin-top: 22px;
+    margin-left: -64px;
+    margin-right: -64px;
+    padding-left: 100px;
+    padding-right: 100px;
+    position: relative;
+  }
+  .b-rebel .label {
+    color: rgba(250,250,249,0.7);
+    border-top-color: var(--stone-50);
+  }
+  .b-rebel .label .num { color: var(--stone-50); }
+  .b-rebel h2 {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    margin-bottom: 10px;
+  }
+  .b-rebel .body {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .b-rebel p {
+    font-size: 14px;
+    line-height: 1.55;
+    font-weight: 300;
+    max-width: 56ch;
+  }
+  .b-rebel .terms {
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .b-rebel .terms span {
+    display: inline-block;
+    border: 1px solid var(--stone-50);
+    padding: 3px 8px;
+    margin: 0 4px 6px 0;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Brody block */
+  .b-brody {
+    grid-column: span 7;
+    margin-top: 20px;
+    position: relative;
+  }
+  .b-brody h2 {
+    font-size: 84px;
+    font-weight: 700;
+    line-height: 0.85;
+    letter-spacing: -0.045em;
+  }
+  .b-brody h2 .last { color: var(--red); }
+  .b-brody .lede {
+    font-size: 14px;
+    line-height: 1.55;
+    font-weight: 300;
+    margin-top: 10px;
+    max-width: 48ch;
+  }
+  .b-brody .credits {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.7;
+    margin-top: 14px;
+    color: rgba(28,25,23,0.7);
+  }
+  .b-brody .credits b { color: var(--stone-900); }
+
+  /* Emigre block */
+  .b-emigre {
+    grid-column: span 5;
+    margin-top: 20px;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    padding: 20px 22px 22px 22px;
+    margin-right: -64px;
+    padding-right: 64px;
+    position: relative;
+  }
+  .b-emigre .label {
+    color: rgba(250,250,249,0.6);
+    border-top-color: var(--stone-50);
+  }
+  .b-emigre .label .num { color: var(--red); }
+  .b-emigre h2 {
+    font-size: 56px;
+    font-weight: 200;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .b-emigre .lede {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(250,250,249,0.85);
+    margin-bottom: 10px;
+  }
+  .b-emigre ul {
+    list-style: none;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .b-emigre ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(250,250,249,0.15);
+    display: flex;
+    gap: 10px;
+  }
+  .b-emigre ul li:last-child { border-bottom: 0; }
+  .b-emigre ul li b { font-weight: 600; min-width: 110px; display: inline-block; }
+  .b-emigre ul li span { color: rgba(250,250,249,0.7); }
+
+  /* Footer */
+  .foot {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.55);
+  }
+  .foot .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 56px;
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    color: var(--stone-900);
+    line-height: 0.85;
+    text-transform: none;
+  }
+  .foot .big em {
+    font-style: normal;
+    color: var(--red);
+    font-weight: 700;
+  }
+  .foot .big .attrib {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    color: rgba(28,25,23,0.45);
+    margin-top: 8px;
+    line-height: 1;
+  }
+  .foot .right { text-align: right; line-height: 1.6; }
+  .foot .right b { color: var(--stone-900); font-weight: 500; }
+
+  /* Background watermark */
+  .ghost {
+    position: absolute;
+    font-size: 360px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: rgba(28,25,23,0.04);
+    transform: rotate(-12deg);
+    pointer-events: none;
+    user-select: none;
+    bottom: 280px;
+    right: -120px;
+    line-height: 0.8;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="ghost">PLAKAT</div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div>Issue 01 / Type Histories</div>
+      <div class="meta">A poster on the rebellion against the LaserWriter menu</div>
+    </div>
+    <div class="right">
+      <div>Set in IBM Plex</div>
+      <div class="meta">1200 × 1800 — Apr 2026</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <h1>
+      <span class="row">BREAKING</span>
+      <span class="row">THE<span class="num">35</span></span>
+    </h1>
+    <div class="redbar"></div>
+  </div>
+
+  <div class="subtitle">
+    <div class="lede">
+      How a generation of designers escaped Adobe's font menu
+      and made typography expressive again.
+    </div>
+    <div class="dates">
+      <strong>1985<br>—1995</strong>
+      A decade<br>of revolt
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- 01 — THE 35 -->
+    <section class="b-35">
+      <div class="label"><span>01 / The Resident Set</span><span class="num">35</span></div>
+      <h2>The PostScript 35</h2>
+      <div class="fontlist">
+        <div class="row"><span class="name f-times">Times Roman</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-helv">Helvetica</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-helvn">Helvetica Narrow</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-courier">Courier</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-avant">ITC Avant Garde</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-bookman">ITC Bookman</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-school">New Century Schoolbook</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-palatino">Palatino</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-chancery">ITC Zapf Chancery</span><span class="n">×1</span></div>
+        <div class="row"><span class="name"><span class="f-symbol">Symbol</span><span class="fn-trans">Symbol — Greek &amp; math glyphs</span></span><span class="n">×1</span></div>
+        <div class="row"><span class="name"><span class="f-dingbats">ITC Zapf Dingbats</span><span class="fn-trans">ITC Zapf Dingbats — ornaments</span></span><span class="n">×1</span></div>
+      </div>
+      <p style="font-size:11px;line-height:1.55;color:rgba(28,25,23,0.55);margin-top:14px;max-width:48ch;">
+        Resident in the ROM of the Apple LaserWriter Plus (1986). The original LaserWriter shipped with 13.
+        Licensed by Adobe from Linotype and ITC. The lingua franca of every desktop output device for a decade.
+      </p>
+    </section>
+
+    <!-- 02 — Nicknames -->
+    <section class="b-nick">
+      <div class="label"><span>02 / Vernacular</span><span class="num">/02</span></div>
+      <ul class="stack">
+        <li>The LaserWriter fonts</li>
+        <li class="hot">The Adobe 35</li>
+        <li>The resident fonts</li>
+        <li>The ROM fonts</li>
+        <li>The core fonts</li>
+        <li>The basic 35</li>
+        <li>The printer fonts</li>
+      </ul>
+      <div class="footnote">
+        Type snobs from the Linotype world used "the printer fonts" with a slight sneer —
+        to distinguish them from "real" output.
+      </div>
+    </section>
+
+    <!-- 03 — RED REBELLION BAND -->
+    <section class="b-rebel">
+      <div class="label"><span>03 / The Abuse</span><span class="num">/03</span></div>
+      <h2>RANSOM<br>NOTE.</h2>
+      <div class="body">
+        <p>
+          Once anyone with a Mac Plus and a LaserWriter could mix 35 typefaces in a single document, they did.
+          Every word a different font, weight, and size — like a kidnapper's note. The deluge had names, all of them
+          deserved. Robin Williams's <i>The Mac Is Not a Typewriter</i> (1990) and Spiekermann's
+          <i>Stop Stealing Sheep</i> (1993) were partly written as field manuals against it.
+        </p>
+        <div class="terms">
+          <span>Font Soup</span>
+          <span>Font Junkies</span>
+          <span>Laser-Font Abuse</span>
+          <span>DTP Disease</span>
+          <span>Typographic Puberty</span>
+          <span>Font Fever</span>
+          <span>Chiropractor Newsletter</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — BRODY -->
+    <section class="b-brody">
+      <div class="label"><span>04 / The Counterpunch</span><span class="num">/04</span></div>
+      <h2>NEVILLE<br>BR<span class="last">O</span>DY</h2>
+      <p class="lede">
+        Industrialised the rebellion. Made custom type the default expectation. Headlines were no longer typeset —
+        they were <i>drawn</i>. Typography became editorial voice, not utility.
+      </p>
+      <div class="credits">
+        <b>1981–86</b> &nbsp; Art Director, <i>The Face</i><br>
+        <b>1987–90</b> &nbsp; Art Director, <i>Arena</i><br>
+        <b>1986—</b>   &nbsp;&nbsp; Fontographer — anyone could draw type<br>
+        <b>1988</b>    &nbsp;&nbsp;&nbsp;&nbsp; <i>The Graphic Language of Neville Brody</i> (120k+ sold)<br>
+        <b>1990</b>    &nbsp;&nbsp;&nbsp;&nbsp; FontShop / FontFont, w. Erik Spiekermann<br>
+        <b>Faces</b>   &nbsp;&nbsp;&nbsp; Industria · Insignia · Arcadia · FF Blur · FF Pop · FF Gothic
+      </div>
+    </section>
+
+    <!-- 05 — EMIGRE -->
+    <section class="b-emigre">
+      <div class="label"><span>05 / Berkeley, CA</span><span class="num">/05</span></div>
+      <h2>Emigre.</h2>
+      <p class="lede">
+        Where Brody pushed against corporate type, Emigre embraced the <i>limitations</i>
+        of the new tools as an aesthetic. Bitmap as defiance.
+      </p>
+      <ul>
+        <li><b>VanderLans &amp; Licko</b><span>Founders, 1984. Magazine + foundry.</span></li>
+        <li><b>David Carson</b><span>Ray Gun. Set Bryan Ferry in Dingbats.</span></li>
+        <li><b>Jonathan Barnbrook</b><span>VirusFonts. Mason. Exocet.</span></li>
+        <li><b>P. Scott Makela</b><span>Cranbrook. Whereishere.</span></li>
+        <li><b>Edward Fella</b><span>CalArts. Vernacular. Fellaparts.</span></li>
+        <li><b>Jeffery Keedy</b><span>CalArts. Keedy Sans. The theory.</span></li>
+        <li><b>Barry Deck</b><span>Template Gothic — the typeface of the decade.</span></li>
+        <li><b>CalArts &amp; Cranbrook</b><span>The two engines of postmodern type.</span></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="big">
+      Pick from <em>nobody's</em> menu.
+      <span class="attrib">Specimens set in URW Base35 (Artifex / urw-base35-fonts, AGPL).</span>
+    </div>
+    <div class="right">
+      <b>Type Histories</b><br>
+      Series № 01 of ∞<br>
+      Weltformat F4
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -4,3 +4,8 @@ dist/
 .env
 *.log
 .DS_Store
+
+# URW Base35 fonts — fetched at render time, not vendored
+# (see output/fonts/README.md for fetch instructions)
+output/fonts/*.otf
+output/fonts/*.ttf
