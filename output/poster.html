@@ -7,6 +7,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* URW free clones of the PostScript 35 — from Artifex urw-base35-fonts (AGPL) */
+  @font-face { font-family: 'PS Times';     src: url('fonts/NimbusRoman-Regular.otf')      format('opentype'); }
+  @font-face { font-family: 'PS Helv';      src: url('fonts/NimbusSans-Regular.otf')       format('opentype'); }
+  @font-face { font-family: 'PS HelvN';     src: url('fonts/NimbusSansNarrow-Regular.otf') format('opentype'); }
+  @font-face { font-family: 'PS Courier';   src: url('fonts/NimbusMonoPS-Regular.otf')     format('opentype'); }
+  @font-face { font-family: 'PS Avant';     src: url('fonts/URWGothic-Book.otf')           format('opentype'); }
+  @font-face { font-family: 'PS Bookman';   src: url('fonts/URWBookman-Light.otf')         format('opentype'); }
+  @font-face { font-family: 'PS Schoolbk';  src: url('fonts/C059-Roman.otf')               format('opentype'); }
+  @font-face { font-family: 'PS Palatino';  src: url('fonts/P052-Roman.otf')               format('opentype'); }
+  @font-face { font-family: 'PS Chancery';  src: url('fonts/Z003-MediumItalic.otf')        format('opentype'); }
+  @font-face { font-family: 'PS Symbol';    src: url('fonts/StandardSymbolsPS.otf')        format('opentype'); }
+  @font-face { font-family: 'PS Dingbats';  src: url('fonts/D050000L.otf')                 format('opentype'); }
+
   :root {
     --stone-50:  #fafaf9;
     --stone-100: #f5f5f4;
@@ -161,19 +174,39 @@
   }
   .fontlist {
     columns: 2;
-    column-gap: 24px;
-    font-size: 12.5px;
-    line-height: 1.7;
+    column-gap: 28px;
+    font-size: 18px;
+    line-height: 1.55;
     color: var(--stone-900);
   }
   .fontlist .row {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
     break-inside: avoid;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--stone-200);
   }
-  .fontlist .row .name { font-weight: 500; }
-  .fontlist .row .n { color: rgba(28,25,23,0.4); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+  .fontlist .row:last-child { border-bottom: 0; }
+  .fontlist .row .name { font-weight: 400; }
+  .fontlist .row .n { color: rgba(28,25,23,0.4); font-family: 'IBM Plex Mono', monospace; font-size: 11px; flex: 0 0 auto; }
   .fontlist hr { display: none; }
+
+  /* Each name typeset in its own PostScript face */
+  .f-times    { font-family: 'PS Times', serif; }
+  .f-helv     { font-family: 'PS Helv', 'Helvetica', sans-serif; }
+  .f-helvn    { font-family: 'PS HelvN', 'Helvetica', sans-serif; letter-spacing: -0.01em; }
+  .f-courier  { font-family: 'PS Courier', monospace; font-size: 0.9em; }
+  .f-avant    { font-family: 'PS Avant', sans-serif; letter-spacing: 0.01em; }
+  .f-bookman  { font-family: 'PS Bookman', serif; }
+  .f-school   { font-family: 'PS Schoolbk', serif; }
+  .f-palatino { font-family: 'PS Palatino', serif; }
+  .f-chancery { font-family: 'PS Chancery', cursive; font-size: 1.25em; line-height: 1; }
+  .f-symbol   { font-family: 'PS Symbol', serif; font-size: 1.05em; }
+  .f-dingbats { font-family: 'PS Dingbats', serif; font-size: 1.1em; letter-spacing: 0.05em; }
+  /* Translation labels for the unreadable ones (Symbol, Dingbats) */
+  .fn-trans { display: block; font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; color: rgba(28,25,23,0.45); letter-spacing: 0.16em; text-transform: uppercase; margin-top: 2px; line-height: 1; }
 
   /* Block: nicknames */
   .b-nick { grid-column: span 5; position: relative; }
@@ -428,17 +461,17 @@
       <div class="label"><span>01 / The Resident Set</span><span class="num">35</span></div>
       <h2>The PostScript 35</h2>
       <div class="fontlist">
-        <div class="row"><span class="name">Times Roman</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">Helvetica</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">Helvetica Narrow</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">Courier</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">ITC Avant Garde</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">ITC Bookman</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">New Century Schoolbook</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">Palatino</span><span class="n">×4</span></div>
-        <div class="row"><span class="name">ITC Zapf Chancery</span><span class="n">×1</span></div>
-        <div class="row"><span class="name">Symbol</span><span class="n">×1</span></div>
-        <div class="row"><span class="name">ITC Zapf Dingbats</span><span class="n">×1</span></div>
+        <div class="row"><span class="name f-times">Times Roman</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-helv">Helvetica</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-helvn">Helvetica Narrow</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-courier">Courier</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-avant">ITC Avant Garde</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-bookman">ITC Bookman</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-school">New Century Schoolbook</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-palatino">Palatino</span><span class="n">×4</span></div>
+        <div class="row"><span class="name f-chancery">ITC Zapf Chancery</span><span class="n">×1</span></div>
+        <div class="row"><span class="name"><span class="f-symbol">Symbol</span><span class="fn-trans">Symbol — Greek &amp; math glyphs</span></span><span class="n">×1</span></div>
+        <div class="row"><span class="name"><span class="f-dingbats">ITC Zapf Dingbats</span><span class="fn-trans">ITC Zapf Dingbats — ornaments</span></span><span class="n">×1</span></div>
       </div>
       <p style="font-size:11px;line-height:1.55;color:rgba(28,25,23,0.55);margin-top:14px;max-width:48ch;">
         Resident in the ROM of the Apple LaserWriter Plus (1986). The original LaserWriter shipped with 13.

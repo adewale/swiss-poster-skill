@@ -1,0 +1,24 @@
+URW Base35 fonts (free clones of the PostScript 35)
+====================================================
+
+Source: https://github.com/ArtifexSoftware/urw-base35-fonts
+License: GNU Affero General Public License v3 (AGPL-3.0) with font
+exception, OR The URW++ License — see the upstream repo for full text.
+
+These OTF files are URW++'s free re-releases of their PostScript 35
+clones, donated to the GhostScript / Artifex project in 2009 and
+re-released as free software in 2015. They are functional clones of:
+
+  NimbusRoman-Regular.otf      — Times Roman
+  NimbusSans-Regular.otf       — Helvetica
+  NimbusSansNarrow-Regular.otf — Helvetica Narrow
+  NimbusMonoPS-Regular.otf     — Courier
+  URWGothic-Book.otf           — ITC Avant Garde Gothic
+  URWBookman-Light.otf         — ITC Bookman
+  C059-Roman.otf               — New Century Schoolbook (Century 751)
+  P052-Roman.otf               — Palatino (URW Palladio)
+  Z003-MediumItalic.otf        — ITC Zapf Chancery (URW Chancery)
+  StandardSymbolsPS.otf        — Symbol
+  D050000L.otf                 — ITC Zapf Dingbats (Dingbats)
+
+Used in this repo solely as typographic specimens within a poster.
