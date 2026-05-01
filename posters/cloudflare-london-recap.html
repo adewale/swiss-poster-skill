@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloudflare London User Group — Recap № 001</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --accent: #F38020;
+  }
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  .halftone {
+    background-image: radial-gradient(circle, currentColor 1.4px, transparent 1.7px);
+    background-size: 12px 12px;
+  }
+  .moire {
+    background-image:
+      repeating-linear-gradient(0deg, currentColor 0, currentColor 1px, transparent 1px, transparent 5px),
+      repeating-linear-gradient(4deg, currentColor 0, currentColor 1px, transparent 1px, transparent 5px);
+  }
+  .line-rhythm {
+    background-image: repeating-linear-gradient(0deg, currentColor 0, currentColor 1px, transparent 1px, transparent 8px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-stone-50 text-stone-900 antialiased overflow-x-hidden">
+
+  <!-- ─── META BAR ──────────────────────────────────────────────────── -->
+  <header class="border-b border-stone-900/20">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-3 flex items-center justify-between text-[11px] tracking-widest uppercase font-medium">
+      <span class="text-stone-900/70">Poster № 002 / Recap</span>
+      <span class="hidden sm:inline text-stone-900/40">Source: @ade_oshineye · 6 tweets</span>
+      <span class="text-stone-900/70">29.04.26</span>
+    </div>
+  </header>
+
+  <!-- ─── HERO: MEGA TYPE + GEOMETRIC COMPOSITION ───────────────────── -->
+  <section class="relative overflow-hidden bg-stone-950 text-stone-50 min-h-[90vh] flex items-end">
+
+    <!-- Moiré interference field — top half -->
+    <div aria-hidden="true" class="absolute top-0 left-0 w-full h-1/2 text-stone-50/[0.05] moire pointer-events-none"></div>
+
+    <!-- Giant circle escaping right edge (Brockmann arcs) -->
+    <div aria-hidden="true" class="absolute top-[5%] -right-[20%] w-[70vw] h-[70vw] max-w-[850px] max-h-[850px] rounded-full border-[6px] border-[#F38020]/50 pointer-events-none"></div>
+    <div aria-hidden="true" class="absolute top-[12%] -right-[14%] w-[55vw] h-[55vw] max-w-[680px] max-h-[680px] rounded-full border-[3px] border-stone-50/20 pointer-events-none"></div>
+    <div aria-hidden="true" class="absolute top-[19%] -right-[8%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full border-[2px] border-[#F38020]/20 pointer-events-none"></div>
+
+    <!-- Accent wedge — top left, cropped -->
+    <div aria-hidden="true" class="absolute top-0 left-0 w-[30vw] max-w-[400px] h-[35vh] bg-[#F38020]" style="clip-path: polygon(0 0, 100% 0, 0 80%)"></div>
+
+    <!-- Diagonal bar cutting across -->
+    <div aria-hidden="true" class="absolute top-[30%] -left-[5%] w-[110%] h-3 bg-[#F38020]/25 -rotate-[2.5deg] pointer-events-none"></div>
+
+    <!-- Background type — visible, cropped by left edge -->
+    <div aria-hidden="true" class="absolute top-8 -left-[6%] pointer-events-none select-none">
+      <div class="text-[clamp(10rem,28vw,32rem)] font-bold leading-[0.82] text-stone-50/[0.06] tracking-tighter whitespace-nowrap">
+        RECAP
+      </div>
+    </div>
+
+    <!-- Rotated label — left rail -->
+    <div class="absolute top-[25%] left-6 z-20 pointer-events-none hidden md:block">
+      <span class="text-sm font-bold tracking-[0.3em] uppercase text-[#F38020] -rotate-90 origin-top-left block whitespace-nowrap">Vol. 01 — Waterloo</span>
+    </div>
+
+    <!-- Small cobalt square — offset accent -->
+    <div aria-hidden="true" class="absolute bottom-[20%] right-[25%] w-12 h-12 bg-[#003B8E]/50 pointer-events-none hidden md:block"></div>
+
+    <div class="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 pt-20 md:pt-32 pb-20 md:pb-32 w-full">
+      <div class="grid grid-cols-12 gap-4 md:gap-8">
+        <div class="col-span-12 md:col-span-9">
+          <p class="text-[11px] tracking-[0.3em] uppercase font-medium text-stone-50/60 mb-6">
+            Cloudflare London User Group / 29 April 2026 / Recap
+          </p>
+          <div class="w-16 h-1.5 bg-[#F38020] mb-10"></div>
+
+          <!-- Mega type — single word fills frame, cropped -->
+          <div class="-mx-6 md:-mx-12 overflow-hidden">
+            <h1 class="text-[clamp(5rem,18vw,22rem)] font-bold leading-[0.78] tracking-[-0.04em] -ml-[0.03em] whitespace-nowrap">
+              <span class="text-[#F38020]">LONDON</span>
+            </h1>
+          </div>
+
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-thin tracking-tight leading-[0.95] mt-4">
+            The first meeting.
+          </h2>
+
+          <p class="text-lg leading-relaxed text-stone-50/70 mt-8 max-w-[48ch]">
+            Three talks on security, agent orchestration, and sandboxed workflows. A view of Westminster from the 6th floor. Monthly sessions from here.
+          </p>
+        </div>
+
+        <!-- Right rail: date/location -->
+        <div class="hidden md:flex col-span-3 flex-col justify-end gap-6 pb-4">
+          <div class="border-t-2 border-stone-50 pt-4">
+            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-50/60">When</div>
+            <div class="mt-2 font-mono text-2xl leading-none">29 APR 26</div>
+            <div class="mt-1 text-5xl font-bold leading-[0.85]">18:30</div>
+          </div>
+          <div class="border-t-2 border-stone-50 pt-4">
+            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-50/60">Where</div>
+            <div class="mt-2 text-lg font-light leading-snug">
+              Cloudflare<br/><span class="font-bold">County Hall, 6F</span><br/>
+              <span class="text-stone-50/60">Waterloo, SE1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ACCENT BAND: PROGRAMME ────────────────────────────────────── -->
+  <section class="bg-[#F38020] text-stone-950 relative overflow-hidden">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-10 md:py-14 grid grid-cols-12 gap-4 md:gap-8 items-center">
+      <div class="col-span-12 md:col-span-2 text-[11px] tracking-[0.3em] uppercase font-medium opacity-80">
+        Three talks
+      </div>
+      <div class="col-span-12 md:col-span-8 text-[clamp(2rem,5vw,5rem)] font-light leading-[0.95] tracking-tight">
+        Security. Agents. <span class="font-bold">Sandboxes.</span>
+      </div>
+      <div class="col-span-12 md:col-span-2 text-right text-[11px] tracking-[0.3em] uppercase font-medium opacity-80">
+        Programme 01–03
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TALKS: STAGGERED OFFSET GRID ──────────────────────────────── -->
+  <section class="relative overflow-hidden">
+    <!-- Halftone texture — right side -->
+    <div aria-hidden="true" class="absolute top-0 right-0 w-2/5 h-1/2 pointer-events-none"
+         style="background-image: radial-gradient(circle, rgba(243,128,32,0.35) 1.4px, transparent 1.7px); background-size: 14px 14px;"></div>
+    <!-- Line rhythm — left edge -->
+    <div aria-hidden="true" class="absolute top-0 left-0 w-10 md:w-16 h-full text-stone-900/[0.08] line-rhythm pointer-events-none"></div>
+
+    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 pl-16 md:pl-28 py-16 md:py-24">
+      <div class="grid grid-cols-12 gap-6 md:gap-10">
+
+        <!-- Talk 01 -->
+        <article class="col-span-12 md:col-span-4 relative">
+          <div class="text-[#F38020] text-[7rem] md:text-[10rem] font-bold leading-[0.85] tracking-tight -ml-[0.05em] select-none">01</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-light leading-tight tracking-tight">
+            Cloudflare Free Plan: <span class="font-bold">every security feature you should turn on</span>
+          </h3>
+          <p class="mt-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70">
+            Edgar Ter Danielyan
+          </p>
+          <p class="mt-4 text-base leading-relaxed max-w-[40ch] text-stone-900/70">
+            DNS-level DDoS protection, SSL/TLS, bot management, firewall rules, email security. A practical checklist for the free tier.
+          </p>
+        </article>
+
+        <!-- Talk 02 — staggered down -->
+        <article class="col-span-12 md:col-span-4 relative md:translate-y-12">
+          <div class="text-stone-900 text-[7rem] md:text-[10rem] font-bold leading-[0.85] tracking-tight -ml-[0.05em] select-none">02</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-light leading-tight tracking-tight">
+            Agent Orchestration: <span class="font-bold">LLMs, swarms, and production systems</span>
+          </h3>
+          <p class="mt-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70">
+            Alpesh Doshi
+          </p>
+          <p class="mt-4 text-base leading-relaxed max-w-[40ch] text-stone-900/70">
+            Building agentic systems with swarms of agents. What it means, what the tools look like, and where production readiness is today.
+          </p>
+        </article>
+
+        <!-- Talk 03 — staggered further -->
+        <article class="col-span-12 md:col-span-4 relative md:translate-y-24">
+          <div class="text-[#F38020] text-[7rem] md:text-[10rem] font-thin leading-[0.85] tracking-tight -ml-[0.05em] select-none">03</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-light leading-tight tracking-tight">
+            Safer Agent Workflows: <span class="font-bold">sandboxes and zero-trust egress</span>
+          </h3>
+          <p class="mt-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70">
+            Yigit Erol
+          </p>
+          <p class="mt-4 text-base leading-relaxed max-w-[40ch] text-stone-900/70">
+            Cloudflare Sandboxes as persistent isolated environments for agents. Outbound Workers as a programmable zero-trust egress layer.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SINGLE LETTER + FIGURE-GROUND ─────────────────────────────── -->
+  <section class="relative overflow-hidden bg-stone-50">
+    <!-- Overprinting rectangles — mix-blend-multiply -->
+    <div aria-hidden="true" class="absolute top-16 right-[15%] w-36 h-72 bg-[#F38020] mix-blend-multiply pointer-events-none z-[1]"></div>
+    <div aria-hidden="true" class="absolute top-36 right-[8%] w-44 h-72 bg-[#F38020]/70 mix-blend-multiply pointer-events-none z-[1]"></div>
+
+    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 pl-16 md:pl-28 py-16 md:py-24">
+      <div class="grid grid-cols-12 gap-4 md:gap-8 items-end">
+        <!-- Single numeral fills frame -->
+        <div class="col-span-12 md:col-span-8 relative">
+          <div class="text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/60 mb-4">Volume 01 — Inaugural</div>
+          <div class="text-[clamp(14rem,48vw,48rem)] font-bold leading-[0.78] tracking-tighter text-stone-900 -ml-[0.08em] select-none">
+            1<span class="text-[#F38020]">.</span>
+          </div>
+        </div>
+
+        <div class="col-span-12 md:col-span-4 relative z-10 -mt-8 md:mt-0">
+          <h2 class="text-3xl md:text-4xl font-light leading-tight tracking-tight text-stone-900">
+            The <span class="font-bold">first</span> of many.
+          </h2>
+          <p class="mt-5 text-base leading-relaxed text-stone-900/70 max-w-[36ch]">
+            Monthly sessions from here. Looking for people from the community with interesting demos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Figure-ground reversal: text crosses orange blocks -->
+      <div aria-hidden="true" class="absolute top-10 right-[5%] z-20 pointer-events-none mix-blend-difference text-white select-none">
+        <div class="text-[clamp(1.5rem,3.5vw,3.5rem)] font-bold tracking-tight leading-[0.9] -rotate-3 origin-top-right">
+          INAUGURAL<br/>MEETING
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TWEET THREAD / SOURCE ─────────────────────────────────────── -->
+  <section class="relative overflow-hidden bg-stone-900 text-stone-50">
+    <!-- Ghost type — visible, cropped by left edge -->
+    <div aria-hidden="true" class="absolute -bottom-4 -left-[8%] select-none pointer-events-none text-[clamp(6rem,18vw,16rem)] font-bold leading-[0.85] tracking-tighter text-stone-50/[0.06] -rotate-6">
+      THREAD
+    </div>
+
+    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 py-16 md:py-24 grid grid-cols-12 gap-4 md:gap-8">
+      <div class="col-span-12 md:col-span-7 relative z-10">
+        <div class="text-[11px] tracking-[0.3em] uppercase font-medium text-stone-50/50 mb-6">
+          Source thread · x.com/@ade_oshineye · 29 Apr 2026
+        </div>
+        <blockquote class="text-2xl md:text-4xl font-light leading-[1.1] tracking-tight">
+          <span class="text-[#F38020] font-bold">"</span>This evening is the inaugural meeting of the
+          <span class="font-bold">Cloudflare London User Group</span>.
+          It's at our offices in Waterloo.<span class="text-[#F38020] font-bold">"</span>
+        </blockquote>
+
+        <div class="mt-6 space-y-3 text-base text-stone-50/60 max-w-[52ch]">
+          <p>Say hi to Prada the pigeon.</p>
+          <p>Alpesh Doshi on agent orchestration. Yigit Erol on sandboxes and zero-trust egress.</p>
+          <p>Thanks to our organizers. Monthly sessions from now on.</p>
+        </div>
+
+        <div class="mt-8 flex items-center gap-3 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-50/60">
+          <span class="inline-block h-3 w-3 bg-[#F38020]"></span>
+          Adewale Oshineye · @ade_oshineye
+        </div>
+      </div>
+
+      <!-- Tweet IDs card — right column, overlapping upward -->
+      <aside class="col-span-12 md:col-span-5 md:-mt-8 relative z-20">
+        <div class="bg-stone-50 text-stone-900 p-8 md:p-10 relative">
+          <!-- Cropped accent corner -->
+          <div aria-hidden="true" class="absolute -top-3 -right-3 w-14 h-14 bg-[#F38020]"></div>
+
+          <div class="text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/50">Source tweets</div>
+          <ul class="mt-4 space-y-2 font-mono text-sm text-stone-900/70">
+            <li class="border-t border-stone-200 pt-2">
+              <a href="https://x.com/ade_oshineye/status/2049452285139276131" class="hover:text-[#F38020] transition-[color] duration-150">01 — Inaugural announcement</a>
+            </li>
+            <li class="border-t border-stone-200 pt-2">
+              <a href="https://x.com/ade_oshineye/status/2049531960716914824" class="hover:text-[#F38020] transition-[color] duration-150">02 — Prada the pigeon</a>
+            </li>
+            <li class="border-t border-stone-200 pt-2">
+              <a href="https://x.com/ade_oshineye/status/2049540575779606823" class="hover:text-[#F38020] transition-[color] duration-150">03 — Demos</a>
+            </li>
+            <li class="border-t border-stone-200 pt-2">
+              <a href="https://x.com/ade_oshineye/status/2049559654208856175" class="hover:text-[#F38020] transition-[color] duration-150">04 — Alpesh on agents</a>
+            </li>
+            <li class="border-t border-stone-200 pt-2">
+              <a href="https://x.com/ade_oshineye/status/2049562905536795033" class="hover:text-[#F38020] transition-[color] duration-150">05 — Yigit on sandboxes</a>
+            </li>
+            <li class="border-t border-stone-200 pt-2">
+              <a href="https://x.com/ade_oshineye/status/2049575911872160076" class="hover:text-[#F38020] transition-[color] duration-150">06 — Monthly from now on</a>
+            </li>
+          </ul>
+
+          <div class="mt-8 border-t border-stone-200 pt-4 grid grid-cols-2 gap-4 text-sm font-mono">
+            <div>
+              <div class="text-[11px] tracking-widest uppercase text-stone-900/50">Venue</div>
+              <div class="mt-1">County Hall, 6F</div>
+            </div>
+            <div>
+              <div class="text-[11px] tracking-widest uppercase text-stone-900/50">Tag</div>
+              <div class="mt-1">#CFLondon</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ─── COLOPHON ──────────────────────────────────────────────────── -->
+  <footer class="border-t border-stone-900/20">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-6 grid grid-cols-12 gap-4 text-[11px] tracking-widest uppercase font-medium text-stone-900/60">
+      <div class="col-span-6 md:col-span-3">Set in IBM Plex Sans</div>
+      <div class="col-span-6 md:col-span-3">Accent · #F38020</div>
+      <div class="hidden md:block md:col-span-3 text-stone-900/10 line-rhythm h-3 self-center"></div>
+      <div class="col-span-12 md:col-span-3 text-right">Swiss Poster Skill · adewale</div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloudflare London User Group — Inaugural Meeting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'media',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', '"Hanken Grotesk"', '"Barlow"', '"Host Grotesk"', '"DM Sans"', 'system-ui', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html, body { background: #fafaf9; }
+  @media (prefers-color-scheme: dark) {
+    html, body { background: #0c0a09; }
+  }
+  body { font-family: 'IBM Plex Sans', 'Hanken Grotesk', 'Barlow', 'Host Grotesk', 'DM Sans', system-ui, sans-serif; }
+  .stripes {
+    background-image: repeating-linear-gradient(
+      90deg,
+      currentColor 0,
+      currentColor 2px,
+      transparent 2px,
+      transparent 14px
+    );
+  }
+</style>
+</head>
+<body class="font-sans text-stone-900 dark:text-stone-50 bg-stone-50 dark:bg-stone-950 antialiased overflow-x-hidden">
+
+  <!-- Top meta bar -->
+  <header class="border-b border-stone-900/20 dark:border-stone-50/20">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-3 flex items-center justify-between text-[11px] tracking-widest uppercase font-medium">
+      <span class="text-stone-900/70 dark:text-stone-50/70">Poster № 001 / Source: @ade_oshineye</span>
+      <span class="hidden sm:inline text-stone-900/40 dark:text-stone-50/40">Cloudflare London User Group · Vol. 01</span>
+      <span class="text-stone-900/70 dark:text-stone-50/70">29.04.26</span>
+    </div>
+  </header>
+
+  <!-- HERO with photo -->
+  <section class="relative overflow-hidden bg-stone-950 text-stone-50">
+    <!-- Photo: shot from the venue (County Hall, looking at Westminster) -->
+    <img src="tweet-photo.jpg"
+         alt="Sunset view of Big Ben and Westminster from a window at Cloudflare's County Hall office, posted by @ade_oshineye"
+         class="absolute inset-0 w-full h-full object-cover object-center opacity-70" />
+
+    <!-- Flat dark scrim for legibility (no gradient — flat color discipline) -->
+    <div aria-hidden="true" class="absolute inset-0 bg-stone-950/55"></div>
+
+    <!-- Concentric / radiating circles, escaping the right edge -->
+    <div aria-hidden="true" class="absolute top-[6%] -right-[22%] w-[78vw] h-[78vw] max-w-[920px] max-h-[920px] rounded-full border-[5px] border-[#F38020]/70 z-[2] pointer-events-none"></div>
+    <div aria-hidden="true" class="absolute top-[14%] -right-[14%] w-[60vw] h-[60vw] max-w-[720px] max-h-[720px] rounded-full border-[3px] border-stone-50/35 z-[2] pointer-events-none"></div>
+    <div aria-hidden="true" class="absolute top-[22%] -right-[6%] w-[42vw] h-[42vw] max-w-[520px] max-h-[520px] rounded-full border-[2px] border-[#F38020]/30 z-[2] pointer-events-none"></div>
+
+    <!-- Halftone dot field (lithographic reference) — stronger -->
+    <div aria-hidden="true" class="absolute bottom-0 left-0 w-1/2 h-1/3 z-[1] pointer-events-none"
+         style="background-image: radial-gradient(circle, rgba(243,128,32,0.65) 1.4px, transparent 1.7px); background-size: 12px 12px;"></div>
+
+    <!-- Ghost background type, layered over photo -->
+    <div aria-hidden="true" class="absolute -top-12 -left-10 -rotate-12 select-none pointer-events-none text-[12rem] sm:text-[16rem] md:text-[22rem] font-bold leading-[0.85] text-stone-50/[0.07] whitespace-nowrap z-[1]">
+      LONDON LONDON
+    </div>
+
+    <!-- Diagonal accent bar bleeding off-edge -->
+    <div aria-hidden="true" class="absolute top-28 -right-10 w-[120%] h-3 bg-[#F38020] -rotate-3 origin-right z-[2]"></div>
+
+    <!-- Cropped accent block (escapes the layout) -->
+    <div aria-hidden="true" class="absolute -bottom-8 left-[8%] w-40 h-40 bg-[#F38020] z-[2]"></div>
+
+    <div class="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 pt-12 md:pt-20 pb-28 md:pb-44">
+      <div class="grid grid-cols-12 gap-4 md:gap-8">
+
+        <!-- Tiny rotated rail label -->
+        <div class="hidden md:flex col-span-1 items-start justify-start pt-2">
+          <span class="text-[11px] tracking-[0.3em] uppercase text-stone-50/70 -rotate-90 origin-top-left translate-y-40 font-medium whitespace-nowrap">
+            Inaugural · Meet · 2026 · A View from Waterloo
+          </span>
+        </div>
+
+        <!-- Main copy -->
+        <div class="col-span-12 md:col-span-7 relative">
+          <p class="text-xs tracking-[0.3em] uppercase font-medium text-stone-50/80 mb-6">
+            Cloudflare London User Group / Inaugural Meeting
+          </p>
+          <h1 class="text-[clamp(3.5rem,13vw,17rem)] font-bold leading-[0.82] tracking-tight -ml-[0.05em] drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+            <span class="block">CLOUD</span>
+            <span class="block text-[#F38020]">FLARE.</span>
+            <span class="block font-thin">LONDON</span>
+          </h1>
+        </div>
+
+        <!-- Right rail: date / where -->
+        <div class="col-span-12 md:col-span-4 md:col-start-9 relative mt-8 md:mt-2">
+          <div class="border-t-2 border-stone-50 pt-4">
+            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-50/80">When</div>
+            <div class="mt-2 font-mono text-2xl md:text-3xl leading-none">
+              WED · 29 · APR · 26
+            </div>
+            <div class="mt-3 text-7xl md:text-8xl font-bold leading-[0.85] tracking-tight">
+              18:30
+            </div>
+            <div class="mt-2 text-stone-50/80 text-sm font-mono">
+              → 21:00 · GMT+1
+            </div>
+          </div>
+
+          <div class="mt-8 border-t-2 border-stone-50 pt-4">
+            <div class="text-[11px] tracking-widest uppercase font-medium text-stone-50/80">Where</div>
+            <div class="mt-2 text-xl font-light leading-snug">
+              Cloudflare<br/>
+              <span class="font-bold">County Hall, 6F</span><br/>
+              Belvedere Rd, SE1 7PB<br/>
+              <span class="text-stone-50/80">Waterloo · London</span>
+            </div>
+          </div>
+
+          <div class="mt-6 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-50/60 italic font-light">
+            ↑ Photo: the view from inside.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FULL-BLEED ACCENT BAND -->
+  <section class="bg-[#F38020] text-stone-950 relative overflow-hidden">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-10 md:py-14 grid grid-cols-12 gap-4 md:gap-8 items-center">
+      <div class="col-span-12 md:col-span-2 text-[11px] tracking-[0.3em] uppercase font-medium opacity-80">
+        Three short talks
+      </div>
+      <div class="col-span-12 md:col-span-8 text-[clamp(2rem,5vw,5rem)] font-light leading-[0.95] tracking-tight">
+        Security. Agents.<br/>
+        <span class="font-bold">Sandboxes.</span>
+      </div>
+      <div class="col-span-12 md:col-span-2 text-right text-[11px] tracking-[0.3em] uppercase font-medium opacity-80">
+        Programme · 01–03
+      </div>
+    </div>
+    <!-- bleed stripe -->
+    <div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-px bg-stone-950/30"></div>
+  </section>
+
+  <!-- INAUGURAL — single letter fills frame; figure-ground via mix-blend-difference; overprinting -->
+  <section class="relative overflow-hidden bg-stone-50 dark:bg-stone-950">
+    <!-- Two overlapping accent rectangles — overlap zone darkens via multiply (overprinting) -->
+    <div aria-hidden="true" class="absolute top-24 right-[18%] w-40 h-80 bg-[#F38020] mix-blend-multiply pointer-events-none z-[1]"></div>
+    <div aria-hidden="true" class="absolute top-44 right-[10%] w-48 h-80 bg-[#F38020]/80 mix-blend-multiply pointer-events-none z-[1]"></div>
+
+    <!-- Optical-vibration bar: closely-spaced repeating thin stripes -->
+    <div aria-hidden="true" class="absolute top-0 left-0 h-full w-10 md:w-16 z-[2] pointer-events-none"
+         style="background-image: repeating-linear-gradient(0deg, currentColor 0, currentColor 1px, transparent 1px, transparent 4px); color: rgb(28 25 23 / 0.9);"></div>
+    <div aria-hidden="true" class="absolute top-0 left-0 h-full w-10 md:w-16 z-[2] pointer-events-none hidden dark:block"
+         style="background-image: repeating-linear-gradient(0deg, currentColor 0, currentColor 1px, transparent 1px, transparent 4px); color: rgb(250 250 249 / 0.9);"></div>
+
+    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 pl-16 md:pl-28 py-16 md:py-24">
+      <div class="grid grid-cols-12 gap-4 md:gap-8 items-end">
+
+        <!-- Single letter — truly fills the frame -->
+        <div class="col-span-12 md:col-span-8 relative">
+          <div class="text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70 mb-4">Volume · 01</div>
+          <div class="text-[clamp(16rem,52vw,52rem)] font-bold leading-[0.78] tracking-tighter text-stone-900 dark:text-stone-50 -ml-[0.08em] select-none">
+            1<span class="text-[#F38020]">.</span>
+          </div>
+        </div>
+
+        <!-- Right copy — and a figure-ground label that crosses the orange blocks -->
+        <div class="col-span-12 md:col-span-4 relative z-10 -mt-4 md:mt-0">
+          <h2 class="text-3xl md:text-4xl font-light leading-tight tracking-tight text-stone-900 dark:text-stone-50">
+            The <span class="font-bold">first</span> meeting<br/>
+            of many.
+          </h2>
+          <p class="mt-5 text-base leading-relaxed text-stone-900/70 dark:text-stone-50/70 max-w-[36ch]">
+            A new community of Cloudflare users in London — three short talks, discussion, Q&amp;A, and refreshments.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Figure-ground reversal: text crosses the orange/white boundary and inverts -->
+      <div aria-hidden="true" class="absolute top-12 right-[6%] z-20 pointer-events-none mix-blend-difference text-stone-50 select-none">
+        <div class="text-[clamp(2rem,4vw,4rem)] font-bold tracking-tight leading-[0.9] -rotate-3 origin-top-right">
+          INAUGURAL<br/>MEETING
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TALKS -->
+  <section class="relative overflow-hidden">
+    <!-- Halftone dot field as decorative texture (lithographic reference) -->
+    <div aria-hidden="true" class="absolute top-0 right-0 w-2/5 h-1/2 pointer-events-none z-0"
+         style="background-image: radial-gradient(circle, currentColor 1.6px, transparent 1.9px); background-size: 14px 14px; color: rgb(243 128 32 / 0.45);"></div>
+
+    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 py-16 md:py-24">
+      <div class="grid grid-cols-12 gap-6 md:gap-10">
+
+        <!-- Talk 01 -->
+        <article class="col-span-12 md:col-span-4 relative">
+          <div class="text-[#F38020] text-[7rem] md:text-[10rem] font-bold leading-[0.85] tracking-tight -ml-[0.05em]">01</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-light leading-tight tracking-tight">
+            Cloudflare Free Plan: <span class="font-bold">all the security features you should be using</span>
+          </h3>
+          <p class="mt-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70">
+            Edgar Ter Danielyan
+          </p>
+          <p class="mt-4 text-base leading-relaxed max-w-[40ch] text-stone-900/80 dark:text-stone-50/80">
+            DNS-level DDoS protection, SSL/TLS, bot management, firewall rules, email security — a practical checklist of features you can and should enable without spending a penny.
+          </p>
+        </article>
+
+        <!-- Talk 02 -->
+        <article class="col-span-12 md:col-span-4 relative md:translate-y-12">
+          <div class="text-stone-900 dark:text-stone-50 text-[7rem] md:text-[10rem] font-bold leading-[0.85] tracking-tight -ml-[0.05em]">02</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-light leading-tight tracking-tight">
+            Agent Orchestration: <span class="font-bold">the missing link between LLMs, agents and productivity</span>
+          </h3>
+          <p class="mt-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70">
+            Alpesh Doshi
+          </p>
+          <p class="mt-4 text-base leading-relaxed max-w-[40ch] text-stone-900/80 dark:text-stone-50/80">
+            Building production agentic systems with swarms of agents is still in its infancy. An insight into what that means and how to take advantage of these technologies and tools.
+          </p>
+        </article>
+
+        <!-- Talk 03 -->
+        <article class="col-span-12 md:col-span-4 relative md:translate-y-24">
+          <div class="text-[#F38020] text-[7rem] md:text-[10rem] font-thin leading-[0.85] tracking-tight -ml-[0.05em]">03</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-light leading-tight tracking-tight">
+            Building <span class="font-bold">safer agent workflows</span> with Sandboxes &amp; zero-trust egress
+          </h3>
+          <p class="mt-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70">
+            Yigit Erol
+          </p>
+          <p class="mt-4 text-base leading-relaxed max-w-[40ch] text-stone-900/80 dark:text-stone-50/80">
+            Cloudflare Sandboxes as persistent isolated environments for agents, with Outbound Workers as a programmable zero-trust egress layer — so agents can use tools without exposing sensitive tokens.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TWEET / SOURCE BLOCK with overlap -->
+  <section class="relative overflow-hidden">
+    <div aria-hidden="true" class="absolute -left-10 -bottom-10 select-none pointer-events-none text-[10rem] md:text-[18rem] font-bold leading-[0.85] tracking-tighter text-stone-900/[0.06] dark:text-stone-50/[0.06] -rotate-6">
+      RSVP
+    </div>
+
+    <div class="relative max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-32 grid grid-cols-12 gap-4 md:gap-8">
+
+      <!-- Big quote -->
+      <div class="col-span-12 md:col-span-7 relative z-10">
+        <div class="text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70 mb-6">
+          Source · X.com / @ade_oshineye · 29 Apr 2026
+        </div>
+        <blockquote class="text-3xl md:text-5xl font-light leading-[1.05] tracking-tight">
+          <span class="text-[#F38020] font-bold">“</span>This evening is the inaugural meeting of the
+          <span class="font-bold">Cloudflare London User Group</span>.
+          It's at our offices in Waterloo. <span class="font-bold">See you there.</span><span class="text-[#F38020] font-bold">”</span>
+        </blockquote>
+
+        <div class="mt-10 flex items-center gap-4 text-[11px] tracking-[0.3em] uppercase font-medium text-stone-900/70 dark:text-stone-50/70">
+          <span class="inline-block h-3 w-3 bg-[#F38020]"></span>
+          Adewale Oshineye · @ade_oshineye
+        </div>
+      </div>
+
+      <!-- Card: hosts + RSVP -->
+      <aside class="col-span-12 md:col-span-5 md:-mt-16 relative z-20">
+        <div class="bg-stone-900 dark:bg-stone-50 text-stone-50 dark:text-stone-900 p-8 md:p-10 relative">
+          <!-- Cropped corner mark -->
+          <div aria-hidden="true" class="absolute -top-3 -right-3 w-16 h-16 bg-[#F38020]"></div>
+
+          <div class="text-[11px] tracking-[0.3em] uppercase font-medium opacity-70">Hosts</div>
+          <ul class="mt-3 text-2xl font-light leading-snug">
+            <li>Edgar ter Danielyan</li>
+            <li>Alpesh Doshi</li>
+            <li>Yigit Erol</li>
+          </ul>
+
+          <div class="mt-8 border-t border-stone-50/30 dark:border-stone-900/30 pt-4 grid grid-cols-2 gap-4 text-sm font-mono">
+            <div>
+              <div class="text-[11px] tracking-widest uppercase opacity-70">Door</div>
+              <div class="mt-1">18:30</div>
+            </div>
+            <div>
+              <div class="text-[11px] tracking-widest uppercase opacity-70">Bring</div>
+              <div class="mt-1">Photo ID</div>
+            </div>
+            <div>
+              <div class="text-[11px] tracking-widest uppercase opacity-70">Drinks</div>
+              <div class="mt-1">Provided</div>
+            </div>
+            <div>
+              <div class="text-[11px] tracking-widest uppercase opacity-70">Tag</div>
+              <div class="mt-1">#CFLondon</div>
+            </div>
+          </div>
+
+          <a href="https://luma.com/twdp0b0t" class="mt-8 inline-flex items-center justify-between w-full bg-[#F38020] text-stone-950 px-6 py-4 text-sm font-bold tracking-widest uppercase hover:translate-x-1 transition-transform">
+            <span>RSVP via lu.ma</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <p class="mt-3 text-[11px] tracking-widest uppercase opacity-70 font-mono">luma.com/twdp0b0t</p>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- FOOTER COLOPHON -->
+  <footer class="border-t border-stone-900/20 dark:border-stone-50/20">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-6 grid grid-cols-12 gap-4 text-[11px] tracking-widest uppercase font-medium text-stone-900/70 dark:text-stone-50/70">
+      <div class="col-span-6 md:col-span-3">Set in IBM Plex Sans</div>
+      <div class="col-span-6 md:col-span-3">Accent · #F38020</div>
+      <div class="hidden md:block md:col-span-3 text-stone-900/40 dark:text-stone-50/40 stripes h-3 self-center"></div>
+      <div class="col-span-12 md:col-span-3 text-right">Swiss Poster Skill · v2.0</div>
+    </div>
+  </footer>
+
+</body>
+</html>
