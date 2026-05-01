@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Cloudflare Connect London — Developer Track</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --accent: #F38020;
+    --cobalt: #003B8E;
+    --stone-50: #fafaf9;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+  }
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 30px;
+  }
+  .poster {
+    width: 1800px;
+    height: 1200px;
+    background: var(--stone-950);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+  }
+  /* Moiré */
+  .moire {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(0deg, var(--stone-50) 0, var(--stone-50) 1px, transparent 1px, transparent 6px),
+      repeating-linear-gradient(2.5deg, var(--stone-50) 0, var(--stone-50) 1px, transparent 1px, transparent 6px);
+    opacity: 0.03;
+    z-index: 0;
+  }
+  /* Halftone dots */
+  .halftone {
+    position: absolute;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.4px);
+    background-size: 10px 10px;
+    opacity: 0.12;
+  }
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  /* Concentric circles */
+  .circles {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .circles div {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    opacity: 0.12;
+  }
+  /* Wedge accent */
+  .wedge {
+    position: absolute;
+    background: var(--accent);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+  <!-- Background moiré -->
+  <div class="moire"></div>
+
+  <!-- Halftone texture — bottom right -->
+  <div class="halftone" style="bottom:0; right:0; width:45%; height:55%;"></div>
+
+  <!-- Concentric circles — top right escaping -->
+  <div class="circles" style="top:-8%; right:-6%; width:420px; height:420px;">
+    <div style="width:420px; height:420px; top:0; right:0; border-width:4px;"></div>
+    <div style="width:320px; height:320px; top:50px; right:50px; border-width:2px; opacity:0.08;"></div>
+    <div style="width:220px; height:220px; top:100px; right:100px; border-width:1px; opacity:0.15;"></div>
+  </div>
+
+  <!-- Concentric circles — bottom left -->
+  <div class="circles" style="bottom:-12%; left:-8%; width:360px; height:360px;">
+    <div style="width:360px; height:360px; top:0; left:0; border-width:3px; opacity:0.08;"></div>
+    <div style="width:260px; height:260px; top:50px; left:50px; border-width:2px; opacity:0.06;"></div>
+  </div>
+
+  <!-- Accent wedge — top left -->
+  <div class="wedge" style="top:0; left:0; width:200px; height:160px; opacity:0.9;"></div>
+
+  <!-- Accent wedge — bottom right -->
+  <div class="wedge" style="bottom:0; right:0; width:160px; height:120px; opacity:0.15; transform:rotate(180deg);"></div>
+
+  <!-- Giant ghost type — CONNECT cropped by top -->
+  <div style="position:absolute; top:-40px; left:-20px; font-size:260px; font-weight:700; line-height:0.78; color:var(--stone-50); opacity:0.04; letter-spacing:-0.02em; white-space:nowrap; z-index:1; pointer-events:none; select:none;">
+    CONNECT
+  </div>
+
+  <!-- Ghost numeral — bottom right -->
+  <div style="position:absolute; bottom:-60px; right:100px; font-size:340px; font-weight:700; line-height:0.78; color:var(--stone-50); opacity:0.03; pointer-events:none; z-index:1;">
+    2026
+  </div>
+
+  <!-- Diagonal bar -->
+  <div style="position:absolute; top:42%; left:-5%; width:110%; height:3px; background:var(--accent); opacity:0.2; transform:rotate(-2deg); z-index:2;"></div>
+
+  <!-- Cobalt accent square -->
+  <div style="position:absolute; top:38%; right:22%; width:14px; height:14px; background:var(--cobalt); opacity:0.5; z-index:3;"></div>
+
+  <!-- MAIN CONTENT -->
+  <div style="position:relative; z-index:10; width:100%; height:100%; padding:48px 56px; display:flex; flex-direction:column;">
+
+    <!-- Top bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <span class="label" style="color:var(--stone-50); opacity:0.6;">Cloudflare Connect London · Developer Track</span>
+      <span class="label" style="color:var(--stone-50); opacity:0.6;">2026</span>
+    </div>
+
+    <!-- MEGA TYPE + INFO BLOCK ROW -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:32px;">
+
+      <!-- Left: Mega type -->
+      <div style="flex:1;">
+        <div style="font-size:clamp(80px, 10vw, 150px); font-weight:700; line-height:0.8; letter-spacing:-0.03em; color:var(--accent); margin-left:-6px;">
+          CONNECT
+        </div>
+        <div style="font-size:clamp(48px, 6vw, 90px); font-weight:700; line-height:0.85; letter-spacing:-0.02em; color:var(--stone-50); margin-left:-4px;">
+          LONDON
+        </div>
+        <div style="font-size:clamp(22px, 2.5vw, 36px); font-weight:300; line-height:1.1; color:var(--stone-50); margin-top:8px; letter-spacing:-0.01em;">
+          Developer Track
+        </div>
+        <div style="width:56px; height:4px; background:var(--accent); margin:20px 0;"></div>
+        <p style="font-size:15px; line-height:1.55; color:var(--stone-50); opacity:0.7; max-width:46ch;">
+          Six speakers from Cloudflare and customers. Agents, data platforms, and production systems built on Workers.
+        </p>
+      </div>
+
+      <!-- Right: Info block -->
+      <div style="text-align:right; flex-shrink:0; margin-left:40px; margin-top:8px;">
+        <div style="margin-bottom:24px;">
+          <div class="label" style="color:var(--stone-50); opacity:0.5; margin-bottom:8px;">When</div>
+          <div class="mono" style="font-size:18px; color:var(--stone-50); line-height:1.2;">APR 2026</div>
+          <div style="font-size:42px; font-weight:700; color:var(--stone-50); line-height:0.9; margin-top:2px;">LONDON</div>
+        </div>
+        <div>
+          <div class="label" style="color:var(--stone-50); opacity:0.5; margin-bottom:8px;">Where</div>
+          <div style="font-size:16px; font-weight:700; color:var(--stone-50);">Cloudflare Connect</div>
+          <div class="mono" style="font-size:12px; color:var(--stone-50); opacity:0.6; margin-top:2px;">Developer Track Stage</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEAKER GRID — 3 columns × 2 rows -->
+    <div style="display:flex; flex-direction:column; gap:28px; margin-top:auto; padding-top:20px;">
+
+      <!-- Row 1 -->
+      <div style="display:flex; gap:40px;">
+        <!-- Speaker 01 -->
+        <div style="flex:1; border-top:2px solid var(--stone-50); padding-top:12px;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+            <span style="font-size:clamp(36px, 4vw, 56px); font-weight:700; line-height:0.85; color:var(--accent);">01</span>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:var(--stone-50); line-height:1.2;">Sunil Pai</div>
+              <div style="font-size:11px; color:var(--stone-50); opacity:0.5; letter-spacing:0.15em; text-transform:uppercase; margin-top:2px;">Cloudflare</div>
+            </div>
+          </div>
+          <div style="font-size:13px; font-weight:700; color:var(--stone-50); line-height:1.3; margin-top:8px;">Project Think</div>
+          <div style="font-size:12px; font-weight:300; color:var(--stone-50); opacity:0.6; line-height:1.4; margin-top:3px;">The heart of Agents Week</div>
+        </div>
+
+        <!-- Speaker 02 -->
+        <div style="flex:1; border-top:2px solid var(--stone-50); padding-top:12px;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+            <span style="font-size:clamp(36px, 4vw, 56px); font-weight:700; line-height:0.85; color:var(--stone-50); opacity:0.2;">02</span>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:var(--stone-50); line-height:1.2;">Micah Wylde</div>
+              <div style="font-size:11px; color:var(--stone-50); opacity:0.5; letter-spacing:0.15em; text-transform:uppercase; margin-top:2px;">Cloudflare</div>
+            </div>
+          </div>
+          <div style="font-size:13px; font-weight:700; color:var(--stone-50); line-height:1.3; margin-top:8px;">Cloudflare Data Platform</div>
+          <div style="font-size:12px; font-weight:300; color:var(--stone-50); opacity:0.6; line-height:1.4; margin-top:3px;">Vision for unified data infrastructure</div>
+        </div>
+
+        <!-- Speaker 03 -->
+        <div style="flex:1; border-top:2px solid var(--stone-50); padding-top:12px;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+            <span style="font-size:clamp(36px, 4vw, 56px); font-weight:300; line-height:0.85; color:var(--accent);">03</span>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:var(--stone-50); line-height:1.2;">Sid Chatterjee</div>
+              <div style="font-size:11px; color:var(--stone-50); opacity:0.5; letter-spacing:0.15em; text-transform:uppercase; margin-top:2px;">Cloudflare</div>
+            </div>
+          </div>
+          <div style="font-size:13px; font-weight:700; color:var(--stone-50); line-height:1.3; margin-top:8px;">Moltworker</div>
+          <div style="font-size:12px; font-weight:300; color:var(--stone-50); opacity:0.6; line-height:1.4; margin-top:3px;">Retrospective on Workers architecture</div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div style="display:flex; gap:40px;">
+        <!-- Speaker 04 -->
+        <div style="flex:1; border-top:2px solid var(--stone-50); padding-top:12px;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+            <span style="font-size:clamp(36px, 4vw, 56px); font-weight:700; line-height:0.85; color:var(--accent);">04</span>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:var(--stone-50); line-height:1.2;">Damien C. Tanner</div>
+              <div style="font-size:11px; color:var(--stone-50); opacity:0.5; letter-spacing:0.15em; text-transform:uppercase; margin-top:2px;">Toyo</div>
+            </div>
+          </div>
+          <div style="font-size:13px; font-weight:700; color:var(--stone-50); line-height:1.3; margin-top:8px;">Building on Cloudflare</div>
+          <div style="font-size:12px; font-weight:300; color:var(--stone-50); opacity:0.6; line-height:1.4; margin-top:3px;">Customer perspective on the platform</div>
+        </div>
+
+        <!-- Speaker 05 -->
+        <div style="flex:1; border-top:2px solid var(--stone-50); padding-top:12px;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+            <span style="font-size:clamp(36px, 4vw, 56px); font-weight:700; line-height:0.85; color:var(--stone-50); opacity:0.2;">05</span>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:var(--stone-50); line-height:1.2;">John Fawcett</div>
+              <div style="font-size:11px; color:var(--stone-50); opacity:0.5; letter-spacing:0.15em; text-transform:uppercase; margin-top:2px;">Kilo Code</div>
+            </div>
+          </div>
+          <div style="font-size:13px; font-weight:700; color:var(--stone-50); line-height:1.3; margin-top:8px;">Scaling Agents</div>
+          <div style="font-size:12px; font-weight:300; color:var(--stone-50); opacity:0.6; line-height:1.4; margin-top:3px;">Production systems for AI agents</div>
+        </div>
+
+        <!-- Speaker 06 -->
+        <div style="flex:1; border-top:2px solid var(--stone-50); padding-top:12px;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+            <span style="font-size:clamp(36px, 4vw, 56px); font-weight:300; line-height:0.85; color:var(--accent);">06</span>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:var(--stone-50); line-height:1.2;">James Henderson &amp; Leach</div>
+              <div style="font-size:11px; color:var(--stone-50); opacity:0.5; letter-spacing:0.15em; text-transform:uppercase; margin-top:2px;">MonetizationOS</div>
+            </div>
+          </div>
+          <div style="font-size:13px; font-weight:700; color:var(--stone-50); line-height:1.3; margin-top:8px;">Built on Workers</div>
+          <div style="font-size:12px; font-weight:300; color:var(--stone-50); opacity:0.6; line-height:1.4; margin-top:3px;">Platform architecture and monetization</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:28px; padding-top:16px; border-top:1px solid var(--stone-50); opacity:0.25;">
+      <span class="label" style="color:var(--stone-50);">Set in IBM Plex Sans · Accent #F38020</span>
+      <span class="label" style="color:var(--stone-50);">Swiss Poster Skill · adewale</span>
+    </div>
+
+  </div>
+
+  <!-- Rotated label — left edge -->
+  <div style="position:absolute; top:50%; left:18px; transform:translateY(-50%) rotate(-90deg); transform-origin:center; z-index:20; pointer-events:none;">
+    <span class="label" style="color:var(--accent); font-weight:700; white-space:nowrap;">Developer Track · Cloudflare Connect</span>
+  </div>
+
+</div>
+
+</body>
+</html>
