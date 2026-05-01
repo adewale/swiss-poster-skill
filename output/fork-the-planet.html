@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fork the Planet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;300;400;500;700&family=IBM+Plex+Mono:wght@300;400;500;600&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #050510;
+    --bg-2:    #0a0a18;
+    --ink:     #ECECF1;
+    --dim:     #8B8B9E;
+    --orange:  #FF6A1A;
+    --orange2: #FFA350;
+    --cyan:    #00E5FF;
+    --magenta: #FF2EC4;
+    --lime:    #B6FF1A;
+    --line:    #1d1d2e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 56px 56px 48px 56px;
+    background:
+      radial-gradient(ellipse at 70% 35%, rgba(255,106,26,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 75%, rgba(0,229,255,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 90%, rgba(255,46,196,0.07) 0%, transparent 50%),
+      var(--bg);
+  }
+
+  /* CRT scanlines */
+  .poster::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.022) 0px,
+      rgba(255,255,255,0.022) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: screen;
+    z-index: 50;
+  }
+  /* Subtle vignette */
+  .poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%);
+    z-index: 49;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 20;
+  }
+  .topbar .left { display: flex; gap: 18px; align-items: center; }
+  .topbar .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 8px var(--lime);
+    animation: blink 1.4s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+  .topbar .cyan { color: var(--cyan); }
+  .topbar .orange { color: var(--orange); }
+  .topbar .magenta { color: var(--magenta); }
+  .topbar .right { display: flex; gap: 18px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    z-index: 10;
+    margin-top: 8px;
+  }
+
+  .terminal {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--lime);
+    margin-bottom: 16px;
+    text-shadow: 0 0 6px rgba(182,255,26,0.5);
+  }
+  .terminal .prompt { color: var(--dim); }
+  .terminal .cmd { color: var(--cyan); }
+  .terminal .out { color: var(--ink); display: block; margin-left: 16px; opacity: 0.85; }
+
+  .title {
+    position: relative;
+    margin-top: 8px;
+  }
+  .title h1 {
+    font-weight: 700;
+    font-size: 246px;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+    position: relative;
+  }
+  .title h1 .row { display: block; position: relative; }
+  .title h1 .row.fork {
+    color: var(--orange);
+    text-shadow:
+      0 0 18px rgba(255,106,26,0.55),
+      0 0 60px rgba(255,106,26,0.25);
+  }
+  .title h1 .row.the {
+    color: var(--ink);
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    font-style: italic;
+  }
+  .title h1 .row.planet {
+    color: var(--ink);
+  }
+
+  /* Glitch shadow on PLANET */
+  .title h1 .row.planet::before,
+  .title h1 .row.planet::after {
+    content: "PLANET.";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    pointer-events: none;
+  }
+  .title h1 .row.planet::before {
+    color: var(--magenta);
+    transform: translate(-3px, 2px);
+    mix-blend-mode: screen;
+    opacity: 0.6;
+  }
+  .title h1 .row.planet::after {
+    color: var(--cyan);
+    transform: translate(3px, -2px);
+    mix-blend-mode: screen;
+    opacity: 0.55;
+  }
+
+  /* ---------- Globe ---------- */
+  .globe {
+    position: absolute;
+    top: -40px;
+    right: -80px;
+    width: 620px;
+    height: 620px;
+    z-index: 5;
+    filter: drop-shadow(0 0 40px rgba(255,106,26,0.45));
+  }
+
+  /* ---------- Manifesto strip ---------- */
+  .manifesto {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .manifesto .lead {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--ink);
+    max-width: 28ch;
+  }
+  .manifesto .lead em {
+    color: var(--orange);
+    font-style: normal;
+    font-weight: 500;
+  }
+  .manifesto .lead s {
+    color: var(--dim);
+    text-decoration-thickness: 2px;
+  }
+  .manifesto .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .manifesto .meta .row { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+  .manifesto .meta .v { color: var(--cyan); }
+  .manifesto .meta .v.o { color: var(--orange); }
+  .manifesto .meta .v.m { color: var(--magenta); }
+  .manifesto .meta .v.l { color: var(--lime); }
+
+  /* ---------- Quotes band ---------- */
+  .quotes {
+    position: relative;
+    z-index: 10;
+    margin-top: 32px;
+    padding: 22px 0;
+    border-top: 1px solid var(--orange);
+    border-bottom: 1px solid var(--orange);
+    background: linear-gradient(90deg, rgba(255,106,26,0.10), rgba(255,106,26,0.02) 60%, transparent);
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .quotes .q {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.18;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .quotes .q strong {
+    font-weight: 700;
+    font-style: normal;
+    color: var(--orange);
+    text-shadow: 0 0 10px rgba(255,106,26,0.4);
+  }
+  .quotes .q .attr {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--dim);
+  }
+  .quotes .stack {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .quotes .stack .item {
+    padding: 5px 0;
+    border-bottom: 1px dotted var(--line);
+    display: flex;
+    gap: 12px;
+  }
+  .quotes .stack .item:last-child { border-bottom: 0; }
+  .quotes .stack .k { color: var(--magenta); min-width: 60px; }
+  .quotes .stack .v { color: var(--ink); }
+
+  /* ---------- Handles grid (Hackers callsigns) ---------- */
+  .handles {
+    position: relative;
+    z-index: 10;
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .handles .h-block {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.4));
+    padding: 14px 14px 12px 14px;
+    position: relative;
+  }
+  .handles .h-block::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 16px; height: 16px;
+    border-top: 1px solid var(--orange);
+    border-left: 1px solid var(--orange);
+  }
+  .handles .h-block::after {
+    content: "";
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 16px; height: 16px;
+    border-bottom: 1px solid var(--orange);
+    border-right: 1px solid var(--orange);
+  }
+  .handles .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+  .handles .label .num { color: var(--orange); }
+  .handles .name {
+    font-family: 'VT323', 'IBM Plex Mono', monospace;
+    font-size: 30px;
+    line-height: 1.05;
+    color: var(--cyan);
+    text-shadow: 0 0 8px rgba(0,229,255,0.4);
+    margin-bottom: 4px;
+  }
+  .handles .real {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .handles .h-block:nth-child(2) .name { color: var(--magenta); text-shadow: 0 0 8px rgba(255,46,196,0.4); }
+  .handles .h-block:nth-child(3) .name { color: var(--lime); text-shadow: 0 0 8px rgba(182,255,26,0.4); }
+
+  /* ---------- ASCII bar ---------- */
+  .ascii {
+    position: relative;
+    z-index: 10;
+    margin-top: 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--orange);
+    white-space: pre;
+    overflow: hidden;
+    opacity: 0.85;
+    text-shadow: 0 0 4px rgba(255,106,26,0.4);
+  }
+
+  /* ---------- Footer ---------- */
+  .foot {
+    position: absolute;
+    left: 56px;
+    right: 56px;
+    bottom: 48px;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .foot .left {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--lime);
+    text-shadow: 0 0 6px rgba(182,255,26,0.4);
+  }
+  .foot .left .blink {
+    display: inline-block;
+    width: 9px;
+    height: 14px;
+    background: var(--lime);
+    vertical-align: -2px;
+    margin-left: 4px;
+    animation: caret 1s steps(2) infinite;
+    box-shadow: 0 0 6px var(--lime);
+  }
+  @keyframes caret { 50% { opacity: 0; } }
+  .foot .center {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-align: center;
+  }
+  .foot .center b {
+    display: block;
+    color: var(--orange);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    margin-bottom: 2px;
+    text-shadow: 0 0 10px rgba(255,106,26,0.45);
+  }
+  .foot .right {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    text-align: right;
+    line-height: 1.6;
+  }
+  .foot .right b { color: var(--ink); font-weight: 500; }
+
+  /* Background ascii dump (decorative) */
+  .bgdump {
+    position: absolute;
+    z-index: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    line-height: 1.2;
+    color: rgba(0,229,255,0.12);
+    white-space: pre;
+    pointer-events: none;
+    user-select: none;
+  }
+  .bgdump.left { top: 360px; left: -10px; transform: rotate(-90deg); transform-origin: left top; }
+  .bgdump.right { bottom: 380px; right: 6px; }
+
+  /* corner ticks */
+  .tick {
+    position: absolute;
+    width: 18px; height: 18px;
+    z-index: 30;
+  }
+  .tick.tl { top: 24px; left: 24px; border-top: 1.5px solid var(--orange); border-left: 1.5px solid var(--orange); }
+  .tick.tr { top: 24px; right: 24px; border-top: 1.5px solid var(--orange); border-right: 1.5px solid var(--orange); }
+  .tick.bl { bottom: 24px; left: 24px; border-bottom: 1.5px solid var(--orange); border-left: 1.5px solid var(--orange); }
+  .tick.br { bottom: 24px; right: 24px; border-bottom: 1.5px solid var(--orange); border-right: 1.5px solid var(--orange); }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="tick tl"></span>
+  <span class="tick tr"></span>
+  <span class="tick bl"></span>
+  <span class="tick br"></span>
+
+  <!-- Background ASCII dump -->
+  <div class="bgdump left">// 0xDEADBEEF // 0xCAFEBABE // 0xFEEDFACE // 0x8BADF00D // 0xBAADF00D //</div>
+  <div class="bgdump right">01001000 01000001
+01000011 01001011
+00100000 01010100
+01001000 01000101
+00100000 01010000
+01001100 01000001
+01001110 01000101
+01010100 00100001</div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="left">
+      <span class="dot"></span>
+      <span><span class="cyan">CONN</span> · gibson.local:31337</span>
+      <span><span class="orange">SSL</span> ·  TRUE</span>
+      <span><span class="magenta">USER</span> · zer0c00l</span>
+    </div>
+    <div class="right">
+      <span>UPLINK 89.6 GBPS</span>
+      <span>WELTFORMAT F4</span>
+      <span>RUN ◉</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="terminal">
+      <span class="prompt">$</span> <span class="cmd">git remote add</span> earth git@github.com:humanity/planet.git<br>
+      <span class="prompt">$</span> <span class="cmd">git fork</span> --recursive --no-permission<br>
+      <span class="out">› cloning into 'planet'... 7,800,000,000 contributors detected</span>
+      <span class="out">› <span style="color:var(--lime)">✓</span> ACCESS GRANTED // hack the planet, fork the planet</span>
+    </div>
+
+    <!-- Wireframe orange globe -->
+    <svg class="globe" viewBox="-310 -310 620 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="globeBg" cx="0.35" cy="0.35" r="0.7">
+          <stop offset="0%" stop-color="#FFA350" stop-opacity="0.22"/>
+          <stop offset="60%" stop-color="#FF6A1A" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#FF6A1A" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="hi" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFD2A8"/>
+          <stop offset="100%" stop-color="#FF6A1A"/>
+        </linearGradient>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- inner glow disk -->
+      <circle r="270" fill="url(#globeBg)"/>
+
+      <!-- latitude lines (horizontal ellipses) -->
+      <g fill="none" stroke="#FF6A1A" stroke-width="1.2" filter="url(#glow)" opacity="0.85">
+        <ellipse rx="270" ry="20"/>
+        <ellipse rx="262" ry="68"/>
+        <ellipse rx="245" ry="115"/>
+        <ellipse rx="220" ry="160"/>
+        <ellipse rx="186" ry="200"/>
+        <ellipse rx="142" ry="232"/>
+        <ellipse rx="92" ry="256"/>
+      </g>
+
+      <!-- longitude lines (vertical ellipses, rotated) -->
+      <g fill="none" stroke="#FF6A1A" stroke-width="1.2" filter="url(#glow)" opacity="0.85">
+        <ellipse rx="20"  ry="270"/>
+        <ellipse rx="68"  ry="270"/>
+        <ellipse rx="115" ry="270"/>
+        <ellipse rx="160" ry="270"/>
+        <ellipse rx="200" ry="270"/>
+        <ellipse rx="232" ry="270"/>
+        <ellipse rx="256" ry="270"/>
+      </g>
+
+      <!-- outer ring (heaviest) -->
+      <circle r="270" fill="none" stroke="url(#hi)" stroke-width="2.4" filter="url(#glow)"/>
+
+      <!-- glowing dots (cities / nodes) -->
+      <g filter="url(#glow)">
+        <circle cx="-110" cy="-180" r="3.5" fill="#FFD2A8"/>
+        <circle cx="60"   cy="-90"  r="3.5" fill="#FFD2A8"/>
+        <circle cx="-30"  cy="40"   r="3.5" fill="#FFD2A8"/>
+        <circle cx="155"  cy="80"   r="3.5" fill="#FFD2A8"/>
+        <circle cx="-180" cy="120"  r="3.5" fill="#FFD2A8"/>
+        <circle cx="90"   cy="200"  r="3.5" fill="#FFD2A8"/>
+        <circle cx="-220" cy="-60"  r="3.5" fill="#FFD2A8"/>
+        <circle cx="200"  cy="-150" r="3.5" fill="#FFD2A8"/>
+      </g>
+
+      <!-- crosshair -->
+      <g stroke="#FFA350" stroke-width="1" opacity="0.7">
+        <line x1="-300" y1="0" x2="-275" y2="0"/>
+        <line x1="275"  y1="0" x2="300"  y2="0"/>
+        <line x1="0" y1="-300" x2="0" y2="-275"/>
+        <line x1="0" y1="275"  x2="0" y2="300"/>
+      </g>
+    </svg>
+
+    <div class="title">
+      <h1>
+        <span class="row fork">FORK</span>
+        <span class="row the">the</span>
+        <span class="row planet">PLANET.</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <p class="lead">
+      <s>Hack</s> <em>fork</em> the planet. The slogan was a threat. The pull request is a promise.
+      Open source. Open globe. Mess with the best.
+    </p>
+    <div class="meta">
+      <div class="row"><span>Global forks today</span><span class="v o">247,304,118</span></div>
+      <div class="row"><span>Commits / sec</span><span class="v">1,420.7</span></div>
+      <div class="row"><span>Open repos</span><span class="v m">∞</span></div>
+      <div class="row"><span>Permission asked</span><span class="v l">/dev/null</span></div>
+      <div class="row"><span>Latency to root</span><span class="v">0.00ms</span></div>
+    </div>
+  </section>
+
+  <!-- QUOTES BAND -->
+  <section class="quotes">
+    <div class="q">
+      "Mess with the best,<br>
+      <strong>die like the rest.</strong>"
+      <span class="attr">— Acid Burn / Hackers (1995)</span>
+    </div>
+    <div class="stack">
+      <div class="item"><span class="k">RULE 01</span><span class="v">Information wants to be free.</span></div>
+      <div class="item"><span class="k">RULE 02</span><span class="v">There is no right and wrong, only fun and boring.</span></div>
+      <div class="item"><span class="k">RULE 03</span><span class="v">A fork is not a theft. It is a continuation.</span></div>
+      <div class="item"><span class="k">RULE 04</span><span class="v">Read the source, Luke.</span></div>
+    </div>
+  </section>
+
+  <!-- HANDLES -->
+  <section class="handles">
+    <div class="h-block">
+      <div class="label">// CALLSIGN <span class="num">01</span></div>
+      <div class="name">CRASH<br>OVERRIDE</div>
+      <div class="real">Dade Murphy · NYC</div>
+    </div>
+    <div class="h-block">
+      <div class="label">// CALLSIGN <span class="num">02</span></div>
+      <div class="name">ACID<br>BURN</div>
+      <div class="real">Kate Libby · NYC</div>
+    </div>
+    <div class="h-block">
+      <div class="label">// CALLSIGN <span class="num">03</span></div>
+      <div class="name">CEREAL<br>KILLER</div>
+      <div class="real">Emmanuel Goldstein · NYC</div>
+    </div>
+  </section>
+
+  <!-- ASCII bar -->
+  <pre class="ascii">  ┌─[  THIS POSTER WAS COMPILED 04:31 EDT — Cyberdelia, NYC ]──[ uplink secure ]──[ trace impossible ]──[ now go fork it ]─┐</pre>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="left">
+      $ <span style="color:var(--ink)">echo</span> "fork the planet"<span class="blink"></span>
+    </div>
+    <div class="center">
+      <b>swiss-poster-skill</b>
+      № 02 · Type Histories · Weltformat F4 · 89.5 × 128 cm
+    </div>
+    <div class="right">
+      <b>HACK · FORK · MERGE</b><br>
+      © 2026 — by anyone, for everyone<br>
+      gibson.local // 31337
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
