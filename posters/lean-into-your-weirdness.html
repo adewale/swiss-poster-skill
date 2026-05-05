@@ -492,6 +492,10 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 14px;
   }
+  .saints-grid.two {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
   .saint {
     border-top: 2px solid var(--stone-900);
     padding-top: 10px;
@@ -499,12 +503,19 @@
   }
   .saint .n {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--red);
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+  }
+  .saints-grid.two .saint h4 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 8px;
   }
   .saint h4 {
     font-size: 20px;
@@ -512,6 +523,14 @@
     letter-spacing: -0.02em;
     line-height: 1;
     margin-bottom: 4px;
+  }
+  .saints-grid.two .saint .what {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .saints-grid.two .saint .quirk {
+    font-size: 11px;
+    padding: 7px 10px;
   }
   .saint h4.italic { font-family: 'IBM Plex Serif', serif; font-style: italic; font-weight: 500; }
   .saint .what {
@@ -849,23 +868,36 @@
     font-size: 7px;
   }
 
-  /* Alexander annotations */
+  /* Alexander annotations — QWAN deserves to be findable */
   .alex-margin {
-    margin-top: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 8.5px;
-    letter-spacing: 0.06em;
-    color: rgba(28,25,23,0.50);
-    border-top: 1px dotted var(--stone-300);
-    padding-top: 6px;
-    line-height: 1.5;
+    margin-top: 12px;
+    padding: 10px 14px 10px 14px;
+    border-left: 4px solid var(--red);
+    background: var(--stone-100);
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    line-height: 1.45;
   }
   .alex-margin .alex-tag {
-    text-transform: uppercase;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    font-size: 22px;
+    letter-spacing: 0.06em;
     color: var(--red);
-    margin-right: 4px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .alex-margin .alex-note {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--stone-900);
+    line-height: 1.4;
+  }
+  .alex-margin .alex-note strong {
+    font-weight: 600;
+    color: var(--red);
   }
   .foot .big .alex-foot {
     font-family: 'IBM Plex Mono', monospace;
@@ -926,6 +958,58 @@
     font-style: normal;
     color: var(--red);
     font-weight: 700;
+  }
+
+  /* Mike Carey running edge — small caps strip around the perimeter */
+  .carey-edge {
+    position: absolute;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-variant: all-small-caps;
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    font-weight: 500;
+    color: rgba(28,25,23,0.55);
+    pointer-events: none;
+    user-select: none;
+    z-index: 7;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .carey-edge .sep { color: var(--red); margin: 0 1.4em; font-weight: 700; }
+  .carey-edge .by  { color: var(--red); font-weight: 700; }
+  .carey-top {
+    top: 8px;
+    left: 64px;
+    right: 64px;
+    height: 14px;
+    text-align: center;
+    line-height: 14px;
+  }
+  .carey-bottom {
+    bottom: 8px;
+    left: 64px;
+    right: 64px;
+    height: 14px;
+    text-align: center;
+    line-height: 14px;
+  }
+  .carey-right {
+    top: 64px;
+    bottom: 64px;
+    right: 7px;
+    width: 14px;
+    writing-mode: vertical-rl;
+    text-align: center;
+    line-height: 14px;
+  }
+  .carey-left {
+    top: 64px;
+    bottom: 64px;
+    left: 7px;
+    width: 14px;
+    writing-mode: vertical-rl;
+    text-align: center;
+    line-height: 14px;
   }
 
   /* Bolder pass — bigger, more confident */
@@ -1067,7 +1151,7 @@
   <div class="subtitle">
     <div class="lede">
       The thing they keep telling you to <s>tone down</s> is the only part of your work
-      <em>nobody else can ship.</em> The rest is interchangeable.
+      <em>nobody else can ship.</em>
     </div>
     <div class="stamp">
       <strong>not for<br>everyone</strong>
@@ -1099,7 +1183,7 @@
         <div class="row"><span class="normal">Be agreeable</span><span class="arrow">→</span><span class="weird-side">Be <em>specific</em></span></div>
         <div class="row"><span class="normal">Round the edges</span><span class="arrow">→</span><span class="weird-side">Sharpen them</span></div>
         <div class="row"><span class="normal">Hedge the take</span><span class="arrow">→</span><span class="weird-side">Sign the take</span></div>
-        <div class="row"><span class="normal">Pick a known lane</span><span class="arrow">→</span><span class="weird-side">Pave a private one</span></div>
+        <div class="row"><span class="normal">Desire paths</span><span class="arrow">→</span><span class="weird-side">Pave a private one</span></div>
         <div class="row"><span class="normal">Quote the consensus</span><span class="arrow">→</span><span class="weird-side">Quote the obsession</span></div>
         <div class="row"><span class="normal">Be hard to dismiss</span><span class="arrow">→</span><span class="weird-side">Be hard to <em>imitate</em></span></div>
       </div>
@@ -1126,30 +1210,18 @@
         <span class="meta"><span>Patron Saints / Refusenik Index</span><span class="tri"></span></span>
       </div>
       <h3>Famous for the part they <em>refused to fix.</em></h3>
-      <div class="saints-grid">
+      <div class="saints-grid two">
         <div class="saint">
           <div class="n">/A — Print</div>
           <h4>David Carson</h4>
-          <p class="what">Set an interview in Zapf Dingbats because the subject was boring. Ray Gun's house style was its illegibility.</p>
+          <p class="what">Set an interview in Zapf Dingbats because the subject was boring. <i>Ray Gun</i>'s house style was its illegibility — and it sold.</p>
           <div class="quirk">"Don't mistake legibility for communication."</div>
         </div>
         <div class="saint">
-          <div class="n">/B — Studio</div>
-          <h4>Stefan Sagmeister</h4>
-          <p class="what">Closes the studio every seven years to avoid becoming a studio. Carved a poster into his own body and called it client work.</p>
-          <div class="quirk">"Style = fart."</div>
-        </div>
-        <div class="saint">
-          <div class="n">/C — Cinema</div>
+          <div class="n">/B — Cinema</div>
           <h4 class="italic">Werner Herzog</h4>
           <p class="what">Hauled a steamship over a mountain because the film required it. Ate his shoe to settle a bet about a film he doubted would finish.</p>
           <div class="quirk">"The poet must not avert his eyes."</div>
-        </div>
-        <div class="saint">
-          <div class="n">/D — Music</div>
-          <h4>Björk</h4>
-          <p class="what">Recorded an album entirely on iPad apps. Wore a swan to the Oscars. Refused, on principle, to be background music.</p>
-          <div class="quirk">"I'd rather be a hypocrite than the same person all the time."</div>
         </div>
       </div>
     </section>
@@ -1210,13 +1282,27 @@
       </p>
       <div class="alex-margin">
         <span class="alex-tag">QWAN</span>
-        <span class="alex-note">— the quality without a name. C. Alexander, <i>Timeless Way</i>, 1979.</span>
+        <span class="alex-note"><strong>Quality Without A Name.</strong> Christopher Alexander's term for the thing in a building, a sentence, a piece of work that is alive — and that no committee can describe. <i>The Timeless Way of Building</i> (1979).</span>
       </div>
     </section>
 
   </div>
 
-  <!-- For the ones who notice -->
+  <!-- Mike Carey running edge — small caps strip around the perimeter -->
+  <div class="carey-edge carey-top" aria-hidden="true">
+    <span class="by">M.&nbsp;Carey</span><span class="sep">·</span>Be absolute. Be yourself, until you bleed.<span class="sep">·</span>Normal consciousness will resume.
+  </div>
+  <div class="carey-edge carey-right" aria-hidden="true">
+    The right idea at the right time is like a dandelion; you may hack it down, but you only spread the seeds abroad.
+  </div>
+  <div class="carey-edge carey-bottom" aria-hidden="true">
+    If you kill the messenger, in the long run, you just get less mail.<span class="sep">·</span>This moment meets that one. What might be becomes what is.
+  </div>
+  <div class="carey-edge carey-left" aria-hidden="true">
+    Beliefs are collars to which leashes can be attached.
+  </div>
+
+  <!-- For the ones who notice (small) -->
   <div class="bous" aria-hidden="true">
     <span class="ltr">PROMETHEUS&nbsp;&gt;</span>
     <span class="rtl">PROCRUSTES</span>
