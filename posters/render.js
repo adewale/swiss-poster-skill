@@ -3,8 +3,9 @@ const path = require('path');
 
 // Weltformat F4 — 89.5 × 128 cm (1 : 1.4302). 1260 × 1800 px @ 2x DPR.
 const POSTERS = [
-  { html: 'poster.html',          png: 'breaking-the-35.png' },
-  { html: 'fork-the-planet.html', png: 'fork-the-planet.png' },
+  { html: 'poster.html',           png: 'breaking-the-35.png' },
+  { html: 'fork-the-planet.html',  png: 'fork-the-planet.png' },
+  { html: 'durable-objects.html',  png: 'durable-objects.png' },
 ];
 
 (async () => {

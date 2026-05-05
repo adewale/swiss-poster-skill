@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Durable Objects — A Case</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --accent:    #F38020; /* Cloudflare orange */
+    --accent-2:  #FAAE40;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 52px 64px 50px 64px;
+  }
+
+  /* Frame marks */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+  }
+  .corner.tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
+
+  /* Background watermark */
+  .ghost {
+    position: absolute;
+    font-size: 380px;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    color: rgba(28,25,23,0.045);
+    transform: rotate(-10deg);
+    pointer-events: none;
+    user-select: none;
+    bottom: 200px;
+    right: -160px;
+    line-height: 0.8;
+    z-index: 0;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  .topbar .right { text-align: right; }
+  .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
+
+  /* Title */
+  .title {
+    position: relative;
+    margin-left: -5px;
+    margin-bottom: 16px;
+    z-index: 5;
+  }
+  .title h1 {
+    font-weight: 700;
+    font-size: 158px;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .title h1 .row { display: block; }
+  .title h1 .row.objects {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+  }
+  .title .orangebar {
+    position: absolute;
+    left: -64px;
+    width: 280px;
+    top: 76px;
+    height: 16px;
+    background: var(--accent);
+    z-index: 1;
+  }
+  .title h1 .row.durable {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Subtitle */
+  .subtitle {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 5;
+  }
+  .subtitle .lede {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.25;
+    max-width: 640px;
+    color: var(--stone-900);
+  }
+  .subtitle .lede em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .subtitle .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.65);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .subtitle .stamp strong {
+    display: block;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 48px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+    text-transform: none;
+    line-height: 0.95;
+    margin-bottom: 6px;
+  }
+
+  /* Pitch band — full-bleed orange */
+  .pitch {
+    background: var(--accent);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 100px 20px 100px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 4;
+  }
+  .pitch .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.85);
+    border-top: 1.5px solid var(--stone-50);
+    padding-top: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .pitch h2 {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+  }
+  .pitch h2 em {
+    font-style: italic;
+    font-weight: 200;
+    color: rgba(250,250,249,0.92);
+  }
+
+  /* Main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    position: relative;
+    z-index: 4;
+  }
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(28,25,23,0.55);
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .label .num { color: var(--accent); font-weight: 600; }
+
+  /* 01 — Collapse the stack */
+  .b-collapse { grid-column: span 7; }
+  .b-collapse h3 {
+    font-size: 36px;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+  }
+  .b-collapse h3 em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+  .b-collapse .lead {
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: rgba(28,25,23,0.75);
+    max-width: 58ch;
+    margin-bottom: 10px;
+  }
+  .stack {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--stone-900);
+  }
+  .stack .row {
+    display: grid;
+    grid-template-columns: 1.1fr 22px 1fr;
+    gap: 8px;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .stack .row:last-child { border-bottom: 0; }
+  .stack .row .was {
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    color: rgba(28,25,23,0.45);
+  }
+  .stack .row .arrow {
+    color: var(--accent);
+    font-weight: 600;
+    text-align: center;
+  }
+  .stack .row .now {
+    color: var(--stone-900);
+    font-weight: 500;
+  }
+
+  /* 02 — One object */
+  .b-one { grid-column: span 5; position: relative; }
+  .b-one .stack-list {
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    color: var(--stone-900);
+  }
+  .b-one .stack-list li {
+    list-style: none;
+    font-size: 24px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .b-one .stack-list li:first-child { padding-top: 0; }
+  .b-one .stack-list li.hot {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .b-one .stack-list li small {
+    display: block;
+    font-size: 9.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.45);
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  /* 03 — Primitives */
+  .b-prim {
+    grid-column: span 12;
+    margin-top: 12px;
+  }
+  .b-prim h3 {
+    font-size: 26px;
+    font-weight: 200;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    margin-bottom: 10px;
+  }
+  .prim-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .prim-grid .card {
+    border-top: 2px solid var(--stone-900);
+    padding-top: 12px;
+    position: relative;
+  }
+  .prim-grid .card .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .prim-grid .card h4 {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .prim-grid .card p {
+    font-size: 10.5px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: rgba(28,25,23,0.78);
+  }
+  .prim-grid .card code {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--stone-700);
+    background: var(--stone-100);
+    padding: 5px 7px;
+    margin-top: 6px;
+    line-height: 1.4;
+    border-left: 2px solid var(--accent);
+  }
+
+  /* 04 — The case */
+  .b-case {
+    grid-column: span 12;
+    margin-top: 16px;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 20px 100px 22px 100px;
+    position: relative;
+  }
+  .b-case .label {
+    color: rgba(250,250,249,0.65);
+    border-top-color: var(--stone-50);
+  }
+  .b-case .label .num { color: var(--accent-2); }
+  .b-case h3 {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+    margin-bottom: 12px;
+  }
+  .b-case h3 em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 200;
+  }
+  .b-case .args {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .b-case .arg .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .b-case .arg h5 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 5px;
+  }
+  .b-case .arg p {
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: rgba(250,250,249,0.78);
+  }
+
+  /* 05 — In the wild */
+  .b-wild {
+    grid-column: span 7;
+    margin-top: 14px;
+  }
+  .b-wild h3 {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .uses {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.55;
+    color: var(--stone-900);
+  }
+  .uses .row {
+    display: flex;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px dotted var(--stone-300);
+  }
+  .uses .row:last-child { border-bottom: 0; }
+  .uses .row b {
+    min-width: 120px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .uses .row span {
+    color: rgba(28,25,23,0.78);
+    font-weight: 400;
+  }
+
+  /* 06 — Code sample */
+  .b-code {
+    grid-column: span 5;
+    margin-top: 14px;
+    background: var(--stone-100);
+    border-left: 3px solid var(--accent);
+    padding: 10px 12px 12px 14px;
+    align-self: start;
+  }
+  .b-code .label {
+    color: rgba(28,25,23,0.6);
+    border-top-color: var(--stone-900);
+    margin-bottom: 8px;
+  }
+  .b-code pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    line-height: 1.55;
+    color: var(--stone-900);
+    white-space: pre;
+    overflow: hidden;
+  }
+  .b-code .kw { color: var(--accent); font-weight: 600; }
+  .b-code .cm { color: rgba(28,25,23,0.45); font-style: italic; }
+  .b-code .st { color: var(--stone-700); }
+  .b-code .fn { color: var(--stone-900); font-weight: 600; }
+
+  /* Footer */
+  .foot {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.55);
+    z-index: 5;
+  }
+  .foot .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 200;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+    line-height: 0.95;
+    text-transform: none;
+  }
+  .foot .big em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .foot .big .attrib {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    color: rgba(28,25,23,0.45);
+    margin-top: 8px;
+    line-height: 1.3;
+  }
+  .foot .right { text-align: right; line-height: 1.7; }
+  .foot .right b { color: var(--stone-900); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="ghost">STATE.</div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div>Issue 02 / Distributed Primitives</div>
+      <div class="meta">A poster making the case for Durable Objects</div>
+    </div>
+    <div class="right">
+      <div>Set in IBM Plex</div>
+      <div class="meta">1260 × 1800 — Weltformat F4</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <h1>
+      <span class="row durable">DURABLE</span>
+      <span class="row objects">objects.</span>
+    </h1>
+    <div class="orangebar"></div>
+  </div>
+
+  <div class="subtitle">
+    <div class="lede">
+      A single primitive that ends the dance between
+      <em>state, coordination, and the network.</em>
+      One named object. One global instance. Strong consistency by default.
+    </div>
+    <div class="stamp">
+      <strong>1 of 1</strong>
+      Globally<br>addressable
+    </div>
+  </div>
+
+  <!-- PITCH BAND -->
+  <section class="pitch">
+    <div class="label"><span>The Pitch</span><span>00 / Manifesto</span></div>
+    <h2>
+      Name an object. Send it a request from anywhere on Earth.<br>
+      <em>It is the only one. It remembers everything.</em>
+    </h2>
+  </section>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- 01 — COLLAPSE THE STACK -->
+    <section class="b-collapse">
+      <div class="label"><span>01 / The Collapse</span><span class="num">/01</span></div>
+      <h3>Five services become <em>one object.</em></h3>
+      <p class="lead">
+        The classic stateful backend is a federation of moving parts —
+        each with its own consistency model, failure mode, and bill.
+        A Durable Object replaces every row below with a single addressable runtime.
+      </p>
+      <div class="stack">
+        <div class="row"><span class="was">Redis &nbsp;— in-memory cache &amp; locks</span><span class="arrow">→</span><span class="now">Object memory</span></div>
+        <div class="row"><span class="was">Postgres row &nbsp;— per-tenant state</span><span class="arrow">→</span><span class="now">Object storage (SQLite)</span></div>
+        <div class="row"><span class="was">RabbitMQ / SQS &nbsp;— queue per actor</span><span class="arrow">→</span><span class="now">Single-threaded inbox</span></div>
+        <div class="row"><span class="was">WebSocket fleet &nbsp;— sticky routing</span><span class="arrow">→</span><span class="now">Hibernating connections</span></div>
+        <div class="row"><span class="was">Cron / scheduler &nbsp;— external trigger</span><span class="arrow">→</span><span class="now">setAlarm()</span></div>
+        <div class="row"><span class="was">ZooKeeper &nbsp;— distributed locking</span><span class="arrow">→</span><span class="now">Serial execution</span></div>
+      </div>
+    </section>
+
+    <!-- 02 — ONE INSTANCE -->
+    <section class="b-one">
+      <div class="label"><span>02 / The Property</span><span class="num">/02</span></div>
+      <ul class="stack-list">
+        <li>One name<small>idFromName("room-42")</small></li>
+        <li class="hot">One instance<small>The runtime guarantees uniqueness</small></li>
+        <li>One CPU at a time<small>No locks. No races.</small></li>
+        <li>One disk<small>Co-located, transactional</small></li>
+        <li>One inbox<small>Requests serialize naturally</small></li>
+      </ul>
+    </section>
+
+    <!-- 03 — PRIMITIVES -->
+    <section class="b-prim">
+      <div class="label"><span>03 / Inside the Object</span><span class="num">/03</span></div>
+      <h3>Four primitives. <span style="color:rgba(28,25,23,0.5);">Nothing more.</span></h3>
+      <div class="prim-grid">
+        <div class="card">
+          <div class="n">/A — Storage</div>
+          <h4>SQLite,<br>per object</h4>
+          <p>Strongly-consistent, transactional storage co-located with compute. Zero-latency reads from the same disk. Point-in-time recovery for 30 days.</p>
+          <code>this.ctx.storage.sql.exec(...)</code>
+        </div>
+        <div class="card">
+          <div class="n">/B — Alarms</div>
+          <h4>Durable<br>scheduling</h4>
+          <p>One alarm per object. Survives restarts, region failures, code deploys. Replaces every external scheduler you've ever paged on.</p>
+          <code>this.ctx.storage.setAlarm(t)</code>
+        </div>
+        <div class="card">
+          <div class="n">/C — Sockets</div>
+          <h4>Hibernating<br>WebSockets</h4>
+          <p>Idle connections cost nothing. The object sleeps; the socket survives. Wake on message, alarm, or RPC. Millions of clients per worker.</p>
+          <code>state.acceptWebSocket(ws)</code>
+        </div>
+        <div class="card">
+          <div class="n">/D — RPC</div>
+          <h4>Typed<br>method calls</h4>
+          <p>Call the object like a local class. Arguments serialize. Return values stream back. No HTTP framing, no JSON ceremony, no client SDKs to ship.</p>
+          <code>await stub.increment(1)</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — THE CASE (dark band) -->
+    <section class="b-case">
+      <div class="label"><span>04 / Why You Should Care</span><span class="num">/04</span></div>
+      <h3>The case is <em>simplicity</em> at every layer.</h3>
+      <div class="args">
+        <div class="arg">
+          <div class="k">/A — Consistency</div>
+          <h5>Strong by default, not by ceremony.</h5>
+          <p>One writer, one reader, one queue. The hardest distributed systems problem becomes a single-threaded function. You write code; the platform stops lying to you about ordering.</p>
+        </div>
+        <div class="arg">
+          <div class="k">/B — Locality</div>
+          <h5>State follows compute. Compute follows users.</h5>
+          <p>The object boots near the first request and stays. Reads are local. Writes are local. The 50&nbsp;ms cross-region round-trip you budgeted for is now a function call.</p>
+        </div>
+        <div class="arg">
+          <div class="k">/C — Economy</div>
+          <h5>Idle is free. Active is cheap.</h5>
+          <p>No instance to provision, no fleet to autoscale, no pre-paid Redis. The object exists when invoked, hibernates when not, and pays per request &amp; per GB-second of state.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — IN THE WILD -->
+    <section class="b-wild">
+      <div class="label"><span>05 / In the Wild</span><span class="num">/05</span></div>
+      <h3>Patterns that fit <span style="color:var(--accent);font-weight:500;">naturally.</span></h3>
+      <div class="uses">
+        <div class="row"><b>Chat &amp; presence</b><span>Object per room. Members fan out over WebSockets.</span></div>
+        <div class="row"><b>Multiplayer</b><span>Game-room as actor. Tick is an alarm. Inputs serialize.</span></div>
+        <div class="row"><b>Collab editing</b><span>Document = object. CRDT in storage. Awareness in memory.</span></div>
+        <div class="row"><b>Per-user agents</b><span>LLM session with memory, tools, budget — one per user.</span></div>
+        <div class="row"><b>Rate limits</b><span>Token bucket per key. No Redis. No race conditions.</span></div>
+        <div class="row"><b>Per-tenant DBs</b><span>One SQLite per customer. Isolated. Migratable. Cheap.</span></div>
+      </div>
+    </section>
+
+    <!-- 06 — CODE SAMPLE -->
+    <section class="b-code">
+      <div class="label"><span>06 / The Whole Idea</span><span class="num">/06</span></div>
+<pre><span class="kw">export class</span> <span class="fn">Counter</span> {
+  <span class="cm">// One CPU. One disk. One name.</span>
+  <span class="kw">async</span> <span class="fn">increment</span>(by = 1) {
+    <span class="kw">const</span> n = (<span class="kw">await</span> <span class="fn">this</span>.ctx
+      .storage.<span class="fn">get</span>(<span class="st">"n"</span>)) ?? 0;
+    <span class="kw">await</span> <span class="fn">this</span>.ctx.storage
+      .<span class="fn">put</span>(<span class="st">"n"</span>, n + by);
+    <span class="kw">return</span> n + by;
+  }
+}
+
+<span class="cm">// From anywhere on Earth:</span>
+<span class="kw">const</span> id   = ns.<span class="fn">idFromName</span>(<span class="st">"global"</span>);
+<span class="kw">const</span> stub = ns.<span class="fn">get</span>(id);
+<span class="kw">await</span> stub.<span class="fn">increment</span>();  <span class="cm">// strongly</span>
+<span class="kw">await</span> stub.<span class="fn">increment</span>();  <span class="cm">// consistent.</span></pre>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="big">
+      State, but make it <em>boring.</em>
+      <span class="attrib">Cloudflare Durable Objects · Storage on SQLite · Hibernating WebSockets · Alarms · RPC.</span>
+    </div>
+    <div class="right">
+      <b>Distributed Primitives</b><br>
+      Series № 02 of ∞<br>
+      Weltformat F4
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
