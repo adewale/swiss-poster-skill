@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lean Into Your Weirdness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,100;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,500;1,300;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --pink:      #FF2D87;   /* riso fluorescent pink */
+    --pink-2:    #FF7AB6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 56px 64px 50px 64px;
+  }
+
+  /* Frame marks */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+  }
+  .corner.tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
+
+  /* Background watermark — a deliberately misaligned mark */
+  .ghost {
+    position: absolute;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 520px;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: -0.06em;
+    color: rgba(255,45,135,0.07);
+    transform: rotate(-14deg);
+    pointer-events: none;
+    user-select: none;
+    bottom: 90px;
+    left: -90px;
+    line-height: 0.8;
+    z-index: 0;
+  }
+  .ghost-2 {
+    position: absolute;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 220px;
+    font-weight: 100;
+    color: rgba(28,25,23,0.04);
+    transform: rotate(8deg);
+    pointer-events: none;
+    user-select: none;
+    top: 580px;
+    right: -40px;
+    line-height: 0.8;
+    z-index: 0;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 5;
+  }
+  .topbar .right { text-align: right; }
+  .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
+  .topbar .pink { color: var(--pink); font-weight: 600; }
+
+  /* Title — typographic mischief */
+  .title {
+    position: relative;
+    margin-left: -6px;
+    z-index: 5;
+    margin-bottom: 8px;
+  }
+  .title .lean {
+    font-size: 156px;
+    font-weight: 700;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    display: block;
+  }
+  .title .into {
+    position: absolute;
+    top: 22px;
+    right: 4px;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 76px;
+    color: var(--stone-900);
+    transform: rotate(-4deg);
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+  }
+  .title .into .into-prefix {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 3px;
+    transform: rotate(2deg);
+  }
+  .title .your {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 60px;
+    color: var(--stone-900);
+    margin-left: 22px;
+    margin-top: -2px;
+    display: inline-block;
+  }
+  /* WEIRDNESS — every letter behaves differently */
+  .weird {
+    display: block;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    margin-top: -6px;
+    margin-left: -4px;
+    white-space: nowrap;
+  }
+  .weird span {
+    display: inline-block;
+    font-size: 124px;
+    color: var(--stone-900);
+  }
+  .weird .l1 { font-weight: 700; }                                                /* W */
+  .weird .l2 { font-weight: 100; transform: translateY(-12px); }                  /* E */
+  .weird .l3 { font-weight: 700; font-style: italic; color: var(--pink); }        /* I */
+  .weird .l4 { font-weight: 300; }                                                /* R */
+  .weird .l5 { font-family: 'IBM Plex Serif', serif; font-weight: 500; transform: translateY(8px); }  /* D */
+  .weird .l6 { font-weight: 700; }                                                /* N */
+  .weird .l7 { font-weight: 100; font-style: italic; transform: translateY(-6px); } /* E */
+  .weird .l8 { font-weight: 700; color: var(--pink); }                             /* S */
+  .weird .l9 { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-style: italic; transform: translateY(4px); } /* S */
+  .weird .dot { font-weight: 700; color: var(--pink); }
+
+  .pinkbar {
+    position: absolute;
+    left: -64px;
+    width: 200px;
+    top: 78px;
+    height: 14px;
+    background: var(--pink);
+    z-index: -1;
+    transform: rotate(-1.5deg);
+  }
+
+  /* Subtitle */
+  .subtitle {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 8px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  .subtitle .lede {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.3;
+    max-width: 620px;
+    color: var(--stone-900);
+  }
+  .subtitle .lede em {
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+  .subtitle .lede s { color: rgba(28,25,23,0.4); text-decoration-thickness: 1.5px; }
+  .subtitle .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.5;
+    color: rgba(28,25,23,0.65);
+  }
+  .subtitle .stamp strong {
+    display: block;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-size: 44px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    text-transform: none;
+    line-height: 0.95;
+    margin-bottom: 6px;
+  }
+
+  /* Pitch — full-bleed pink, slightly tilted text inside */
+  .pitch {
+    background: var(--pink);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 100px 20px 100px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 4;
+    overflow: hidden;
+  }
+  .pitch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 18px);
+    pointer-events: none;
+  }
+  .pitch .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.92);
+    border-top: 1.5px solid var(--stone-50);
+    padding-top: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  .pitch h2 {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+    position: relative;
+  }
+  .pitch h2 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--stone-50);
+  }
+  .pitch h2 s {
+    text-decoration-thickness: 3px;
+    color: rgba(250,250,249,0.55);
+  }
+
+  /* Main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    position: relative;
+    z-index: 4;
+  }
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(28,25,23,0.55);
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .label .num { color: var(--pink); font-weight: 600; }
+
+  /* 01 — The Cost of Normal */
+  .b-cost { grid-column: span 7; }
+  .b-cost h3 {
+    font-size: 38px;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 10px;
+  }
+  .b-cost h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+  .b-cost .lead {
+    font-size: 12.5px;
+    line-height: 1.55;
+    font-weight: 300;
+    color: rgba(28,25,23,0.78);
+    max-width: 56ch;
+    margin-bottom: 12px;
+  }
+  .balance {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--stone-900);
+  }
+  .balance .row {
+    display: grid;
+    grid-template-columns: 1fr 22px 1fr;
+    gap: 8px;
+    align-items: baseline;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .balance .row:last-child { border-bottom: 0; }
+  .balance .row .normal {
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    color: rgba(28,25,23,0.45);
+  }
+  .balance .row .arrow {
+    color: var(--pink);
+    font-weight: 700;
+    text-align: center;
+  }
+  .balance .row .weird-side {
+    color: var(--stone-900);
+    font-weight: 500;
+  }
+  .balance .row .weird-side em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+
+  /* 02 — Symptoms (you're already weird) */
+  .b-sym { grid-column: span 5; position: relative; }
+  .b-sym .stack-list { line-height: 1; }
+  .b-sym .stack-list li {
+    list-style: none;
+    font-size: 22px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--stone-200);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .b-sym .stack-list li:first-child { padding-top: 0; }
+  .b-sym .stack-list li .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--pink);
+    min-width: 22px;
+    font-weight: 600;
+  }
+  .b-sym .stack-list li.hot {
+    color: var(--pink);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* 03 — Exemplars (the patron saints) */
+  .b-saints {
+    grid-column: span 12;
+    margin-top: 10px;
+  }
+  .b-saints h3 {
+    font-size: 22px;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+  }
+  .b-saints h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+  .saints-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .saint {
+    border-top: 2px solid var(--stone-900);
+    padding-top: 10px;
+    position: relative;
+  }
+  .saint .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .saint h4 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .saint h4.italic { font-family: 'IBM Plex Serif', serif; font-style: italic; font-weight: 500; }
+  .saint .what {
+    font-size: 10.5px;
+    line-height: 1.45;
+    font-weight: 300;
+    color: rgba(28,25,23,0.78);
+    margin-bottom: 6px;
+  }
+  .saint .quirk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.4;
+    color: var(--stone-700);
+    background: var(--stone-100);
+    padding: 5px 7px;
+    border-left: 2px solid var(--pink);
+  }
+
+  /* 04 — Practices — DARK band */
+  .b-prac {
+    grid-column: span 12;
+    margin-top: 14px;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 100px 20px 100px;
+    position: relative;
+  }
+  .b-prac .label {
+    color: rgba(250,250,249,0.65);
+    border-top-color: var(--stone-50);
+  }
+  .b-prac .label .num { color: var(--pink); }
+  .b-prac h3 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+    margin-bottom: 10px;
+  }
+  .b-prac h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--pink);
+  }
+  .b-prac .practices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .prac .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink-2);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .prac h5 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 5px;
+  }
+  .prac p {
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: rgba(250,250,249,0.78);
+  }
+
+  /* 05 — Casualties */
+  .b-cas {
+    grid-column: span 7;
+    margin-top: 12px;
+  }
+  .b-cas h3 {
+    font-size: 24px;
+    font-weight: 200;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+  .b-cas h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+  .casualties {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.5;
+    color: var(--stone-900);
+  }
+  .casualties .row {
+    display: flex;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px dotted var(--stone-300);
+  }
+  .casualties .row:last-child { border-bottom: 0; }
+  .casualties .row b {
+    min-width: 130px;
+    color: var(--pink);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .casualties .row span {
+    color: rgba(28,25,23,0.78);
+    font-weight: 400;
+  }
+
+  /* 06 — The vow */
+  .b-vow {
+    grid-column: span 5;
+    margin-top: 12px;
+    background: var(--stone-100);
+    border-left: 3px solid var(--pink);
+    padding: 12px 16px 14px 16px;
+    align-self: start;
+    position: relative;
+  }
+  .b-vow .label {
+    color: rgba(28,25,23,0.6);
+    border-top-color: var(--stone-900);
+    margin-bottom: 8px;
+  }
+  .b-vow .vow {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--stone-900);
+  }
+  .b-vow .vow em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+  .b-vow .vow strong {
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .b-vow .sig {
+    margin-top: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.5);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px dashed var(--stone-300);
+    padding-top: 8px;
+  }
+  .b-vow .sig .x {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 26px;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: -0.02em;
+    color: var(--pink);
+    line-height: 0.7;
+  }
+
+  /* Footer */
+  .foot {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.55);
+    z-index: 5;
+  }
+  .foot .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 200;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+    line-height: 0.95;
+    text-transform: none;
+  }
+  .foot .big em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-weight: 500;
+  }
+  .foot .big .attrib {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    color: rgba(28,25,23,0.45);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+  .foot .right { text-align: right; line-height: 1.7; }
+  .foot .right b { color: var(--stone-900); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="ghost">strange.</div>
+  <div class="ghost-2">odd</div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div>Issue 03 / <span class="pink">Anti-Manifestos</span></div>
+      <div class="meta">A poster for the people the room was not built for</div>
+    </div>
+    <div class="right">
+      <div>Set in IBM Plex (Sans · Serif · Mono)</div>
+      <div class="meta">1260 × 1800 — Weltformat F4</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <div class="pinkbar"></div>
+    <span class="lean">LEAN</span>
+    <span class="into">
+      <span class="into-prefix">02 / verb</span>
+      into
+    </span>
+    <span class="your">your</span>
+    <span class="weird">
+      <span class="l1">W</span><span class="l2">E</span><span class="l3">I</span><span class="l4">R</span><span class="l5">D</span><span class="l6">N</span><span class="l7">E</span><span class="l8">S</span><span class="l9">S</span><span class="dot">.</span>
+    </span>
+  </div>
+
+  <div class="subtitle">
+    <div class="lede">
+      The thing they keep telling you to <s>tone down</s> is the only part of your work
+      <em>nobody else can ship.</em> The rest is interchangeable.
+    </div>
+    <div class="stamp">
+      <strong>not for<br>everyone</strong>
+      That is<br>the point
+    </div>
+  </div>
+
+  <!-- PITCH BAND -->
+  <section class="pitch">
+    <div class="label"><span>The Pitch</span><span>00 / Manifesto</span></div>
+    <h2>
+      The world has enough <s>professionals.</s><br>
+      It is starving for <em>someone unmistakable.</em>
+    </h2>
+  </section>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- 01 — THE COST OF NORMAL -->
+    <section class="b-cost">
+      <div class="label"><span>01 / The Trade</span><span class="num">/01</span></div>
+      <h3>What you traded to <em>fit in.</em></h3>
+      <p class="lead">
+        Normal is a treaty signed on your behalf — a quiet exchange of voltage
+        for permission. The terms, in plain language:
+      </p>
+      <div class="balance">
+        <div class="row"><span class="normal">Be agreeable</span><span class="arrow">→</span><span class="weird-side">Be <em>specific</em></span></div>
+        <div class="row"><span class="normal">Round the edges</span><span class="arrow">→</span><span class="weird-side">Sharpen them</span></div>
+        <div class="row"><span class="normal">Hedge the take</span><span class="arrow">→</span><span class="weird-side">Sign the take</span></div>
+        <div class="row"><span class="normal">Pick a known lane</span><span class="arrow">→</span><span class="weird-side">Pave a private one</span></div>
+        <div class="row"><span class="normal">Quote the consensus</span><span class="arrow">→</span><span class="weird-side">Quote the obsession</span></div>
+        <div class="row"><span class="normal">Be hard to dismiss</span><span class="arrow">→</span><span class="weird-side">Be hard to <em>imitate</em></span></div>
+      </div>
+    </section>
+
+    <!-- 02 — SYMPTOMS -->
+    <section class="b-sym">
+      <div class="label"><span>02 / Diagnosis</span><span class="num">/02</span></div>
+      <ul class="stack-list">
+        <li><span class="n">i.</span>You re-read the footnotes</li>
+        <li><span class="n">ii.</span>You finish the side project</li>
+        <li class="hot"><span class="n">iii.</span>You make the wrong joke</li>
+        <li><span class="n">iv.</span>You fix the kerning</li>
+        <li><span class="n">v.</span>You bring up the obscure album</li>
+        <li><span class="n">vi.</span>You correct the etymology</li>
+        <li class="hot"><span class="n">vii.</span>You ship the strange version</li>
+      </ul>
+    </section>
+
+    <!-- 03 — PATRON SAINTS -->
+    <section class="b-saints">
+      <div class="label"><span>03 / Patron Saints</span><span class="num">/03</span></div>
+      <h3>Famous for the part they <em>refused to fix.</em></h3>
+      <div class="saints-grid">
+        <div class="saint">
+          <div class="n">/A — Print</div>
+          <h4>David Carson</h4>
+          <p class="what">Set an interview in Zapf Dingbats because the subject was boring. Ray Gun's house style was its illegibility.</p>
+          <div class="quirk">"Don't mistake legibility for communication."</div>
+        </div>
+        <div class="saint">
+          <div class="n">/B — Studio</div>
+          <h4>Stefan Sagmeister</h4>
+          <p class="what">Closes the studio every seven years to avoid becoming a studio. Carved a poster into his own body and called it client work.</p>
+          <div class="quirk">"Style = fart."</div>
+        </div>
+        <div class="saint">
+          <div class="n">/C — Cinema</div>
+          <h4 class="italic">Werner Herzog</h4>
+          <p class="what">Hauled a steamship over a mountain because the film required it. Ate his shoe to settle a bet about a film he doubted would finish.</p>
+          <div class="quirk">"The poet must not avert his eyes."</div>
+        </div>
+        <div class="saint">
+          <div class="n">/D — Music</div>
+          <h4>Björk</h4>
+          <p class="what">Recorded an album entirely on iPad apps. Wore a swan to the Oscars. Refused, on principle, to be background music.</p>
+          <div class="quirk">"I'd rather be a hypocrite than the same person all the time."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — PRACTICES (dark) -->
+    <section class="b-prac">
+      <div class="label"><span>04 / Practices</span><span class="num">/04</span></div>
+      <h3>How to actually <em>lean.</em></h3>
+      <div class="practices">
+        <div class="prac">
+          <div class="k">/A — Subtract</div>
+          <h5>Cut the parts a stranger would have made.</h5>
+          <p>Most "polish" is sanding off fingerprints. Find the moves only you would make and let the rest stay rough. Texture is not a defect.</p>
+        </div>
+        <div class="prac">
+          <div class="k">/B — Confess</div>
+          <h5>Make the obsession the brief.</h5>
+          <p>The thing you've been quietly reading about for ten years is the thing nobody else has read about for ten years. Stop treating it as a hobby.</p>
+        </div>
+        <div class="prac">
+          <div class="k">/C — Sign it</div>
+          <h5>Take the take. In public. With your name.</h5>
+          <p>Anonymous opinions are interchangeable. A signed opinion is an artefact — collectable, citable, hireable, ignorable, but never replaceable.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — CASUALTIES -->
+    <section class="b-cas">
+      <div class="label"><span>05 / Casualties</span><span class="num">/05</span></div>
+      <h3>What stops working when you stop <em>filing yourself down.</em></h3>
+      <div class="casualties">
+        <div class="row"><b>Small talk</b><span>becomes specific. Some of it gets weird. Most of it improves.</span></div>
+        <div class="row"><b>The applause meter</b><span>gets quieter. The signal it replaces is louder, and yours.</span></div>
+        <div class="row"><b>The committee</b><span>cannot place you. This is a feature, not a defect.</span></div>
+        <div class="row"><b>The imitators</b><span>arrive. You will know them by the parts they refuse to copy.</span></div>
+      </div>
+    </section>
+
+    <!-- 06 — THE VOW -->
+    <section class="b-vow">
+      <div class="label"><span>06 / The Vow</span><span class="num">/06</span></div>
+      <p class="vow">
+        I will stop <strong>auditioning</strong> for a room I would not sit in.
+        I will keep the <em>strange sentence.</em> I will ship the version
+        that scares me a little. I will let my work be a fingerprint, not a stencil.
+      </p>
+      <div class="sig">
+        <span>Signed,<br>the only one</span>
+        <span class="x">×</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="big">
+      Be hard to dismiss.<br>
+      Be <em>impossible</em> to replicate.
+      <span class="attrib">A poster for the side projects, the obsessives, the people whose taste does not match the room.</span>
+    </div>
+    <div class="right">
+      <b>Anti-Manifestos</b><br>
+      Series № 03 of ∞<br>
+      Weltformat F4
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
