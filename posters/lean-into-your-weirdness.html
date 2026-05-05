@@ -634,7 +634,7 @@
 
   /* 06 — The vow */
   .b-vow {
-    grid-column: span 5;
+    grid-column: span 12;
     margin-top: 12px;
     background: var(--stone-100);
     border-left: 3px solid var(--red);
@@ -879,12 +879,71 @@
     max-width: 58ch;
   }
 
+  /* Ten Principles for Bad Design — readable section */
+  .b-bad {
+    grid-column: span 12;
+    margin-top: 14px;
+  }
+  .bad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 14px;
+  }
+  .bad-item {
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 5px;
+    display: flex;
+    gap: 7px;
+    align-items: baseline;
+  }
+  .bad-item .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    min-width: 20px;
+    flex: 0 0 auto;
+  }
+  .bad-item .body { flex: 1; }
+  .bad-item .ttl {
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 3px;
+    color: var(--stone-900);
+    letter-spacing: -0.005em;
+  }
+  .bad-item .desc {
+    font-size: 9px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: rgba(28,25,23,0.78);
+  }
+  .bad-item.bonus .n { color: var(--red); }
+  .bad-item.bonus .ttl em {
+    font-style: normal;
+    color: var(--red);
+    font-weight: 700;
+  }
+
   /* Bolder pass — bigger, more confident */
-  .title .lean { font-size: 174px; }
-  .weird span { font-size: 134px; }
-  .pitch h2 { font-size: 56px; line-height: 1; }
+  .title .lean { font-size: 158px; }
+  .weird span { font-size: 122px; }
+  .pitch h2 { font-size: 44px; line-height: 1; }
+  .pitch { padding: 14px 100px 16px 100px; margin-bottom: 14px; }
   .bmark { border-top-width: 4px; }
-  .bmark .num { font-size: 30px; padding: 3px 10px 5px 10px; margin-top: -7px; }
+  .bmark .num { font-size: 28px; padding: 3px 9px 5px 9px; margin-top: -7px; }
+
+  /* Readability — tone watermarks back */
+  .wilde-mark { color: rgba(28,25,23,0.038); font-size: 50px; top: 320px; }
+  .q-stross { color: rgba(218,41,28,0.22); }
+  .q-farquhar { color: rgba(28,25,23,0.10); font-size: 14px; top: 660px; }
+  .q-shudraka { color: rgba(28,25,23,0.16); font-size: 10px; top: 780px; }
+  .charybdis { opacity: 0.07; }
+  .scylla { opacity: 0.09; }
+  .ship-path { opacity: 0.18; }
 </style>
 </head>
 <body>
@@ -1015,9 +1074,8 @@
     </div>
   </div>
 
-  <!-- PITCH BAND -->
+  <!-- BOLD STATEMENT BAND -->
   <section class="pitch">
-    <div class="label"><span>The Pitch</span><span>00 / Manifesto</span></div>
     <h2>
       The world has enough <s>professionals.</s>
     </h2>
@@ -1122,19 +1180,28 @@
       </div>
     </section>
 
-    <!-- 05 — CASUALTIES -->
-    <section class="b-cas">
-      <div class="label"><span>05 / Casualties</span><span class="num">/05</span></div>
-      <h3>What stops working when you stop <em>filing yourself down.</em></h3>
-      <div class="casualties">
-        <div class="row"><b>Small talk</b><span>becomes specific. Some of it gets weird. Most of it improves.</span></div>
-        <div class="row"><b>The applause meter</b><span>gets quieter. The signal it replaces is louder, and yours.</span></div>
-        <div class="row"><b>The committee</b><span>cannot place you. This is a feature, not a defect.</span></div>
-        <div class="row"><b>The imitators</b><span>arrive. You will know them by the parts they refuse to copy.</span></div>
+    <!-- 05 — TEN PRINCIPLES FOR BAD DESIGN -->
+    <section class="b-bad">
+      <div class="bmark">
+        <span class="num red">05</span>
+        <span class="meta"><span>Ten Principles · For Bad Design</span><span class="tri"></span></span>
+      </div>
+      <div class="bad-grid">
+        <div class="bad-item"><span class="n">01</span><div class="body"><div class="ttl">Bad design is old-fashioned for the sake of being old-fashioned.</div><div class="desc">It distrusts new possibilities and stubbornly clings to outdated forms.</div></div></div>
+        <div class="bad-item"><span class="n">02</span><div class="body"><div class="ttl">Bad design makes a product unusable.</div><div class="desc">It creates obstacles where clarity and usefulness are needed.</div></div></div>
+        <div class="bad-item"><span class="n">03</span><div class="body"><div class="ttl">Bad design is ugly.</div><div class="desc">It offends the eye and makes everyday use unpleasant.</div></div></div>
+        <div class="bad-item"><span class="n">04</span><div class="body"><div class="ttl">Bad design makes a product incomprehensible.</div><div class="desc">It hides its function and forces people to guess.</div></div></div>
+        <div class="bad-item"><span class="n">05</span><div class="body"><div class="ttl">Bad design is intrusive.</div><div class="desc">It screams for attention and makes itself more important than the person using it.</div></div></div>
+        <div class="bad-item"><span class="n">06</span><div class="body"><div class="ttl">Bad design is dishonest.</div><div class="desc">It promises more than it can deliver and only pretends to have quality, performance, or meaning.</div></div></div>
+        <div class="bad-item"><span class="n">07</span><div class="body"><div class="ttl">Bad design is short-lived.</div><div class="desc">It follows fashion, ages quickly, and soon becomes embarrassing.</div></div></div>
+        <div class="bad-item"><span class="n">08</span><div class="body"><div class="ttl">Bad design is careless down to the details.</div><div class="desc">It treats small decisions as trivial and makes the whole thing worse.</div></div></div>
+        <div class="bad-item"><span class="n">09</span><div class="body"><div class="ttl">Bad design is wasteful.</div><div class="desc">It consumes materials, energy, attention, and time without good reason.</div></div></div>
+        <div class="bad-item"><span class="n">10</span><div class="body"><div class="ttl">Bad design is as much design as possible.</div><div class="desc">It adds, overloads, decorates, and hides what matters.</div></div></div>
+        <div class="bad-item bonus"><span class="n">11</span><div class="body"><div class="ttl">Bad design <em>mistakes quantity for quality.</em></div><div class="desc">It believes that more features, more decoration, more noise, and more stuff will somehow become better by sheer volume.</div></div></div>
       </div>
     </section>
 
-    <!-- 06 — STANDING ORDER -->
+    <!-- 06 — STANDING ORDER (full-width) -->
     <section class="b-vow">
       <div class="label"><span>06 / Standing Order</span><span class="num">/06</span></div>
       <p class="vow">
@@ -1155,17 +1222,6 @@
     <span class="rtl">PROCRUSTES</span>
   </div>
 
-  <!-- Original satirical German aphorisms (small caps, hard to read) -->
-  <div class="heresies" aria-hidden="true">
-    <span><span class="h-num">i</span>plagiat ist schicksal.</span>
-    <span><span class="h-num">ii</span>lärm ist liebe.</span>
-    <span><span class="h-num">iii</span>pfusch ist stil.</span>
-    <span><span class="h-num">iv</span>hässlichkeit ist heimat.</span>
-    <span><span class="h-num">v</span>verschwendung ist form.</span>
-    <span><span class="h-num">vi</span>ehrlichkeit ist mittelmass.</span>
-    <span><span class="h-num">vii</span>mehr ist mehr.</span>
-    <span><span class="h-num">viii</span>was zerfällt, hat gelebt.</span>
-  </div>
 
   <!-- FOOTER -->
   <div class="foot">
@@ -1173,8 +1229,8 @@
       <span class="alex-foot">Cf. C. Alexander, <i>Systems Generating Systems</i> (1968) — patterns that generate further patterns; this poster among them.</span>
     </div>
     <div class="right">
-      <b>Anti-Manifestos</b><br>
-      Series № 03 of ∞<br>
+      <b>Working Notes</b><br>
+      № 03 / ∞<br>
       Weltformat F4
     </div>
   </div>
