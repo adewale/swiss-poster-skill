@@ -16,8 +16,8 @@
     --stone-700: #44403c;
     --stone-900: #1c1917;
     --stone-950: #0c0a09;
-    --pink:      #FF2D87;   /* riso fluorescent pink */
-    --pink-2:    #FF7AB6;
+    --red:       #DA291C;   /* Swiss flag red — Pantone 485 */
+    --red-2:     #B81E14;   /* deeper Swiss red for shadow */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -77,13 +77,13 @@
     height: 280px;
     pointer-events: none;
     user-select: none;
-    color: var(--pink);
+    color: var(--red);
     opacity: 0.32;
     z-index: 0;
   }
   .ship-path .ship {
-    fill: var(--pink);
-    stroke: var(--pink);
+    fill: var(--red);
+    stroke: var(--red);
     stroke-width: 0.8;
   }
 
@@ -128,7 +128,7 @@
     margin-top: -6px;
     align-self: flex-start;
   }
-  .bmark .num.pink { background: var(--pink); }
+  .bmark .num.red { background: var(--red); }
   .bmark .meta {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
@@ -145,12 +145,12 @@
   }
   .bmark .meta .tri {
     width: 0; height: 0;
-    border-left: 8px solid var(--pink);
+    border-left: 8px solid var(--red);
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
   }
   .bmark.dark { border-top-color: var(--stone-50); }
-  .bmark.dark .num { background: var(--pink); color: var(--stone-50); }
+  .bmark.dark .num { background: var(--red); color: var(--stone-50); }
   .bmark.dark .meta { color: rgba(250,250,249,0.6); }
 
   /* Top bar */
@@ -170,7 +170,7 @@
   }
   .topbar .right { text-align: right; }
   .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
-  .topbar .pink { color: var(--pink); font-weight: 600; }
+  .topbar .pink { color: var(--red); font-weight: 600; }
 
   /* Title — typographic mischief */
   .title {
@@ -208,7 +208,7 @@
     font-size: 10.5px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--pink);
+    color: var(--red);
     margin-bottom: 3px;
     transform: rotate(2deg);
   }
@@ -238,22 +238,22 @@
   }
   .weird .l1 { font-weight: 700; }                                                /* W */
   .weird .l2 { font-weight: 100; transform: translateY(-12px); }                  /* E */
-  .weird .l3 { font-weight: 700; font-style: italic; color: var(--pink); }        /* I */
+  .weird .l3 { font-weight: 700; font-style: italic; color: var(--red); }        /* I */
   .weird .l4 { font-weight: 300; }                                                /* R */
   .weird .l5 { font-family: 'IBM Plex Serif', serif; font-weight: 500; transform: translateY(8px); }  /* D */
   .weird .l6 { font-weight: 700; }                                                /* N */
   .weird .l7 { font-weight: 100; font-style: italic; transform: translateY(-6px); } /* E */
-  .weird .l8 { font-weight: 700; color: var(--pink); }                             /* S */
+  .weird .l8 { font-weight: 700; color: var(--red); }                             /* S */
   .weird .l9 { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-style: italic; transform: translateY(4px); } /* S */
-  .weird .dot { font-weight: 700; color: var(--pink); }
+  .weird .dot { font-weight: 700; color: var(--red); }
 
-  .pinkbar {
+  .redbar {
     position: absolute;
     left: -64px;
     width: 200px;
     top: 78px;
     height: 14px;
-    background: var(--pink);
+    background: var(--red);
     z-index: -1;
     transform: rotate(-1.5deg);
   }
@@ -277,7 +277,7 @@
   }
   .subtitle .lede em {
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
   .subtitle .lede s { color: rgba(28,25,23,0.4); text-decoration-thickness: 1.5px; }
@@ -305,7 +305,7 @@
 
   /* Pitch — full-bleed pink, slightly tilted text inside */
   .pitch {
-    background: var(--pink);
+    background: var(--red);
     color: var(--stone-50);
     margin-left: -64px;
     margin-right: -64px;
@@ -377,7 +377,7 @@
     display: flex;
     justify-content: space-between;
   }
-  .label .num { color: var(--pink); font-weight: 600; }
+  .label .num { color: var(--red); font-weight: 600; }
 
   /* 01 — The Cost of Normal */
   .b-cost { grid-column: span 7; }
@@ -391,7 +391,7 @@
   .b-cost h3 em {
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
   .b-cost .lead {
@@ -423,7 +423,7 @@
     color: rgba(28,25,23,0.45);
   }
   .balance .row .arrow {
-    color: var(--pink);
+    color: var(--red);
     font-weight: 700;
     text-align: center;
   }
@@ -434,7 +434,7 @@
   .balance .row .weird-side em {
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
 
@@ -458,12 +458,12 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.18em;
-    color: var(--pink);
+    color: var(--red);
     min-width: 22px;
     font-weight: 600;
   }
   .b-sym .stack-list li.hot {
-    color: var(--pink);
+    color: var(--red);
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
     font-weight: 500;
@@ -484,7 +484,7 @@
   .b-saints h3 em {
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
   .saints-grid {
@@ -502,7 +502,7 @@
     font-size: 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 600;
     margin-bottom: 4px;
   }
@@ -528,7 +528,7 @@
     color: var(--stone-700);
     background: var(--stone-100);
     padding: 5px 7px;
-    border-left: 2px solid var(--pink);
+    border-left: 2px solid var(--red);
   }
 
   /* 04 — Practices — DARK band */
@@ -546,7 +546,7 @@
     color: rgba(250,250,249,0.65);
     border-top-color: var(--stone-50);
   }
-  .b-prac .label .num { color: var(--pink); }
+  .b-prac .label .num { color: var(--red); }
   .b-prac h3 {
     font-size: 32px;
     font-weight: 700;
@@ -559,7 +559,7 @@
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
     font-weight: 300;
-    color: var(--pink);
+    color: var(--red);
   }
   .b-prac .practices {
     display: grid;
@@ -571,7 +571,7 @@
     font-size: 9.5px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--pink-2);
+    color: var(--red-2);
     font-weight: 600;
     margin-bottom: 4px;
   }
@@ -604,7 +604,7 @@
   .b-cas h3 em {
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
   .casualties {
@@ -622,7 +622,7 @@
   .casualties .row:last-child { border-bottom: 0; }
   .casualties .row b {
     min-width: 130px;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -637,7 +637,7 @@
     grid-column: span 5;
     margin-top: 12px;
     background: var(--stone-100);
-    border-left: 3px solid var(--pink);
+    border-left: 3px solid var(--red);
     padding: 12px 16px 14px 16px;
     align-self: start;
     position: relative;
@@ -656,7 +656,7 @@
   .b-vow .vow em {
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
   .b-vow .vow strong {
@@ -681,7 +681,7 @@
     font-style: italic;
     text-transform: none;
     letter-spacing: -0.02em;
-    color: var(--pink);
+    color: var(--red);
     line-height: 0.7;
   }
 
@@ -713,7 +713,7 @@
   .foot .big em {
     font-family: 'IBM Plex Serif', serif;
     font-style: italic;
-    color: var(--pink);
+    color: var(--red);
     font-weight: 500;
   }
   .foot .big .attrib {
@@ -729,6 +729,162 @@
   }
   .foot .right { text-align: right; line-height: 1.7; }
   .foot .right b { color: var(--stone-900); font-weight: 500; }
+
+  /* ── Background quotes — hard to read but present ───────────────── */
+  .wilde-mark {
+    position: absolute;
+    top: 358px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 60px;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: rgba(28,25,23,0.055);
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .q-stross {
+    position: absolute;
+    right: 12px;
+    top: 720px;
+    width: 220px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px;
+    line-height: 1.55;
+    color: rgba(218,41,28,0.32);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transform: rotate(90deg);
+    transform-origin: top right;
+    text-align: right;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+  }
+  .q-farquhar {
+    position: absolute;
+    left: 50%;
+    top: 700px;
+    transform: translateX(-50%) rotate(-3deg);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 17px;
+    color: rgba(28,25,23,0.14);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+  }
+  .q-farquhar .src {
+    display: block;
+    text-align: right;
+    font-style: normal;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 2px;
+    color: rgba(28,25,23,0.18);
+  }
+  .q-shudraka {
+    position: absolute;
+    left: 26px;
+    top: 820px;
+    width: 240px;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(28,25,23,0.22);
+    letter-spacing: 0.01em;
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .q-shudraka .src {
+    display: block;
+    font-style: normal;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 3px;
+    color: rgba(28,25,23,0.16);
+  }
+
+  /* German design heresies — original satirical aphorisms */
+  .heresies {
+    position: absolute;
+    bottom: 4px;
+    left: 64px;
+    right: 200px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-variant: all-small-caps;
+    font-size: 7.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: rgba(28,25,23,0.36);
+    line-height: 1.15;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 12px;
+    z-index: 6;
+  }
+  .heresies .h-num {
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-right: 3px;
+    font-size: 7px;
+  }
+
+  /* Alexander annotations */
+  .alex-margin {
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+    color: rgba(28,25,23,0.50);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 6px;
+    line-height: 1.5;
+  }
+  .alex-margin .alex-tag {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--red);
+    margin-right: 4px;
+  }
+  .foot .big .alex-foot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: rgba(28,25,23,0.55);
+    line-height: 1.45;
+    display: block;
+    max-width: 58ch;
+  }
+
+  /* Bolder pass — bigger, more confident */
+  .title .lean { font-size: 174px; }
+  .weird span { font-size: 134px; }
+  .pitch h2 { font-size: 56px; line-height: 1; }
+  .bmark { border-top-width: 4px; }
+  .bmark .num { font-size: 30px; padding: 3px 10px 5px 10px; margin-top: -7px; }
 </style>
 </head>
 <body>
@@ -800,6 +956,29 @@
     </g>
   </svg>
 
+  <!-- Background watermark — "Be Yourself" (subtle) -->
+  <div class="wilde-mark" aria-hidden="true">
+    Be Yourself.&nbsp;&nbsp;Everyone&nbsp;Else&nbsp;Is&nbsp;Already&nbsp;Taken.
+  </div>
+
+  <!-- Stross — attributed paraphrase along the Charybdis vortex -->
+  <div class="q-stross" aria-hidden="true">
+    every gadget arrives haunted by its sequel.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— after C. Stross
+  </div>
+
+  <!-- Farquhar — public-domain song refrain from The Recruiting Officer (1706) -->
+  <div class="q-farquhar" aria-hidden="true">
+    Over the hills and far away.
+    <span class="src">G. Farquhar · The Recruiting Officer · 1706</span>
+  </div>
+
+  <!-- Shudraka — public-domain Mṛcchakaṭika (c. 5th c. CE) -->
+  <div class="q-shudraka" aria-hidden="true">
+    The wheel of fortune lifts and lowers, like the well-rope and the bucket.
+    <span class="src">after Śūdraka · Mṛcchakaṭika · c. 400 CE</span>
+  </div>
+
   <!-- TOP BAR -->
   <div class="topbar">
     <div>
@@ -833,7 +1012,6 @@
     </div>
     <div class="stamp">
       <strong>not for<br>everyone</strong>
-      That is<br>the point
     </div>
   </div>
 
@@ -841,8 +1019,7 @@
   <section class="pitch">
     <div class="label"><span>The Pitch</span><span>00 / Manifesto</span></div>
     <h2>
-      The world has enough <s>professionals.</s><br>
-      It is starving for <em>someone unmistakable.</em>
+      The world has enough <s>professionals.</s>
     </h2>
   </section>
 
@@ -887,7 +1064,7 @@
     <!-- 03 — PATRON SAINTS -->
     <section class="b-saints">
       <div class="bmark">
-        <span class="num pink">03</span>
+        <span class="num red">03</span>
         <span class="meta"><span>Patron Saints / Refusenik Index</span><span class="tri"></span></span>
       </div>
       <h3>Famous for the part they <em>refused to fix.</em></h3>
@@ -938,9 +1115,9 @@
           <p>The thing you've been quietly reading about for ten years is the thing nobody else has read about for ten years. Stop treating it as a hobby.</p>
         </div>
         <div class="prac">
-          <div class="k">/C — Sign it</div>
-          <h5>Take the take. In public. With your name.</h5>
-          <p>Anonymous opinions are interchangeable. A signed opinion is an artefact — collectable, citable, hireable, ignorable, but never replaceable.</p>
+          <div class="k">/C — Refuse the smoothing</div>
+          <h5>Your editor wants to make you legible.</h5>
+          <p>Every system around you is gradient descent toward the median. Add friction. Keep the strange sentence; <em>everything else is negotiable.</em></p>
         </div>
       </div>
     </section>
@@ -957,17 +1134,16 @@
       </div>
     </section>
 
-    <!-- 06 — THE VOW -->
+    <!-- 06 — STANDING ORDER -->
     <section class="b-vow">
-      <div class="label"><span>06 / The Vow</span><span class="num">/06</span></div>
+      <div class="label"><span>06 / Standing Order</span><span class="num">/06</span></div>
       <p class="vow">
-        I will stop <strong>auditioning</strong> for a room I would not sit in.
         I will keep the <em>strange sentence.</em> I will ship the version
         that scares me a little. I will let my work be a fingerprint, not a stencil.
       </p>
-      <div class="sig">
-        <span>Signed,<br>the only one</span>
-        <span class="x">×</span>
+      <div class="alex-margin">
+        <span class="alex-tag">QWAN</span>
+        <span class="alex-note">— the quality without a name. C. Alexander, <i>Timeless Way</i>, 1979.</span>
       </div>
     </section>
 
@@ -979,12 +1155,22 @@
     <span class="rtl">PROCRUSTES</span>
   </div>
 
+  <!-- Original satirical German aphorisms (small caps, hard to read) -->
+  <div class="heresies" aria-hidden="true">
+    <span><span class="h-num">i</span>plagiat ist schicksal.</span>
+    <span><span class="h-num">ii</span>lärm ist liebe.</span>
+    <span><span class="h-num">iii</span>pfusch ist stil.</span>
+    <span><span class="h-num">iv</span>hässlichkeit ist heimat.</span>
+    <span><span class="h-num">v</span>verschwendung ist form.</span>
+    <span><span class="h-num">vi</span>ehrlichkeit ist mittelmass.</span>
+    <span><span class="h-num">vii</span>mehr ist mehr.</span>
+    <span><span class="h-num">viii</span>was zerfällt, hat gelebt.</span>
+  </div>
+
   <!-- FOOTER -->
   <div class="foot">
     <div class="big">
-      Be hard to dismiss.<br>
-      Be <em>impossible</em> to replicate.
-      <span class="attrib">A poster for the side projects, the obsessives, the people whose taste does not match the room.</span>
+      <span class="alex-foot">Cf. C. Alexander, <i>Systems Generating Systems</i> (1968) — patterns that generate further patterns; this poster among them.</span>
     </div>
     <div class="right">
       <b>Anti-Manifestos</b><br>
