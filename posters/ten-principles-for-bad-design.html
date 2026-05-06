@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ten Principles for Bad Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --red:       #DA291C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 96px 100px 80px 100px;
+  }
+
+  /* Top — minimal colophon */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-700);
+    margin-bottom: 110px;
+  }
+
+  /* Title — centred, restrained, single accent on the rule below */
+  .title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 108px;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .title .br { display: block; }
+  .rule {
+    border-top: 2px solid var(--stone-900);
+    margin: 0 auto 64px auto;
+    width: 108px;
+  }
+
+  /* Principles — 2-col reading list; #11 centred in the final row */
+  .principles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6, minmax(150px, auto));
+    column-gap: 64px;
+    row-gap: 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: 20px;
+    align-items: baseline;
+    border-top: 1px solid var(--stone-200);
+    padding: 22px 0 22px 0;
+  }
+  .item.center {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 32px);
+  }
+  .item .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--red);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    padding-top: 5px;
+  }
+  .item .body {}
+  .item .ttl {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.28;
+    letter-spacing: -0.012em;
+    color: var(--stone-900);
+    margin-bottom: 7px;
+    max-width: 30ch;
+  }
+  .item .desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--stone-700);
+    max-width: 38ch;
+  }
+
+  /* Footer — colophon only */
+  .foot {
+    position: absolute;
+    left: 100px;
+    right: 100px;
+    bottom: 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-700);
+    border-top: 1px solid var(--stone-300);
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="top">
+    <span>Issue 04</span>
+    <span>Weltformat F4</span>
+  </div>
+
+  <h1 class="title"><span class="br">10 principles</span><span class="br">for bad design</span></h1>
+  <div class="rule"></div>
+
+  <div class="principles">
+
+    <div class="item">
+      <span class="n">01</span>
+      <div class="body">
+        <div class="ttl">Bad design is old-fashioned for the sake of being old-fashioned.</div>
+        <div class="desc">It distrusts new possibilities and stubbornly clings to outdated forms.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">02</span>
+      <div class="body">
+        <div class="ttl">Bad design makes a product unusable.</div>
+        <div class="desc">It creates obstacles where clarity and usefulness are needed.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">03</span>
+      <div class="body">
+        <div class="ttl">Bad design is ugly.</div>
+        <div class="desc">It offends the eye and makes everyday use unpleasant.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">04</span>
+      <div class="body">
+        <div class="ttl">Bad design makes a product incomprehensible.</div>
+        <div class="desc">It hides its function and forces people to guess.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">05</span>
+      <div class="body">
+        <div class="ttl">Bad design is intrusive.</div>
+        <div class="desc">It screams for attention and makes itself more important than the person using it.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">06</span>
+      <div class="body">
+        <div class="ttl">Bad design is dishonest.</div>
+        <div class="desc">It promises more than it can deliver and only pretends to have quality, performance, or meaning.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">07</span>
+      <div class="body">
+        <div class="ttl">Bad design is short-lived.</div>
+        <div class="desc">It follows fashion, ages quickly, and soon becomes embarrassing.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">08</span>
+      <div class="body">
+        <div class="ttl">Bad design is careless down to the details.</div>
+        <div class="desc">It treats small decisions as trivial and makes the whole thing worse.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">09</span>
+      <div class="body">
+        <div class="ttl">Bad design is wasteful.</div>
+        <div class="desc">It consumes materials, energy, attention, and time without good reason.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">10</span>
+      <div class="body">
+        <div class="ttl">Bad design is as much design as possible.</div>
+        <div class="desc">It adds, overloads, decorates, and hides what matters.</div>
+      </div>
+    </div>
+
+    <div class="item center">
+      <span class="n">11</span>
+      <div class="body">
+        <div class="ttl">Bad design mistakes quantity for quality.</div>
+        <div class="desc">It believes that more features, more decoration, more noise, and more stuff will somehow become better by sheer volume.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>№ 04 / ∞</span>
+    <span>1260 × 1800</span>
+  </div>
+
+</div>
+</body>
+</html>
