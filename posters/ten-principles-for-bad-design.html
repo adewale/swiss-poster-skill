@@ -41,36 +41,37 @@
     justify-content: space-between;
     align-items: baseline;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     font-weight: 500;
     color: var(--stone-700);
-    margin-bottom: 96px;
+    margin-bottom: 110px;
   }
 
-  /* Title — restrained, single accent on the rule below */
+  /* Title — centred, restrained, single accent on the rule below */
   .title {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
-    font-size: 78px;
+    font-size: 108px;
     line-height: 1.02;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     color: var(--stone-900);
-    margin-bottom: 28px;
+    margin-bottom: 32px;
+    text-align: center;
   }
   .title .br { display: block; }
   .rule {
     border-top: 2px solid var(--stone-900);
-    margin-bottom: 56px;
-    width: 96px;
+    margin: 0 auto 64px auto;
+    width: 108px;
   }
 
-  /* Principles — 2-col reading list; #11 spans both at the foot */
+  /* Principles — 2-col reading list; #11 centred in the final row */
   .principles {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(6, minmax(110px, auto));
+    grid-template-rows: repeat(6, minmax(150px, auto));
     column-gap: 64px;
     row-gap: 0;
     border-bottom: 1px solid var(--stone-200);
@@ -78,11 +79,11 @@
 
   .item {
     display: grid;
-    grid-template-columns: 36px 1fr;
-    column-gap: 18px;
+    grid-template-columns: 44px 1fr;
+    column-gap: 20px;
     align-items: baseline;
     border-top: 1px solid var(--stone-200);
-    padding: 18px 0 18px 0;
+    padding: 22px 0 22px 0;
   }
   .item.center {
     grid-column: 1 / -1;
@@ -91,31 +92,31 @@
   }
   .item .n {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--red);
     letter-spacing: 0.04em;
     line-height: 1;
-    padding-top: 4px;
+    padding-top: 5px;
   }
   .item .body {}
   .item .ttl {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
+    line-height: 1.28;
+    letter-spacing: -0.012em;
     color: var(--stone-900);
-    margin-bottom: 5px;
-    max-width: 38ch;
+    margin-bottom: 7px;
+    max-width: 30ch;
   }
   .item .desc {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
+    font-size: 14.5px;
     line-height: 1.55;
     font-weight: 400;
     color: var(--stone-700);
-    max-width: 42ch;
+    max-width: 38ch;
   }
 
   /* Footer — colophon only */
@@ -128,7 +129,7 @@
     justify-content: space-between;
     align-items: baseline;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--stone-700);
@@ -145,7 +146,7 @@
     <span>Weltformat F4</span>
   </div>
 
-  <h1 class="title"><span class="br">Ten Principles for</span><span class="br">Bad Design</span></h1>
+  <h1 class="title"><span class="br">10 principles</span><span class="br">for bad design</span></h1>
   <div class="rule"></div>
 
   <div class="principles">
