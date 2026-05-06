@@ -66,25 +66,27 @@
     width: 96px;
   }
 
-  /* Principles — 2-column reading list with a quiet shared baseline */
+  /* Principles — 3-col × 4-row reading grid; #11 spans 2 cells */
   .principles {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(6, minmax(110px, auto));
-    grid-auto-flow: column;
-    column-gap: 64px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(4, minmax(140px, auto));
+    column-gap: 40px;
     row-gap: 0;
     border-bottom: 1px solid var(--stone-200);
   }
 
   .item {
     display: grid;
-    grid-template-columns: 36px 1fr;
-    column-gap: 18px;
+    grid-template-columns: 32px 1fr;
+    column-gap: 14px;
     align-items: baseline;
     border-top: 1px solid var(--stone-200);
     padding: 18px 0 18px 0;
   }
+  .item.span2 { grid-column: span 2; }
+  .item.span2 .body { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .item.span2 .ttl { grid-column: 1 / -1; max-width: none; }
   .item .n {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
@@ -97,21 +99,21 @@
   .item .body {}
   .item .ttl {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.01em;
     color: var(--stone-900);
-    margin-bottom: 5px;
-    max-width: 38ch;
+    margin-bottom: 6px;
+    max-width: 30ch;
   }
   .item .desc {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
+    font-size: 12.5px;
     line-height: 1.55;
     font-weight: 400;
     color: var(--stone-700);
-    max-width: 42ch;
+    max-width: 34ch;
   }
 
   /* Footer — colophon only */
@@ -226,7 +228,7 @@
       </div>
     </div>
 
-    <div class="item">
+    <div class="item span2">
       <span class="n">11</span>
       <div class="body">
         <div class="ttl">Bad design mistakes quantity for quality.</div>
