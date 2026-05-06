@@ -868,12 +868,9 @@
     font-size: 7px;
   }
 
-  /* Alexander annotations — QWAN deserves to be findable */
+  /* Alexander annotations — typographic, no card chrome */
   .alex-margin {
-    margin-top: 12px;
-    padding: 10px 14px 10px 14px;
-    border-left: 4px solid var(--red);
-    background: var(--stone-100);
+    margin-top: 14px;
     display: flex;
     gap: 12px;
     align-items: baseline;
@@ -882,22 +879,27 @@
   .alex-margin .alex-tag {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
-    font-size: 22px;
-    letter-spacing: 0.06em;
+    font-size: 28px;
+    letter-spacing: -0.01em;
     color: var(--red);
     line-height: 1;
     flex: 0 0 auto;
   }
   .alex-margin .alex-note {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     color: var(--stone-900);
-    line-height: 1.4;
+    line-height: 1.45;
+    max-width: 76ch;
   }
   .alex-margin .alex-note strong {
     font-weight: 600;
-    color: var(--red);
+    color: var(--stone-900);
+  }
+  .alex-margin .alex-note i {
+    font-style: italic;
+    color: rgba(28,25,23,0.6);
   }
   .foot .big .alex-foot {
     font-family: 'IBM Plex Mono', monospace;
@@ -960,56 +962,65 @@
     font-weight: 700;
   }
 
-  /* Mike Carey running edge — small caps strip around the perimeter */
+  /* Mike Carey running edge — italic serif marginalia */
   .carey-edge {
     position: absolute;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-variant: all-small-caps;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    font-weight: 500;
-    color: rgba(28,25,23,0.68);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.005em;
+    font-weight: 400;
+    color: rgba(28,25,23,0.62);
     pointer-events: none;
     user-select: none;
     z-index: 7;
     white-space: nowrap;
     overflow: hidden;
   }
-  .carey-edge .sep { color: var(--red); margin: 0 1.4em; font-weight: 700; }
-  .carey-edge .by  { color: var(--red); font-weight: 700; }
+  .carey-edge .sep { color: var(--red); margin: 0 0.8em; font-style: normal; font-weight: 700; }
+  .carey-edge .by  {
+    color: var(--red);
+    font-style: normal;
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-right: 1em;
+  }
   .carey-top {
-    top: 7px;
+    top: 6px;
     left: 64px;
     right: 64px;
-    height: 16px;
+    height: 18px;
     text-align: center;
-    line-height: 16px;
+    line-height: 18px;
   }
   .carey-bottom {
-    bottom: 7px;
+    bottom: 6px;
     left: 64px;
     right: 64px;
-    height: 16px;
+    height: 18px;
     text-align: center;
-    line-height: 16px;
+    line-height: 18px;
   }
   .carey-right {
     top: 64px;
     bottom: 64px;
-    right: 6px;
-    width: 16px;
+    right: 4px;
+    width: 18px;
     writing-mode: vertical-rl;
     text-align: center;
-    line-height: 16px;
+    line-height: 18px;
   }
   .carey-left {
     top: 64px;
     bottom: 64px;
-    left: 6px;
-    width: 16px;
+    left: 4px;
+    width: 18px;
     writing-mode: vertical-rl;
     text-align: center;
-    line-height: 16px;
+    line-height: 18px;
   }
 
   /* Bolder pass — bigger, more confident */
