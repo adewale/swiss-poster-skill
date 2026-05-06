@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ten Principles for Bad Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --red:       #DA291C;
+    --red-2:     #B81E14;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 56px 64px 50px 64px;
+  }
+
+  /* Frame marks */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+  }
+  .corner.tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 10px;
+  }
+  .topbar .right { text-align: right; }
+  .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
+  .topbar .red { color: var(--red); font-weight: 700; }
+
+  /* Title */
+  .title {
+    position: relative;
+    margin-left: -6px;
+    margin-bottom: 26px;
+  }
+  .title .ten {
+    display: block;
+    font-size: 240px;
+    font-weight: 700;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .title .principles {
+    display: block;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-style: italic;
+    font-weight: 200;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--stone-900);
+    margin-left: 56px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  .title .baddesign {
+    display: block;
+    font-size: 192px;
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .title .baddesign .bad {
+    color: var(--red);
+    font-style: italic;
+  }
+  .title .baddesign .dot { color: var(--red); }
+
+  /* Lede band */
+  .lede {
+    border-top: 2px solid var(--stone-900);
+    border-bottom: 2px solid var(--stone-900);
+    padding: 16px 0;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: baseline;
+  }
+  .lede .quote {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    max-width: 36ch;
+  }
+  .lede .quote em {
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .lede .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    line-height: 1.65;
+    color: rgba(28,25,23,0.65);
+    text-transform: uppercase;
+    align-self: end;
+  }
+  .lede .meta b { color: var(--stone-900); font-weight: 600; }
+  .lede .meta .num { color: var(--red); font-weight: 700; }
+
+  /* Grid of principles */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px 22px;
+  }
+  .item {
+    border-top: 2px solid var(--stone-900);
+    padding-top: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .item .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--stone-900);
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    flex: 0 0 auto;
+    min-width: 56px;
+  }
+  .item .body { flex: 1; }
+  .item .ttl {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.012em;
+    margin-bottom: 6px;
+    color: var(--stone-900);
+  }
+  .item .desc {
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: rgba(28,25,23,0.82);
+    max-width: 38ch;
+  }
+
+  /* The bonus 11th — full-width closing band */
+  .item.bonus {
+    grid-column: span 3;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    border-top-color: var(--red);
+    border-top-width: 4px;
+    padding: 16px 22px 18px 22px;
+    margin-top: 4px;
+  }
+  .item.bonus .n {
+    color: var(--red);
+    font-size: 44px;
+    min-width: 64px;
+  }
+  .item.bonus .ttl {
+    color: var(--stone-50);
+    font-size: 18px;
+  }
+  .item.bonus .ttl em {
+    font-style: italic;
+    color: var(--red);
+    font-weight: 700;
+  }
+  .item.bonus .desc {
+    color: rgba(250,250,249,0.85);
+    font-size: 13px;
+    max-width: none;
+  }
+
+  /* The (deliberately) empty cell — Swiss negative space */
+  .item.empty {
+    border-top: 2px solid var(--red);
+    padding-top: 10px;
+    position: relative;
+    min-height: 80px;
+  }
+  .item.empty::before {
+    content: "11 was supposed to be 10.";
+    position: absolute;
+    top: 14px;
+    left: 0;
+    right: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 600;
+  }
+  .item.empty::after {
+    content: "see ↓";
+    position: absolute;
+    bottom: 14px;
+    right: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(218,41,28,0.6);
+    font-weight: 600;
+  }
+
+  /* Footer */
+  .foot {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.55);
+    border-top: 2px solid var(--stone-900);
+    padding-top: 12px;
+  }
+  .foot .left { line-height: 1.6; }
+  .foot .left b { color: var(--stone-900); font-weight: 600; }
+  .foot .left em {
+    font-style: normal;
+    color: var(--red);
+    font-weight: 700;
+  }
+  .foot .right { text-align: right; line-height: 1.6; }
+  .foot .right b { color: var(--stone-900); font-weight: 600; }
+
+  /* Background watermark — single big "11" */
+  .ghost {
+    position: absolute;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 760px;
+    color: rgba(218,41,28,0.045);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    bottom: 60px;
+    right: -90px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="ghost">11</div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div>Issue 04 / <span class="red">Working Notes</span></div>
+      <div class="meta">A field guide to common offenses</div>
+    </div>
+    <div class="right">
+      <div>Weltformat F4</div>
+      <div class="meta">1260 × 1800 — № 04 / ∞</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="ten">Ten</span>
+    <span class="principles">principles for</span>
+    <span class="baddesign"><span class="bad">bad</span> design<span class="dot">.</span></span>
+  </div>
+
+  <!-- LEDE -->
+  <div class="lede">
+    <div class="quote">
+      Numbered ten by tradition. Numbered eleven by <em>necessity</em> — the list itself an exhibit.
+    </div>
+    <div class="meta">
+      <b>An incomplete catalogue,</b><br>
+      helpfully overstuffed.<br>
+      <span class="num">— principle 10/11.</span>
+    </div>
+  </div>
+
+  <!-- PRINCIPLES GRID -->
+  <div class="principles-grid">
+
+    <div class="item">
+      <span class="n">01</span>
+      <div class="body">
+        <div class="ttl">Bad design is old-fashioned for the sake of being old-fashioned.</div>
+        <div class="desc">It distrusts new possibilities and stubbornly clings to outdated forms.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">02</span>
+      <div class="body">
+        <div class="ttl">Bad design makes a product unusable.</div>
+        <div class="desc">It creates obstacles where clarity and usefulness are needed.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">03</span>
+      <div class="body">
+        <div class="ttl">Bad design is ugly.</div>
+        <div class="desc">It offends the eye and makes everyday use unpleasant.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">04</span>
+      <div class="body">
+        <div class="ttl">Bad design makes a product incomprehensible.</div>
+        <div class="desc">It hides its function and forces people to guess.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">05</span>
+      <div class="body">
+        <div class="ttl">Bad design is intrusive.</div>
+        <div class="desc">It screams for attention and makes itself more important than the person using it.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">06</span>
+      <div class="body">
+        <div class="ttl">Bad design is dishonest.</div>
+        <div class="desc">It promises more than it can deliver and only pretends to have quality, performance, or meaning.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">07</span>
+      <div class="body">
+        <div class="ttl">Bad design is short-lived.</div>
+        <div class="desc">It follows fashion, ages quickly, and soon becomes embarrassing.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">08</span>
+      <div class="body">
+        <div class="ttl">Bad design is careless down to the details.</div>
+        <div class="desc">It treats small decisions as trivial and makes the whole thing worse.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">09</span>
+      <div class="body">
+        <div class="ttl">Bad design is wasteful.</div>
+        <div class="desc">It consumes materials, energy, attention, and time without good reason.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="n">10</span>
+      <div class="body">
+        <div class="ttl">Bad design is as much design as possible.</div>
+        <div class="desc">It adds, overloads, decorates, and hides what matters.</div>
+      </div>
+    </div>
+
+    <!-- The deliberate empty — the joke is structural -->
+    <div class="item empty"></div>
+
+    <!-- The bonus 11th — spans 2 cols, dark band, red accent -->
+    <div class="item bonus">
+      <span class="n">11</span>
+      <div class="body">
+        <div class="ttl">Bad design <em>mistakes quantity for quality.</em></div>
+        <div class="desc">It believes that more features, more decoration, more noise, and more stuff will somehow become better by sheer volume.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="left">
+      <b>The lesson</b> · the eleventh principle <em>demonstrates</em> the tenth.
+    </div>
+    <div class="right">
+      <b>Working Notes</b><br>
+      № 04 / ∞ · Weltformat F4
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
