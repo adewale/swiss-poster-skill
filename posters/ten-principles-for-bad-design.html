@@ -84,15 +84,11 @@
     border-top: 1px solid var(--stone-200);
     padding: 18px 0 18px 0;
   }
-  .item.span2 { grid-column: span 2; }
-  .item.span2 .body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 64px;
-    align-items: baseline;
+  .item.center {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 32px);
   }
-  .item.span2 .ttl { max-width: none; margin-bottom: 0; }
-  .item.span2 .desc { max-width: none; }
   .item .n {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
@@ -234,7 +230,7 @@
       </div>
     </div>
 
-    <div class="item span2">
+    <div class="item center">
       <span class="n">11</span>
       <div class="body">
         <div class="ttl">Bad design mistakes quantity for quality.</div>
