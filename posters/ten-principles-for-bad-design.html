@@ -85,8 +85,14 @@
     padding: 18px 0 18px 0;
   }
   .item.span2 { grid-column: span 2; }
-  .item.span2 .ttl { max-width: 60ch; }
-  .item.span2 .desc { max-width: 70ch; }
+  .item.span2 .body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 64px;
+    align-items: baseline;
+  }
+  .item.span2 .ttl { max-width: none; margin-bottom: 0; }
+  .item.span2 .desc { max-width: none; }
   .item .n {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
