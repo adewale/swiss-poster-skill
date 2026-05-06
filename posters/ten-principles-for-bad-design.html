@@ -66,14 +66,15 @@
     width: 96px;
   }
 
-  /* Principles — 2-column reading list */
+  /* Principles — 2-column reading list with a quiet shared baseline */
   .principles {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(6, auto);
+    grid-template-rows: repeat(6, minmax(110px, auto));
     grid-auto-flow: column;
     column-gap: 64px;
-    row-gap: 30px;
+    row-gap: 0;
+    border-bottom: 1px solid var(--stone-200);
   }
 
   .item {
@@ -81,6 +82,8 @@
     grid-template-columns: 36px 1fr;
     column-gap: 18px;
     align-items: baseline;
+    border-top: 1px solid var(--stone-200);
+    padding: 18px 0 18px 0;
   }
   .item .n {
     font-family: 'IBM Plex Mono', monospace;
