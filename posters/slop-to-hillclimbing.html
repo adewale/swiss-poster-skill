@@ -5,7 +5,7 @@
 <title>Slop → Hillclimbing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #FAFAF9;
@@ -31,27 +31,14 @@
     background: var(--paper);
   }
 
-  /* Main diagonal: anchored near bottom-left corner, rotated -45° (CCW)
-     so text reads from bottom-left up toward top-right. The left padding
-     accommodates the glyph height projected at 45° so cap-tops stay on page. */
-  .diag {
+  /* Curved Elm signature SVG */
+  .curve {
     position: absolute;
-    bottom: 44px;
-    left: 110px;
-    transform-origin: left bottom;
-    transform: rotate(-45deg);
-    white-space: nowrap;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 700;
-    font-size: 132px;
-    letter-spacing: -0.045em;
-    line-height: 1;
-    color: var(--ink);
+    top: 0; left: 0;
+    width: 1800px;
+    height: 1260px;
+    pointer-events: none;
   }
-  .diag .name  { font-style: italic; }
-  .diag .colon { font-weight: 100; color: var(--ink-7); margin: 0 0.16em; }
-  .diag .arrow { font-weight: 100; margin: 0 0.16em; }
-  .diag .out   { color: var(--red); }
 
   /* ---------- Edge strips ---------- */
   .edge {
@@ -85,20 +72,32 @@
 <body>
 <div class="poster">
 
-  <!-- TOP edge: 7 langs -->
+  <!-- TOP edge -->
   <div class="edge edge-top">TS  function elevate(slop: Slop): Hillclimbing  ·  RS  fn elevate(slop: Slop) -&gt; Hillclimbing  ·  GO  func Elevate(slop Slop) Hillclimbing  ·  PY  def elevate(slop: Slop) -&gt; Hillclimbing  ·  HS  elevate :: Slop -&gt; Hillclimbing  ·  ML  val elevate : slop -&gt; hillclimbing  ·  F#  let elevate : Slop -&gt; Hillclimbing</div>
 
-  <!-- RIGHT edge: 6 langs -->
+  <!-- RIGHT edge -->
   <div class="edge edge-right">SC  def elevate(slop: Slop): Hillclimbing  ·  KT  fun elevate(slop: Slop): Hillclimbing  ·  SW  func elevate(_ slop: Slop) -&gt; Hillclimbing  ·  JV  Hillclimbing elevate(Slop slop)  ·  C#  Hillclimbing Elevate(Slop slop)  ·  C++ Hillclimbing elevate(Slop slop)</div>
 
-  <!-- BOTTOM edge: 7 langs -->
+  <!-- BOTTOM edge -->
   <div class="edge edge-bottom">C   Hillclimbing elevate(Slop slop)  ·  ZIG fn elevate(slop: Slop) Hillclimbing  ·  ERL -spec elevate(slop()) -&gt; hillclimbing()  ·  EX  @spec elevate(Slop.t()) :: Hillclimbing.t()  ·  CLJ (s/fdef elevate :args (s/cat :slop ::slop) :ret ::hillclimbing)  ·  CL  (declaim (ftype (function (slop) hillclimbing) elevate))  ·  RB  def elevate: (Slop) -&gt; Hillclimbing</div>
 
-  <!-- LEFT edge: 6 langs -->
+  <!-- LEFT edge -->
   <div class="edge edge-left">IDR elevate : Slop -&gt; Hillclimbing  ·  LN  def elevate : Slop → Hillclimbing  ·  CQ  Definition elevate : Slop -&gt; Hillclimbing  ·  SQL CREATE FUNCTION elevate(slop SLOP) RETURNS HILLCLIMBING  ·  λ   elevate := λs:Slop. (lift s) : Hillclimbing  ·  CAT elevate : Slop ⟶ Hillclimbing</div>
 
-  <!-- Main diagonal (Elm) -->
-  <div class="diag"><span class="name">elevate</span><span class="colon">:</span>Slop<span class="arrow">&rarr;</span><span class="out">Hillclimbing</span></div>
+  <!-- Curved Elm signature: BL → TR with massive Slop in the middle -->
+  <svg class="curve" viewBox="0 0 1800 1260" preserveAspectRatio="none">
+    <defs>
+      <!-- Quadratic Bezier from bottom-left corner to top-right corner,
+           with control point pulling the curve up through the upper area.
+           Apex roughly at (900, 415). -->
+      <path id="elmCurve" d="M 40 1220 Q 900 200 1770 90" fill="none" stroke="none" />
+    </defs>
+    <text font-family="IBM Plex Sans, sans-serif" letter-spacing="-0.045em">
+      <textPath href="#elmCurve" startOffset="0">
+        <tspan font-size="96" font-weight="700" font-style="italic" fill="#1C1917">elevate</tspan><tspan font-size="96" font-weight="100" fill="#5B5854"> : </tspan><tspan font-size="460" font-weight="700" fill="#1C1917">Slop</tspan><tspan font-size="96" font-weight="100" fill="#1C1917"> → </tspan><tspan font-size="96" font-weight="700" fill="#C8102E">Hillclimbing</tspan>
+      </textPath>
+    </text>
+  </svg>
 
 </div>
 </body>
