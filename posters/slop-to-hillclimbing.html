@@ -5,12 +5,12 @@
 <title>Slop → Hillclimbing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #FAFAF9;
     --ink:   #1C1917;
-    --ink-4: rgba(28,25,23,0.40);
+    --ink-7: rgba(28,25,23,0.70);
     --red:   #C8102E;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,32 +31,75 @@
     background: var(--paper);
   }
 
-  /* The function definition runs along the page diagonal,
-     top-left to bottom-right.
-     diagonal angle = atan(1260 / 1800) ≈ 35deg */
+  /* Main diagonal: anchored near bottom-left corner, rotated -45° (CCW)
+     so text reads from bottom-left up toward top-right. The left padding
+     accommodates the glyph height projected at 45° so cap-tops stay on page. */
   .diag {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(35deg);
-    transform-origin: center center;
+    bottom: 44px;
+    left: 110px;
+    transform-origin: left bottom;
+    transform: rotate(-45deg);
     white-space: nowrap;
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
-    font-size: 164px;
+    font-size: 132px;
     letter-spacing: -0.045em;
     line-height: 1;
     color: var(--ink);
   }
-  .diag .name   { font-style: italic; }
-  .diag .colon  { font-weight: 100; color: var(--ink-4); margin: 0 0.18em; }
-  .diag .arrow  { font-weight: 100; margin: 0 0.18em; }
-  .diag .out    { color: var(--red); }
+  .diag .name  { font-style: italic; }
+  .diag .colon { font-weight: 100; color: var(--ink-7); margin: 0 0.16em; }
+  .diag .arrow { font-weight: 100; margin: 0 0.16em; }
+  .diag .out   { color: var(--red); }
+
+  /* ---------- Edge strips ---------- */
+  .edge {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .edge-top, .edge-bottom {
+    left: 28px;
+    right: 28px;
+  }
+  .edge-top    { top: 24px; }
+  .edge-bottom { bottom: 24px; }
+
+  .edge-left, .edge-right {
+    top: 28px;
+    bottom: 28px;
+    width: 12px;
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+  }
+  .edge-left  { left: 24px; }
+  .edge-right { right: 24px; }
 </style>
 </head>
 <body>
 <div class="poster">
+
+  <!-- TOP edge: 7 langs -->
+  <div class="edge edge-top">TS  function elevate(slop: Slop): Hillclimbing  ·  RS  fn elevate(slop: Slop) -&gt; Hillclimbing  ·  GO  func Elevate(slop Slop) Hillclimbing  ·  PY  def elevate(slop: Slop) -&gt; Hillclimbing  ·  HS  elevate :: Slop -&gt; Hillclimbing  ·  ML  val elevate : slop -&gt; hillclimbing  ·  F#  let elevate : Slop -&gt; Hillclimbing</div>
+
+  <!-- RIGHT edge: 6 langs -->
+  <div class="edge edge-right">SC  def elevate(slop: Slop): Hillclimbing  ·  KT  fun elevate(slop: Slop): Hillclimbing  ·  SW  func elevate(_ slop: Slop) -&gt; Hillclimbing  ·  JV  Hillclimbing elevate(Slop slop)  ·  C#  Hillclimbing Elevate(Slop slop)  ·  C++ Hillclimbing elevate(Slop slop)</div>
+
+  <!-- BOTTOM edge: 7 langs -->
+  <div class="edge edge-bottom">C   Hillclimbing elevate(Slop slop)  ·  ZIG fn elevate(slop: Slop) Hillclimbing  ·  ERL -spec elevate(slop()) -&gt; hillclimbing()  ·  EX  @spec elevate(Slop.t()) :: Hillclimbing.t()  ·  CLJ (s/fdef elevate :args (s/cat :slop ::slop) :ret ::hillclimbing)  ·  CL  (declaim (ftype (function (slop) hillclimbing) elevate))  ·  RB  def elevate: (Slop) -&gt; Hillclimbing</div>
+
+  <!-- LEFT edge: 6 langs -->
+  <div class="edge edge-left">IDR elevate : Slop -&gt; Hillclimbing  ·  LN  def elevate : Slop → Hillclimbing  ·  CQ  Definition elevate : Slop -&gt; Hillclimbing  ·  SQL CREATE FUNCTION elevate(slop SLOP) RETURNS HILLCLIMBING  ·  λ   elevate := λs:Slop. (lift s) : Hillclimbing  ·  CAT elevate : Slop ⟶ Hillclimbing</div>
+
+  <!-- Main diagonal (Elm) -->
   <div class="diag"><span class="name">elevate</span><span class="colon">:</span>Slop<span class="arrow">&rarr;</span><span class="out">Hillclimbing</span></div>
+
 </div>
 </body>
 </html>
