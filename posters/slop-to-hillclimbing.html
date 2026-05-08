@@ -158,31 +158,19 @@
   }
   .fn .line { display: block; position: relative; white-space: nowrap; }
 
-  /* line 1: fn  refine ( */
+  /* line 1: elevate */
   .fn .l1 {
-    font-weight: 100;
-    font-size: 168px;
-    margin-bottom: 8px;
-  }
-  .fn .l1 .kw {
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .fn .l1 .name {
     font-weight: 700;
     font-style: italic;
+    font-size: 232px;
+    margin-bottom: 4px;
+    letter-spacing: -0.05em;
     color: var(--ink);
-    margin-left: 14px;
-  }
-  .fn .l1 .paren {
-    font-weight: 100;
-    color: var(--ink-4);
-    margin-left: 4px;
   }
 
-  /* line 2: indented argument: slop : Slop */
+  /* line 2: : Slop */
   .fn .l2 {
-    margin-left: 168px;
+    margin-left: 96px;
     margin-top: 4px;
     font-weight: 700;
     font-size: 280px;
@@ -190,35 +178,27 @@
     color: var(--red);
     letter-spacing: -0.055em;
   }
-  .fn .l2 .arg {
-    color: var(--ink);
-    font-weight: 100;
-    font-style: italic;
-    font-size: 96px;
-    letter-spacing: -0.02em;
-    vertical-align: 1.55em;
-    margin-right: 18px;
-  }
   .fn .l2 .colon {
     color: var(--ink-4);
     font-weight: 100;
-    font-size: 96px;
-    vertical-align: 1.55em;
-    margin-right: 18px;
+    font-size: 168px;
+    vertical-align: 0.55em;
+    margin-right: 28px;
+    letter-spacing: 0;
   }
 
-  /* line 3: ) -> */
+  /* line 3: -> */
   .fn .l3 {
     font-weight: 100;
     font-size: 168px;
     margin-top: 18px;
     margin-bottom: 6px;
-    color: var(--ink-4);
+    margin-left: 96px;
+    color: var(--ink);
   }
   .fn .l3 .arrow {
     color: var(--ink);
     font-weight: 700;
-    margin-left: 28px;
     letter-spacing: -0.02em;
   }
 
@@ -388,27 +368,28 @@
     <div class="l">
       <span><span class="red">●</span> &nbsp;POSTER № 03</span>
       <span class="dim">TYPE HISTORIES</span>
-      <span>FUNCTION DEFINITION</span>
+      <span>ELM &nbsp;·&nbsp; 0.19.1</span>
     </div>
     <div class="r">
       <span class="dim">WELTFORMAT F4</span>
       <span class="dim">89.5 × 128 CM</span>
-      <span>2026 / V.01</span>
+      <span>2026 / V.02</span>
     </div>
   </div>
 
   <!-- LEFT VERTICAL LABEL -->
-  <div class="vlabel">SIGNATURE &nbsp;·&nbsp; <b>SLOP → HILLCLIMBING</b> &nbsp;·&nbsp; PURE TOTAL FN</div>
+  <div class="vlabel">ELM SIGNATURE &nbsp;·&nbsp; <b>SLOP → HILLCLIMBING</b> &nbsp;·&nbsp; PURE TOTAL FN</div>
 
   <!-- RIGHT META RAIL -->
   <aside class="rail">
+    <div class="row"><span>lang</span><span class="v">elm</span></div>
     <div class="row"><span>arity</span><span class="v">1</span></div>
     <div class="row"><span>purity</span><span class="v">total</span></div>
     <div class="row"><span>side fx</span><span class="v">none</span></div>
-    <div class="row"><span>domain</span><span class="v">slop</span></div>
-    <div class="row"><span>codomain</span><span class="v red">hillclimbing</span></div>
-    <div class="row"><span>fixpoint</span><span class="v">∃</span></div>
+    <div class="row"><span>domain</span><span class="v">Slop</span></div>
+    <div class="row"><span>codomain</span><span class="v red">Hillclimbing</span></div>
     <div class="row"><span>monotone</span><span class="v">true</span></div>
+    <div class="row"><span>elevates</span><span class="v">↗</span></div>
   </aside>
 
   <!-- red square accent -->
@@ -418,18 +399,16 @@
   <section class="hero">
     <div class="kicker">
       <span class="bar"></span>
-      <span>type slop &nbsp;⟶&nbsp; type <b>hillclimbing</b></span>
+      <span>elm signature &nbsp;·&nbsp; elevate : Slop &rarr; <b>Hillclimbing</b></span>
     </div>
 
     <div class="fn">
-      <span class="line l1">
-        <span class="kw">fn</span><span class="name">refine</span><span class="paren">(</span>
-      </span>
+      <span class="line l1">elevate</span>
       <span class="line l2">
-        <span class="arg">slop</span><span class="colon">:</span>Slop
+        <span class="colon">:</span>Slop
       </span>
       <span class="line l3">
-        )<span class="arrow">→</span>
+        <span class="arrow">&rarr;</span>
       </span>
       <span class="line l4">
         Hillclimbing
@@ -441,7 +420,7 @@
   <!-- FOOT BAND -->
   <section class="foot-band">
     <div class="blurb">
-      A function takes <em>slop</em> — the unrefined, the noisy, the over-eager output of an unconstrained model — and returns <b>hillclimbing</b>: a small, deliberate step toward a measurable better. The body is left as an exercise.
+      A pure function <em>elevates</em> slop — the noisy, over-eager output of an unconstrained model — into <b>hillclimbing</b>: a small, deliberate step toward a measurable better. Written in Elm, total by construction. The body is left as an exercise.
     </div>
     <div class="col">
       <h4>// Pre</h4>
@@ -465,15 +444,15 @@
   <!-- FOOTER -->
   <div class="foot">
     <div class="left">
-      fn refine(slop: Slop) → Hillclimbing
+      elevate : Slop -&gt; Hillclimbing
     </div>
     <div class="center">
       <b>Slop &rarr; Hillclimbing</b>
       № 03 · Type Histories · Weltformat F4
     </div>
     <div class="right">
-      <b>SET · GUESS · VERIFY</b><br>
-      after Odermatt &amp; Tissi · 1968
+      <b>ELEVATE · ASCEND · CLIMB</b><br>
+      Elm 0.19.1 · after Odermatt &amp; Tissi · 1968
     </div>
   </div>
 
