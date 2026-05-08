@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Slop → Hillclimbing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #F5F5F4;   /* stone-100 */
+    --paper:  #FAFAF9;   /* stone-50  */
+    --ink:    #1C1917;   /* stone-900 */
+    --ink-7:  rgba(28,25,23,0.70);
+    --ink-4:  rgba(28,25,23,0.40);
+    --ink-2:  rgba(28,25,23,0.18);
+    --ink-1:  rgba(28,25,23,0.08);
+    --red:    #C8102E;   /* swiss red */
+    --line:   #1C1917;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    background: var(--paper);
+  }
+
+  /* corner ticks */
+  .tick {
+    position: absolute;
+    width: 22px; height: 22px;
+    z-index: 30;
+  }
+  .tick.tl { top: 28px; left: 28px; border-top: 1.5px solid var(--ink); border-left: 1.5px solid var(--ink); }
+  .tick.tr { top: 28px; right: 28px; border-top: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); }
+  .tick.bl { bottom: 28px; left: 28px; border-bottom: 1.5px solid var(--ink); border-left: 1.5px solid var(--ink); }
+  .tick.br { bottom: 28px; right: 28px; border-bottom: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar {
+    position: absolute;
+    top: 56px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 14px;
+    z-index: 20;
+  }
+  .topbar .l { display: flex; gap: 28px; }
+  .topbar .r { display: flex; gap: 28px; }
+  .topbar .red { color: var(--red); font-weight: 500; }
+  .topbar .dim { color: var(--ink-4); }
+
+  /* ---------- LEFT VERTICAL LABEL ---------- */
+  .vlabel {
+    position: absolute;
+    left: 44px;
+    top: 470px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-7);
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    white-space: nowrap;
+    z-index: 20;
+  }
+  .vlabel b { color: var(--red); font-weight: 500; }
+
+  /* ---------- RIGHT META RAIL ---------- */
+  .rail {
+    position: absolute;
+    right: 72px;
+    top: 132px;
+    width: 220px;
+    z-index: 15;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-7);
+    border-left: 1px solid var(--ink);
+    padding: 6px 0 6px 14px;
+  }
+  .rail .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--ink-2); }
+  .rail .row:last-child { border-bottom: 0; }
+  .rail .v { color: var(--ink); font-weight: 500; }
+  .rail .v.red { color: var(--red); }
+
+  /* ---------- HUGE BACKDROP TYPE ---------- */
+  .backdrop {
+    position: absolute;
+    z-index: 1;
+    font-weight: 700;
+    font-size: 720px;
+    line-height: 0.78;
+    letter-spacing: -0.06em;
+    color: rgba(28,25,23,0.045);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    top: 60px;
+    left: -120px;
+  }
+
+  /* ---------- HERO: function definition ---------- */
+  .hero {
+    position: absolute;
+    top: 188px;
+    left: 72px;
+    right: 72px;
+    z-index: 10;
+  }
+
+  .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-7);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .kicker .bar { display: inline-block; width: 64px; height: 1.5px; background: var(--red); }
+  .kicker b { color: var(--red); font-weight: 500; }
+
+  /* The function definition itself.
+     Hand-built lines so each token can break the grid. */
+  .fn {
+    position: relative;
+    margin-top: 18px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--ink);
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+  }
+  .fn .line { display: block; position: relative; white-space: nowrap; }
+
+  /* line 1: fn  refine ( */
+  .fn .l1 {
+    font-weight: 100;
+    font-size: 168px;
+    margin-bottom: 8px;
+  }
+  .fn .l1 .kw {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .fn .l1 .name {
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink);
+    margin-left: 14px;
+  }
+  .fn .l1 .paren {
+    font-weight: 100;
+    color: var(--ink-4);
+    margin-left: 4px;
+  }
+
+  /* line 2: indented argument: slop : Slop */
+  .fn .l2 {
+    margin-left: 168px;
+    margin-top: 4px;
+    font-weight: 700;
+    font-size: 280px;
+    line-height: 0.84;
+    color: var(--red);
+    letter-spacing: -0.055em;
+  }
+  .fn .l2 .arg {
+    color: var(--ink);
+    font-weight: 100;
+    font-style: italic;
+    font-size: 96px;
+    letter-spacing: -0.02em;
+    vertical-align: 1.55em;
+    margin-right: 18px;
+  }
+  .fn .l2 .colon {
+    color: var(--ink-4);
+    font-weight: 100;
+    font-size: 96px;
+    vertical-align: 1.55em;
+    margin-right: 18px;
+  }
+
+  /* line 3: ) -> */
+  .fn .l3 {
+    font-weight: 100;
+    font-size: 168px;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    color: var(--ink-4);
+  }
+  .fn .l3 .arrow {
+    color: var(--ink);
+    font-weight: 700;
+    margin-left: 28px;
+    letter-spacing: -0.02em;
+  }
+
+  /* line 4: Hillclimbing — bleeds off right edge */
+  .fn .l4 {
+    font-weight: 700;
+    font-size: 308px;
+    line-height: 0.82;
+    color: var(--ink);
+    letter-spacing: -0.06em;
+    margin-left: -8px;
+    /* deliberate bleed on the right */
+    width: calc(100% + 200px);
+  }
+
+  /* small underline accent under the return type */
+  .fn .underbar {
+    position: absolute;
+    left: 0;
+    bottom: -22px;
+    width: 380px;
+    height: 8px;
+    background: var(--red);
+  }
+
+  /* ---------- FOOT TEXT BAND ---------- */
+  .foot-band {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    bottom: 196px;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 34px;
+    border-top: 1px solid var(--ink);
+    padding-top: 18px;
+  }
+  .foot-band .blurb {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.32;
+    color: var(--ink);
+    max-width: 36ch;
+  }
+  .foot-band .blurb b {
+    font-weight: 600;
+    color: var(--red);
+  }
+  .foot-band .blurb em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+  }
+  .foot-band .col {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-7);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .foot-band .col h4 {
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    color: var(--red);
+    font-weight: 500;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed var(--ink-2);
+    padding-bottom: 6px;
+  }
+  .foot-band .col .row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .foot-band .col .row .v { color: var(--ink); font-weight: 500; }
+
+  /* ---------- BOTTOM BIG NUMBER ---------- */
+  .bignum {
+    position: absolute;
+    left: 72px;
+    bottom: 96px;
+    z-index: 10;
+    font-weight: 700;
+    font-size: 144px;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+  }
+  .bignum sup {
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink-4);
+    margin-left: 12px;
+    vertical-align: top;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .foot {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    bottom: 56px;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-7);
+  }
+  .foot .center {
+    text-align: center;
+    color: var(--ink);
+  }
+  .foot .center b {
+    display: block;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--red);
+    margin-bottom: 2px;
+  }
+  .foot .right { text-align: right; }
+  .foot .right b { color: var(--ink); font-weight: 500; }
+
+  /* red square accent breaking from the right rail */
+  .square {
+    position: absolute;
+    right: 0;
+    top: 1080px;
+    width: 168px;
+    height: 168px;
+    background: var(--red);
+    z-index: 5;
+  }
+  .square::after {
+    content: "01";
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--paper);
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- corner ticks -->
+  <span class="tick tl"></span>
+  <span class="tick tr"></span>
+  <span class="tick bl"></span>
+  <span class="tick br"></span>
+
+  <!-- giant backdrop letter -->
+  <div class="backdrop">ƒ</div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="l">
+      <span><span class="red">●</span> &nbsp;POSTER № 03</span>
+      <span class="dim">TYPE HISTORIES</span>
+      <span>FUNCTION DEFINITION</span>
+    </div>
+    <div class="r">
+      <span class="dim">WELTFORMAT F4</span>
+      <span class="dim">89.5 × 128 CM</span>
+      <span>2026 / V.01</span>
+    </div>
+  </div>
+
+  <!-- LEFT VERTICAL LABEL -->
+  <div class="vlabel">SIGNATURE &nbsp;·&nbsp; <b>SLOP → HILLCLIMBING</b> &nbsp;·&nbsp; PURE TOTAL FN</div>
+
+  <!-- RIGHT META RAIL -->
+  <aside class="rail">
+    <div class="row"><span>arity</span><span class="v">1</span></div>
+    <div class="row"><span>purity</span><span class="v">total</span></div>
+    <div class="row"><span>side fx</span><span class="v">none</span></div>
+    <div class="row"><span>domain</span><span class="v">slop</span></div>
+    <div class="row"><span>codomain</span><span class="v red">hillclimbing</span></div>
+    <div class="row"><span>fixpoint</span><span class="v">∃</span></div>
+    <div class="row"><span>monotone</span><span class="v">true</span></div>
+  </aside>
+
+  <!-- red square accent -->
+  <div class="square"></div>
+
+  <!-- HERO: the function definition -->
+  <section class="hero">
+    <div class="kicker">
+      <span class="bar"></span>
+      <span>type slop &nbsp;⟶&nbsp; type <b>hillclimbing</b></span>
+    </div>
+
+    <div class="fn">
+      <span class="line l1">
+        <span class="kw">fn</span><span class="name">refine</span><span class="paren">(</span>
+      </span>
+      <span class="line l2">
+        <span class="arg">slop</span><span class="colon">:</span>Slop
+      </span>
+      <span class="line l3">
+        )<span class="arrow">→</span>
+      </span>
+      <span class="line l4">
+        Hillclimbing
+        <span class="underbar"></span>
+      </span>
+    </div>
+  </section>
+
+  <!-- FOOT BAND -->
+  <section class="foot-band">
+    <div class="blurb">
+      A function takes <em>slop</em> — the unrefined, the noisy, the over-eager output of an unconstrained model — and returns <b>hillclimbing</b>: a small, deliberate step toward a measurable better. The body is left as an exercise.
+    </div>
+    <div class="col">
+      <h4>// Pre</h4>
+      <div class="row"><span>input</span><span class="v">Slop</span></div>
+      <div class="row"><span>shape</span><span class="v">unbounded</span></div>
+      <div class="row"><span>signal</span><span class="v">low</span></div>
+      <div class="row"><span>cost</span><span class="v">cheap</span></div>
+    </div>
+    <div class="col">
+      <h4>// Post</h4>
+      <div class="row"><span>output</span><span class="v">Hillclimbing</span></div>
+      <div class="row"><span>shape</span><span class="v">Δ &gt; 0</span></div>
+      <div class="row"><span>signal</span><span class="v">high</span></div>
+      <div class="row"><span>cost</span><span class="v">earned</span></div>
+    </div>
+  </section>
+
+  <!-- BIG NUMBER -->
+  <div class="bignum">∂L/∂θ<sup>↘</sup></div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="left">
+      fn refine(slop: Slop) → Hillclimbing
+    </div>
+    <div class="center">
+      <b>Slop &rarr; Hillclimbing</b>
+      № 03 · Type Histories · Weltformat F4
+    </div>
+    <div class="right">
+      <b>SET · GUESS · VERIFY</b><br>
+      after Odermatt &amp; Tissi · 1968
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
