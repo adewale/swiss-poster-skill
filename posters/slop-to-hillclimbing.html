@@ -8,10 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #FAFAF9;
-    --ink:   #1C1917;
-    --ink-7: rgba(28,25,23,0.70);
-    --red:   #C8102E;
+    --paper: #0A0A0A;
+    --ink:   #FAFAF9;
+    --ink-7: rgba(250,250,249,0.65);
+    --red:   #E63946;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -84,59 +84,85 @@
 <body>
 <div class="poster">
 
-  <!-- Topographic loss-landscape pattern: 4 peaks rendered as irregular
-       lobed contour lines, with index contours (every 5th) at heavier
-       stroke, like a real topo map. -->
+  <!-- Topographic loss-landscape pattern, TAD-style: dense uniform-stroke
+       contour lines around multiple peaks, with three different lobed
+       base shapes alternated per ring so neighbouring contours don't
+       look like literal scaled copies of each other. -->
   <svg class="bg-pattern" viewBox="0 0 1800 1260" preserveAspectRatio="none">
     <defs>
-      <!-- Single irregular closed shape, scaled and rotated per peak/ring. -->
-      <path id="lobed" d="M 110 -5 C 110 -50, 75 -78, 25 -83 C -25 -88, -65 -75, -85 -45 C -105 -10, -95 30, -65 60 C -30 90, 15 90, 55 75 C 95 60, 115 30, 110 -5 Z" />
+      <!-- Three meaningfully different irregular shapes — alternated per
+           ring so the contours don't read as scaled copies. -->
+      <!-- lobeA: ridge-elongated (horizontally stretched, with two bumps). -->
+      <path id="lobeA" d="M 145 -15 C 145 -55, 105 -75, 55 -78 C 10 -82, -25 -65, -45 -85 C -75 -110, -120 -90, -130 -55 C -140 -15, -125 25, -90 35 C -55 45, -25 30, 5 50 C 35 70, 75 75, 110 60 C 140 45, 155 15, 145 -15 Z" />
+      <!-- lobeB: tear-drop, asymmetric with a sharp lobe top-right. -->
+      <path id="lobeB" d="M 95 -55 C 130 -50, 145 -10, 130 25 C 115 60, 75 80, 30 80 C -25 82, -70 65, -95 25 C -115 -15, -100 -55, -55 -75 C -10 -90, 35 -85, 60 -78 C 78 -72, 85 -65, 95 -55 Z" />
+      <!-- lobeC: bean-shaped, with a concave inflection on the left. -->
+      <path id="lobeC" d="M 110 -10 C 115 -55, 80 -85, 25 -82 C -20 -78, -55 -55, -55 -25 C -55 5, -85 15, -100 35 C -115 65, -90 90, -50 90 C -10 90, 30 75, 65 60 C 100 45, 115 20, 110 -10 Z" />
     </defs>
-    <g fill="none" stroke="#1C1917" stroke-width="1" vector-effect="non-scaling-stroke">
-      <!-- Peak A — dominant central-right hill, 15 rings -->
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(0.45)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(0.9)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(1.35)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(1.8)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(2.25)" stroke-width="2.4" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(2.7)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(3.15)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(3.6)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(4.05)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(4.5)" stroke-width="2.4" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(4.95)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(5.4)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(5.85)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(6.3)" />
-      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(6.75)" stroke-width="2.4" />
+    <g fill="none" stroke="#FAFAF9" stroke-width="1.1" vector-effect="non-scaling-stroke">
+      <!-- Peak A — dominant central-right hill, 16 rings, 3 alternating shapes -->
+      <use href="#lobeA" transform="translate(1180 600) rotate(18) scale(0.32)" />
+      <use href="#lobeB" transform="translate(1180 600) rotate(24) scale(0.62)" />
+      <use href="#lobeC" transform="translate(1180 600) rotate(14) scale(0.94)" />
+      <use href="#lobeA" transform="translate(1180 600) rotate(22) scale(1.28)" />
+      <use href="#lobeB" transform="translate(1180 600) rotate(16) scale(1.65)" />
+      <use href="#lobeC" transform="translate(1180 600) rotate(20) scale(2.04)" />
+      <use href="#lobeA" transform="translate(1180 600) rotate(12) scale(2.45)" />
+      <use href="#lobeB" transform="translate(1180 600) rotate(26) scale(2.88)" />
+      <use href="#lobeC" transform="translate(1180 600) rotate(18) scale(3.32)" />
+      <use href="#lobeA" transform="translate(1180 600) rotate(15) scale(3.78)" />
+      <use href="#lobeB" transform="translate(1180 600) rotate(22) scale(4.26)" />
+      <use href="#lobeC" transform="translate(1180 600) rotate(19) scale(4.76)" />
+      <use href="#lobeA" transform="translate(1180 600) rotate(17) scale(5.28)" />
+      <use href="#lobeB" transform="translate(1180 600) rotate(20) scale(5.82)" />
+      <use href="#lobeC" transform="translate(1180 600) rotate(15) scale(6.38)" />
+      <use href="#lobeA" transform="translate(1180 600) rotate(23) scale(6.96)" />
 
-      <!-- Peak B — secondary peak, upper-left, 9 rings -->
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(0.25)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(0.6)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(1.0)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(1.4)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(1.8)" stroke-width="2.4" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(2.2)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(2.6)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(3.0)" />
-      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(3.4)" stroke-width="2.4" />
+      <!-- Peak B — secondary peak, upper-left, 12 rings -->
+      <use href="#lobeB" transform="translate(320 280) rotate(-48) scale(0.22)" />
+      <use href="#lobeC" transform="translate(320 280) rotate(-54) scale(0.46)" />
+      <use href="#lobeA" transform="translate(320 280) rotate(-50) scale(0.72)" />
+      <use href="#lobeB" transform="translate(320 280) rotate(-44) scale(1.0)" />
+      <use href="#lobeC" transform="translate(320 280) rotate(-52) scale(1.3)" />
+      <use href="#lobeA" transform="translate(320 280) rotate(-46) scale(1.62)" />
+      <use href="#lobeB" transform="translate(320 280) rotate(-50) scale(1.96)" />
+      <use href="#lobeC" transform="translate(320 280) rotate(-48) scale(2.32)" />
+      <use href="#lobeA" transform="translate(320 280) rotate(-54) scale(2.7)" />
+      <use href="#lobeB" transform="translate(320 280) rotate(-46) scale(3.1)" />
+      <use href="#lobeC" transform="translate(320 280) rotate(-50) scale(3.52)" />
+      <use href="#lobeA" transform="translate(320 280) rotate(-44) scale(3.96)" />
 
-      <!-- Peak C — local optimum, lower-left, 7 rings -->
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(0.25)" />
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(0.55)" />
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(0.9)" />
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(1.3)" />
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(1.75)" stroke-width="2.4" />
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(2.25)" />
-      <use href="#lobed" transform="translate(220 970) rotate(70) scale(2.75)" />
+      <!-- Peak C — local optimum, lower-left, 10 rings -->
+      <use href="#lobeC" transform="translate(220 970) rotate(72) scale(0.22)" />
+      <use href="#lobeA" transform="translate(220 970) rotate(66) scale(0.46)" />
+      <use href="#lobeB" transform="translate(220 970) rotate(70) scale(0.74)" />
+      <use href="#lobeC" transform="translate(220 970) rotate(74) scale(1.04)" />
+      <use href="#lobeA" transform="translate(220 970) rotate(68) scale(1.38)" />
+      <use href="#lobeB" transform="translate(220 970) rotate(72) scale(1.74)" />
+      <use href="#lobeC" transform="translate(220 970) rotate(66) scale(2.12)" />
+      <use href="#lobeA" transform="translate(220 970) rotate(70) scale(2.52)" />
+      <use href="#lobeB" transform="translate(220 970) rotate(76) scale(2.94)" />
+      <use href="#lobeC" transform="translate(220 970) rotate(68) scale(3.38)" />
 
-      <!-- Peak D — small saddle, upper-right, 6 rings -->
-      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(0.2)" />
-      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(0.45)" />
-      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(0.75)" />
-      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(1.1)" />
-      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(1.5)" stroke-width="2.4" />
-      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(1.95)" />
+      <!-- Peak D — small saddle, upper-right, 8 rings -->
+      <use href="#lobeA" transform="translate(1660 190) rotate(-12) scale(0.18)" />
+      <use href="#lobeB" transform="translate(1660 190) rotate(-18) scale(0.4)" />
+      <use href="#lobeC" transform="translate(1660 190) rotate(-14) scale(0.66)" />
+      <use href="#lobeA" transform="translate(1660 190) rotate(-16) scale(0.94)" />
+      <use href="#lobeB" transform="translate(1660 190) rotate(-12) scale(1.24)" />
+      <use href="#lobeC" transform="translate(1660 190) rotate(-18) scale(1.56)" />
+      <use href="#lobeA" transform="translate(1660 190) rotate(-14) scale(1.9)" />
+      <use href="#lobeB" transform="translate(1660 190) rotate(-16) scale(2.26)" />
+
+      <!-- Peak E — additional peak, mid-bottom, 8 rings -->
+      <use href="#lobeC" transform="translate(750 1100) rotate(-30) scale(0.2)" />
+      <use href="#lobeA" transform="translate(750 1100) rotate(-26) scale(0.42)" />
+      <use href="#lobeB" transform="translate(750 1100) rotate(-32) scale(0.66)" />
+      <use href="#lobeC" transform="translate(750 1100) rotate(-28) scale(0.92)" />
+      <use href="#lobeA" transform="translate(750 1100) rotate(-30) scale(1.2)" />
+      <use href="#lobeB" transform="translate(750 1100) rotate(-26) scale(1.5)" />
+      <use href="#lobeC" transform="translate(750 1100) rotate(-30) scale(1.82)" />
+      <use href="#lobeA" transform="translate(750 1100) rotate(-32) scale(2.16)" />
     </g>
   </svg>
 
@@ -159,18 +185,18 @@
            with control point pulling the curve up through the upper area.
            Apex roughly at (900, 415). -->
       <path id="elmCurve" d="M 40 1220 Q 900 200 1770 90" fill="none" stroke="none" />
-      <!-- Cross-fade for the arrow: black at the Slop end, red at the
+      <!-- Cross-fade for the arrow: white at the Slop end, red at the
            Hillclimbing end. Tightened to match the visible glyph line
-           so the endpoints land in true black / true red. -->
+           on the curve. -->
       <linearGradient id="arrowFade" gradientUnits="userSpaceOnUse"
                       x1="1030" y1="295" x2="1170" y2="220">
-        <stop offset="0%" stop-color="#1C1917" />
-        <stop offset="100%" stop-color="#C8102E" />
+        <stop offset="0%" stop-color="#FAFAF9" />
+        <stop offset="100%" stop-color="#E63946" />
       </linearGradient>
     </defs>
     <text font-family="IBM Plex Sans, sans-serif" letter-spacing="-0.045em">
       <textPath href="#elmCurve" startOffset="0">
-        <tspan font-size="96" font-weight="700" font-style="italic" fill="#1C1917">elevate</tspan><tspan font-size="96" font-weight="100" fill="#5B5854"> : </tspan><tspan font-size="420" font-weight="700" fill="#1C1917">Slop</tspan><tspan font-size="160" font-weight="400" fill="url(#arrowFade)"> → </tspan><tspan font-size="96" font-weight="700" fill="#C8102E">Hillclimbing</tspan>
+        <tspan font-size="96" font-weight="700" font-style="italic" fill="#FAFAF9">elevate</tspan><tspan font-size="96" font-weight="100" fill="#9A9893"> : </tspan><tspan font-size="420" font-weight="700" fill="#FAFAF9">Slop</tspan><tspan font-size="160" font-weight="400" fill="url(#arrowFade)"> → </tspan><tspan font-size="96" font-weight="700" fill="#E63946">Hillclimbing</tspan>
       </textPath>
     </text>
   </svg>
