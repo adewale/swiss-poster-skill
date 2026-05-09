@@ -84,44 +84,59 @@
 <body>
 <div class="poster">
 
-  <!-- Topographic loss-landscape pattern: 4 peaks, nested level sets -->
+  <!-- Topographic loss-landscape pattern: 4 peaks rendered as irregular
+       lobed contour lines, with index contours (every 5th) at heavier
+       stroke, like a real topo map. -->
   <svg class="bg-pattern" viewBox="0 0 1800 1260" preserveAspectRatio="none">
-    <g stroke="#1C1917" stroke-width="1.5" fill="none">
-      <!-- Peak A — dominant central-right hill -->
-      <ellipse cx="1180" cy="600" rx="46" ry="36" />
-      <ellipse cx="1186" cy="604" rx="108" ry="82" />
-      <ellipse cx="1192" cy="608" rx="180" ry="138" />
-      <ellipse cx="1198" cy="612" rx="262" ry="200" />
-      <ellipse cx="1204" cy="616" rx="356" ry="270" />
-      <ellipse cx="1210" cy="620" rx="460" ry="346" />
-      <ellipse cx="1216" cy="624" rx="572" ry="428" />
-      <ellipse cx="1222" cy="628" rx="694" ry="514" />
-      <ellipse cx="1228" cy="632" rx="824" ry="606" />
-      <ellipse cx="1234" cy="636" rx="962" ry="702" />
+    <defs>
+      <!-- Single irregular closed shape, scaled and rotated per peak/ring. -->
+      <path id="lobed" d="M 110 -5 C 110 -50, 75 -78, 25 -83 C -25 -88, -65 -75, -85 -45 C -105 -10, -95 30, -65 60 C -30 90, 15 90, 55 75 C 95 60, 115 30, 110 -5 Z" />
+    </defs>
+    <g fill="none" stroke="#1C1917" stroke-width="1" vector-effect="non-scaling-stroke">
+      <!-- Peak A — dominant central-right hill, 15 rings -->
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(0.45)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(0.9)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(1.35)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(1.8)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(2.25)" stroke-width="2.4" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(2.7)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(3.15)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(3.6)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(4.05)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(4.5)" stroke-width="2.4" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(4.95)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(5.4)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(5.85)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(6.3)" />
+      <use href="#lobed" transform="translate(1180 600) rotate(20) scale(6.75)" stroke-width="2.4" />
 
-      <!-- Peak B — secondary peak, upper-left -->
-      <ellipse cx="320" cy="280" rx="30" ry="22" />
-      <ellipse cx="324" cy="284" rx="68" ry="50" />
-      <ellipse cx="328" cy="288" rx="115" ry="84" />
-      <ellipse cx="332" cy="292" rx="172" ry="124" />
-      <ellipse cx="336" cy="296" rx="240" ry="170" />
-      <ellipse cx="340" cy="300" rx="318" ry="222" />
-      <ellipse cx="344" cy="304" rx="406" ry="280" />
+      <!-- Peak B — secondary peak, upper-left, 9 rings -->
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(0.25)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(0.6)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(1.0)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(1.4)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(1.8)" stroke-width="2.4" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(2.2)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(2.6)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(3.0)" />
+      <use href="#lobed" transform="translate(320 280) rotate(-50) scale(3.4)" stroke-width="2.4" />
 
-      <!-- Peak C — local optimum, lower-left -->
-      <ellipse cx="220" cy="970" rx="24" ry="19" />
-      <ellipse cx="224" cy="974" rx="58" ry="44" />
-      <ellipse cx="228" cy="978" rx="102" ry="74" />
-      <ellipse cx="232" cy="982" rx="156" ry="112" />
-      <ellipse cx="236" cy="986" rx="220" ry="156" />
-      <ellipse cx="240" cy="990" rx="294" ry="206" />
+      <!-- Peak C — local optimum, lower-left, 7 rings -->
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(0.25)" />
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(0.55)" />
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(0.9)" />
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(1.3)" />
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(1.75)" stroke-width="2.4" />
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(2.25)" />
+      <use href="#lobed" transform="translate(220 970) rotate(70) scale(2.75)" />
 
-      <!-- Peak D — small saddle, upper-right -->
-      <ellipse cx="1660" cy="190" rx="20" ry="16" />
-      <ellipse cx="1663" cy="193" rx="48" ry="36" />
-      <ellipse cx="1666" cy="196" rx="86" ry="62" />
-      <ellipse cx="1670" cy="200" rx="134" ry="94" />
-      <ellipse cx="1674" cy="204" rx="190" ry="132" />
+      <!-- Peak D — small saddle, upper-right, 6 rings -->
+      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(0.2)" />
+      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(0.45)" />
+      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(0.75)" />
+      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(1.1)" />
+      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(1.5)" stroke-width="2.4" />
+      <use href="#lobed" transform="translate(1660 190) rotate(-15) scale(1.95)" />
     </g>
   </svg>
 
@@ -144,10 +159,18 @@
            with control point pulling the curve up through the upper area.
            Apex roughly at (900, 415). -->
       <path id="elmCurve" d="M 40 1220 Q 900 200 1770 90" fill="none" stroke="none" />
+      <!-- Cross-fade for the arrow: black at the Slop end, red at the
+           Hillclimbing end. Tightened to match the visible glyph line
+           so the endpoints land in true black / true red. -->
+      <linearGradient id="arrowFade" gradientUnits="userSpaceOnUse"
+                      x1="1030" y1="295" x2="1170" y2="220">
+        <stop offset="0%" stop-color="#1C1917" />
+        <stop offset="100%" stop-color="#C8102E" />
+      </linearGradient>
     </defs>
     <text font-family="IBM Plex Sans, sans-serif" letter-spacing="-0.045em">
       <textPath href="#elmCurve" startOffset="0">
-        <tspan font-size="96" font-weight="700" font-style="italic" fill="#1C1917">elevate</tspan><tspan font-size="96" font-weight="100" fill="#5B5854"> : </tspan><tspan font-size="420" font-weight="700" fill="#1C1917">Slop</tspan><tspan font-size="160" font-weight="400" fill="#C8102E"> → </tspan><tspan font-size="96" font-weight="700" fill="#C8102E">Hillclimbing</tspan>
+        <tspan font-size="96" font-weight="700" font-style="italic" fill="#1C1917">elevate</tspan><tspan font-size="96" font-weight="100" fill="#5B5854"> : </tspan><tspan font-size="420" font-weight="700" fill="#1C1917">Slop</tspan><tspan font-size="160" font-weight="400" fill="url(#arrowFade)"> → </tspan><tspan font-size="96" font-weight="700" fill="#C8102E">Hillclimbing</tspan>
       </textPath>
     </text>
   </svg>
