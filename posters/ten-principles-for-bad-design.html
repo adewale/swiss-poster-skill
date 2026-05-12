@@ -32,7 +32,7 @@
     width: 1260px;
     height: 1800px;
     overflow: hidden;
-    padding: 180px 100px 140px 100px;
+    padding: 140px 100px 100px 100px;
   }
 
   /* Top — minimal colophon */
@@ -53,25 +53,25 @@
   .title {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
-    font-size: 108px;
+    font-size: 144px;
     line-height: 1.02;
     letter-spacing: -0.03em;
     color: var(--stone-900);
-    margin-bottom: 32px;
+    margin-bottom: 40px;
     text-align: center;
   }
   .title .br { display: block; }
   .rule {
     border-top: 2px solid var(--stone-900);
-    margin: 0 auto 64px auto;
-    width: 108px;
+    margin: 0 auto 72px auto;
+    width: 144px;
   }
 
   /* Principles — 2-col reading list; #11 centred in the final row */
   .principles {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(6, minmax(150px, auto));
+    grid-template-rows: repeat(6, minmax(200px, auto));
     column-gap: 64px;
     row-gap: 0;
     border-bottom: 1px solid var(--stone-200);
@@ -79,11 +79,11 @@
 
   .item {
     display: grid;
-    grid-template-columns: 44px 1fr;
-    column-gap: 20px;
+    grid-template-columns: 56px 1fr;
+    column-gap: 24px;
     align-items: baseline;
     border-top: 1px solid var(--stone-200);
-    padding: 22px 0 22px 0;
+    padding: 26px 0 26px 0;
   }
   .item.center {
     grid-column: 1 / -1;
@@ -92,28 +92,28 @@
   }
   .item .n {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 600;
     color: var(--red);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     line-height: 1;
-    padding-top: 5px;
+    padding-top: 6px;
   }
   .item .body {}
   .item .ttl {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 600;
-    line-height: 1.28;
-    letter-spacing: -0.012em;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
     color: var(--stone-900);
-    margin-bottom: 7px;
-    max-width: 30ch;
+    margin-bottom: 9px;
+    max-width: 32ch;
   }
   .item .desc {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14.5px;
-    line-height: 1.55;
+    font-size: 18px;
+    line-height: 1.5;
     font-weight: 400;
     color: var(--stone-700);
     max-width: 38ch;
