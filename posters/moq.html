@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Media over QUIC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:  #FAFAF9;   /* stone-50 — never #fff */
+    --ink:    #1C1917;   /* stone-900 — never #000 */
+    --ink-70: rgba(28,25,23,0.66);
+    --ink-45: rgba(28,25,23,0.46);
+    --ink-25: rgba(28,25,23,0.25);
+    --line:   rgba(28,25,23,0.16);
+    --accent: #F6821F;   /* one accent — Cloudflare orange, flat fields only */
+    --on-ink-70: rgba(250,250,249,0.66);
+    --on-ink-45: rgba(250,250,249,0.42);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px; height: 1800px;
+    overflow: hidden;
+    padding: 60px 60px 48px 60px;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* ---------- Top meta bar ---------- */
+  .meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-45);
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 12px;
+  }
+  .meta .l { display: flex; gap: 26px; }
+  .meta .l b { color: var(--ink); font-weight: 600; }
+  .meta .sq { color: var(--accent); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; margin-top: 20px; }
+  .disc {            /* bold flat accent field, bleeds off top-right */
+    position: absolute;
+    top: -160px; right: -150px;
+    width: 500px; height: 500px;
+    background: var(--accent);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .kicker {
+    display: flex; align-items: center; gap: 16px;
+    position: relative; z-index: 2; margin-bottom: 18px;
+  }
+  .kicker .bar { width: 64px; height: 10px; background: var(--accent); }
+  .kicker span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--ink-70); font-weight: 500;
+  }
+  h1.title {
+    position: relative; z-index: 2;
+    font-weight: 700; font-size: 150px; line-height: 0.85;
+    letter-spacing: -0.045em; color: var(--ink);
+    margin-left: -0.05em;
+  }
+  h1.title .row { display: block; }
+  h1.title .quic { margin-left: -0.012em; }
+  .lead {
+    position: relative; z-index: 2;
+    margin-top: 20px; max-width: 32ch;
+    font-size: 22px; font-weight: 300; line-height: 1.45; color: var(--ink);
+  }
+  .lead b { font-weight: 600; }
+
+  /* ---------- Chart ---------- */
+  .seclabel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-45); font-weight: 500;
+    display: flex; gap: 12px; align-items: baseline;
+  }
+  .seclabel b { color: var(--ink); font-weight: 600; }
+  section.chart { margin-top: 20px; }
+  .panel {
+    margin-top: 14px;
+    background: var(--ink);
+    padding: 6px 0 2px 0;
+  }
+  .panel svg { display: block; width: 100%; height: auto; }
+  /* keep CSS color in step with the SVG fills (light/accent on the dark panel) */
+  .panel svg text { color: #fafaf9; }
+  .panel svg text.acc { color: var(--accent); }
+
+  /* ---------- Unification band (full-bleed accent) ---------- */
+  .band {
+    margin: 20px -60px 0 -60px;
+    background: var(--accent);
+    padding: 18px 60px;
+    display: flex; align-items: center; justify-content: space-between; gap: 40px;
+  }
+  .band .big {
+    color: var(--ink); font-weight: 600; font-size: 31px; line-height: 1.4;
+    letter-spacing: -0.02em; max-width: 19ch;
+  }
+  .band .rhs {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink); text-align: right; font-size: 13px; line-height: 1.7;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .band .rhs b { font-weight: 600; }
+  .band .rhs .v { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; text-transform: none; }
+
+  /* ---------- Lower zone ---------- */
+  .lower {
+    margin-top: 18px;
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 52px;
+  }
+  /* data model — containment shown by deepening indent + accent rule */
+  .model { margin-top: 12px; }
+  .model .lvl { position: relative; padding: 9px 0 10px 0; border-top: 1px solid var(--line); }
+  .model .lvl:first-child { border-top: 0; }
+  .model .lvl .name { font-size: 25px; font-weight: 600; letter-spacing: -0.01em; }
+  .model .lvl .def { font-size: 15px; color: var(--ink-70); line-height: 1.4; margin-top: 3px; max-width: 42ch; }
+  .model .lvl .def code { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: var(--ink); }
+  /* containment shown with a thin neutral tree elbow + indent (not a colored side-tab) */
+  .model .l2 { padding-left: 38px; }
+  .model .l3 { padding-left: 76px; }
+  .model .l2::before, .model .l3::before {
+    content: ""; position: absolute; top: 0; width: 16px; height: 26px;
+    border-left: 1px solid var(--ink-25); border-bottom: 1px solid var(--ink-25);
+  }
+  .model .l2::before { left: 14px; }
+  .model .l3::before { left: 52px; }
+
+  /* stack — three layers, hairline separated; MoQT carries the accent */
+  .stack { margin-top: 12px; border: 1.5px solid var(--ink); }
+  .stack .layer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 13px 18px; border-top: 1px solid var(--line);
+  }
+  .stack .layer:first-child { border-top: 0; }
+  .stack .layer .ln { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }
+  .stack .layer .sub {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-70);
+    text-transform: uppercase; letter-spacing: 0.08em; text-align: right;
+  }
+  .stack .moqt { background: var(--accent); }
+  .stack .moqt .ln, .stack .moqt .sub { color: var(--ink); }
+  .stack .moqt .sub { color: rgba(28,25,23,0.8); }
+
+  /* relay flow */
+  .flow { margin-top: 12px; display: flex; align-items: stretch; gap: 0; }
+  .flow .node {
+    flex: 1; border: 1.5px solid var(--ink); padding: 11px 13px;
+  }
+  .flow .node.mid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .flow .node .nlabel {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-45);
+  }
+  .flow .node.mid .nlabel { color: var(--on-ink-45); }
+  .flow .node .nname { font-size: 20px; font-weight: 600; margin-top: 4px; letter-spacing: -0.01em; }
+  .flow .node .nsub { font-size: 12.5px; color: var(--ink-70); margin-top: 2px; line-height: 1.4; }
+  .flow .node.mid .nsub { color: var(--on-ink-70); }
+  .flow .node.mid .acc { color: var(--accent); font-weight: 600; }
+  .flow .arrow {
+    display: flex; align-items: center; padding: 0 14px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-45);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    position: relative;
+  }
+  .flow .arrow .glyph { font-size: 26px; color: var(--accent); line-height: 1; }
+
+  /* ---------- Facts + footer ---------- */
+  .facts {
+    position: absolute; left: 60px; right: 60px; bottom: 96px;
+    display: flex; justify-content: space-between;
+    border-top: 1.5px solid var(--ink); padding-top: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12.5px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-70);
+  }
+  .facts .f b { color: var(--ink); font-weight: 600; display: block; font-size: 15px; letter-spacing: 0.02em; }
+  .facts .f span { color: var(--ink-45); }
+
+  .foot {
+    position: absolute; left: 60px; right: 60px; bottom: 44px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    letter-spacing: 0.02em; color: var(--ink-45);
+  }
+  .foot b { color: var(--ink); font-weight: 600; }
+  .foot .c { text-align: center; }
+  .foot .r { text-align: right; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- META -->
+  <div class="meta">
+    <div class="l">
+      <span><b>Media over QUIC</b></span>
+      <span><span class="sq">■</span> IETF standard</span>
+      <span>Open · royalty-free</span>
+    </div>
+    <div class="r">After blog.cloudflare.com/moq</div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="disc"></div>
+    <div class="kicker">
+      <span class="bar"></span>
+      <span>Real-time, at any scale</span>
+    </div>
+    <h1 class="title">
+      <span class="row">MEDIA</span>
+      <span class="row">OVER</span>
+      <span class="row quic">QUIC</span>
+    </h1>
+    <p class="lead">
+      The end of the latency-versus-scale trade-off: the live interactivity of
+      <b>WebRTC</b>, the planetary reach of <b>HLS</b>, in a single open stack.
+    </p>
+  </section>
+
+  <!-- CHART -->
+  <section class="chart">
+    <div class="seclabel"><span>01</span><b>The old trade-off</b></div>
+    <div class="panel">
+      <svg viewBox="0 0 1140 360" xmlns="http://www.w3.org/2000/svg" aria-label="Latency versus scale quadrant chart">
+        <!-- axes -->
+        <g stroke="rgba(250,250,249,0.5)" stroke-width="1.5" fill="none">
+          <line x1="120" y1="34" x2="120" y2="300"/>
+          <line x1="120" y1="300" x2="1090" y2="300"/>
+        </g>
+        <!-- axis arrowheads -->
+        <g fill="rgba(250,250,249,0.5)">
+          <path d="M120 26 l-6 12 h12 z"/>
+          <path d="M1098 300 l-12 -6 v12 z"/>
+        </g>
+        <!-- the empty quadrant everyone wanted -->
+        <rect x="708" y="30" width="374" height="132" fill="none"
+              stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 7" opacity="0.85"/>
+        <text x="724" y="54" class="acc" fill="var(--accent)" font-family="'IBM Plex Mono',monospace"
+              font-size="13" letter-spacing="1.5">THE EMPTY QUADRANT</text>
+
+        <!-- axis end labels -->
+        <g fill="rgba(250,250,249,0.5)" font-family="'IBM Plex Mono',monospace" font-size="13.5" letter-spacing="1">
+          <text x="120" y="322" text-anchor="start">FEWER VIEWERS</text>
+          <text x="1090" y="322" text-anchor="end">PLANET-SCALE</text>
+          <text x="112" y="44" text-anchor="end">REAL-TIME</text>
+          <text x="112" y="298" text-anchor="end">DELAYED</text>
+        </g>
+        <!-- axis titles -->
+        <text x="605" y="346" text-anchor="middle" fill="var(--paper)"
+              font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="600"
+              letter-spacing="2">SCALE  →</text>
+        <text x="40" y="167" text-anchor="middle" fill="var(--paper)" transform="rotate(-90 40 167)"
+              font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="600"
+              letter-spacing="2">LOW LATENCY  →</text>
+
+        <!-- legacy points -->
+        <g font-family="'IBM Plex Sans',sans-serif">
+          <!-- WebRTC: top-left -->
+          <circle cx="246" cy="61" r="8" fill="rgba(250,250,249,0.92)"/>
+          <text x="262" y="56" fill="var(--paper)" font-size="20" font-weight="600">WebRTC</text>
+          <text x="262" y="77" fill="rgba(250,250,249,0.6)" font-family="'IBM Plex Mono',monospace" font-size="13.5">&lt;500 ms · collapses at broadcast scale</text>
+
+          <!-- RTMP -->
+          <circle cx="362" cy="111" r="8" fill="rgba(250,250,249,0.92)"/>
+          <text x="378" y="106" fill="var(--paper)" font-size="20" font-weight="600">RTMP</text>
+          <text x="378" y="127" fill="rgba(250,250,249,0.6)" font-family="'IBM Plex Mono',monospace" font-size="13.5">2–5 s · can't scale</text>
+
+          <!-- HLS / DASH: bottom-right -->
+          <circle cx="944" cy="257" r="8" fill="rgba(250,250,249,0.92)"/>
+          <text x="926" y="252" text-anchor="end" fill="var(--paper)" font-size="20" font-weight="600">HLS / DASH</text>
+          <text x="926" y="273" text-anchor="end" fill="rgba(250,250,249,0.6)" font-family="'IBM Plex Mono',monospace" font-size="13.5">15–30 s · massive scale</text>
+
+          <!-- MoQ: top-right, the accent -->
+          <circle cx="993" cy="66" r="24" fill="var(--accent)"/>
+          <text x="952" y="60" text-anchor="end" class="acc" fill="var(--accent)" font-size="27" font-weight="700">MoQ</text>
+          <text x="952" y="83" text-anchor="end" fill="rgba(250,250,249,0.92)" font-family="'IBM Plex Mono',monospace" font-size="14">sub-second · global scale</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- UNIFICATION BAND -->
+  <section class="band">
+    <div class="big">Sub-second latency. Planet-scale reach. No compromises.</div>
+    <div class="rhs">
+      <span class="v">25 yrs</span><br>
+      <b>of patched-together</b><br>
+      <b>streaming, retired</b>
+    </div>
+  </section>
+
+  <!-- LOWER -->
+  <div class="lower">
+    <!-- data model -->
+    <div>
+      <div class="seclabel"><span>02</span><b>Data model</b></div>
+      <div class="model">
+        <div class="lvl">
+          <div class="name">Track</div>
+          <div class="def">A named media stream a subscriber can request — e.g. <code>video-1080p</code>.</div>
+        </div>
+        <div class="lvl l2">
+          <div class="name">Group</div>
+          <div class="def">An independently decodable span of a track — typically a GOP starting on a keyframe.</div>
+        </div>
+        <div class="lvl l3">
+          <div class="name">Object</div>
+          <div class="def">A single addressable payload sent over its own QUIC stream — no head-of-line blocking.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- the stack -->
+    <div>
+      <div class="seclabel"><span>03</span><b>The stack</b></div>
+      <div class="stack">
+        <div class="layer">
+          <div class="ln">Streaming format</div>
+          <div class="sub">codecs · catalog</div>
+        </div>
+        <div class="layer moqt">
+          <div class="ln">MoQT signaling</div>
+          <div class="sub">announce · subscribe</div>
+        </div>
+        <div class="layer">
+          <div class="ln">QUIC / WebTransport</div>
+          <div class="sub">transport · browser-native</div>
+        </div>
+      </div>
+
+      <!-- relay flow -->
+      <div class="flow">
+        <div class="node">
+          <div class="nlabel">Publisher</div>
+          <div class="nname">Announce</div>
+          <div class="nsub">offers track namespaces</div>
+        </div>
+        <div class="arrow"><span class="glyph">→</span></div>
+        <div class="node mid">
+          <div class="nlabel">Relay</div>
+          <div class="nname"><span class="acc">330+</span> cities</div>
+          <div class="nsub">forwards objects, never parses media</div>
+        </div>
+        <div class="arrow"><span class="glyph">→</span></div>
+        <div class="node">
+          <div class="nlabel">Subscriber</div>
+          <div class="nname">Request</div>
+          <div class="nsub">pulls only the tracks it needs</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FACTS -->
+  <div class="facts">
+    <div class="f"><b>moq-transport-07</b><span>current IETF draft</span></div>
+    <div class="f"><b>Meta · Google · Cisco</b><span>interoperable impls</span></div>
+    <div class="f"><b>Free in preview</b><span>GA ≈ $0.05 / GB</span></div>
+    <div class="f"><b>Connection migration</b><span>survives network switch</span></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="l">Swiss Poster · <b>Anti-slop build</b></div>
+    <div class="c">Media over QUIC · Weltformat F4 · 89.5 × 128 cm</div>
+    <div class="r">Source: <b>blog.cloudflare.com/moq</b></div>
+  </div>
+
+</div>
+</body>
+</html>
