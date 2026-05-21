@@ -211,10 +211,9 @@
   <div class="meta">
     <div class="l">
       <span><b>Media over QUIC</b></span>
-      <span><span class="sq">■</span> IETF standard</span>
-      <span>Open · royalty-free</span>
+      <span><span class="sq">■</span> IETF Internet-Draft</span>
     </div>
-    <div class="r">After blog.cloudflare.com/moq</div>
+    <div class="r">Work in progress</div>
   </div>
 
   <!-- HERO -->
@@ -231,7 +230,7 @@
     </h1>
     <p class="lead">
       The end of the latency-versus-scale trade-off: the live interactivity of
-      <b>WebRTC</b>, the planetary reach of <b>HLS</b>, in a single open stack.
+      <b>WebRTC</b>, the planetary reach of <b>HLS</b>, in a single stack.
     </p>
   </section>
 
@@ -301,7 +300,7 @@
   <section class="band">
     <div class="big">Sub-second latency. Planet-scale reach. No compromises.</div>
     <div class="rhs">
-      <span class="v">25 yrs</span><br>
+      <span class="v">20+ yrs</span><br>
       <b>of patched-together</b><br>
       <b>streaming, retired</b>
     </div>
@@ -323,7 +322,7 @@
         </div>
         <div class="lvl l3">
           <div class="name">Object</div>
-          <div class="def">A single addressable payload sent over its own QUIC stream — no head-of-line blocking.</div>
+          <div class="def">A single addressable payload — the unit a relay forwards.</div>
         </div>
       </div>
     </div>
@@ -338,7 +337,7 @@
         </div>
         <div class="layer moqt">
           <div class="ln">MoQT signaling</div>
-          <div class="sub">announce · subscribe</div>
+          <div class="sub">control · subscriptions</div>
         </div>
         <div class="layer">
           <div class="ln">QUIC / WebTransport</div>
@@ -350,8 +349,8 @@
       <div class="flow">
         <div class="node">
           <div class="nlabel">Publisher</div>
-          <div class="nname">Announce</div>
-          <div class="nsub">offers track namespaces</div>
+          <div class="nname">Publish</div>
+          <div class="nsub">offers named tracks</div>
         </div>
         <div class="arrow"><span class="glyph">→</span></div>
         <div class="node mid">
@@ -362,7 +361,7 @@
         <div class="arrow"><span class="glyph">→</span></div>
         <div class="node">
           <div class="nlabel">Subscriber</div>
-          <div class="nname">Request</div>
+          <div class="nname">Subscribe</div>
           <div class="nsub">pulls only the tracks it needs</div>
         </div>
       </div>
@@ -371,16 +370,14 @@
 
   <!-- FACTS -->
   <div class="facts">
-    <div class="f"><b>moq-transport-07</b><span>current IETF draft</span></div>
+    <div class="f"><b>draft-ietf-moq-transport-07</b><span>Cloudflare's preview path</span></div>
     <div class="f"><b>Meta · Google · Cisco</b><span>interoperable impls</span></div>
-    <div class="f"><b>Free in preview</b><span>GA ≈ $0.05 / GB</span></div>
-    <div class="f"><b>Connection migration</b><span>survives network switch</span></div>
+    <div class="f"><b>Independent QUIC streams</b><span>no head-of-line blocking</span></div>
   </div>
 
   <!-- FOOTER -->
   <div class="foot">
-    <div class="l">Swiss Poster · <b>Anti-slop build</b></div>
-    <div class="c">Media over QUIC · Weltformat F4 · 89.5 × 128 cm</div>
+    <div class="l">Weltformat F4 · 89.5 × 128 cm</div>
     <div class="r">Source: <b>blog.cloudflare.com/moq</b></div>
   </div>
 
