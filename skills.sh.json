@@ -1,0 +1,11 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Design Systems",
+      "description": "Apply Swiss poster design to web interfaces with dramatic type, grid-breaking layouts, overlap, bleed, and bold Tailwind color fields.",
+      "skills": ["swiss-poster"]
+    }
+  ]
+}

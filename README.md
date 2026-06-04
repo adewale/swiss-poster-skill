@@ -1,11 +1,19 @@
 # swiss-poster-skill
 
+[![skills.sh](https://skills.sh/b/adewale/swiss-poster-skill)](https://skills.sh/adewale/swiss-poster-skill)
+
 A Swiss Poster design system for AI agents. Huge type, grid-breaking layouts, overlapping elements, and bold color fields — all in Tailwind CSS.
 
 ## Install
 
 ```sh
 npx skills add adewale/swiss-poster-skill
+```
+
+To opt out of skills CLI telemetry for the install:
+
+```sh
+DISABLE_TELEMETRY=1 npx skills add adewale/swiss-poster-skill
 ```
 
 Or manually copy the skill directory:
@@ -26,6 +34,10 @@ The installable skill directory is `swiss-poster`. It uses the Agent Skills `SKI
 | Pi | `pi install https://github.com/adewale/swiss-poster-skill` or `pi --skill swiss-poster` |
 | Gemini CLI | `gemini skills install https://github.com/adewale/swiss-poster-skill --path swiss-poster` or copy to `.gemini/skills/swiss-poster` |
 | Claude Code | `npx skills add adewale/swiss-poster-skill` or copy to `.claude/skills/swiss-poster` |
+
+## skills.sh
+
+This repository is configured for skills.sh. Per the skills.sh docs, repositories appear after the skills CLI sees an install, and rankings use anonymous CLI telemetry.
 
 ## Usage
 
