@@ -1,5 +1,7 @@
 # swiss-poster-skill
 
+[![skills.sh](https://skills.sh/b/adewale/swiss-poster-skill)](https://skills.sh/adewale/swiss-poster-skill)
+
 A Swiss Poster design system for AI agents. Huge type, grid-breaking layouts, overlapping elements, and bold color fields — all in Tailwind CSS.
 
 ## Install
@@ -8,12 +10,22 @@ A Swiss Poster design system for AI agents. Huge type, grid-breaking layouts, ov
 npx skills add adewale/swiss-poster-skill
 ```
 
+To opt out of skills CLI telemetry for the install:
+
+```sh
+DISABLE_TELEMETRY=1 npx skills add adewale/swiss-poster-skill
+```
+
 Or manually copy the skill directory:
 
 ```sh
 gh repo clone adewale/swiss-poster-skill
 cp -r swiss-poster-skill/swiss-poster ~/.config/opencode/skills/
 ```
+
+## skills.sh
+
+This repository is configured for skills.sh. Per the skills.sh docs, repositories appear after the skills CLI sees an install, and rankings use anonymous CLI telemetry.
 
 ## Usage
 
