@@ -49,20 +49,21 @@
   .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
   .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
 
-  /* Background watermark */
-  .ghost {
+  /* Algorithmic visual — Voronoi field
+     The metaphor materialised: each cell owns its region absolutely,
+     partitioned by the simple rule "the closest seed point wins".
+     That is literally a DO's routing decision. One cell is hot. */
+  #atom-field {
     position: absolute;
-    font-size: 380px;
-    font-weight: 700;
-    letter-spacing: -0.06em;
-    color: rgba(28,25,23,0.045);
-    transform: rotate(-10deg);
+    bottom: -120px;
+    right: -180px;
+    width: 820px;
+    height: 820px;
     pointer-events: none;
     user-select: none;
-    bottom: 200px;
-    right: -160px;
-    line-height: 0.8;
     z-index: 0;
+    opacity: 0.55;
+    display: block;
   }
 
   /* Top bar */
@@ -547,7 +548,7 @@
   <span class="corner bl"></span>
   <span class="corner br"></span>
 
-  <div class="ghost">STATE.</div>
+  <canvas id="atom-field"></canvas>
 
   <!-- TITLE -->
   <div class="title">
@@ -560,23 +561,23 @@
 
   <div class="subtitle">
     <div class="lede">
-      A single primitive that ends the dance between
-      <em>state, coordination, and the network.</em>
-      One named object. One global instance. Strong consistency by default.
+      A primitive that ends the dance between
+      <em>state, coordination, and the network</em>
+      by giving each named thing in your system exactly one home.
     </div>
     <div class="stamp">
       <strong>1 of 1</strong>
-      Globally<br>addressable
+      per atom
     </div>
   </div>
 
   <!-- CLAIM BAND -->
   <section class="pitch">
     <div class="label"><span>The Claim</span><span>00</span></div>
-    <h2>Name an object. Reach it from anywhere on Earth.</h2>
+    <h2>One object = one atom of coordination.</h2>
     <p class="honest">
-      The only instance that will ever answer to that name, holding its own
-      state on its own disk — <b>one object, one bottleneck, on purpose.</b>
+      Name it once; reach it from anywhere. It owns its slice of state, runs single-threaded,
+      and answers to nothing else — <b>~500–1,000 req/s per atom, by design.</b>
     </p>
   </section>
 
@@ -678,19 +679,26 @@
     <!-- 06 — CODE SAMPLE -->
     <section class="b-code">
       <div class="label"><span>06 / The Whole Idea</span><span class="num">/06</span></div>
-<pre><span class="kw">export class</span> <span class="fn">Counter</span> {
+<pre><span class="kw">export class</span> <span class="fn">Counter</span> <span class="kw">extends</span> <span class="fn">DurableObject</span> {
+  <span class="fn">constructor</span>(ctx, env) {
+    <span class="kw">super</span>(ctx, env);
+    <span class="fn">this</span>.sql = ctx.storage.sql;
+    <span class="fn">this</span>.sql.<span class="fn">exec</span>(<span class="st">`CREATE TABLE IF NOT EXISTS
+      n (v INTEGER NOT NULL)`</span>);
+    <span class="fn">this</span>.sql.<span class="fn">exec</span>(<span class="st">`INSERT OR IGNORE
+      INTO n VALUES (0)`</span>);
+  }
+
   <span class="cm">// One CPU. One disk. One name.</span>
   <span class="kw">async</span> <span class="fn">increment</span>(by = 1) {
-    <span class="kw">const</span> n = (<span class="kw">await</span> <span class="fn">this</span>.ctx
-      .storage.<span class="fn">get</span>(<span class="st">"n"</span>)) ?? 0;
-    <span class="kw">await</span> <span class="fn">this</span>.ctx.storage
-      .<span class="fn">put</span>(<span class="st">"n"</span>, n + by);
-    <span class="kw">return</span> n + by;
+    <span class="kw">return</span> <span class="fn">this</span>.sql.<span class="fn">exec</span>(
+      <span class="st">`UPDATE n SET v = v + ?
+         RETURNING v`</span>, by).<span class="fn">one</span>().v;
   }
 }
 
 <span class="cm">// From anywhere on Earth:</span>
-<span class="kw">const</span> id   = ns.<span class="fn">idFromName</span>(<span class="st">"global"</span>);
+<span class="kw">const</span> id   = ns.<span class="fn">idFromName</span>(<span class="st">"counter"</span>);
 <span class="kw">const</span> stub = ns.<span class="fn">get</span>(id);
 <span class="kw">await</span> stub.<span class="fn">increment</span>();  <span class="cm">// strongly</span>
 <span class="kw">await</span> stub.<span class="fn">increment</span>();  <span class="cm">// consistent.</span></pre>
@@ -707,5 +715,171 @@
   </div>
 
 </div>
+
+<script>
+  // ── Algorithmic visual ────────────────────────────────────────────
+  // Seeded Voronoi tessellation. Each cell owns its region absolutely;
+  // the partition rule is "closest seed point wins" — which is exactly
+  // the routing decision a Durable Object makes when you look up a
+  // name. One cell is rendered hot: an atom currently handling work.
+  //
+  // Self-contained: a small mulberry32 PRNG for reproducibility, plus
+  // an inline Bowyer–Watson triangulation whose dual is the Voronoi.
+  (function () {
+    const W = 820, H = 820;
+    const DPR = 2;
+    const SEED = 0xD0CAFE;
+    const COLS = 7, ROWS = 7;
+    const HOT  = 24;
+
+    const canvas = document.getElementById('atom-field');
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(DPR, DPR);
+
+    // mulberry32 — small deterministic PRNG.
+    function mulberry32(s) {
+      return function () {
+        let t = s = (s + 0x6D2B79F5) | 0;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    const rand = mulberry32(SEED);
+
+    // Jittered grid: stronger visual rhythm than pure random.
+    const pts = [];
+    const sx = W / COLS, sy = H / ROWS;
+    for (let j = 0; j < ROWS; j++) {
+      for (let i = 0; i < COLS; i++) {
+        pts.push([
+          (i + 0.5) * sx + (rand() - 0.5) * sx * 0.84,
+          (j + 0.5) * sy + (rand() - 0.5) * sy * 0.84,
+        ]);
+      }
+    }
+
+    // Bowyer–Watson Delaunay. Each triangle carries its circumcircle.
+    function triangulate(points) {
+      const n = points.length;
+      let mnX = Infinity, mnY = Infinity, mxX = -Infinity, mxY = -Infinity;
+      for (const [x, y] of points) {
+        if (x < mnX) mnX = x; if (y < mnY) mnY = y;
+        if (x > mxX) mxX = x; if (y > mxY) mxY = y;
+      }
+      const dM = Math.max(mxX - mnX, mxY - mnY);
+      const cx = (mnX + mxX) / 2, cy = (mnY + mxY) / 2;
+      const all = points.slice();
+      all.push([cx - 20 * dM, cy - dM]);
+      all.push([cx,           cy + 20 * dM]);
+      all.push([cx + 20 * dM, cy - dM]);
+
+      function tri(a, b, c) {
+        const [ax, ay] = all[a], [bx, by] = all[b], [Cx, Cy] = all[c];
+        const ad = ax * ax + ay * ay,
+              bd = bx * bx + by * by,
+              cd = Cx * Cx + Cy * Cy;
+        const D = 2 * (ax * (by - Cy) + bx * (Cy - ay) + Cx * (ay - by));
+        const ux = (ad * (by - Cy) + bd * (Cy - ay) + cd * (ay - by)) / D;
+        const uy = (ad * (Cx - bx) + bd * (ax - Cx) + cd * (bx - ax)) / D;
+        const dx = ax - ux, dy = ay - uy;
+        return { a, b, c, cx: ux, cy: uy, r2: dx * dx + dy * dy };
+      }
+
+      let tris = [tri(n, n + 1, n + 2)];
+      for (let i = 0; i < n; i++) {
+        const [x, y] = points[i];
+        const good = [], bad = [];
+        for (const t of tris) {
+          const dx = x - t.cx, dy = y - t.cy;
+          (dx * dx + dy * dy < t.r2 ? bad : good).push(t);
+        }
+        const edges = new Map();
+        for (const t of bad) {
+          for (const [u, v] of [[t.a, t.b], [t.b, t.c], [t.c, t.a]]) {
+            const k = u < v ? u + ',' + v : v + ',' + u;
+            edges.set(k, (edges.get(k) || 0) + 1);
+          }
+        }
+        tris = good;
+        for (const [k, count] of edges) {
+          if (count === 1) {
+            const [u, v] = k.split(',').map(Number);
+            tris.push(tri(u, v, i));
+          }
+        }
+      }
+      // Drop triangles that touched the super-triangle.
+      return tris.filter(t => t.a < n && t.b < n && t.c < n);
+    }
+
+    // Voronoi cell for point i = circumcenters of incident triangles,
+    // sorted angularly around the seed.
+    function voronoiCells(points, tris) {
+      const cells = points.map(() => []);
+      for (const t of tris) {
+        cells[t.a].push([t.cx, t.cy]);
+        cells[t.b].push([t.cx, t.cy]);
+        cells[t.c].push([t.cx, t.cy]);
+      }
+      for (let i = 0; i < points.length; i++) {
+        const [px, py] = points[i];
+        cells[i].sort((p, q) =>
+          Math.atan2(p[1] - py, p[0] - px) - Math.atan2(q[1] - py, q[0] - px)
+        );
+      }
+      return cells;
+    }
+
+    const tris  = triangulate(pts);
+    const cells = voronoiCells(pts, tris);
+
+    function tracePath(cell) {
+      ctx.beginPath();
+      ctx.moveTo(cell[0][0], cell[0][1]);
+      for (let k = 1; k < cell.length; k++) ctx.lineTo(cell[k][0], cell[k][1]);
+      ctx.closePath();
+    }
+
+    // Cool cells — thin graphite outlines.
+    ctx.lineWidth = 0.9;
+    ctx.strokeStyle = 'rgba(28,25,23,0.42)';
+    for (let i = 0; i < pts.length; i++) {
+      if (i === HOT) continue;
+      const c = cells[i];
+      if (!c || c.length < 3) continue;
+      tracePath(c);
+      ctx.stroke();
+    }
+
+    // Hot cell — Cloudflare orange.
+    const hot = cells[HOT];
+    if (hot && hot.length >= 3) {
+      tracePath(hot);
+      ctx.fillStyle   = 'rgba(243,128,32,0.42)';
+      ctx.fill();
+      ctx.lineWidth   = 1.8;
+      ctx.strokeStyle = 'rgba(243,128,32,0.92)';
+      ctx.stroke();
+    }
+
+    // Seed dots.
+    for (let i = 0; i < pts.length; i++) {
+      const [x, y] = pts[i];
+      ctx.beginPath();
+      if (i === HOT) {
+        ctx.fillStyle = '#F38020';
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+      } else {
+        ctx.fillStyle = 'rgba(28,25,23,0.78)';
+        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+      }
+      ctx.fill();
+    }
+  })();
+</script>
+
 </body>
 </html>
