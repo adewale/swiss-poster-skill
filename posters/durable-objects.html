@@ -296,14 +296,14 @@
   }
   .b-one .stack-list li small {
     display: block;
-    font-size: 9.5px;
-    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 400;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(28,25,23,0.45);
+    letter-spacing: -0.005em;
+    text-transform: none;
+    color: rgba(28,25,23,0.55);
     margin-top: 3px;
-    line-height: 1.3;
+    line-height: 1.35;
   }
 
   /* 03 — Primitives */
@@ -345,21 +345,10 @@
     margin-bottom: 6px;
   }
   .prim-grid .card p {
-    font-size: 10.5px;
+    font-size: 12.5px;
     line-height: 1.5;
     font-weight: 300;
-    color: rgba(28,25,23,0.78);
-  }
-  .prim-grid .card code {
-    display: block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9.5px;
-    color: var(--stone-700);
-    background: var(--stone-100);
-    padding: 5px 7px;
-    margin-top: 6px;
-    line-height: 1.4;
-    border-left: 2px solid var(--accent);
+    color: rgba(28,25,23,0.82);
   }
 
   /* 04 — The case */
@@ -406,17 +395,17 @@
     margin-bottom: 4px;
   }
   .b-case .arg h5 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 5px;
+    line-height: 1.15;
+    margin-bottom: 8px;
   }
   .b-case .arg p {
-    font-size: 11px;
+    font-size: 12.5px;
     line-height: 1.5;
     font-weight: 300;
-    color: rgba(250,250,249,0.78);
+    color: rgba(250,250,249,0.82);
   }
 
   /* 05 — In the wild */
@@ -432,8 +421,8 @@
     margin-bottom: 8px;
   }
   .uses {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
     line-height: 1.55;
     color: var(--stone-900);
   }
@@ -445,12 +434,12 @@
   }
   .uses .row:last-child { border-bottom: 0; }
   .uses .row b {
-    min-width: 120px;
+    min-width: 150px;
     color: var(--accent);
     font-weight: 600;
   }
   .uses .row span {
-    color: rgba(28,25,23,0.78);
+    color: rgba(28,25,23,0.82);
     font-weight: 400;
   }
 
@@ -459,8 +448,8 @@
     grid-column: span 5;
     margin-top: 14px;
     background: var(--stone-100);
-    border-left: 3px solid var(--accent);
-    padding: 10px 12px 12px 14px;
+    border-top: 2px solid var(--stone-900);
+    padding: 12px 14px 14px 14px;
     align-self: start;
   }
   .b-code .label {
@@ -606,28 +595,20 @@
       <h3>Four primitives. <span style="color:rgba(28,25,23,0.5);">Nothing more.</span></h3>
       <div class="prim-grid">
         <div class="card">
-          <div class="n">/A — Storage</div>
           <h4>SQLite,<br>per object</h4>
           <p>Strongly-consistent, transactional storage co-located with compute. Zero-latency reads from the same disk. Point-in-time recovery for 30 days.</p>
-          <code>this.ctx.storage.sql.exec(...)</code>
         </div>
         <div class="card">
-          <div class="n">/B — Alarms</div>
           <h4>Durable<br>scheduling</h4>
           <p>One alarm per object. Survives restarts, region failures, code deploys. Replaces every external scheduler you've ever paged on.</p>
-          <code>this.ctx.storage.setAlarm(t)</code>
         </div>
         <div class="card">
-          <div class="n">/C — Sockets</div>
           <h4>Hibernating<br>WebSockets</h4>
           <p>Idle connections cost nothing. The object sleeps; the socket survives. Wake on message, alarm, or RPC. Millions of clients per worker.</p>
-          <code>state.acceptWebSocket(ws)</code>
         </div>
         <div class="card">
-          <div class="n">/D — RPC</div>
           <h4>Typed<br>method calls</h4>
           <p>Call the object like a local class. Arguments serialize. Return values stream back. No HTTP framing, no JSON ceremony, no client SDKs to ship.</p>
-          <code>await stub.increment(1)</code>
         </div>
       </div>
     </section>
@@ -638,17 +619,14 @@
       <h3>The case is <em>simplicity</em> at every layer.</h3>
       <div class="args">
         <div class="arg">
-          <div class="k">/A — Consistency</div>
           <h5>Strong by default, not by ceremony.</h5>
           <p>One writer, one reader, one queue. The hardest distributed systems problem becomes a single-threaded function. You write code; the platform stops lying to you about ordering.</p>
         </div>
         <div class="arg">
-          <div class="k">/B — Locality</div>
           <h5>State follows compute. Compute follows users.</h5>
           <p>The object boots near the first request and stays. Reads are local. Writes are local. The 50&nbsp;ms cross-region round-trip you budgeted for is now a function call.</p>
         </div>
         <div class="arg">
-          <div class="k">/C — Economy</div>
           <h5>Idle is free. Active is cheap.</h5>
           <p>No instance to provision, no fleet to autoscale, no pre-paid Redis. The object exists when invoked, hibernates when not, and pays per request &amp; per GB-second of state.</p>
         </div>
