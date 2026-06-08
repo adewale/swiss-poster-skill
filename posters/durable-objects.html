@@ -467,24 +467,6 @@
     color: rgba(28,25,23,0.82);
     font-weight: 400;
   }
-  .misfit-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: rgba(28,25,23,0.5);
-    border-top: 1px solid var(--stone-300);
-    padding-top: 4px;
-    margin: 4px 0 2px 0;
-  }
-  .uses.misfit .row b {
-    color: rgba(28,25,23,0.5);
-    text-decoration: line-through;
-    text-decoration-thickness: 1px;
-  }
-  .uses.misfit .row span { color: rgba(28,25,23,0.7); }
-
   /* 06 — Code sample */
   .b-code {
     grid-column: span 5;
@@ -681,11 +663,6 @@
         <div class="row"><b>Multiplayer</b><span>Game-room as actor. Tick is an alarm. Inputs serialize.</span></div>
         <div class="row"><b>Collab editing</b><span>Document = object. CRDT in storage. Awareness in memory.</span></div>
         <div class="row"><b>Per-user agents</b><span>LLM session with memory, tools, budget — one per user.</span></div>
-      </div>
-      <div class="misfit-label">Reach elsewhere when</div>
-      <div class="uses misfit">
-        <div class="row"><b>Analytics fan-in</b><span>Millions of writers to one key — the single object is the bottleneck. Use a queue.</span></div>
-        <div class="row"><b>Bulk OLAP</b><span>One SQLite is not a warehouse. Scan-heavy work belongs elsewhere.</span></div>
       </div>
     </section>
 
