@@ -51,19 +51,36 @@
 
   /* Algorithmic visual — Voronoi field
      The metaphor materialised: each cell owns its region absolutely,
-     partitioned by the simple rule "the closest seed point wins".
-     That is literally a DO's routing decision. One cell is hot. */
+     partitioned by the rule "the closest seed point wins" — which is
+     a DO's routing decision. Hot cell = atom handling a request,
+     warm cells = neighbours in memory, cold cells = hibernating.
+     A routing arrow finds the hot cell from the field edge. */
   #atom-field {
-    position: absolute;
-    bottom: -120px;
-    right: -180px;
-    width: 820px;
-    height: 820px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 0;
-    opacity: 0.55;
     display: block;
+    width: 100%;
+    max-width: 464px;
+    height: 280px;
+    margin: 4px 0 6px 0;
+  }
+  .atom-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: rgba(28,25,23,0.62);
+    margin-top: 0;
+    text-align: center;
+  }
+  .b-one h3 {
+    font-size: 24px;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .b-one h3 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 500;
   }
 
   /* Top bar */
@@ -419,25 +436,25 @@
   /* 05 — In the wild */
   .b-wild {
     grid-column: span 7;
-    margin-top: 10px;
+    margin-top: 8px;
   }
   .b-wild h3 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 200;
     letter-spacing: -0.025em;
     line-height: 1;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .uses {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12.5px;
-    line-height: 1.55;
+    font-size: 12px;
+    line-height: 1.45;
     color: var(--stone-900);
   }
   .uses .row {
     display: flex;
     gap: 10px;
-    padding: 3px 0;
+    padding: 2px 0;
     border-bottom: 1px dotted var(--stone-300);
   }
   .uses .row:last-child { border-bottom: 0; }
@@ -457,9 +474,9 @@
     text-transform: uppercase;
     font-weight: 600;
     color: rgba(28,25,23,0.5);
-    border-top: 1.5px solid var(--stone-300);
-    padding-top: 5px;
-    margin: 8px 0 4px 0;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 4px;
+    margin: 4px 0 2px 0;
   }
   .uses.misfit .row b {
     color: rgba(28,25,23,0.5);
@@ -500,7 +517,7 @@
     position: absolute;
     left: 64px;
     right: 64px;
-    bottom: 26px;
+    bottom: 18px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -513,7 +530,7 @@
   }
   .foot .big {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 200;
     letter-spacing: -0.035em;
     color: var(--stone-900);
@@ -547,8 +564,6 @@
   <span class="corner tr"></span>
   <span class="corner bl"></span>
   <span class="corner br"></span>
-
-  <canvas id="atom-field"></canvas>
 
   <!-- TITLE -->
   <div class="title">
@@ -603,16 +618,14 @@
       </div>
     </section>
 
-    <!-- 02 — ONE INSTANCE -->
+    <!-- 02 — THE ATOM, VISUALISED -->
     <section class="b-one">
-      <div class="label"><span>02 / The Guarantee</span><span class="num">/02</span></div>
-      <ul class="stack-list">
-        <li>One name<small>idFromName("room-42")</small></li>
-        <li class="hot">One instance<small>The runtime guarantees uniqueness</small></li>
-        <li>One CPU at a time<small>No locks. No races.</small></li>
-        <li>One disk<small>Co-located, transactional</small></li>
-        <li>One inbox<small>Requests serialize naturally</small></li>
-      </ul>
+      <div class="label"><span>02 / The Atom</span><span class="num">/02</span></div>
+      <h3>What one atom <em>looks like.</em></h3>
+      <canvas id="atom-field"></canvas>
+      <div class="atom-caption">
+        One name · one instance · one CPU · one disk · one inbox.
+      </div>
     </section>
 
     <!-- 03 — PRIMITIVES -->
@@ -641,8 +654,8 @@
 
     <!-- 04 — THE CASE (dark band) -->
     <section class="b-case">
-      <div class="label"><span>04 / Why You Should Care</span><span class="num">/04</span></div>
-      <h3>The case is <em>simplicity</em> at every layer.</h3>
+      <div class="label"><span>04 / Why Atoms Win</span><span class="num">/04</span></div>
+      <h3>The case for <em>atoms.</em></h3>
       <div class="args">
         <div class="arg">
           <h5>Strong by default, not by ceremony.</h5>
@@ -662,7 +675,7 @@
     <!-- 05 — IN THE WILD -->
     <section class="b-wild">
       <div class="label"><span>05 / In the Wild</span><span class="num">/05</span></div>
-      <h3>Patterns that fit <span style="color:var(--accent);font-weight:500;">naturally.</span></h3>
+      <h3>Where the atom shape <span style="color:var(--accent);font-weight:500;">fits.</span></h3>
       <div class="uses">
         <div class="row"><b>Chat &amp; presence</b><span>Object per room. Members fan out over WebSockets.</span></div>
         <div class="row"><b>Multiplayer</b><span>Game-room as actor. Tick is an alarm. Inputs serialize.</span></div>
@@ -719,18 +732,21 @@
 <script>
   // ── Algorithmic visual ────────────────────────────────────────────
   // Seeded Voronoi tessellation. Each cell owns its region absolutely;
-  // the partition rule is "closest seed point wins" — which is exactly
-  // the routing decision a Durable Object makes when you look up a
-  // name. One cell is rendered hot: an atom currently handling work.
+  // the partition rule is "closest seed point wins" — which is
+  // literally a Durable Object's routing decision when you call
+  // idFromName(...). Three cell states echo the runtime:
+  //   COLD   — graphite outline   : hibernating, state at rest
+  //   WARM   — light orange outline: neighbour atoms still in memory
+  //   HOT    — orange filled + ring: the atom currently handling work
+  // A dashed orange routing arrow enters from the canvas edge and
+  // lands at the hot seed point — a request finding its atom.
   //
-  // Self-contained: a small mulberry32 PRNG for reproducibility, plus
-  // an inline Bowyer–Watson triangulation whose dual is the Voronoi.
+  // Self-contained: mulberry32 PRNG, inline Bowyer–Watson Delaunay
+  // whose dual is the Voronoi, all rendered to canvas.
   (function () {
-    const W = 820, H = 820;
+    const W = 464, H = 280;
     const DPR = 2;
     const SEED = 0xD0CAFE;
-    const COLS = 7, ROWS = 7;
-    const HOT  = 24;
 
     const canvas = document.getElementById('atom-field');
     canvas.width = W * DPR; canvas.height = H * DPR;
@@ -738,7 +754,6 @@
     const ctx = canvas.getContext('2d');
     ctx.scale(DPR, DPR);
 
-    // mulberry32 — small deterministic PRNG.
     function mulberry32(s) {
       return function () {
         let t = s = (s + 0x6D2B79F5) | 0;
@@ -749,19 +764,39 @@
     }
     const rand = mulberry32(SEED);
 
-    // Jittered grid: stronger visual rhythm than pure random.
+    // The focal point — where the hot cell will live. Off-centre so
+    // the routing arrow has somewhere to come from.
+    const focal = [W * 0.58, H * 0.46];
+
+    // Seed points: a sparse jittered grid for coverage, plus a
+    // dense polar cluster around the focal point for visual weight.
     const pts = [];
+    const COLS = 6, ROWS = 5;
     const sx = W / COLS, sy = H / ROWS;
     for (let j = 0; j < ROWS; j++) {
       for (let i = 0; i < COLS; i++) {
         pts.push([
-          (i + 0.5) * sx + (rand() - 0.5) * sx * 0.84,
-          (j + 0.5) * sy + (rand() - 0.5) * sy * 0.84,
+          (i + 0.5) * sx + (rand() - 0.5) * sx * 0.78,
+          (j + 0.5) * sy + (rand() - 0.5) * sy * 0.78,
         ]);
       }
     }
+    // Replace the cell nearest the focal with the focal itself
+    // (guarantees an interior hot cell with bounded geometry).
+    let HOT = 0, hotD = Infinity;
+    for (let i = 0; i < pts.length; i++) {
+      const dx = pts[i][0] - focal[0], dy = pts[i][1] - focal[1];
+      const d = dx * dx + dy * dy;
+      if (d < hotD) { hotD = d; HOT = i; }
+    }
+    pts[HOT] = focal.slice();
+    // Dense cluster around focal for visual weight (smaller cells).
+    for (let i = 0; i < 6; i++) {
+      const a = rand() * Math.PI * 2;
+      const r = 38 + rand() * 46;
+      pts.push([focal[0] + Math.cos(a) * r, focal[1] + Math.sin(a) * r]);
+    }
 
-    // Bowyer–Watson Delaunay. Each triangle carries its circumcircle.
     function triangulate(points) {
       const n = points.length;
       let mnX = Infinity, mnY = Infinity, mxX = -Infinity, mxY = -Infinity;
@@ -811,12 +846,9 @@
           }
         }
       }
-      // Drop triangles that touched the super-triangle.
       return tris.filter(t => t.a < n && t.b < n && t.c < n);
     }
 
-    // Voronoi cell for point i = circumcenters of incident triangles,
-    // sorted angularly around the seed.
     function voronoiCells(points, tris) {
       const cells = points.map(() => []);
       for (const t of tris) {
@@ -836,6 +868,15 @@
     const tris  = triangulate(pts);
     const cells = voronoiCells(pts, tris);
 
+    // Adjacency: cells sharing a Delaunay edge with HOT = warm.
+    const warm = new Set();
+    for (const t of tris) {
+      if (t.a === HOT) { warm.add(t.b); warm.add(t.c); }
+      else if (t.b === HOT) { warm.add(t.a); warm.add(t.c); }
+      else if (t.c === HOT) { warm.add(t.a); warm.add(t.b); }
+    }
+    warm.delete(HOT);
+
     function tracePath(cell) {
       ctx.beginPath();
       ctx.moveTo(cell[0][0], cell[0][1]);
@@ -843,40 +884,116 @@
       ctx.closePath();
     }
 
-    // Cool cells — thin graphite outlines.
-    ctx.lineWidth = 0.9;
-    ctx.strokeStyle = 'rgba(28,25,23,0.42)';
+    // 1. COLD cells — thin graphite outlines.
+    ctx.lineWidth = 0.85;
+    ctx.strokeStyle = 'rgba(28,25,23,0.38)';
     for (let i = 0; i < pts.length; i++) {
-      if (i === HOT) continue;
+      if (i === HOT || warm.has(i)) continue;
       const c = cells[i];
       if (!c || c.length < 3) continue;
-      tracePath(c);
-      ctx.stroke();
+      tracePath(c); ctx.stroke();
     }
 
-    // Hot cell — Cloudflare orange.
+    // 2. WARM cells — light orange outlines, slightly heavier stroke.
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = 'rgba(243,128,32,0.72)';
+    for (const i of warm) {
+      const c = cells[i];
+      if (!c || c.length < 3) continue;
+      tracePath(c); ctx.stroke();
+    }
+
+    // 3. HOT cell — orange filled, with concentric activity ring.
     const hot = cells[HOT];
     if (hot && hot.length >= 3) {
       tracePath(hot);
-      ctx.fillStyle   = 'rgba(243,128,32,0.42)';
+      ctx.fillStyle = 'rgba(243,128,32,0.46)';
       ctx.fill();
-      ctx.lineWidth   = 1.8;
-      ctx.strokeStyle = 'rgba(243,128,32,0.92)';
+      ctx.lineWidth = 2.0;
+      ctx.strokeStyle = 'rgba(243,128,32,0.95)';
       ctx.stroke();
+      // Activity ring around the hot seed point.
+      const [hx, hy] = pts[HOT];
+      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'rgba(243,128,32,0.55)';
+      ctx.beginPath(); ctx.arc(hx, hy, 14, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = 'rgba(243,128,32,0.28)';
+      ctx.beginPath(); ctx.arc(hx, hy, 22, 0, Math.PI * 2); ctx.stroke();
     }
 
-    // Seed dots.
+    // 4. Routing arrow — dashed, entering from the upper-left edge,
+    // landing at the hot seed point with an arrowhead.
+    const [hx, hy] = pts[HOT];
+    const start = [22, 24];
+    ctx.save();
+    ctx.setLineDash([5, 5]);
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = 'rgba(243,128,32,0.78)';
+    ctx.beginPath();
+    ctx.moveTo(start[0], start[1]);
+    // small bezier curve so the line has character
+    const ctrl = [hx - 70, hy - 80];
+    ctx.quadraticCurveTo(ctrl[0], ctrl[1], hx - 16, hy - 16);
+    ctx.stroke();
+    ctx.restore();
+    // Arrowhead at landing.
+    ctx.save();
+    const ang = Math.atan2((hy - 16) - ctrl[1], (hx - 16) - ctrl[0]);
+    ctx.translate(hx - 14, hy - 14);
+    ctx.rotate(ang);
+    ctx.fillStyle = 'rgba(243,128,32,0.92)';
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-7, -3.5);
+    ctx.lineTo(-7,  3.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 5. Seed dots.
     for (let i = 0; i < pts.length; i++) {
       const [x, y] = pts[i];
       ctx.beginPath();
       if (i === HOT) {
         ctx.fillStyle = '#F38020';
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+      } else if (warm.has(i)) {
+        ctx.fillStyle = 'rgba(243,128,32,0.78)';
+        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
       } else {
-        ctx.fillStyle = 'rgba(28,25,23,0.78)';
-        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(28,25,23,0.62)';
+        ctx.arc(x, y, 1.8, 0, Math.PI * 2);
       }
       ctx.fill();
+    }
+
+    // 6. Named-atom labels. Hand-picked indices that hit cells with
+    // enough room for tiny mono text.
+    const labelMap = {};
+    labelMap[HOT] = 'counter/global';
+    // Pick four other cells distributed around the field for context.
+    const candidates = [0, COLS - 1, COLS * (ROWS - 1), COLS * ROWS - 1];
+    const tags = ['room/42', 'doc/x', 'user/alice', 'session/9k'];
+    for (let k = 0; k < candidates.length; k++) {
+      const i = candidates[k];
+      if (i < pts.length && i !== HOT && !warm.has(i)) labelMap[i] = tags[k];
+    }
+    ctx.font = '9.5px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (const i in labelMap) {
+      const [x, y] = pts[i];
+      const tag = labelMap[i];
+      // Background sliver for legibility.
+      const w = ctx.measureText(tag).width + 6;
+      ctx.fillStyle = +i === HOT
+        ? 'rgba(255,255,255,0.78)'
+        : 'rgba(250,250,249,0.78)';
+      ctx.fillRect(x - w / 2, y + 7, w, 12);
+      ctx.fillStyle = +i === HOT
+        ? '#B85508'
+        : 'rgba(28,25,23,0.75)';
+      ctx.fillText(tag, x, y + 13);
     }
   })();
 </script>
