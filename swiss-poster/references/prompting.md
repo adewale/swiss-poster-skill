@@ -343,8 +343,24 @@ Before declaring a design done, assess against every criterion below. Each is a 
 - [ ] **Optical vibration** — closely spaced lines or patterns creating shimmering effect
 - [ ] **Entry point not top-left** — primary focal point placed off conventional reading-start position
 
+### Anti-Slop — no AI tells (11 criteria)
+
+The presence of any single tell below is disqualifying, no matter how well the rest scores. These check for the reflexive AI-generated defaults catalogued by Paul Bakaus at <https://impeccable.style/slop/>. Run `npx impeccable detect <file-or-url>` to verify automatically.
+
+- [ ] **No AI palette** — no purple/violet gradients, no default cyan-on-black
+- [ ] **No gradient text** — every text fill is a solid color
+- [ ] **No reflexive glow** — colored `box-shadow`/text-glow only if it is the poster's deliberate subject
+- [ ] **No pure `#000`/`#fff`** — stone-950 / stone-50 (warm-tinted), never raw black/white
+- [ ] **Dark mode is a decision** — not defaulted to for "safety"; light is allowed and often stronger
+- [ ] **Distinctive typeface** — IBM Plex or an approved fallback; never Inter/Roboto/Geist/Space Grotesk/Plus Jakarta Sans
+- [ ] **Monospace earns its place** — used for code/data/IDs/metadata, not as "technical" decoration
+- [ ] **No card slop** — no identical icon-tile feature-card grid, no nested cards, no side-tab accent stripe
+- [ ] **No template metrics** — charts carry real information; no sparkline garnish or big-number-plus-three-stats block
+- [ ] **Not everything centered** — asymmetric composition, flush-left body copy
+- [ ] **No quality bugs** — passes WCAG AA contrast, no cramped padding, no justified text
+
 ---
 
-**Total: 71 criteria across 8 categories.**
+**Total: 82 criteria across 9 categories.**
 
-A strong Swiss Poster implementation should pass >= 60 criteria. The remaining gaps are acceptable if they involve techniques not applicable to the medium (e.g., photomontage in a CSS-only site).
+A strong Swiss Poster implementation should pass >= 70 criteria **and all 11 Anti-Slop checks**. The remaining gaps are acceptable only if they involve techniques not applicable to the medium (e.g., photomontage in a CSS-only site) — the Anti-Slop checks are never optional.

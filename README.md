@@ -34,9 +34,14 @@ swiss-poster/
     ├── design-system.md        # Full token reference, CSS variables
     ├── components.md           # Tailwind component patterns + poster compositions
     ├── tailwind-config.md      # Paste-ready tailwind.config.js
-    ├── prompting.md            # Applying the system + 71-point checklist
+    ├── prompting.md            # Applying the system + 82-point checklist
     └── research.md             # Designer profiles, key works, source URLs
 ```
+
+The Anti-Slop principles live in `SKILL.md`. The full 37-tell catalog and the
+deterministic detector are maintained by Paul Bakaus at
+[impeccable.style/slop](https://impeccable.style/slop/) — install with
+`npx impeccable skills install` and run `npx impeccable detect <file>` to verify.
 
 ## Design principles
 
@@ -46,6 +51,7 @@ swiss-poster/
 - **Bleed and crop.** Type cropped by the viewport edge, elements that run off-screen
 - **One accent, used boldly.** Swiss red (`#C8102E`) by default, in large confident fields
 - **Tension over comfort.** Asymmetric whitespace, rotation, diagonal energy
+- **Anti-slop.** No AI tells by reflex — no purple/cyan gradients, gradient text, glow, or overused fonts ([impeccable.style/slop](https://impeccable.style/slop/))
 
 ## Typography
 

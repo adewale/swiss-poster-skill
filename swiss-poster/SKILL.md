@@ -22,6 +22,45 @@ A design system based on Swiss poster design from the 1950s through 1980s: grote
 
 ---
 
+## Anti-Slop
+
+Adapted from **Impeccable** — <https://impeccable.style/slop/>. "Slop" is the look of an
+interface no one decided on: the reflexive default chosen because it was easy. This system is
+slop-resistant by construction, but the defaults still tempt. **The rule: every gradient, glow,
+blur, rotation, and font must be a choice you could defend.** If you can't say why it's there,
+it's slop — delete it.
+
+The tells to never ship by reflex:
+
+- **No AI palette.** No purple/violet gradients, no cyan-on-black. Stone + **one** accent only.
+- **No gradient text, no reflexive glow.** Flat fills. A colored glow is allowed *only* when it
+  is the poster's actual subject (e.g. a deliberate CRT/neon homage), never as polish.
+- **No pure `#000`/`#fff`.** Use `stone-950` / `stone-50`. Don't default to dark mode for
+  "safety" — a light Swiss ground is often the braver, less-sloppy choice.
+- **No overused fonts.** IBM Plex Sans + the approved fallbacks. **Never** Inter, Roboto, Geist,
+  Space Grotesk, or Plus Jakarta Sans — they read as "an AI made this."
+- **Monospace must earn its place.** Mono is for code, data, IDs, and metadata — not sprinkled
+  on to look "technical."
+- **No card slop.** No identical icon-tile feature-card grids, no cards-in-cards, no
+  accent stripe taped to one side of a box. Group with space and scale, not boxes.
+- **Charts carry information.** No sparkline garnish, no big-number-plus-three-stats template.
+- **Not everything centered.** Asymmetric, flush-left body. And it's still a bug if it fails AA
+  contrast, has cramped padding, or is justified.
+
+**Verify before shipping.** The full 37-tell catalog and the deterministic detection rules
+are maintained by Paul Bakaus at <https://impeccable.style/slop/>. Install the slash commands
+and run the linter once per page:
+
+```sh
+npx impeccable detect <file-or-url>    # deterministic checks (HTML/CSS/JSX/TSX)
+npx impeccable skills install          # adds /audit, /critique, /polish, etc.
+```
+
+The bullets above cover the tells the agent should never produce. The linter catches what
+the agent missed.
+
+---
+
 ## Typography
 
 **Primary font:** IBM Plex Sans (Google Fonts)
@@ -262,6 +301,7 @@ Every color token has a `dark:` variant. See the stone palette table above. Neve
 - **No border-radius on structural elements.** The poster style is still rectilinear. No `rounded-lg`, no pills. `rounded-none` or at most `rounded-sm`.
 - **Never `bg-white` or `bg-black`.** Use `bg-stone-50` / `bg-stone-950`.
 - **One accent per project.** Even with bolder usage, the discipline of a single accent remains.
+- **No AI tells by reflex.** No purple/cyan gradients, no gradient text, no decorative glow, no overused fonts (Inter/Roboto/Geist/Space Grotesk), no monospace-as-decoration. See the Anti-Slop section above; run `npx impeccable detect` to verify.
 - **Touch targets minimum 44px.** All interactive elements must remain usable despite the dramatic compositions.
 - **Every layout must work on mobile.** Poster drama scales down gracefully. Overlaps simplify, mega type shrinks (but stays dominant), bleeds remain.
 
