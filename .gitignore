@@ -9,3 +9,5 @@ dist/
 # (see output/fonts/README.md for fetch instructions)
 output/fonts/*.otf
 output/fonts/*.ttf
+
+eval-runs/

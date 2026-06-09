@@ -11,6 +11,19 @@ metadata:
 
 A design system based on Swiss poster design from the 1950s through 1980s: grotesque type at extreme scales, layouts that break the grid, overlapping layers, diagonal energy, and cropped forms. Draws on Weingart, Troxler, Odermatt & Tissi, Hofmann, and Ruder.
 
+## Output contract for web/UI tasks
+
+When the user asks for a page, component, landing page, or Tailwind/UI styling, return implementable HTML/Tailwind/CSS. Do **not** satisfy a web/UI task with a standalone SVG poster unless the user explicitly asks for an SVG, print asset, or static poster file.
+
+Hard gates before final output:
+
+- Start from an explicit `grid grid-cols-12` structure, then let selected elements escape it.
+- Use exactly one accent hue per project (default `#C8102E`). Opacity variants of that hue are allowed; extra accent hues, purple SaaS gradients, and multi-accent palettes are not.
+- Make scale contrast extreme: pair viewport-scale `text-[clamp(...)]` display type with `text-[11px]` labels; target 10×+ size ratio and `leading-[0.85]` or `leading-none` at display scale.
+- Prevent horizontal scroll. Any section with bleed, negative margins, absolute breakouts, wide `vw` elements, or cropped type needs `overflow-hidden`, `overflow-x-hidden`, or `overflow-clip` on the wrapper.
+- Check the 320px boundary: default to `col-span-12`, fluid `clamp()` type, reduced offsets (`md:` and up for aggressive negative margins), no fixed-width elements that force sideways scroll, and 44px minimum touch targets.
+- Respect non-design boundaries: do not apply this skill to Switzerland geography, tax/legal residency, Swiss German translation, or other non-poster meanings of “Swiss.” If the user asks for clean corporate Swiss minimalism and explicitly rejects poster drama, restrain the composition instead of forcing this style.
+
 ## Six Principles
 
 1. **Grid as launchpad.** Start with a 12-column grid, then let key elements escape it. Oversized type, images, and color blocks should break column boundaries, overlap neighbors, or bleed off the viewport edge. The grid exists so the breakout has meaning.
@@ -255,13 +268,13 @@ Every color token has a `dark:` variant. See the stone palette table above. Neve
 - **The grid must exist before you break it.** Every layout starts with `grid grid-cols-12`. Breakout elements use negative margins, absolute positioning, or overflow to escape — they don't ignore the grid entirely.
 - **Scale contrast must be extreme.** If your largest and smallest text are within 3× size difference, you're still in International Style territory. Aim for 10×+ (e.g., 12rem heading / 11px label).
 - **Overlap needs a clear layer order.** Every overlapping composition must have a deliberate `z-10`, `z-20`, `z-30` stacking. Random overlap looks like a bug.
-- **Bleed needs `overflow-hidden` on the parent.** Escaped elements must not cause horizontal scroll. Apply `overflow-hidden` to the section or page wrapper.
+- **Bleed needs clipping on the parent.** Escaped elements must not cause horizontal scroll — that is a hard failure, not an acceptable poster effect. Apply `overflow-hidden`, `overflow-x-hidden`, or `overflow-clip` to the section/page wrapper and reduce negative margins on mobile.
 - **Bold at display sizes, light at body.** `font-bold` / `font-thin` are for mega/display type only. Body text stays `font-normal`. This is the opposite of the International Style's "never bold" rule.
 - **Rotation is seasoning, not the meal.** One or two rotated elements per section maximum. Over-rotation feels gimmicky, not Swiss.
 - **Accent fields can be large.** Full-width bands, half-page blocks, oversized shapes — poster style embraces large accent surfaces that the International Style would forbid.
 - **No border-radius on structural elements.** The poster style is still rectilinear. No `rounded-lg`, no pills. `rounded-none` or at most `rounded-sm`.
 - **Never `bg-white` or `bg-black`.** Use `bg-stone-50` / `bg-stone-950`.
-- **One accent per project.** Even with bolder usage, the discipline of a single accent remains.
+- **One accent per project.** Even with bolder usage, the discipline of a single accent remains: one hue plus opacity, not red plus blue plus purple, and no gradient palette masquerading as an accent.
 - **Touch targets minimum 44px.** All interactive elements must remain usable despite the dramatic compositions.
 - **Every layout must work on mobile.** Poster drama scales down gracefully. Overlaps simplify, mega type shrinks (but stays dominant), bleeds remain.
 
