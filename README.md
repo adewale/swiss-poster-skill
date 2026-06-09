@@ -35,9 +35,13 @@ swiss-poster/
     ├── components.md           # Tailwind component patterns + poster compositions
     ├── tailwind-config.md      # Paste-ready tailwind.config.js
     ├── prompting.md            # Applying the system + 82-point checklist
-    ├── anti-slop.md            # The 37 AI "slop" tells to avoid, mapped to this system
     └── research.md             # Designer profiles, key works, source URLs
 ```
+
+The Anti-Slop principles live in `SKILL.md`. The full 37-tell catalog and the
+deterministic detector are maintained by Paul Bakaus at
+[impeccable.style/slop](https://impeccable.style/slop/) — install with
+`npx impeccable skills install` and run `npx impeccable detect <file>` to verify.
 
 ## Design principles
 

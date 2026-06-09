@@ -47,8 +47,17 @@ The tells to never ship by reflex:
 - **Not everything centered.** Asymmetric, flush-left body. And it's still a bug if it fails AA
   contrast, has cramped padding, or is justified.
 
-Full 37-tell catalog, each mapped to this system (enforced / watch / deliberate), in
-`references/anti-slop.md`.
+**Verify before shipping.** The full 37-tell catalog and the deterministic detection rules
+are maintained by Paul Bakaus at <https://impeccable.style/slop/>. Install the slash commands
+and run the linter once per page:
+
+```sh
+npx impeccable detect <file-or-url>    # deterministic checks (HTML/CSS/JSX/TSX)
+npx impeccable skills install          # adds /audit, /critique, /polish, etc.
+```
+
+The bullets above cover the tells the agent should never produce. The linter catches what
+the agent missed.
 
 ---
 
@@ -292,7 +301,7 @@ Every color token has a `dark:` variant. See the stone palette table above. Neve
 - **No border-radius on structural elements.** The poster style is still rectilinear. No `rounded-lg`, no pills. `rounded-none` or at most `rounded-sm`.
 - **Never `bg-white` or `bg-black`.** Use `bg-stone-50` / `bg-stone-950`.
 - **One accent per project.** Even with bolder usage, the discipline of a single accent remains.
-- **No AI tells by reflex.** No purple/cyan gradients, no gradient text, no decorative glow, no overused fonts (Inter/Roboto/Geist/Space Grotesk), no monospace-as-decoration. See `references/anti-slop.md`.
+- **No AI tells by reflex.** No purple/cyan gradients, no gradient text, no decorative glow, no overused fonts (Inter/Roboto/Geist/Space Grotesk), no monospace-as-decoration. See the Anti-Slop section above; run `npx impeccable detect` to verify.
 - **Touch targets minimum 44px.** All interactive elements must remain usable despite the dramatic compositions.
 - **Every layout must work on mobile.** Poster drama scales down gracefully. Overlaps simplify, mega type shrinks (but stays dominant), bleeds remain.
 
@@ -307,4 +316,3 @@ Every color token has a `dark:` variant. See the stone palette table above. Neve
 | Paste-ready `tailwind.config.js` and CSS `@theme` block | `references/tailwind-config.md` |
 | Designer research, key works, source URLs | `references/research.md` |
 | Applying this system to an existing page, audit checklist | `references/prompting.md` |
-| Full catalog of AI "slop" tells to avoid, mapped to this system | `references/anti-slop.md` |

@@ -345,7 +345,7 @@ Before declaring a design done, assess against every criterion below. Each is a 
 
 ### Anti-Slop — no AI tells (11 criteria)
 
-The presence of any single tell below is disqualifying, no matter how well the rest scores. These check for the reflexive AI-generated defaults catalogued in `references/anti-slop.md` (source: <https://impeccable.style/slop/>).
+The presence of any single tell below is disqualifying, no matter how well the rest scores. These check for the reflexive AI-generated defaults catalogued by Paul Bakaus at <https://impeccable.style/slop/>. Run `npx impeccable detect <file-or-url>` to verify automatically.
 
 - [ ] **No AI palette** — no purple/violet gradients, no default cyan-on-black
 - [ ] **No gradient text** — every text fill is a solid color
