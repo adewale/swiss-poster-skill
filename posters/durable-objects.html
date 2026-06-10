@@ -2,23 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Durable Objects — A Case</title>
+<title>Field Lessons for Durable Objects</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --stone-50:  #fafaf9;
     --stone-100: #f5f5f4;
     --stone-200: #e7e5e4;
     --stone-300: #d6d3d1;
-    --stone-400: #a8a29e;
     --stone-500: #78716c;
     --stone-700: #44403c;
     --stone-900: #1c1917;
-    --stone-950: #0c0a09;
-    --accent:    #F38020; /* Cloudflare orange */
-    --accent-2:  #FAAE40;
+    --orange:    #F38020;
+    --orange-2:  #B85508;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -35,945 +33,388 @@
     width: 1260px;
     height: 1800px;
     overflow: hidden;
-    padding: 52px 64px 50px 64px;
+    padding: 120px 104px 100px 104px;
   }
-
-  /* Frame marks */
-  .corner {
-    position: absolute;
-    width: 22px; height: 22px;
-    border: 2px solid var(--stone-900);
-  }
-  .corner.tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
-  .corner.tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
-  .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
-  .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
-
-  /* Algorithmic visual — Voronoi field
-     The metaphor materialised: each cell owns its region absolutely,
-     partitioned by the rule "the closest seed point wins" — which is
-     a DO's routing decision. Hot cell = atom handling a request,
-     warm cells = neighbours in memory, cold cells = hibernating.
-     A routing arrow finds the hot cell from the field edge. */
-  #atom-field {
-    display: block;
-    width: 100%;
-    max-width: 464px;
-    height: 280px;
-    margin: 4px 0 6px 0;
-  }
-  .atom-caption {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    color: rgba(28,25,23,0.62);
-    margin-top: 0;
-    text-align: center;
-  }
-  .b-one h3 {
-    font-size: 24px;
-    font-weight: 200;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 10px;
-  }
-  .b-one h3 em {
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  /* Top bar */
-  .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: var(--stone-900);
-    margin-bottom: 18px;
-    position: relative;
-    z-index: 5;
-  }
-  .topbar .right { text-align: right; }
-  .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
 
   /* Title */
   .title {
-    position: relative;
-    margin-left: -5px;
-    margin-bottom: 16px;
-    z-index: 5;
+    text-align: center;
+    margin-bottom: 64px;
   }
   .title h1 {
-    font-weight: 700;
-    font-size: 158px;
-    line-height: 0.82;
-    letter-spacing: -0.05em;
-    color: var(--stone-900);
-  }
-  .title h1 .row { display: block; }
-  .title h1 .row.objects {
-    color: var(--accent);
-    font-style: italic;
-    font-weight: 700;
-    letter-spacing: -0.06em;
-  }
-  .title .orangebar {
-    position: absolute;
-    left: -64px;
-    width: 280px;
-    top: 76px;
-    height: 16px;
-    background: var(--accent);
-    z-index: 1;
-  }
-  .title h1 .row.durable {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Subtitle */
-  .subtitle {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-top: 4px;
-    margin-bottom: 12px;
-    position: relative;
-    z-index: 5;
-  }
-  .subtitle .lede {
-    font-size: 20px;
-    font-weight: 300;
-    line-height: 1.25;
-    max-width: 640px;
-    color: var(--stone-900);
-  }
-  .subtitle .lede em {
-    font-style: normal;
-    color: var(--accent);
-    font-weight: 500;
-  }
-  .subtitle .stamp {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(28,25,23,0.65);
-    text-align: right;
-    line-height: 1.5;
-  }
-  .subtitle .stamp strong {
-    display: block;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 48px;
-    font-weight: 200;
-    letter-spacing: -0.03em;
-    color: var(--stone-900);
-    text-transform: none;
-    line-height: 0.95;
-    margin-bottom: 6px;
-  }
-
-  /* Pitch band — full-bleed orange */
-  .pitch {
-    background: var(--accent);
-    color: var(--stone-50);
-    margin-left: -64px;
-    margin-right: -64px;
-    padding: 16px 100px 18px 100px;
-    margin-top: 0;
-    margin-bottom: 14px;
-    position: relative;
-    z-index: 4;
-  }
-  .pitch .label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
     font-weight: 600;
-    color: rgba(250,250,249,0.85);
-    border-top: 1.5px solid var(--stone-50);
-    padding-top: 6px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .pitch h2 {
-    font-size: 48px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--stone-50);
-  }
-  .pitch .honest {
-    font-size: 21px;
-    font-weight: 300;
-    line-height: 1.18;
-    letter-spacing: -0.01em;
-    color: rgba(250,250,249,0.9);
-    margin-top: 12px;
-    max-width: 64ch;
-  }
-  .pitch .honest b {
-    font-weight: 600;
-  }
-
-  /* Main grid */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 12px;
-    position: relative;
-    z-index: 4;
-  }
-  .label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: rgba(28,25,23,0.55);
-    border-top: 1.5px solid var(--stone-900);
-    padding-top: 6px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .label .num { color: var(--accent); font-weight: 600; }
-
-  /* 01 — Collapse the stack */
-  .b-collapse { grid-column: span 7; }
-  .b-collapse h3 {
-    font-size: 36px;
-    font-weight: 200;
-    line-height: 1;
+    font-size: 80px;
+    line-height: 1.02;
     letter-spacing: -0.025em;
-    margin-bottom: 8px;
+    color: var(--stone-900);
+    margin-bottom: 14px;
   }
-  .b-collapse h3 em {
-    color: var(--accent);
-    font-style: normal;
-    font-weight: 500;
-  }
-  .b-collapse .lead {
-    font-size: 12px;
-    line-height: 1.5;
+  .title .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 300;
-    color: rgba(28,25,23,0.75);
-    max-width: 58ch;
-    margin-bottom: 10px;
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1.1;
+    color: var(--stone-700);
+    letter-spacing: -0.005em;
   }
-  .stack {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11.5px;
-    line-height: 1.5;
-    color: var(--stone-900);
-  }
-  .stack .row {
-    display: grid;
-    grid-template-columns: 1.1fr 22px 1fr;
-    gap: 8px;
-    align-items: baseline;
-    padding: 4px 0;
-    border-bottom: 1px solid var(--stone-200);
-  }
-  .stack .row:last-child { border-bottom: 0; }
-  .stack .row .was {
-    text-decoration: line-through;
-    text-decoration-thickness: 1.5px;
-    color: rgba(28,25,23,0.45);
-  }
-  .stack .row .arrow {
-    color: var(--accent);
-    font-weight: 600;
-    text-align: center;
-  }
-  .stack .row .now {
-    color: var(--stone-900);
-    font-weight: 500;
+  .title .rule {
+    width: 92px;
+    height: 2px;
+    background: var(--orange);
+    margin: 26px auto 0 auto;
   }
 
-  /* 02 — One object */
-  .b-one { grid-column: span 5; position: relative; }
-  .b-one .stack-list {
-    font-weight: 200;
-    letter-spacing: -0.02em;
-    line-height: 0.98;
+  /* Section label — small Mono caption */
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .section-label .num { color: var(--orange); font-weight: 700; }
+
+  /* Hero: phantom players */
+  .hero h2 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    max-width: 60ch;
+  }
+  .hero h2 code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 27px;
+    font-weight: 500;
+    color: var(--orange-2);
+    padding: 0 2px;
+  }
+
+  .divergence {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    border-top: 1.5px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+    margin-bottom: 32px;
+  }
+  .divergence .side {
+    padding: 18px 28px 18px 0;
+  }
+  .divergence .side.r {
+    padding-left: 28px;
+    padding-right: 0;
+    border-left: 1px solid var(--stone-200);
+  }
+  .divergence .h {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone-700);
+    margin-bottom: 12px;
+  }
+  .divergence ul {
+    list-style: none;
+  }
+  .divergence li {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    line-height: 1.7;
     color: var(--stone-900);
   }
-  .b-one .stack-list li {
-    list-style: none;
-    font-size: 24px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--stone-200);
+  .divergence li.dead {
+    color: var(--stone-300);
+    text-decoration: line-through;
+    text-decoration-color: var(--orange);
+    text-decoration-thickness: 1.5px;
   }
-  .b-one .stack-list li:first-child { padding-top: 0; }
-  .b-one .stack-list li.hot {
-    color: var(--accent);
-    font-weight: 500;
+  .divergence .count {
+    margin-top: 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    color: var(--stone-700);
   }
-  .b-one .stack-list li small {
-    display: block;
-    font-size: 12px;
+  .divergence .count strong {
+    color: var(--stone-900);
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .divergence .mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 56px;
+    color: var(--orange);
+    line-height: 1;
+  }
+
+  /* The three-layer fix */
+  .fix-intro {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 400;
-    letter-spacing: -0.005em;
-    text-transform: none;
-    color: rgba(28,25,23,0.55);
-    margin-top: 3px;
-    line-height: 1.35;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--stone-700);
+    margin-bottom: 22px;
+    max-width: 64ch;
+  }
+  .fix-intro b {
+    color: var(--stone-900);
+    font-weight: 600;
   }
 
-  /* 03 — Primitives */
-  .b-prim {
-    grid-column: span 12;
-    margin-top: 12px;
-  }
-  .b-prim h3 {
-    font-size: 26px;
-    font-weight: 200;
-    line-height: 0.95;
-    letter-spacing: -0.025em;
-    margin-bottom: 10px;
-  }
-  .prim-grid {
+  .layers {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: 40px 220px 1fr;
+    row-gap: 18px;
+    column-gap: 22px;
+    align-items: baseline;
+    border-top: 1px solid var(--stone-200);
+    padding-top: 16px;
   }
-  .prim-grid .card {
-    border-top: 2px solid var(--stone-900);
-    padding-top: 12px;
-    position: relative;
+  .layers .letter {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--orange);
+    line-height: 1;
   }
-  .prim-grid .card .n {
+  .layers .name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--stone-900);
+    line-height: 1.3;
+  }
+  .layers .desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--stone-700);
+    max-width: 56ch;
+  }
+  .layers .desc code {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
+    font-size: 13px;
+    color: var(--stone-900);
+    background: var(--stone-100);
+    padding: 1px 5px;
+  }
+  .fix-foot {
+    margin-top: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .prim-grid .card h4 {
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .prim-grid .card p {
-    font-size: 12.5px;
-    line-height: 1.5;
-    font-weight: 300;
-    color: rgba(28,25,23,0.82);
+    color: var(--stone-500);
+    text-align: center;
   }
 
-  /* 04 — The case */
-  .b-case {
-    grid-column: span 12;
-    margin-top: 12px;
-    background: var(--stone-900);
-    color: var(--stone-50);
-    margin-left: -64px;
-    margin-right: -64px;
-    padding: 16px 100px 18px 100px;
-    position: relative;
+  /* Numbered lessons */
+  .lessons {
+    margin-top: 44px;
   }
-  .b-case .label {
-    color: rgba(250,250,249,0.65);
-    border-top-color: var(--stone-50);
-  }
-  .b-case .label .num { color: var(--accent-2); }
-  .b-case h3 {
-    font-size: 38px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.035em;
-    color: var(--stone-50);
-    margin-bottom: 12px;
-  }
-  .b-case h3 em {
-    color: var(--accent);
-    font-style: italic;
-    font-weight: 200;
-  }
-  .b-case .args {
+  .lessons-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 56px;
+    row-gap: 0;
   }
-  .b-case .arg .k {
+  .lesson {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 16px;
+    align-items: baseline;
+    border-top: 1px solid var(--stone-200);
+    padding: 14px 0 14px 0;
+  }
+  .lesson .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--orange);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .lesson .text {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--stone-900);
+  }
+  .lesson .text b {
+    font-weight: 600;
+  }
+  .lesson .text code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--stone-900);
+    background: var(--stone-100);
+    padding: 1px 5px;
+  }
+
+  /* Closing */
+  .closing {
+    position: absolute;
+    left: 104px;
+    right: 104px;
+    bottom: 96px;
+    text-align: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.3;
+    color: var(--stone-700);
+    letter-spacing: -0.005em;
+  }
+  .closing b {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+
+  /* Footer attribution */
+  .colophon {
+    position: absolute;
+    left: 104px;
+    right: 104px;
+    bottom: 36px;
+    text-align: center;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9.5px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--accent-2);
-    font-weight: 600;
-    margin-bottom: 4px;
+    color: var(--stone-500);
   }
-  .b-case .arg h5 {
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-    margin-bottom: 8px;
-  }
-  .b-case .arg p {
-    font-size: 12.5px;
-    line-height: 1.5;
-    font-weight: 300;
-    color: rgba(250,250,249,0.82);
-  }
-
-  /* 05 — In the wild */
-  .b-wild {
-    grid-column: span 7;
-    margin-top: 8px;
-  }
-  .b-wild h3 {
-    font-size: 24px;
-    font-weight: 200;
-    letter-spacing: -0.025em;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .uses {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px;
-    line-height: 1.45;
-    color: var(--stone-900);
-  }
-  .uses .row {
-    display: flex;
-    gap: 10px;
-    padding: 2px 0;
-    border-bottom: 1px dotted var(--stone-300);
-  }
-  .uses .row:last-child { border-bottom: 0; }
-  .uses .row b {
-    min-width: 150px;
-    color: var(--accent);
-    font-weight: 600;
-  }
-  .uses .row span {
-    color: rgba(28,25,23,0.82);
-    font-weight: 400;
-  }
-  /* 06 — Code sample */
-  .b-code {
-    grid-column: span 5;
-    margin-top: 14px;
-    background: var(--stone-100);
-    border-top: 2px solid var(--stone-900);
-    padding: 12px 14px 14px 14px;
-    align-self: start;
-  }
-  .b-code .label {
-    color: rgba(28,25,23,0.6);
-    border-top-color: var(--stone-900);
-    margin-bottom: 8px;
-  }
-  .b-code pre {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    line-height: 1.55;
-    color: var(--stone-900);
-    white-space: pre;
-    overflow: hidden;
-  }
-  .b-code .kw { color: var(--accent); font-weight: 600; }
-  .b-code .cm { color: rgba(28,25,23,0.45); font-style: italic; }
-  .b-code .st { color: var(--stone-700); }
-  .b-code .fn { color: var(--stone-900); font-weight: 600; }
-
-  /* Footer */
-  .foot {
-    position: absolute;
-    left: 64px;
-    right: 64px;
-    bottom: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(28,25,23,0.55);
-    z-index: 5;
-  }
-  .foot .big {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 22px;
-    font-weight: 200;
-    letter-spacing: -0.035em;
-    color: var(--stone-900);
-    line-height: 0.95;
-    text-transform: none;
-  }
-  .foot .big em {
-    font-style: normal;
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .foot .big .attrib {
-    display: block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 8px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: none;
-    color: rgba(28,25,23,0.45);
-    margin-top: 8px;
-    line-height: 1.3;
-  }
-  .foot .right { text-align: right; line-height: 1.7; }
-  .foot .right b { color: var(--stone-900); font-weight: 500; }
+  .colophon b { color: var(--stone-900); font-weight: 600; }
 </style>
 </head>
 <body>
 <div class="poster">
 
-  <span class="corner tl"></span>
-  <span class="corner tr"></span>
-  <span class="corner bl"></span>
-  <span class="corner br"></span>
-
-  <!-- TITLE -->
   <div class="title">
-    <h1>
-      <span class="row durable">DURABLE</span>
-      <span class="row objects">objects.</span>
-    </h1>
-    <div class="orangebar"></div>
+    <h1>Field Lessons</h1>
+    <div class="sub">— for Durable Objects</div>
+    <div class="rule"></div>
   </div>
 
-  <div class="subtitle">
-    <div class="lede">
-      A primitive that ends the dance between
-      <em>state, coordination, and the network</em>
-      by giving each named thing in your system exactly one home.
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="section-label">
+      <span>The Phantom</span>
+      <span class="num">Hero · 01</span>
     </div>
-    <div class="stamp">
-      <strong>1 of 1</strong>
-      per atom
-    </div>
-  </div>
+    <h2>
+      Storage records what you wrote. <code>getWebSockets()</code> reports what's reachable. They will disagree.
+    </h2>
 
-  <!-- CLAIM BAND -->
-  <section class="pitch">
-    <div class="label"><span>The Claim</span><span>00</span></div>
-    <h2>One object = one atom of coordination.</h2>
-    <p class="honest">
-      Name it once; reach it from anywhere. It owns its slice of state, runs single-threaded,
-      and answers to nothing else — <b>~500–1,000 req/s per atom, by design.</b>
-    </p>
+    <div class="divergence">
+      <div class="side l">
+        <div class="h">storage.list("players/")</div>
+        <ul>
+          <li>alice@desktop</li>
+          <li class="dead">bob@phone</li>
+          <li>dana@web</li>
+          <li class="dead">eve@laptop</li>
+        </ul>
+        <div class="count"><strong>4</strong> &nbsp;players ready</div>
+      </div>
+      <div class="mid">≠</div>
+      <div class="side r">
+        <div class="h">ctx.getWebSockets()</div>
+        <ul>
+          <li>alice@desktop</li>
+          <li>dana@web</li>
+        </ul>
+        <div class="count"><strong>2</strong> &nbsp;sockets alive</div>
+      </div>
+    </div>
+
+    <div class="fix-intro">
+      The fix is <b>three layers</b>, not one. Each closes a different hole — the corpses persist otherwise, the matchmaker keeps feeding the room victims, and you never notice until the support tickets arrive.
+    </div>
+
+    <div class="layers">
+      <div class="letter">A</div>
+      <div class="name">Reconcile on wake.</div>
+      <div class="desc">In the constructor, diff <code>storage</code> against <code>ctx.getWebSockets()</code> and delete entries that aren't reachable. ~15 LoC.</div>
+
+      <div class="letter">B</div>
+      <div class="name">Server heartbeat.</div>
+      <div class="desc">Refresh <code>lastActiveTick</code> on every message. Reap players idle &gt; <b>2400 ticks (~80 s)</b>. Client pings prove the client is alive — only this proves the server can still hear them.</div>
+
+      <div class="letter">C</div>
+      <div class="name">Matchmaker prune.</div>
+      <div class="desc">Watch <code>lastStatusChangeAt</code>, not <code>updatedAt</code>. Rooms can churn while frozen in a phantom state. Prune at <b>10 min</b> stale.</div>
+    </div>
+
+    <div class="fix-foot">— each closes a different hole —</div>
   </section>
 
-  <!-- GRID -->
-  <div class="grid">
-
-    <!-- 01 — COLLAPSE THE STACK -->
-    <section class="b-collapse">
-      <div class="label"><span>01 / The Collapse</span><span class="num">/01</span></div>
-      <h3>Six services become <em>one object.</em></h3>
-      <p class="lead">
-        The classic stateful backend is a federation of moving parts —
-        each with its own consistency model, failure mode, and bill.
-        A Durable Object replaces every row below with a single addressable runtime.
-      </p>
-      <div class="stack">
-        <div class="row"><span class="was">Redis &nbsp;— in-memory cache &amp; locks</span><span class="arrow">→</span><span class="now">Object memory</span></div>
-        <div class="row"><span class="was">Postgres row &nbsp;— per-tenant state</span><span class="arrow">→</span><span class="now">Object storage (SQLite)</span></div>
-        <div class="row"><span class="was">RabbitMQ / SQS &nbsp;— queue per actor</span><span class="arrow">→</span><span class="now">Single-threaded inbox</span></div>
-        <div class="row"><span class="was">WebSocket fleet &nbsp;— sticky routing</span><span class="arrow">→</span><span class="now">Hibernating connections</span></div>
-        <div class="row"><span class="was">Cron / scheduler &nbsp;— external trigger</span><span class="arrow">→</span><span class="now">setAlarm()</span></div>
-        <div class="row"><span class="was">ZooKeeper &nbsp;— distributed locking</span><span class="arrow">→</span><span class="now">Serial execution</span></div>
-      </div>
-    </section>
-
-    <!-- 02 — THE ATOM, VISUALISED -->
-    <section class="b-one">
-      <div class="label"><span>02 / The Atom</span><span class="num">/02</span></div>
-      <h3>What one atom <em>looks like.</em></h3>
-      <canvas id="atom-field"></canvas>
-      <div class="atom-caption">
-        One name · one instance · one CPU · one disk · one inbox.
-      </div>
-    </section>
-
-    <!-- 03 — PRIMITIVES -->
-    <section class="b-prim">
-      <div class="label"><span>03 / The Toolkit</span><span class="num">/03</span></div>
-      <h3>What that guarantee gives you. <span style="color:rgba(28,25,23,0.5);">Four primitives, nothing more.</span></h3>
-      <div class="prim-grid">
-        <div class="card">
-          <h4>SQLite,<br>per object</h4>
-          <p>Strongly-consistent, transactional storage co-located with compute. Zero-latency reads from the same disk. Point-in-time recovery for 30 days.</p>
-        </div>
-        <div class="card">
-          <h4>Durable<br>scheduling</h4>
-          <p>One alarm per object. Survives restarts, region failures, code deploys. Replaces every external scheduler you've ever paged on.</p>
-        </div>
-        <div class="card">
-          <h4>Hibernating<br>WebSockets</h4>
-          <p>Idle connections cost nothing. The object sleeps; the socket survives. Wake on message, alarm, or RPC. Millions of clients per worker.</p>
-        </div>
-        <div class="card">
-          <h4>Typed<br>method calls</h4>
-          <p>Call the object like a local class. Arguments serialize. Return values stream back. No HTTP framing, no JSON ceremony, no client SDKs to ship.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 04 — THE CASE (dark band) -->
-    <section class="b-case">
-      <div class="label"><span>04 / Why Atoms Win</span><span class="num">/04</span></div>
-      <h3>The case for <em>atoms.</em></h3>
-      <div class="args">
-        <div class="arg">
-          <h5>Strong by default, not by ceremony.</h5>
-          <p>One writer, one reader, one queue. The hardest distributed systems problem becomes a single-threaded function. You write code; the platform stops lying to you about ordering.</p>
-        </div>
-        <div class="arg">
-          <h5>State follows compute. Compute follows users.</h5>
-          <p>The object boots near the first request and stays. Reads are local. Writes are local. The 50&nbsp;ms cross-region round-trip you budgeted for is now a function call.</p>
-        </div>
-        <div class="arg">
-          <h5>Idle is free. Active is cheap.</h5>
-          <p>No instance to provision, no fleet to autoscale, no pre-paid Redis. The object exists when invoked, hibernates when not, and pays per request &amp; per GB-second of state.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 05 — IN THE WILD -->
-    <section class="b-wild">
-      <div class="label"><span>05 / In the Wild</span><span class="num">/05</span></div>
-      <h3>Where the atom shape <span style="color:var(--accent);font-weight:500;">fits.</span></h3>
-      <div class="uses">
-        <div class="row"><b>Chat &amp; presence</b><span>Object per room. Members fan out over WebSockets.</span></div>
-        <div class="row"><b>Multiplayer</b><span>Game-room as actor. Tick is an alarm. Inputs serialize.</span></div>
-        <div class="row"><b>Collab editing</b><span>Document = object. CRDT in storage. Awareness in memory.</span></div>
-        <div class="row"><b>Per-user agents</b><span>LLM session with memory, tools, budget — one per user.</span></div>
-      </div>
-    </section>
-
-    <!-- 06 — CODE SAMPLE -->
-    <section class="b-code">
-      <div class="label"><span>06 / The Whole Idea</span><span class="num">/06</span></div>
-<pre><span class="kw">export class</span> <span class="fn">Counter</span> <span class="kw">extends</span> <span class="fn">DurableObject</span> {
-  <span class="fn">constructor</span>(ctx, env) {
-    <span class="kw">super</span>(ctx, env);
-    <span class="fn">this</span>.sql = ctx.storage.sql;
-    <span class="fn">this</span>.sql.<span class="fn">exec</span>(<span class="st">`CREATE TABLE IF NOT EXISTS
-      n (v INTEGER NOT NULL)`</span>);
-    <span class="fn">this</span>.sql.<span class="fn">exec</span>(<span class="st">`INSERT OR IGNORE
-      INTO n VALUES (0)`</span>);
-  }
-
-  <span class="cm">// One CPU. One disk. One name.</span>
-  <span class="kw">async</span> <span class="fn">increment</span>(by = 1) {
-    <span class="kw">return</span> <span class="fn">this</span>.sql.<span class="fn">exec</span>(
-      <span class="st">`UPDATE n SET v = v + ?
-         RETURNING v`</span>, by).<span class="fn">one</span>().v;
-  }
-}
-
-<span class="cm">// From anywhere on Earth:</span>
-<span class="kw">const</span> id   = ns.<span class="fn">idFromName</span>(<span class="st">"counter"</span>);
-<span class="kw">const</span> stub = ns.<span class="fn">get</span>(id);
-<span class="kw">await</span> stub.<span class="fn">increment</span>();  <span class="cm">// strongly</span>
-<span class="kw">await</span> stub.<span class="fn">increment</span>();  <span class="cm">// consistent.</span></pre>
-    </section>
-
-  </div>
-
-  <!-- FOOTER -->
-  <div class="foot">
-    <div class="big">
-      State, but make it <em>boring.</em>
-      <span class="attrib">Cloudflare Durable Objects · Storage on SQLite · Hibernating WebSockets · Alarms · RPC.</span>
+  <!-- ── NUMBERED LESSONS ────────────────────────────────────────── -->
+  <section class="lessons">
+    <div class="section-label">
+      <span>Field Lessons</span>
+      <span class="num">8 from the war stories</span>
     </div>
+    <div class="lessons-grid">
+      <div class="lesson">
+        <div class="n">01</div>
+        <div class="text"><code>setTimeout</code> doesn't survive hibernation. <b>Alarms</b> do.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">02</div>
+        <div class="text"><code>blockConcurrencyWhile</code> lives in the constructor. Never in request handlers — you cap yourself at ~200 req/s.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">03</div>
+        <div class="text">Validate at the Worker. The DO is too expensive to use as a request filter.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">04</div>
+        <div class="text">On <code>e.retryable</code>, throw the stub away and ask for a fresh one. On <code>e.overloaded</code>, do <b>not</b> retry.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">05</div>
+        <div class="text">Sequence numbers must persist. Hibernation resets in-memory state to zero.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">06</div>
+        <div class="text">Server-initiated heartbeats, or they don't prove anything. Client pings only prove the client is alive.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">07</div>
+        <div class="text"><code>Math.random()</code> in render hot paths is a red flag. Determinism is something you build, not something you inherit.</div>
+      </div>
+      <div class="lesson">
+        <div class="n">08</div>
+        <div class="text"><code>wrangler dev</code> or you didn't test. Mocks hide hibernation.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLOSING ─────────────────────────────────────────────────── -->
+  <div class="closing">
+    Single-threaded didn't mean concurrency went away. <b>It moved.</b>
+  </div>
+  <div class="colophon">
+    sourced from <b>keyboardia</b> &nbsp;·&nbsp; <b>vaders</b> &nbsp;·&nbsp; field-tuned numbers, not nominal ones
   </div>
 
 </div>
-
-<script>
-  // ── Algorithmic visual ────────────────────────────────────────────
-  // Seeded Voronoi tessellation. Each cell owns its region absolutely;
-  // the partition rule is "closest seed point wins" — which is
-  // literally a Durable Object's routing decision when you call
-  // idFromName(...). Three cell states echo the runtime:
-  //   COLD   — graphite outline   : hibernating, state at rest
-  //   WARM   — light orange outline: neighbour atoms still in memory
-  //   HOT    — orange filled + ring: the atom currently handling work
-  // A dashed orange routing arrow enters from the canvas edge and
-  // lands at the hot seed point — a request finding its atom.
-  //
-  // Self-contained: mulberry32 PRNG, inline Bowyer–Watson Delaunay
-  // whose dual is the Voronoi, all rendered to canvas.
-  (function () {
-    const W = 464, H = 280;
-    const DPR = 2;
-    const SEED = 0xD0CAFE;
-
-    const canvas = document.getElementById('atom-field');
-    canvas.width = W * DPR; canvas.height = H * DPR;
-    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-    const ctx = canvas.getContext('2d');
-    ctx.scale(DPR, DPR);
-
-    function mulberry32(s) {
-      return function () {
-        let t = s = (s + 0x6D2B79F5) | 0;
-        t = Math.imul(t ^ (t >>> 15), t | 1);
-        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-      };
-    }
-    const rand = mulberry32(SEED);
-
-    // The focal point — where the hot cell will live. Off-centre so
-    // the routing arrow has somewhere to come from.
-    const focal = [W * 0.58, H * 0.46];
-
-    // Seed points: a sparse jittered grid for coverage, plus a
-    // dense polar cluster around the focal point for visual weight.
-    const pts = [];
-    const COLS = 6, ROWS = 5;
-    const sx = W / COLS, sy = H / ROWS;
-    for (let j = 0; j < ROWS; j++) {
-      for (let i = 0; i < COLS; i++) {
-        pts.push([
-          (i + 0.5) * sx + (rand() - 0.5) * sx * 0.78,
-          (j + 0.5) * sy + (rand() - 0.5) * sy * 0.78,
-        ]);
-      }
-    }
-    // Replace the cell nearest the focal with the focal itself
-    // (guarantees an interior hot cell with bounded geometry).
-    let HOT = 0, hotD = Infinity;
-    for (let i = 0; i < pts.length; i++) {
-      const dx = pts[i][0] - focal[0], dy = pts[i][1] - focal[1];
-      const d = dx * dx + dy * dy;
-      if (d < hotD) { hotD = d; HOT = i; }
-    }
-    pts[HOT] = focal.slice();
-    // Dense cluster around focal for visual weight (smaller cells).
-    for (let i = 0; i < 6; i++) {
-      const a = rand() * Math.PI * 2;
-      const r = 38 + rand() * 46;
-      pts.push([focal[0] + Math.cos(a) * r, focal[1] + Math.sin(a) * r]);
-    }
-
-    function triangulate(points) {
-      const n = points.length;
-      let mnX = Infinity, mnY = Infinity, mxX = -Infinity, mxY = -Infinity;
-      for (const [x, y] of points) {
-        if (x < mnX) mnX = x; if (y < mnY) mnY = y;
-        if (x > mxX) mxX = x; if (y > mxY) mxY = y;
-      }
-      const dM = Math.max(mxX - mnX, mxY - mnY);
-      const cx = (mnX + mxX) / 2, cy = (mnY + mxY) / 2;
-      const all = points.slice();
-      all.push([cx - 20 * dM, cy - dM]);
-      all.push([cx,           cy + 20 * dM]);
-      all.push([cx + 20 * dM, cy - dM]);
-
-      function tri(a, b, c) {
-        const [ax, ay] = all[a], [bx, by] = all[b], [Cx, Cy] = all[c];
-        const ad = ax * ax + ay * ay,
-              bd = bx * bx + by * by,
-              cd = Cx * Cx + Cy * Cy;
-        const D = 2 * (ax * (by - Cy) + bx * (Cy - ay) + Cx * (ay - by));
-        const ux = (ad * (by - Cy) + bd * (Cy - ay) + cd * (ay - by)) / D;
-        const uy = (ad * (Cx - bx) + bd * (ax - Cx) + cd * (bx - ax)) / D;
-        const dx = ax - ux, dy = ay - uy;
-        return { a, b, c, cx: ux, cy: uy, r2: dx * dx + dy * dy };
-      }
-
-      let tris = [tri(n, n + 1, n + 2)];
-      for (let i = 0; i < n; i++) {
-        const [x, y] = points[i];
-        const good = [], bad = [];
-        for (const t of tris) {
-          const dx = x - t.cx, dy = y - t.cy;
-          (dx * dx + dy * dy < t.r2 ? bad : good).push(t);
-        }
-        const edges = new Map();
-        for (const t of bad) {
-          for (const [u, v] of [[t.a, t.b], [t.b, t.c], [t.c, t.a]]) {
-            const k = u < v ? u + ',' + v : v + ',' + u;
-            edges.set(k, (edges.get(k) || 0) + 1);
-          }
-        }
-        tris = good;
-        for (const [k, count] of edges) {
-          if (count === 1) {
-            const [u, v] = k.split(',').map(Number);
-            tris.push(tri(u, v, i));
-          }
-        }
-      }
-      return tris.filter(t => t.a < n && t.b < n && t.c < n);
-    }
-
-    function voronoiCells(points, tris) {
-      const cells = points.map(() => []);
-      for (const t of tris) {
-        cells[t.a].push([t.cx, t.cy]);
-        cells[t.b].push([t.cx, t.cy]);
-        cells[t.c].push([t.cx, t.cy]);
-      }
-      for (let i = 0; i < points.length; i++) {
-        const [px, py] = points[i];
-        cells[i].sort((p, q) =>
-          Math.atan2(p[1] - py, p[0] - px) - Math.atan2(q[1] - py, q[0] - px)
-        );
-      }
-      return cells;
-    }
-
-    const tris  = triangulate(pts);
-    const cells = voronoiCells(pts, tris);
-
-    // Adjacency: cells sharing a Delaunay edge with HOT = warm.
-    const warm = new Set();
-    for (const t of tris) {
-      if (t.a === HOT) { warm.add(t.b); warm.add(t.c); }
-      else if (t.b === HOT) { warm.add(t.a); warm.add(t.c); }
-      else if (t.c === HOT) { warm.add(t.a); warm.add(t.b); }
-    }
-    warm.delete(HOT);
-
-    function tracePath(cell) {
-      ctx.beginPath();
-      ctx.moveTo(cell[0][0], cell[0][1]);
-      for (let k = 1; k < cell.length; k++) ctx.lineTo(cell[k][0], cell[k][1]);
-      ctx.closePath();
-    }
-
-    // 1. COLD cells — thin graphite outlines.
-    ctx.lineWidth = 0.85;
-    ctx.strokeStyle = 'rgba(28,25,23,0.38)';
-    for (let i = 0; i < pts.length; i++) {
-      if (i === HOT || warm.has(i)) continue;
-      const c = cells[i];
-      if (!c || c.length < 3) continue;
-      tracePath(c); ctx.stroke();
-    }
-
-    // 2. WARM cells — light orange outlines, slightly heavier stroke.
-    ctx.lineWidth = 1.2;
-    ctx.strokeStyle = 'rgba(243,128,32,0.72)';
-    for (const i of warm) {
-      const c = cells[i];
-      if (!c || c.length < 3) continue;
-      tracePath(c); ctx.stroke();
-    }
-
-    // 3. HOT cell — orange filled, with concentric activity ring.
-    const hot = cells[HOT];
-    if (hot && hot.length >= 3) {
-      tracePath(hot);
-      ctx.fillStyle = 'rgba(243,128,32,0.46)';
-      ctx.fill();
-      ctx.lineWidth = 2.0;
-      ctx.strokeStyle = 'rgba(243,128,32,0.95)';
-      ctx.stroke();
-      // Activity ring around the hot seed point.
-      const [hx, hy] = pts[HOT];
-      ctx.lineWidth = 0.8;
-      ctx.strokeStyle = 'rgba(243,128,32,0.55)';
-      ctx.beginPath(); ctx.arc(hx, hy, 14, 0, Math.PI * 2); ctx.stroke();
-      ctx.strokeStyle = 'rgba(243,128,32,0.28)';
-      ctx.beginPath(); ctx.arc(hx, hy, 22, 0, Math.PI * 2); ctx.stroke();
-    }
-
-    // 4. Routing arrow — dashed, entering from the upper-left edge,
-    // landing at the hot seed point with an arrowhead.
-    const [hx, hy] = pts[HOT];
-    const start = [22, 24];
-    ctx.save();
-    ctx.setLineDash([5, 5]);
-    ctx.lineWidth = 1.2;
-    ctx.strokeStyle = 'rgba(243,128,32,0.78)';
-    ctx.beginPath();
-    ctx.moveTo(start[0], start[1]);
-    // small bezier curve so the line has character
-    const ctrl = [hx - 70, hy - 80];
-    ctx.quadraticCurveTo(ctrl[0], ctrl[1], hx - 16, hy - 16);
-    ctx.stroke();
-    ctx.restore();
-    // Arrowhead at landing.
-    ctx.save();
-    const ang = Math.atan2((hy - 16) - ctrl[1], (hx - 16) - ctrl[0]);
-    ctx.translate(hx - 14, hy - 14);
-    ctx.rotate(ang);
-    ctx.fillStyle = 'rgba(243,128,32,0.92)';
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(-7, -3.5);
-    ctx.lineTo(-7,  3.5);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    // 5. Seed dots.
-    for (let i = 0; i < pts.length; i++) {
-      const [x, y] = pts[i];
-      ctx.beginPath();
-      if (i === HOT) {
-        ctx.fillStyle = '#F38020';
-        ctx.arc(x, y, 4.5, 0, Math.PI * 2);
-      } else if (warm.has(i)) {
-        ctx.fillStyle = 'rgba(243,128,32,0.78)';
-        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
-      } else {
-        ctx.fillStyle = 'rgba(28,25,23,0.62)';
-        ctx.arc(x, y, 1.8, 0, Math.PI * 2);
-      }
-      ctx.fill();
-    }
-
-    // 6. Named-atom labels. Hand-picked indices that hit cells with
-    // enough room for tiny mono text.
-    const labelMap = {};
-    labelMap[HOT] = 'counter/global';
-    // Pick four other cells distributed around the field for context.
-    const candidates = [0, COLS - 1, COLS * (ROWS - 1), COLS * ROWS - 1];
-    const tags = ['room/42', 'doc/x', 'user/alice', 'session/9k'];
-    for (let k = 0; k < candidates.length; k++) {
-      const i = candidates[k];
-      if (i < pts.length && i !== HOT && !warm.has(i)) labelMap[i] = tags[k];
-    }
-    ctx.font = '9.5px "IBM Plex Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    for (const i in labelMap) {
-      const [x, y] = pts[i];
-      const tag = labelMap[i];
-      // Background sliver for legibility.
-      const w = ctx.measureText(tag).width + 6;
-      ctx.fillStyle = +i === HOT
-        ? 'rgba(255,255,255,0.78)'
-        : 'rgba(250,250,249,0.78)';
-      ctx.fillRect(x - w / 2, y + 7, w, 12);
-      ctx.fillStyle = +i === HOT
-        ? '#B85508'
-        : 'rgba(28,25,23,0.75)';
-      ctx.fillText(tag, x, y + 13);
-    }
-  })();
-</script>
-
 </body>
 </html>
