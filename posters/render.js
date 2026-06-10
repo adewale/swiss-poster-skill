@@ -7,6 +7,7 @@ const POSTERS = [
   { html: 'fork-the-planet.html',       png: 'fork-the-planet.png' },
   { html: 'slop-to-hillclimbing.html',  png: 'slop-to-hillclimbing.png' },
   { html: 'credential-broker.html',     png: 'credential-broker.png' },
+  { html: 'moq.html',                   png: 'moq.png' },
 ];
 
 (async () => {
