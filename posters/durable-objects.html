@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Field Lessons for Durable Objects</title>
+<title>Durable Objects — Understanding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,6 @@
     --stone-500: #78716c;
     --stone-700: #44403c;
     --stone-900: #1c1917;
-    --stone-950: #0c0a09;
     --orange:    #F38020;
     --orange-2:  #B85508;
   }
@@ -34,40 +33,39 @@
     width: 1260px;
     height: 1800px;
     overflow: hidden;
-    padding: 48px 64px 44px 64px;
+    padding: 44px 64px 36px 64px;
   }
 
-  /* Corner crop marks */
   .corner {
     position: absolute;
     width: 22px; height: 22px;
     border: 2px solid var(--stone-900);
-    z-index: 5;
+    z-index: 6;
   }
   .corner.tl { top: 24px; left: 24px; border-right: 0; border-bottom: 0; }
   .corner.tr { top: 24px; right: 24px; border-left: 0; border-bottom: 0; }
   .corner.bl { bottom: 24px; left: 24px; border-right: 0; border-top: 0; }
   .corner.br { bottom: 24px; right: 24px; border-left: 0; border-top: 0; }
 
-  /* Background mega watermark behind the phantom hero — type as image */
-  .ghost-phantom {
+  /* Background mega watermark — type as image, behind everything */
+  .ghost {
     position: absolute;
-    top: 730px;
-    left: -120px;
+    top: 650px;
+    right: -160px;
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     font-style: italic;
-    font-size: 360px;
+    font-size: 420px;
     line-height: 0.82;
     letter-spacing: -0.07em;
-    color: rgba(28, 25, 23, 0.05);
+    color: rgba(28, 25, 23, 0.04);
     transform: rotate(-8deg);
     pointer-events: none;
     user-select: none;
     z-index: 0;
   }
 
-  /* Top bar — mono section marker */
+  /* Topbar */
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -78,18 +76,18 @@
     text-transform: uppercase;
     font-weight: 500;
     color: var(--stone-900);
-    margin-bottom: 14px;
+    margin-bottom: 8px;
     position: relative;
     z-index: 4;
   }
   .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
   .topbar .right { text-align: right; }
 
-  /* MEGA title — bleeds left, two lines, mixed weight */
+  /* MEGA title */
   .title {
     position: relative;
     margin-left: -10px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     z-index: 4;
   }
   .title .row {
@@ -97,22 +95,22 @@
     line-height: 0.82;
     letter-spacing: -0.055em;
   }
-  .title .field {
+  .title .durable {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
-    font-size: 232px;
+    font-size: 218px;
     color: var(--stone-900);
   }
-  .title .lessons {
+  .title .objects {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     font-style: italic;
-    font-size: 232px;
+    font-size: 218px;
     color: var(--orange);
-    letter-spacing: -0.065em;
-    margin-top: -6px;
+    letter-spacing: -0.06em;
+    margin-top: -4px;
   }
-  .title .lessons .dot { color: var(--stone-900); }
+  .title .objects .dot { color: var(--stone-900); }
   .title .sub {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
@@ -120,24 +118,24 @@
     text-transform: uppercase;
     font-weight: 500;
     color: var(--stone-700);
-    margin-top: 14px;
+    margin-top: 12px;
     margin-left: 4px;
   }
   .title .sub b { color: var(--stone-900); font-weight: 700; }
 
-  /* Full-bleed orange band — the thesis */
-  .thesis {
+  /* Full-bleed orange definition band */
+  .definition {
     background: var(--orange);
     color: var(--stone-50);
     margin-left: -64px;
     margin-right: -64px;
     padding: 22px 100px 24px 100px;
     margin-top: 18px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
     position: relative;
     z-index: 3;
   }
-  .thesis .label {
+  .definition .label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10.5px;
     letter-spacing: 0.24em;
@@ -146,209 +144,26 @@
     color: rgba(250, 250, 249, 0.85);
     border-top: 1.5px solid var(--stone-50);
     padding-top: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
   }
-  .thesis h2 {
+  .definition h2 {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 50px;
+    font-size: 46px;
     font-weight: 700;
-    line-height: 0.96;
+    line-height: 1.05;
     letter-spacing: -0.035em;
     color: var(--stone-50);
   }
-  .thesis h2 em {
+  .definition h2 em {
     font-style: italic;
     font-weight: 300;
     color: rgba(250, 250, 249, 0.96);
   }
-  .thesis h2 .punch {
-    font-weight: 700;
-    font-style: italic;
-    color: var(--stone-900);
-  }
 
-  /* Hero — phantom players (overlap with ghost watermark) */
-  .hero {
-    position: relative;
-    z-index: 4;
-    margin-bottom: 22px;
-  }
-  .hero .bmark {
-    display: flex;
-    align-items: stretch;
-    gap: 12px;
-    margin-bottom: 14px;
-    border-top: 4px solid var(--stone-900);
-    padding-top: 6px;
-  }
-  .hero .bmark .n {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 0.9;
-    letter-spacing: -0.05em;
-    background: var(--orange);
-    color: var(--stone-50);
-    padding: 4px 12px 6px 12px;
-    margin-top: -6px;
-  }
-  .hero .bmark .meta {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--stone-500);
-    padding-top: 8px;
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .hero h3 {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    font-size: 40px;
-    line-height: 1.04;
-    letter-spacing: -0.025em;
-    color: var(--stone-900);
-    margin-bottom: 18px;
-    max-width: 30ch;
-  }
-  .hero h3 b {
-    font-weight: 700;
-    color: var(--stone-900);
-  }
-  .hero h3 code {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 36px;
-    font-weight: 500;
-    color: var(--orange-2);
-    padding: 0 2px;
-  }
-
-  .divergence {
-    display: grid;
-    grid-template-columns: 1fr 90px 1fr;
-    border-top: 1.5px solid var(--stone-900);
-    border-bottom: 1.5px solid var(--stone-900);
-    margin-bottom: 22px;
-    position: relative;
-    z-index: 4;
-    background: rgba(250, 250, 249, 0.7); /* lift over ghost */
-  }
-  .divergence .side {
-    padding: 16px 24px 16px 0;
-  }
-  .divergence .side.r {
-    padding-left: 24px;
-    padding-right: 0;
-    border-left: 1px solid var(--stone-200);
-  }
-  .divergence .h {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--stone-700);
-    margin-bottom: 10px;
-  }
-  .divergence ul { list-style: none; }
-  .divergence li {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14.5px;
-    line-height: 1.6;
-    color: var(--stone-900);
-  }
-  .divergence li.dead {
-    color: var(--stone-300);
-    text-decoration: line-through;
-    text-decoration-color: var(--orange);
-    text-decoration-thickness: 1.5px;
-  }
-  .divergence .count {
-    margin-top: 10px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px;
-    color: var(--stone-700);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .divergence .count strong {
-    color: var(--stone-900);
-    font-weight: 700;
-    font-size: 22px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    letter-spacing: -0.02em;
-    margin-right: 8px;
-  }
-  .divergence .mid {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 200;
-    font-size: 72px;
-    color: var(--orange);
-    line-height: 1;
-  }
-
-  /* The fix — three layers as a horizontal strip */
-  .layers {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    position: relative;
-    z-index: 4;
-    background: rgba(250, 250, 249, 0.7);
-    padding-top: 4px;
-  }
-  .layer {
-    border-top: 1px solid var(--stone-300);
-    padding-top: 10px;
-  }
-  .layer .letter {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--orange);
-    margin-bottom: 4px;
-  }
-  .layer .name {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    font-size: 17px;
-    color: var(--stone-900);
-    line-height: 1.2;
-    margin-bottom: 6px;
-  }
-  .layer .desc {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--stone-700);
-  }
-  .layer .desc code {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--stone-900);
-    background: var(--stone-100);
-    padding: 1px 5px;
-  }
-  .layer .desc b { color: var(--stone-900); font-weight: 600; }
-
-  /* Numbered lessons */
-  .lessons-section {
-    margin-top: 24px;
-    position: relative;
-    z-index: 4;
-  }
-  .lessons-bmark {
+  /* Section markers (Brody) */
+  .bmark {
     display: flex;
     align-items: stretch;
     gap: 12px;
@@ -356,73 +171,252 @@
     border-top: 4px solid var(--stone-900);
     padding-top: 6px;
   }
-  .lessons-bmark .n {
+  .bmark .n {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
     line-height: 0.9;
     letter-spacing: -0.05em;
     background: var(--stone-900);
     color: var(--stone-50);
-    padding: 4px 12px 6px 12px;
+    padding: 3px 12px 5px 12px;
     margin-top: -6px;
   }
-  .lessons-bmark .meta {
+  .bmark .n.orange { background: var(--orange); }
+  .bmark .meta {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     font-weight: 600;
     color: var(--stone-500);
-    padding-top: 8px;
+    padding-top: 7px;
     flex: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .lessons-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 32px;
+
+  /* HERO: anatomy of one object */
+  .anatomy {
+    position: relative;
+    z-index: 4;
+    margin-bottom: 22px;
   }
-  .lesson {
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    column-gap: 14px;
-    align-items: baseline;
-    border-top: 1px solid var(--stone-200);
-    padding: 10px 0 10px 0;
-  }
-  .lesson .n {
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 1;
-    color: var(--orange);
-    letter-spacing: -0.04em;
-  }
-  .lesson .text {
+  .anatomy h3 {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13.5px;
-    line-height: 1.4;
-    font-weight: 400;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    color: var(--stone-900);
+    margin-bottom: 14px;
+  }
+  .anatomy h3 b {
+    font-weight: 700;
     color: var(--stone-900);
   }
-  .lesson .text b { font-weight: 600; }
-  .lesson .text code {
+  .anatomy h3 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  /* The object — diagram box */
+  .object {
+    border: 2.5px solid var(--stone-900);
+    background: var(--stone-50);
+    position: relative;
+    z-index: 4;
+  }
+  .object-name {
+    background: var(--stone-900);
+    color: var(--stone-50);
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 12.5px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    padding: 10px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .object-name .what {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+  .parts {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+  }
+  .part {
+    display: contents;
+  }
+  .part-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange-2);
+    padding: 14px 18px;
+    border-top: 1px solid var(--stone-200);
+    border-right: 1px solid var(--stone-200);
+  }
+  .part-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
     color: var(--stone-900);
+    padding: 14px 18px;
+    border-top: 1px solid var(--stone-200);
+  }
+  .part-desc b { font-weight: 600; }
+  .part-desc code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
     background: var(--stone-100);
     padding: 1px 5px;
   }
+  .part:first-child .part-name,
+  .part:first-child .part-desc {
+    border-top: 0;
+  }
+  .object-foot {
+    background: var(--stone-100);
+    color: var(--stone-700);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-top: 2px solid var(--stone-900);
+    text-align: center;
+  }
+  .object-foot b { color: var(--orange); }
 
-  /* Colophon — bottom, mono micro */
+  /* Routing visual — small block in the corner of the anatomy */
+  .routing {
+    position: absolute;
+    top: -36px;
+    right: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-700);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .routing .name {
+    color: var(--orange-2);
+    font-weight: 700;
+  }
+  .routing b { color: var(--stone-900); font-weight: 700; }
+  .routing .arrow {
+    display: block;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 20px;
+    color: var(--orange);
+    line-height: 1;
+    margin: 4px 0 2px 0;
+    text-align: right;
+  }
+
+  /* Below the hero: things + code side by side */
+  .lower {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 28px;
+    position: relative;
+    z-index: 4;
+  }
+  .things h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--stone-900);
+    margin-bottom: 10px;
+  }
+  .things h3 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .things-list {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--stone-900);
+    letter-spacing: -0.015em;
+    margin-bottom: 10px;
+  }
+  .things-list .sep { color: var(--orange); font-weight: 700; padding: 0 3px; }
+  .things-rule {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--stone-700);
+    line-height: 1.45;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 8px;
+    margin-top: 6px;
+  }
+  .things-rule b { font-style: normal; color: var(--stone-900); font-weight: 600; }
+
+  .code-block {
+    background: var(--stone-900);
+    color: var(--stone-50);
+    padding: 14px 18px 14px 18px;
+    position: relative;
+    align-self: start;
+  }
+  .code-block .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .code-block pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--stone-50);
+    white-space: pre;
+  }
+  .code-block pre .kw { color: var(--orange); font-weight: 600; }
+  .code-block pre .st { color: #B6E0AA; }
+  .code-block pre .fn { color: var(--stone-50); font-weight: 600; }
+  .code-block pre .cm { color: rgba(250,250,249,0.45); font-style: italic; }
+  .code-caption {
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    text-align: right;
+  }
+  .code-caption b { color: var(--orange-2); font-weight: 700; }
+
+  /* Colophon */
   .colophon {
     position: absolute;
     left: 64px;
     right: 64px;
-    bottom: 38px;
+    bottom: 30px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.22em;
@@ -434,7 +428,6 @@
     padding-top: 10px;
   }
   .colophon b { color: var(--stone-900); font-weight: 700; }
-  .colophon .right { text-align: right; }
 </style>
 </head>
 <body>
@@ -445,133 +438,118 @@
   <span class="corner bl"></span>
   <span class="corner br"></span>
 
-  <div class="ghost-phantom">PHANTOM</div>
+  <div class="ghost">object.</div>
 
   <!-- TOPBAR -->
   <div class="topbar">
     <div>
-      <div>Issue 04 / DO Field Notes</div>
-      <div class="meta">sourced from war stories, not docs</div>
+      <div>Durable Objects · Understanding</div>
+      <div class="meta">what kind of thing this is</div>
     </div>
     <div class="right">
-      <div>Set in IBM Plex</div>
-      <div class="meta">keyboardia · vaders</div>
+      <div>One per named thing</div>
+      <div class="meta">JavaScript class · with a disk · with a name</div>
     </div>
   </div>
 
-  <!-- TITLE — mega, bleeds left, two-line mixed weight -->
+  <!-- TITLE -->
   <div class="title">
-    <span class="row field">FIELD</span>
-    <span class="row lessons">lessons<span class="dot">.</span></span>
-    <div class="sub">— for <b>Durable Objects</b></div>
+    <span class="row durable">DURABLE</span>
+    <span class="row objects">objects<span class="dot">.</span></span>
+    <div class="sub">— a class instance with a <b>name</b>, a <b>disk</b>, and a place to <b>run</b></div>
   </div>
 
-  <!-- THESIS — full-bleed orange band -->
-  <section class="thesis">
-    <div class="label"><span>The Thesis</span><span>00 / Manifesto</span></div>
+  <!-- DEFINITION BAND -->
+  <section class="definition">
+    <div class="label"><span>The smallest mental model</span><span>00</span></div>
     <h2>
-      Single-threaded didn't mean concurrency went <em>away.</em>
-      <span class="punch">It moved.</span>
+      A <em>JavaScript class.</em> Plus a name. Plus a disk. Plus one CPU at a time.
     </h2>
   </section>
 
-  <!-- HERO — the phantom -->
-  <section class="hero">
+  <!-- ANATOMY HERO -->
+  <section class="anatomy">
     <div class="bmark">
-      <span class="n">01</span>
-      <span class="meta"><span>The Phantom / SQL ≠ Reachable</span><span>Hero</span></span>
+      <span class="n orange">01</span>
+      <span class="meta"><span>Anatomy / what's in one</span><span>Look inside</span></span>
     </div>
-    <h3>
-      Storage <b>records</b> what you wrote. <code>getWebSockets()</code> <b>reports</b> what's reachable. They <em>will</em> disagree.
-    </h3>
+    <h3>What lives inside <b>one</b> object.</h3>
 
-    <div class="divergence">
-      <div class="side l">
-        <div class="h">storage.list("players/")</div>
-        <ul>
-          <li>alice@desktop</li>
-          <li class="dead">bob@phone</li>
-          <li>dana@web</li>
-          <li class="dead">eve@laptop</li>
-        </ul>
-        <div class="count"><strong>4</strong> players ready</div>
+    <div class="object">
+      <div class="routing">
+        <span>any client &nbsp;→&nbsp; <span class="name">idFromName("standup")</span></span>
+        <span class="arrow">↓</span>
       </div>
-      <div class="mid">≠</div>
-      <div class="side r">
-        <div class="h">ctx.getWebSockets()</div>
-        <ul>
-          <li>alice@desktop</li>
-          <li>dana@web</li>
-        </ul>
-        <div class="count"><strong>2</strong> sockets alive</div>
-      </div>
-    </div>
 
-    <div class="layers">
-      <div class="layer">
-        <div class="letter">A</div>
-        <div class="name">Reconcile on wake.</div>
-        <div class="desc">Constructor diffs <code>storage</code> against <code>ctx.getWebSockets()</code>; deletes entries that aren't reachable. <b>~15 LoC.</b></div>
+      <div class="object-name">
+        <span>/room/standup</span>
+        <span class="what">the named instance</span>
       </div>
-      <div class="layer">
-        <div class="letter">B</div>
-        <div class="name">Server heartbeat.</div>
-        <div class="desc">Refresh <code>lastActiveTick</code> on every message. Reap at <b>2400 ticks (~80&nbsp;s)</b>. Client pings only prove the client is alive.</div>
+
+      <div class="parts">
+        <div class="part">
+          <div class="part-name">storage</div>
+          <div class="part-desc">SQLite, persistent, co-located. <b>Lives where the code does.</b> Transactional. Outlives hibernation.</div>
+        </div>
+        <div class="part">
+          <div class="part-name">memory</div>
+          <div class="part-desc">JavaScript class fields. Lasts <b>until hibernation</b>; re-hydrate from storage on wake.</div>
+        </div>
+        <div class="part">
+          <div class="part-name">inbox</div>
+          <div class="part-desc">Requests handled <b>one at a time</b>, in arrival order. No locks. No races. The single-threaded story.</div>
+        </div>
+        <div class="part">
+          <div class="part-name">alarms</div>
+          <div class="part-desc">Scheduled work. Survives sleep. <code>ctx.storage.setAlarm()</code>.</div>
+        </div>
+        <div class="part">
+          <div class="part-name">sockets</div>
+          <div class="part-desc">WebSockets, hibernate-able. Idle connections cost nothing; wake on the next message.</div>
+        </div>
       </div>
-      <div class="layer">
-        <div class="letter">C</div>
-        <div class="name">Matchmaker prune.</div>
-        <div class="desc">Watch <code>lastStatusChangeAt</code>, not <code>updatedAt</code>. Rooms churn while frozen. Prune at <b>10 min</b> stale.</div>
-      </div>
+
+      <div class="object-foot">▽ &nbsp;&nbsp;<b>hibernates when idle</b>&nbsp; · &nbsp;wakes on the next request&nbsp;&nbsp; ▽</div>
     </div>
   </section>
 
-  <!-- LESSONS -->
-  <section class="lessons-section">
-    <div class="lessons-bmark">
-      <span class="n">02</span>
-      <span class="meta"><span>Field Lessons / Numbered</span><span>8 from production</span></span>
-    </div>
-    <div class="lessons-grid">
-      <div class="lesson">
-        <div class="n">01</div>
-        <div class="text"><code>setTimeout</code> doesn't survive hibernation. <b>Alarms do.</b></div>
+  <!-- THINGS + CODE -->
+  <div class="lower">
+    <section class="things">
+      <div class="bmark">
+        <span class="n">02</span>
+        <span class="meta"><span>What becomes one</span><span>one per thing</span></span>
       </div>
-      <div class="lesson">
-        <div class="n">02</div>
-        <div class="text"><code>blockConcurrencyWhile</code> lives in the constructor. Never in request handlers — <b>you cap yourself at ~200 req/s.</b></div>
+      <h3>One per <em>thing</em> in your system.</h3>
+      <div class="things-list">
+        chat&nbsp;rooms <span class="sep">·</span>
+        documents <span class="sep">·</span>
+        game&nbsp;sessions <span class="sep">·</span>
+        user&nbsp;agents <span class="sep">·</span>
+        carts <span class="sep">·</span>
+        multiplayer&nbsp;lobbies <span class="sep">·</span>
+        long&nbsp;workflows
       </div>
-      <div class="lesson">
-        <div class="n">03</div>
-        <div class="text">Validate at the Worker. The DO is too expensive to use as a request filter.</div>
+      <div class="things-rule">
+        <b>One per thing.</b> Not one for many. The atom is the thing — a room, a session, a user — and the object is its home.
       </div>
-      <div class="lesson">
-        <div class="n">04</div>
-        <div class="text">On <code>e.retryable</code>, throw the stub away. On <code>e.overloaded</code>, <b>do not retry.</b></div>
-      </div>
-      <div class="lesson">
-        <div class="n">05</div>
-        <div class="text">Sequence numbers must persist. Hibernation resets in-memory state to zero.</div>
-      </div>
-      <div class="lesson">
-        <div class="n">06</div>
-        <div class="text">Server-initiated heartbeats, or they don't prove anything. Client pings only prove the client is alive.</div>
-      </div>
-      <div class="lesson">
-        <div class="n">07</div>
-        <div class="text"><code>Math.random()</code> in render hot paths is a red flag. Determinism is something you <em>build.</em></div>
-      </div>
-      <div class="lesson">
-        <div class="n">08</div>
-        <div class="text"><code>wrangler dev</code> or you didn't test. Mocks hide hibernation.</div>
-      </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="code-block">
+      <div class="label">— 03 / How you reach one</div>
+<pre><span class="kw">const</span> id   = ns.<span class="fn">idFromName</span>(<span class="st">"standup"</span>);
+<span class="kw">const</span> room = ns.<span class="fn">get</span>(id);
+<span class="kw">await</span> room.<span class="fn">send</span>(message);
+
+<span class="cm">// same name → same instance,</span>
+<span class="cm">// from anywhere on Earth.</span></pre>
+    </section>
+  </div>
 
   <!-- COLOPHON -->
   <div class="colophon">
-    <div>Field-tuned numbers · not nominal</div>
-    <div class="right">Weltformat F4 / 1260 × 1800</div>
+    <div>A <b>Durable Object</b> is what you get when a class has a name and its own disk</div>
+    <div>Cloudflare Workers / Durable Objects</div>
   </div>
 
 </div>
