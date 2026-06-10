@@ -5,7 +5,7 @@
 <title>Field Lessons for Durable Objects</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --stone-50:  #fafaf9;
@@ -15,6 +15,7 @@
     --stone-500: #78716c;
     --stone-700: #44403c;
     --stone-900: #1c1917;
+    --stone-950: #0c0a09;
     --orange:    #F38020;
     --orange-2:  #B85508;
   }
@@ -33,67 +34,196 @@
     width: 1260px;
     height: 1800px;
     overflow: hidden;
-    padding: 120px 104px 100px 104px;
+    padding: 48px 64px 44px 64px;
   }
 
-  /* Title */
-  .title {
-    text-align: center;
-    margin-bottom: 64px;
+  /* Corner crop marks */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 5;
   }
-  .title h1 {
+  .corner.tl { top: 24px; left: 24px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 24px; right: 24px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 24px; left: 24px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 24px; right: 24px; border-left: 0; border-top: 0; }
+
+  /* Background mega watermark behind the phantom hero — type as image */
+  .ghost-phantom {
+    position: absolute;
+    top: 730px;
+    left: -120px;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    font-size: 80px;
-    line-height: 1.02;
-    letter-spacing: -0.025em;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 360px;
+    line-height: 0.82;
+    letter-spacing: -0.07em;
+    color: rgba(28, 25, 23, 0.05);
+    transform: rotate(-8deg);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  /* Top bar — mono section marker */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
     color: var(--stone-900);
     margin-bottom: 14px;
+    position: relative;
+    z-index: 4;
   }
-  .title .sub {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    font-style: italic;
-    font-size: 28px;
-    line-height: 1.1;
-    color: var(--stone-700);
-    letter-spacing: -0.005em;
-  }
-  .title .rule {
-    width: 92px;
-    height: 2px;
-    background: var(--orange);
-    margin: 26px auto 0 auto;
-  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
 
-  /* Section label — small Mono caption */
-  .section-label {
+  /* MEGA title — bleeds left, two lines, mixed weight */
+  .title {
+    position: relative;
+    margin-left: -10px;
+    margin-bottom: 8px;
+    z-index: 4;
+  }
+  .title .row {
+    display: block;
+    line-height: 0.82;
+    letter-spacing: -0.055em;
+  }
+  .title .field {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 232px;
+    color: var(--stone-900);
+  }
+  .title .lessons {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 232px;
+    color: var(--orange);
+    letter-spacing: -0.065em;
+    margin-top: -6px;
+  }
+  .title .lessons .dot { color: var(--stone-900); }
+  .title .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-700);
+    margin-top: 14px;
+    margin-left: 4px;
+  }
+  .title .sub b { color: var(--stone-900); font-weight: 700; }
+
+  /* Full-bleed orange band — the thesis */
+  .thesis {
+    background: var(--orange);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 22px 100px 24px 100px;
+    margin-top: 18px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 3;
+  }
+  .thesis .label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10.5px;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--stone-500);
-    margin-bottom: 14px;
+    font-weight: 600;
+    color: rgba(250, 250, 249, 0.85);
+    border-top: 1.5px solid var(--stone-50);
+    padding-top: 6px;
+    margin-bottom: 12px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
   }
-  .section-label .num { color: var(--orange); font-weight: 700; }
-
-  /* Hero: phantom players */
-  .hero h2 {
+  .thesis h2 {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 500;
-    font-size: 30px;
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    color: var(--stone-900);
-    margin-bottom: 22px;
-    max-width: 60ch;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
   }
-  .hero h2 code {
+  .thesis h2 em {
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(250, 250, 249, 0.96);
+  }
+  .thesis h2 .punch {
+    font-weight: 700;
+    font-style: italic;
+    color: var(--stone-900);
+  }
+
+  /* Hero — phantom players (overlap with ghost watermark) */
+  .hero {
+    position: relative;
+    z-index: 4;
+    margin-bottom: 22px;
+  }
+  .hero .bmark {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 14px;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 6px;
+  }
+  .hero .bmark .n {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    background: var(--orange);
+    color: var(--stone-50);
+    padding: 4px 12px 6px 12px;
+    margin-top: -6px;
+  }
+  .hero .bmark .meta {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 27px;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    padding-top: 8px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    color: var(--stone-900);
+    margin-bottom: 18px;
+    max-width: 30ch;
+  }
+  .hero h3 b {
+    font-weight: 700;
+    color: var(--stone-900);
+  }
+  .hero h3 code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 36px;
     font-weight: 500;
     color: var(--orange-2);
     padding: 0 2px;
@@ -101,16 +231,19 @@
 
   .divergence {
     display: grid;
-    grid-template-columns: 1fr 80px 1fr;
+    grid-template-columns: 1fr 90px 1fr;
     border-top: 1.5px solid var(--stone-900);
     border-bottom: 1.5px solid var(--stone-900);
-    margin-bottom: 32px;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+    background: rgba(250, 250, 249, 0.7); /* lift over ghost */
   }
   .divergence .side {
-    padding: 18px 28px 18px 0;
+    padding: 16px 24px 16px 0;
   }
   .divergence .side.r {
-    padding-left: 28px;
+    padding-left: 24px;
     padding-right: 0;
     border-left: 1px solid var(--stone-200);
   }
@@ -121,15 +254,13 @@
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--stone-700);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
-  .divergence ul {
-    list-style: none;
-  }
+  .divergence ul { list-style: none; }
   .divergence li {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 14.5px;
+    line-height: 1.6;
     color: var(--stone-900);
   }
   .divergence li.dead {
@@ -139,188 +270,220 @@
     text-decoration-thickness: 1.5px;
   }
   .divergence .count {
-    margin-top: 14px;
+    margin-top: 10px;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--stone-700);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
   .divergence .count strong {
     color: var(--stone-900);
     font-weight: 700;
-    font-size: 18px;
+    font-size: 22px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    letter-spacing: -0.02em;
+    margin-right: 8px;
   }
   .divergence .mid {
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    font-size: 56px;
+    font-weight: 200;
+    font-size: 72px;
     color: var(--orange);
     line-height: 1;
   }
 
-  /* The three-layer fix */
-  .fix-intro {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.5;
-    color: var(--stone-700);
-    margin-bottom: 22px;
-    max-width: 64ch;
-  }
-  .fix-intro b {
-    color: var(--stone-900);
-    font-weight: 600;
-  }
-
+  /* The fix — three layers as a horizontal strip */
   .layers {
     display: grid;
-    grid-template-columns: 40px 220px 1fr;
-    row-gap: 18px;
-    column-gap: 22px;
-    align-items: baseline;
-    border-top: 1px solid var(--stone-200);
-    padding-top: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    position: relative;
+    z-index: 4;
+    background: rgba(250, 250, 249, 0.7);
+    padding-top: 4px;
   }
-  .layers .letter {
+  .layer {
+    border-top: 1px solid var(--stone-300);
+    padding-top: 10px;
+  }
+  .layer .letter {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
-    font-size: 26px;
-    color: var(--orange);
+    font-size: 36px;
     line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--orange);
+    margin-bottom: 4px;
   }
-  .layers .name {
+  .layer .name {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
     font-size: 17px;
     color: var(--stone-900);
-    line-height: 1.3;
+    line-height: 1.2;
+    margin-bottom: 6px;
   }
-  .layers .desc {
+  .layer .desc {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14.5px;
+    font-size: 13px;
     line-height: 1.5;
     color: var(--stone-700);
-    max-width: 56ch;
   }
-  .layers .desc code {
+  .layer .desc code {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--stone-900);
     background: var(--stone-100);
     padding: 1px 5px;
   }
-  .fix-foot {
-    margin-top: 18px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--stone-500);
-    text-align: center;
-  }
+  .layer .desc b { color: var(--stone-900); font-weight: 600; }
 
   /* Numbered lessons */
-  .lessons {
-    margin-top: 44px;
+  .lessons-section {
+    margin-top: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .lessons-bmark {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 12px;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 6px;
+  }
+  .lessons-bmark .n {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    padding: 4px 12px 6px 12px;
+    margin-top: -6px;
+  }
+  .lessons-bmark .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    padding-top: 8px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .lessons-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 56px;
-    row-gap: 0;
+    column-gap: 32px;
   }
   .lesson {
     display: grid;
-    grid-template-columns: 40px 1fr;
-    column-gap: 16px;
+    grid-template-columns: 56px 1fr;
+    column-gap: 14px;
     align-items: baseline;
     border-top: 1px solid var(--stone-200);
-    padding: 14px 0 14px 0;
+    padding: 10px 0 10px 0;
   }
   .lesson .n {
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 700;
-    font-size: 14px;
-    color: var(--orange);
-    letter-spacing: 0.02em;
+    font-size: 32px;
     line-height: 1;
+    color: var(--orange);
+    letter-spacing: -0.04em;
   }
   .lesson .text {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14.5px;
-    line-height: 1.45;
+    font-size: 13.5px;
+    line-height: 1.4;
     font-weight: 400;
     color: var(--stone-900);
   }
-  .lesson .text b {
-    font-weight: 600;
-  }
+  .lesson .text b { font-weight: 600; }
   .lesson .text code {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--stone-900);
     background: var(--stone-100);
     padding: 1px 5px;
   }
 
-  /* Closing */
-  .closing {
-    position: absolute;
-    left: 104px;
-    right: 104px;
-    bottom: 96px;
-    text-align: center;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    font-style: italic;
-    font-size: 26px;
-    line-height: 1.3;
-    color: var(--stone-700);
-    letter-spacing: -0.005em;
-  }
-  .closing b {
-    font-style: normal;
-    font-weight: 600;
-    color: var(--stone-900);
-  }
-
-  /* Footer attribution */
+  /* Colophon — bottom, mono micro */
   .colophon {
     position: absolute;
-    left: 104px;
-    right: 104px;
-    bottom: 36px;
-    text-align: center;
+    left: 64px;
+    right: 64px;
+    bottom: 38px;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 10px;
   }
-  .colophon b { color: var(--stone-900); font-weight: 600; }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+  .colophon .right { text-align: right; }
 </style>
 </head>
 <body>
 <div class="poster">
 
-  <div class="title">
-    <h1>Field Lessons</h1>
-    <div class="sub">— for Durable Objects</div>
-    <div class="rule"></div>
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="ghost-phantom">PHANTOM</div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Issue 04 / DO Field Notes</div>
+      <div class="meta">sourced from war stories, not docs</div>
+    </div>
+    <div class="right">
+      <div>Set in IBM Plex</div>
+      <div class="meta">keyboardia · vaders</div>
+    </div>
   </div>
 
-  <!-- ── HERO ────────────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="section-label">
-      <span>The Phantom</span>
-      <span class="num">Hero · 01</span>
-    </div>
+  <!-- TITLE — mega, bleeds left, two-line mixed weight -->
+  <div class="title">
+    <span class="row field">FIELD</span>
+    <span class="row lessons">lessons<span class="dot">.</span></span>
+    <div class="sub">— for <b>Durable Objects</b></div>
+  </div>
+
+  <!-- THESIS — full-bleed orange band -->
+  <section class="thesis">
+    <div class="label"><span>The Thesis</span><span>00 / Manifesto</span></div>
     <h2>
-      Storage records what you wrote. <code>getWebSockets()</code> reports what's reachable. They will disagree.
+      Single-threaded didn't mean concurrency went <em>away.</em>
+      <span class="punch">It moved.</span>
     </h2>
+  </section>
+
+  <!-- HERO — the phantom -->
+  <section class="hero">
+    <div class="bmark">
+      <span class="n">01</span>
+      <span class="meta"><span>The Phantom / SQL ≠ Reachable</span><span>Hero</span></span>
+    </div>
+    <h3>
+      Storage <b>records</b> what you wrote. <code>getWebSockets()</code> <b>reports</b> what's reachable. They <em>will</em> disagree.
+    </h3>
 
     <div class="divergence">
       <div class="side l">
@@ -331,7 +494,7 @@
           <li>dana@web</li>
           <li class="dead">eve@laptop</li>
         </ul>
-        <div class="count"><strong>4</strong> &nbsp;players ready</div>
+        <div class="count"><strong>4</strong> players ready</div>
       </div>
       <div class="mid">≠</div>
       <div class="side r">
@@ -340,45 +503,43 @@
           <li>alice@desktop</li>
           <li>dana@web</li>
         </ul>
-        <div class="count"><strong>2</strong> &nbsp;sockets alive</div>
+        <div class="count"><strong>2</strong> sockets alive</div>
       </div>
     </div>
 
-    <div class="fix-intro">
-      The fix is <b>three layers</b>, not one. Each closes a different hole — the corpses persist otherwise, the matchmaker keeps feeding the room victims, and you never notice until the support tickets arrive.
-    </div>
-
     <div class="layers">
-      <div class="letter">A</div>
-      <div class="name">Reconcile on wake.</div>
-      <div class="desc">In the constructor, diff <code>storage</code> against <code>ctx.getWebSockets()</code> and delete entries that aren't reachable. ~15 LoC.</div>
-
-      <div class="letter">B</div>
-      <div class="name">Server heartbeat.</div>
-      <div class="desc">Refresh <code>lastActiveTick</code> on every message. Reap players idle &gt; <b>2400 ticks (~80 s)</b>. Client pings prove the client is alive — only this proves the server can still hear them.</div>
-
-      <div class="letter">C</div>
-      <div class="name">Matchmaker prune.</div>
-      <div class="desc">Watch <code>lastStatusChangeAt</code>, not <code>updatedAt</code>. Rooms can churn while frozen in a phantom state. Prune at <b>10 min</b> stale.</div>
+      <div class="layer">
+        <div class="letter">A</div>
+        <div class="name">Reconcile on wake.</div>
+        <div class="desc">Constructor diffs <code>storage</code> against <code>ctx.getWebSockets()</code>; deletes entries that aren't reachable. <b>~15 LoC.</b></div>
+      </div>
+      <div class="layer">
+        <div class="letter">B</div>
+        <div class="name">Server heartbeat.</div>
+        <div class="desc">Refresh <code>lastActiveTick</code> on every message. Reap at <b>2400 ticks (~80&nbsp;s)</b>. Client pings only prove the client is alive.</div>
+      </div>
+      <div class="layer">
+        <div class="letter">C</div>
+        <div class="name">Matchmaker prune.</div>
+        <div class="desc">Watch <code>lastStatusChangeAt</code>, not <code>updatedAt</code>. Rooms churn while frozen. Prune at <b>10 min</b> stale.</div>
+      </div>
     </div>
-
-    <div class="fix-foot">— each closes a different hole —</div>
   </section>
 
-  <!-- ── NUMBERED LESSONS ────────────────────────────────────────── -->
-  <section class="lessons">
-    <div class="section-label">
-      <span>Field Lessons</span>
-      <span class="num">8 from the war stories</span>
+  <!-- LESSONS -->
+  <section class="lessons-section">
+    <div class="lessons-bmark">
+      <span class="n">02</span>
+      <span class="meta"><span>Field Lessons / Numbered</span><span>8 from production</span></span>
     </div>
     <div class="lessons-grid">
       <div class="lesson">
         <div class="n">01</div>
-        <div class="text"><code>setTimeout</code> doesn't survive hibernation. <b>Alarms</b> do.</div>
+        <div class="text"><code>setTimeout</code> doesn't survive hibernation. <b>Alarms do.</b></div>
       </div>
       <div class="lesson">
         <div class="n">02</div>
-        <div class="text"><code>blockConcurrencyWhile</code> lives in the constructor. Never in request handlers — you cap yourself at ~200 req/s.</div>
+        <div class="text"><code>blockConcurrencyWhile</code> lives in the constructor. Never in request handlers — <b>you cap yourself at ~200 req/s.</b></div>
       </div>
       <div class="lesson">
         <div class="n">03</div>
@@ -386,7 +547,7 @@
       </div>
       <div class="lesson">
         <div class="n">04</div>
-        <div class="text">On <code>e.retryable</code>, throw the stub away and ask for a fresh one. On <code>e.overloaded</code>, do <b>not</b> retry.</div>
+        <div class="text">On <code>e.retryable</code>, throw the stub away. On <code>e.overloaded</code>, <b>do not retry.</b></div>
       </div>
       <div class="lesson">
         <div class="n">05</div>
@@ -398,7 +559,7 @@
       </div>
       <div class="lesson">
         <div class="n">07</div>
-        <div class="text"><code>Math.random()</code> in render hot paths is a red flag. Determinism is something you build, not something you inherit.</div>
+        <div class="text"><code>Math.random()</code> in render hot paths is a red flag. Determinism is something you <em>build.</em></div>
       </div>
       <div class="lesson">
         <div class="n">08</div>
@@ -407,12 +568,10 @@
     </div>
   </section>
 
-  <!-- ── CLOSING ─────────────────────────────────────────────────── -->
-  <div class="closing">
-    Single-threaded didn't mean concurrency went away. <b>It moved.</b>
-  </div>
+  <!-- COLOPHON -->
   <div class="colophon">
-    sourced from <b>keyboardia</b> &nbsp;·&nbsp; <b>vaders</b> &nbsp;·&nbsp; field-tuned numbers, not nominal ones
+    <div>Field-tuned numbers · not nominal</div>
+    <div class="right">Weltformat F4 / 1260 × 1800</div>
   </div>
 
 </div>
