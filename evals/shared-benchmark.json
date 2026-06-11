@@ -4,7 +4,7 @@
   "harness": {
     "name": "skill-eval-harness",
     "url": "https://github.com/adewale/skill-eval-harness",
-    "version": ">=0.2.0"
+    "version": ">=0.3.0"
   },
   "skill_paths": [
     "swiss-poster/SKILL.md"
@@ -768,33 +768,17 @@
           ]
         },
         {
-          "name": "one-accent",
-          "type": "contains_any",
-          "values": [
-            "one accent",
-            "single accent",
-            "only accent"
-          ]
-        },
-        {
-          "name": "not-svg-only",
-          "type": "contains_any",
-          "values": [
-            "not SVG-only",
-            "HTML",
-            "Tailwind",
-            "implementable"
-          ]
-        },
-        {
-          "name": "mobile-scroll-safe",
-          "type": "contains_any",
-          "values": [
-            "320px",
-            "no horizontal scroll",
-            "overflow-hidden",
-            "overflow-x-hidden"
-          ]
+          "name": "fixture-script-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/fixture_oracle.py",
+            "{output_dir}",
+            "round3-fixture-poster-html-audit"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Deterministic fixture-backed oracle; run benchmark with --allow-scripts."
         },
         {
           "name": "round-3-qualitative-review",
