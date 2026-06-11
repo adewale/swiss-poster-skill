@@ -2,9 +2,10 @@
 name: swiss-poster
 description: Apply a Swiss Poster design system using Tailwind CSS. Use when asked to style a webpage with poster-style layouts where elements break the grid, overlap, bleed off edges, and use extreme typographic scale. Implements IBM Plex Sans, stone color palette, opacity hierarchy, and compositional techniques from Weingart, Troxler, Hofmann, and Odermatt & Tissi.
 license: MIT
+compatibility: Agent Skills clients including Codex, OpenCode, Pi, Gemini CLI, and Claude Code.
 metadata:
   author: adewale
-  version: "2.0"
+  version: "2.0.0"
 ---
 
 # Swiss Poster Design System

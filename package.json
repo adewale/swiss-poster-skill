@@ -1,0 +1,35 @@
+{
+  "name": "swiss-poster-skill",
+  "version": "2.0.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Agent Skill for applying a Swiss Poster design system to web and UI work.",
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "opencode",
+    "pi",
+    "gemini",
+    "claude-code"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adewale/swiss-poster-skill.git"
+  },
+  "homepage": "https://github.com/adewale/swiss-poster-skill#readme",
+  "skill": {
+    "entry": "swiss-poster/SKILL.md",
+    "harnesses": [
+      "codex",
+      "opencode",
+      "pi",
+      "gemini",
+      "claude-code"
+    ]
+  },
+  "pi": {
+    "skills": [
+      "./swiss-poster"
+    ]
+  }
+}
