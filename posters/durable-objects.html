@@ -523,6 +523,39 @@
   }
   .follow p b { color: var(--stone-900); font-weight: 600; }
 
+  /* Lineage — the phrases that travelled with this idea */
+  .lineage {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 58px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border-bottom: 1px dotted var(--stone-300);
+    padding-bottom: 8px;
+  }
+  .lineage .tag {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange-2);
+    margin-right: 8px;
+    flex: 0 0 auto;
+  }
+  .lineage .phrase b { color: var(--stone-900); font-weight: 700; letter-spacing: 0.12em; }
+  .lineage .phrase .when { color: var(--stone-500); font-weight: 400; margin-left: 4px; }
+  .lineage .arrow { color: var(--orange); font-weight: 700; margin: 0 2px; }
+  .lineage .phrase { flex: 1; }
+  .lineage .phrase:last-of-type { text-align: right; }
+
   /* Colophon */
   .colophon {
     position: absolute;
@@ -581,7 +614,7 @@
   <section class="inversion">
     <div class="bmark">
       <span class="n orange">01</span>
-      <span class="meta"><span>The Inversion / why it's different</span><span>old shape → new shape</span></span>
+      <span class="meta"><span>The Missing Piece / why it's different</span><span>old shape → new shape</span></span>
     </div>
     <div class="inv-grid">
       <div class="inv-panel old">
@@ -667,10 +700,10 @@
     <div class="left">
       <div class="bmark">
         <span class="n">03</span>
-        <span class="meta"><span>The unit of state / how to think in it</span></span>
+        <span class="meta"><span>The unit of state / durable identity</span></span>
       </div>
       <div class="unit-quote">
-        Your app already has natural units of state. <em>Name them,</em> and each one gets its own object.
+        Your app already has natural units of state. <em>Name them</em> — each gets a <b>durable identity,</b> each gets its own object.
       </div>
       <div class="unit-things">
         <div class="pair"><span class="app">chat app</span><span class="thing">a room <span class="tail">— its members, its history</span></span></div>
@@ -712,6 +745,18 @@
       </div>
     </div>
   </section>
+
+  <!-- LINEAGE — the phrases that have travelled with this idea -->
+  <div class="lineage">
+    <span class="tag">The language</span>
+    <span class="phrase"><b>stateful serverless</b><span class="when">· 2020</span></span>
+    <span class="arrow">→</span>
+    <span class="phrase"><b>missing piece</b><span class="when">· 2020</span></span>
+    <span class="arrow">→</span>
+    <span class="phrase"><b>stateful nodes</b><span class="when">· 2024</span></span>
+    <span class="arrow">→</span>
+    <span class="phrase"><b>durable identity</b><span class="when">· now</span></span>
+  </div>
 
   <!-- COLOPHON -->
   <div class="colophon">
