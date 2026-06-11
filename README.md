@@ -15,6 +15,18 @@ gh repo clone adewale/swiss-poster-skill
 cp -r swiss-poster-skill/swiss-poster ~/.config/opencode/skills/
 ```
 
+## Agent compatibility
+
+The installable skill directory is `swiss-poster`. It uses the Agent Skills `SKILL.md` format and is configured for Codex, OpenCode, Pi, Gemini CLI, and Claude Code.
+
+| Agent/client | Install or use |
+|---|---|
+| Codex | `cp -R swiss-poster ~/.codex/skills/swiss-poster` |
+| OpenCode | `cp -R swiss-poster ~/.config/opencode/skills/swiss-poster` or use `.opencode/skills/swiss-poster` in a project |
+| Pi | `pi install https://github.com/adewale/swiss-poster-skill` or `pi --skill swiss-poster` |
+| Gemini CLI | `gemini skills install https://github.com/adewale/swiss-poster-skill --path swiss-poster` or copy to `.gemini/skills/swiss-poster` |
+| Claude Code | `npx skills add adewale/swiss-poster-skill` or copy to `.claude/skills/swiss-poster` |
+
 ## Usage
 
 Once installed, tell your agent to apply it:
