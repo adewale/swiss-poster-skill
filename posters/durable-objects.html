@@ -438,20 +438,31 @@
   .unit-quote em { font-style: italic; color: var(--orange-2); font-weight: 500; }
   .unit-things {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
+    font-size: 12.5px;
+    line-height: 1.85;
     color: var(--stone-700);
   }
   .unit-things .pair {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     border-bottom: 1px dotted var(--stone-300);
     padding: 1px 0;
+    gap: 14px;
   }
   .unit-things .pair:last-child { border-bottom: 0; }
-  .unit-things .app { color: var(--stone-500); }
-  .unit-things .thing { color: var(--stone-900); font-weight: 600; }
+  .unit-things .app { color: var(--stone-500); flex: 0 0 auto; }
+  .unit-things .thing { color: var(--stone-900); font-weight: 600; text-align: right; }
   .unit-things .thing::before { content: "→ "; color: var(--orange); font-weight: 700; }
+  .unit-things .thing .tail {
+    font-weight: 400;
+    color: var(--stone-500);
+    font-style: italic;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    letter-spacing: -0.005em;
+    margin-left: 6px;
+  }
 
   .code-block {
     background: var(--stone-900);
@@ -662,11 +673,11 @@
         Your app already has natural units of state. <em>Name them,</em> and each one gets its own object.
       </div>
       <div class="unit-things">
-        <div class="pair"><span class="app">chat app</span><span class="thing">the room</span></div>
-        <div class="pair"><span class="app">spreadsheet editor</span><span class="thing">the spreadsheet</span></div>
-        <div class="pair"><span class="app">multiplayer game</span><span class="thing">the match</span></div>
-        <div class="pair"><span class="app">AI assistant</span><span class="thing">the conversation</span></div>
-        <div class="pair"><span class="app">storefront</span><span class="thing">the cart</span></div>
+        <div class="pair"><span class="app">chat app</span><span class="thing">a room <span class="tail">— its members, its history</span></span></div>
+        <div class="pair"><span class="app">collab editor</span><span class="thing">a document <span class="tail">— its CRDT, its cursors</span></span></div>
+        <div class="pair"><span class="app">multiplayer game</span><span class="thing">a match <span class="tail">— its players, the tick</span></span></div>
+        <div class="pair"><span class="app">AI agent</span><span class="thing">a session <span class="tail">— its memory, its tools, its budget</span></span></div>
+        <div class="pair"><span class="app">storefront</span><span class="thing">a cart <span class="tail">— its items, the checkout lock</span></span></div>
       </div>
     </div>
     <section class="code-block">
