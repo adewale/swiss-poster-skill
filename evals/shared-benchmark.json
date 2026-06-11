@@ -75,7 +75,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "pos-component-set",
@@ -116,7 +122,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "pos-dark-mode",
@@ -156,7 +168,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "pos-mobile-320",
@@ -205,7 +223,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "pos-poster-composition",
@@ -291,7 +315,13 @@
           "description": "Must use the Swiss red accent or a semantic accent token."
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-swiss-country",
@@ -319,7 +349,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-swiss-tax",
@@ -347,7 +383,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-corporate-minimal",
@@ -376,7 +418,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-multi-accent-gradient",
@@ -415,7 +463,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-excessive-rotation",
@@ -443,7 +497,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-horizontal-scroll",
@@ -483,7 +543,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "neg-inaccessible-touch",
@@ -512,7 +578,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "trig-swiss-poster",
@@ -532,7 +604,13 @@
       ],
       "tags": [
         "trigger"
-      ]
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "implicit"
     },
     {
       "id": "trig-poster-energy",
@@ -552,7 +630,13 @@
       ],
       "tags": [
         "trigger"
-      ]
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "implicit"
     },
     {
       "id": "trig-break-grid",
@@ -572,7 +656,13 @@
       ],
       "tags": [
         "trigger"
-      ]
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "implicit"
     },
     {
       "id": "trig-geography",
@@ -592,7 +682,13 @@
       ],
       "tags": [
         "trigger"
-      ]
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "negative-near-miss"
     },
     {
       "id": "trig-translation",
@@ -612,7 +708,13 @@
       ],
       "tags": [
         "trigger"
-      ]
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "negative-near-miss"
     },
     {
       "id": "trig-neutral-cleanup",
@@ -632,7 +734,13 @@
       ],
       "tags": [
         "trigger"
-      ]
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "negative-near-miss"
     },
     {
       "id": "holdout-rendered-tailwind-01",
@@ -653,7 +761,13 @@
           ]
         }
       ],
-      "tags": []
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
     },
     {
       "id": "holdback-nonposter-swiss-like-01",
@@ -676,6 +790,12 @@
       ],
       "tags": [
         "holdback-private"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
       ]
     },
     {
@@ -744,6 +864,12 @@
         "round-2",
         "anthropic-gap",
         "responsive-proof"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
       ]
     },
     {
@@ -794,6 +920,12 @@
         "round-3",
         "fixture-backed",
         "audit-manifest"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
       ]
     }
   ],
