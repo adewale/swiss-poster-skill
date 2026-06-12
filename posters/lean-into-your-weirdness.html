@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lean Into Your Weirdness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,100;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,500;1,300;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --red:       #DA291C;   /* Swiss flag red — Pantone 485 */
+    --red-2:     #B81E14;   /* deeper Swiss red for shadow */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 56px 64px 50px 64px;
+  }
+
+  /* Frame marks */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+  }
+  .corner.tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
+
+  /* Background — Scylla & Charybdis */
+  .myth-svg {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    color: var(--stone-900);
+    z-index: 0;
+  }
+  .scylla {
+    left: -28px;
+    top: 480px;
+    width: 220px;
+    height: 290px;
+    opacity: 0.14;
+  }
+  .charybdis {
+    right: -30px;
+    top: 540px;
+    width: 260px;
+    height: 260px;
+    opacity: 0.12;
+  }
+  .ship-path {
+    position: absolute;
+    left: 0; right: 0; top: 560px;
+    width: 100%;
+    height: 280px;
+    pointer-events: none;
+    user-select: none;
+    color: var(--red);
+    opacity: 0.32;
+    z-index: 0;
+  }
+  .ship-path .ship {
+    fill: var(--red);
+    stroke: var(--red);
+    stroke-width: 0.8;
+  }
+
+  /* Boustrophedon — for the ones who notice */
+  .bous {
+    position: absolute;
+    bottom: 8px;
+    right: 56px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.5px;
+    line-height: 1.25;
+    letter-spacing: 0.24em;
+    color: rgba(28,25,23,0.42);
+    text-align: right;
+    z-index: 6;
+  }
+  .bous .ltr { display: block; }
+  .bous .rtl {
+    display: block;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+
+  /* Brody-influenced section markers */
+  .bmark {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 8px;
+    border-top: 3px solid var(--stone-900);
+    padding-top: 6px;
+  }
+  .bmark .num {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    padding: 2px 8px 4px 8px;
+    margin-top: -6px;
+    align-self: flex-start;
+  }
+  .bmark .num.red { background: var(--red); }
+  .bmark .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(28,25,23,0.55);
+    line-height: 1.2;
+    padding-top: 4px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .bmark .meta .tri {
+    width: 0; height: 0;
+    border-left: 8px solid var(--red);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+  .bmark.dark { border-top-color: var(--stone-50); }
+  .bmark.dark .num { background: var(--red); color: var(--stone-50); }
+  .bmark.dark .meta { color: rgba(250,250,249,0.6); }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 5;
+  }
+  .topbar .right { text-align: right; }
+  .topbar .meta { color: rgba(28,25,23,0.55); margin-top: 4px; font-weight: 400; }
+  .topbar .pink { color: var(--red); font-weight: 600; }
+
+  /* Title — typographic mischief */
+  .title {
+    position: relative;
+    margin-left: -6px;
+    z-index: 5;
+    margin-bottom: 8px;
+  }
+  .title .lean {
+    font-size: 156px;
+    font-weight: 700;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    display: block;
+  }
+  .title .into {
+    position: absolute;
+    top: 22px;
+    right: 4px;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 76px;
+    color: var(--stone-900);
+    transform: rotate(-4deg);
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+  }
+  .title .into .into-prefix {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 3px;
+    transform: rotate(2deg);
+  }
+  .title .your {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 60px;
+    color: var(--stone-900);
+    margin-left: 22px;
+    margin-top: -2px;
+    display: inline-block;
+  }
+  /* WEIRDNESS — every letter behaves differently */
+  .weird {
+    display: block;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    margin-top: -6px;
+    margin-left: -4px;
+    white-space: nowrap;
+  }
+  .weird span {
+    display: inline-block;
+    font-size: 124px;
+    color: var(--stone-900);
+  }
+  .weird .l1 { font-weight: 700; }                                                /* W */
+  .weird .l2 { font-weight: 100; transform: translateY(-12px); }                  /* E */
+  .weird .l3 { font-weight: 700; font-style: italic; color: var(--red); }        /* I */
+  .weird .l4 { font-weight: 300; }                                                /* R */
+  .weird .l5 { font-family: 'IBM Plex Serif', serif; font-weight: 500; transform: translateY(8px); }  /* D */
+  .weird .l6 { font-weight: 700; }                                                /* N */
+  .weird .l7 { font-weight: 100; font-style: italic; transform: translateY(-6px); } /* E */
+  .weird .l8 { font-weight: 700; color: var(--red); }                             /* S */
+  .weird .l9 { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-style: italic; transform: translateY(4px); } /* S */
+  .weird .dot { font-weight: 700; color: var(--red); }
+
+  .redbar {
+    position: absolute;
+    left: -64px;
+    width: 200px;
+    top: 78px;
+    height: 14px;
+    background: var(--red);
+    z-index: -1;
+    transform: rotate(-1.5deg);
+  }
+
+  /* Subtitle */
+  .subtitle {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 8px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  .subtitle .lede {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.3;
+    max-width: 620px;
+    color: var(--stone-900);
+  }
+  .subtitle .lede em {
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .subtitle .lede s { color: rgba(28,25,23,0.4); text-decoration-thickness: 1.5px; }
+  .subtitle .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.5;
+    color: rgba(28,25,23,0.65);
+  }
+  .subtitle .stamp strong {
+    display: block;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-size: 44px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    text-transform: none;
+    line-height: 0.95;
+    margin-bottom: 6px;
+  }
+
+  /* Pitch — full-bleed pink, slightly tilted text inside */
+  .pitch {
+    background: var(--red);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 100px 20px 100px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 4;
+    overflow: hidden;
+  }
+  .pitch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 18px);
+    pointer-events: none;
+  }
+  .pitch .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.92);
+    border-top: 1.5px solid var(--stone-50);
+    padding-top: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  .pitch h2 {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+    position: relative;
+  }
+  .pitch h2 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--stone-50);
+  }
+  .pitch h2 s {
+    text-decoration-thickness: 3px;
+    color: rgba(250,250,249,0.55);
+  }
+
+  /* Main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    position: relative;
+    z-index: 4;
+  }
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(28,25,23,0.55);
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .label .num { color: var(--red); font-weight: 600; }
+
+  /* 01 — The Cost of Normal */
+  .b-cost { grid-column: span 7; }
+  .b-cost h3 {
+    font-size: 38px;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 10px;
+  }
+  .b-cost h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .b-cost .lead {
+    font-size: 12.5px;
+    line-height: 1.55;
+    font-weight: 300;
+    color: rgba(28,25,23,0.78);
+    max-width: 56ch;
+    margin-bottom: 12px;
+  }
+  .balance {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--stone-900);
+  }
+  .balance .row {
+    display: grid;
+    grid-template-columns: 1fr 22px 1fr;
+    gap: 8px;
+    align-items: baseline;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .balance .row:last-child { border-bottom: 0; }
+  .balance .row .normal {
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    color: rgba(28,25,23,0.45);
+  }
+  .balance .row .arrow {
+    color: var(--red);
+    font-weight: 700;
+    text-align: center;
+  }
+  .balance .row .weird-side {
+    color: var(--stone-900);
+    font-weight: 500;
+  }
+  .balance .row .weird-side em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+
+  /* 02 — Symptoms (you're already weird) */
+  .b-sym { grid-column: span 5; position: relative; }
+  .b-sym .stack-list { line-height: 1; }
+  .b-sym .stack-list li {
+    list-style: none;
+    font-size: 22px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--stone-200);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .b-sym .stack-list li:first-child { padding-top: 0; }
+  .b-sym .stack-list li .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--red);
+    min-width: 22px;
+    font-weight: 600;
+  }
+  .b-sym .stack-list li.hot {
+    color: var(--red);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* 03 — Exemplars (the patron saints) */
+  .b-saints {
+    grid-column: span 12;
+    margin-top: 10px;
+  }
+  .b-saints h3 {
+    font-size: 22px;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+  }
+  .b-saints h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .saints-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .saints-grid.two {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .saint {
+    border-top: 2px solid var(--stone-900);
+    padding-top: 10px;
+    position: relative;
+  }
+  .saint .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .saints-grid.two .saint h4 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .saint h4 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .saints-grid.two .saint .what {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .saints-grid.two .saint .quirk {
+    font-size: 11px;
+    padding: 7px 10px;
+  }
+  .saint h4.italic { font-family: 'IBM Plex Serif', serif; font-style: italic; font-weight: 500; }
+  .saint .what {
+    font-size: 10.5px;
+    line-height: 1.45;
+    font-weight: 300;
+    color: rgba(28,25,23,0.78);
+    margin-bottom: 6px;
+  }
+  .saint .quirk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.4;
+    color: var(--stone-700);
+    background: var(--stone-100);
+    padding: 5px 7px;
+    border-left: 2px solid var(--red);
+  }
+
+  /* 04 — Practices — DARK band */
+  .b-prac {
+    grid-column: span 12;
+    margin-top: 14px;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 100px 20px 100px;
+    position: relative;
+  }
+  .b-prac .label {
+    color: rgba(250,250,249,0.65);
+    border-top-color: var(--stone-50);
+  }
+  .b-prac .label .num { color: var(--red); }
+  .b-prac h3 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+    margin-bottom: 10px;
+  }
+  .b-prac h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--red);
+  }
+  .b-prac .practices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .prac .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red-2);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .prac h5 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 5px;
+  }
+  .prac p {
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: rgba(250,250,249,0.78);
+  }
+
+  /* 05 — Casualties */
+  .b-cas {
+    grid-column: span 7;
+    margin-top: 12px;
+  }
+  .b-cas h3 {
+    font-size: 24px;
+    font-weight: 200;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+  .b-cas h3 em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .casualties {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.5;
+    color: var(--stone-900);
+  }
+  .casualties .row {
+    display: flex;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px dotted var(--stone-300);
+  }
+  .casualties .row:last-child { border-bottom: 0; }
+  .casualties .row b {
+    min-width: 130px;
+    color: var(--red);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .casualties .row span {
+    color: rgba(28,25,23,0.78);
+    font-weight: 400;
+  }
+
+  /* 06 — The vow */
+  .b-vow {
+    grid-column: span 12;
+    margin-top: 12px;
+    background: var(--stone-100);
+    border-left: 3px solid var(--red);
+    padding: 12px 16px 14px 16px;
+    align-self: start;
+    position: relative;
+  }
+  .b-vow .label {
+    color: rgba(28,25,23,0.6);
+    border-top-color: var(--stone-900);
+    margin-bottom: 8px;
+  }
+  .b-vow .vow {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--stone-900);
+  }
+  .b-vow .vow em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .b-vow .vow strong {
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .b-vow .sig {
+    margin-top: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.5);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px dashed var(--stone-300);
+    padding-top: 8px;
+  }
+  .b-vow .sig .x {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 26px;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: -0.02em;
+    color: var(--red);
+    line-height: 0.7;
+  }
+
+  /* Footer */
+  .foot {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,25,23,0.55);
+    z-index: 5;
+  }
+  .foot .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 200;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+    line-height: 1;
+    text-transform: none;
+  }
+  .foot .big em {
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .foot .big .attrib {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    color: rgba(28,25,23,0.45);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+  .foot .right { text-align: right; line-height: 1.7; }
+  .foot .right b { color: var(--stone-900); font-weight: 500; }
+
+  /* ── Background quotes — hard to read but present ───────────────── */
+  .wilde-mark {
+    position: absolute;
+    top: 358px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 60px;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: rgba(28,25,23,0.055);
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .q-stross {
+    position: absolute;
+    right: 12px;
+    top: 720px;
+    width: 220px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px;
+    line-height: 1.55;
+    color: rgba(218,41,28,0.32);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transform: rotate(90deg);
+    transform-origin: top right;
+    text-align: right;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+  }
+  .q-farquhar {
+    position: absolute;
+    left: 50%;
+    top: 700px;
+    transform: translateX(-50%) rotate(-3deg);
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 17px;
+    color: rgba(28,25,23,0.14);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+  }
+  .q-farquhar .src {
+    display: block;
+    text-align: right;
+    font-style: normal;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 2px;
+    color: rgba(28,25,23,0.18);
+  }
+  .q-shudraka {
+    position: absolute;
+    left: 26px;
+    top: 820px;
+    width: 240px;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(28,25,23,0.22);
+    letter-spacing: 0.01em;
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .q-shudraka .src {
+    display: block;
+    font-style: normal;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 3px;
+    color: rgba(28,25,23,0.16);
+  }
+
+  /* German design heresies — original satirical aphorisms */
+  .heresies {
+    position: absolute;
+    bottom: 4px;
+    left: 64px;
+    right: 200px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-variant: all-small-caps;
+    font-size: 7.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: rgba(28,25,23,0.36);
+    line-height: 1.15;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 12px;
+    z-index: 6;
+  }
+  .heresies .h-num {
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-right: 3px;
+    font-size: 7px;
+  }
+
+  /* Alexander annotations — typographic, no card chrome */
+  .alex-margin {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    line-height: 1.45;
+  }
+  .alex-margin .alex-tag {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    color: var(--red);
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .alex-margin .alex-note {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--stone-900);
+    line-height: 1.45;
+    max-width: 76ch;
+  }
+  .alex-margin .alex-note strong {
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .alex-margin .alex-note i {
+    font-style: italic;
+    color: rgba(28,25,23,0.6);
+  }
+  .foot .big .alex-foot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: rgba(28,25,23,0.55);
+    line-height: 1.45;
+    display: block;
+    max-width: 58ch;
+  }
+
+  /* Ten Principles for Bad Design — readable section */
+  .b-bad {
+    grid-column: span 12;
+    margin-top: 14px;
+  }
+  .bad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 14px;
+  }
+  .bad-item {
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 5px;
+    display: flex;
+    gap: 7px;
+    align-items: baseline;
+  }
+  .bad-item .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    min-width: 22px;
+    flex: 0 0 auto;
+  }
+  .bad-item .body { flex: 1; }
+  .bad-item .ttl {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 4px;
+    color: var(--stone-900);
+    letter-spacing: -0.005em;
+  }
+  .bad-item .desc {
+    font-size: 10.5px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: rgba(28,25,23,0.85);
+  }
+  .bad-item.bonus .n { color: var(--red); }
+  .bad-item.bonus .ttl em {
+    font-style: normal;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* Carey running edge — quiet marginalia */
+  .carey-edge {
+    position: absolute;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-size: 9px;
+    letter-spacing: 0.005em;
+    font-weight: 400;
+    color: rgba(28,25,23,0.42);
+    pointer-events: none;
+    user-select: none;
+    z-index: 7;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .carey-edge .sep { color: rgba(218,41,28,0.55); margin: 0 0.7em; font-style: normal; }
+  .carey-top {
+    top: 8px;
+    left: 64px;
+    right: 64px;
+    height: 12px;
+    text-align: center;
+    line-height: 12px;
+  }
+  .carey-bottom {
+    bottom: 8px;
+    left: 64px;
+    right: 64px;
+    height: 12px;
+    text-align: center;
+    line-height: 12px;
+  }
+  .carey-right {
+    top: 64px;
+    bottom: 64px;
+    right: 6px;
+    width: 12px;
+    writing-mode: vertical-rl;
+    text-align: center;
+    line-height: 12px;
+  }
+  .carey-left {
+    top: 64px;
+    bottom: 64px;
+    left: 6px;
+    width: 12px;
+    writing-mode: vertical-rl;
+    text-align: center;
+    line-height: 12px;
+  }
+
+  /* Bolder pass — bigger, more confident */
+  .title .lean { font-size: 158px; }
+  .weird span { font-size: 122px; }
+  .pitch h2 { font-size: 44px; line-height: 1; }
+  .pitch { padding: 14px 100px 16px 100px; margin-bottom: 14px; }
+  .bmark { border-top-width: 4px; }
+  .bmark .num { font-size: 28px; padding: 3px 9px 5px 9px; margin-top: -7px; }
+
+  /* Readability — tone watermarks back */
+  .wilde-mark { color: rgba(28,25,23,0.038); font-size: 50px; top: 320px; }
+  .q-stross { color: rgba(218,41,28,0.22); }
+  .q-farquhar { color: rgba(28,25,23,0.10); font-size: 14px; top: 660px; }
+  .q-shudraka { color: rgba(28,25,23,0.16); font-size: 10px; top: 780px; }
+  .charybdis { opacity: 0.07; }
+  .scylla { opacity: 0.09; }
+  .ship-path { opacity: 0.18; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- Scylla — six-headed monster on the rocks (left) -->
+  <svg class="myth-svg scylla" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <!-- waves -->
+      <path d="M0 246 Q22 240 44 246 T88 246 T132 246 T176 246 T200 246" stroke-width="1" />
+      <path d="M0 254 Q26 250 52 254 T104 254 T156 254 T200 254" stroke-width="1" />
+      <!-- jagged rocks -->
+      <path d="M28 246 L40 208 L58 230 L74 188 L90 218 L108 184 L126 210 L142 178 L158 204 L172 246 Z" stroke-width="1.2" />
+      <!-- six serpentine necks -->
+      <path d="M52 210 Q34 168 50 132 T68 84 T58 30" />
+      <path d="M74 204 Q92 162 76 116 T86 64 T78 18" />
+      <path d="M96 200 Q80 154 96 100 T100 50 T104 12" />
+      <path d="M118 200 Q134 156 118 110 T122 56 T128 18" />
+      <path d="M140 206 Q124 164 140 122 T146 70 T150 26" />
+      <path d="M162 210 Q176 170 160 134 T170 86 T162 32" />
+      <!-- six heads -->
+      <ellipse cx="60" cy="32" rx="7" ry="5" fill="currentColor" opacity="0.55" />
+      <ellipse cx="80" cy="20" rx="7" ry="5" fill="currentColor" opacity="0.55" />
+      <ellipse cx="106" cy="14" rx="7" ry="5" fill="currentColor" opacity="0.55" />
+      <ellipse cx="128" cy="20" rx="7" ry="5" fill="currentColor" opacity="0.55" />
+      <ellipse cx="150" cy="28" rx="7" ry="5" fill="currentColor" opacity="0.55" />
+      <ellipse cx="162" cy="34" rx="7" ry="5" fill="currentColor" opacity="0.55" />
+    </g>
+  </svg>
+
+  <!-- Charybdis — whirlpool (right) -->
+  <svg class="myth-svg charybdis" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+      <!-- waves -->
+      <path d="M10 230 Q34 224 58 230 T106 230 T154 230 T202 230 T230 230" stroke-width="1" />
+      <!-- vortex: rotated ellipses spiralling inward -->
+      <ellipse cx="120" cy="120" rx="106" ry="100" transform="rotate(0 120 120)" />
+      <ellipse cx="120" cy="120" rx="86"  ry="80"  transform="rotate(22 120 120)" />
+      <ellipse cx="120" cy="120" rx="68"  ry="62"  transform="rotate(44 120 120)" />
+      <ellipse cx="120" cy="120" rx="52"  ry="46"  transform="rotate(66 120 120)" />
+      <ellipse cx="120" cy="120" rx="38"  ry="32"  transform="rotate(88 120 120)" />
+      <ellipse cx="120" cy="120" rx="26"  ry="20"  transform="rotate(110 120 120)" />
+      <ellipse cx="120" cy="120" rx="15"  ry="10"  transform="rotate(132 120 120)" />
+      <ellipse cx="120" cy="120" rx="7"   ry="4"   transform="rotate(154 120 120)" />
+      <circle cx="120" cy="120" r="2" fill="currentColor" />
+    </g>
+  </svg>
+
+  <!-- The path between — Odysseus's ship threading the strait -->
+  <svg class="ship-path" viewBox="0 0 1260 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0 0 L10 5 L0 10 Z" fill="currentColor" />
+      </marker>
+    </defs>
+    <path d="M 200 110 C 380 50, 520 250, 700 170 S 980 50, 1080 140"
+          fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 6"
+          marker-end="url(#arrow)" />
+    <!-- tiny ship silhouette mid-strait -->
+    <g class="ship" transform="translate(630 158) rotate(-6)">
+      <path d="M-14 4 L14 4 L10 10 L-10 10 Z" />
+      <path d="M0 4 L0 -14" stroke="currentColor" stroke-width="1.2" />
+      <path d="M0 -14 L7 -2 L0 -2 Z" />
+    </g>
+  </svg>
+
+  <!-- Background watermark — "Be Yourself" (subtle) -->
+  <div class="wilde-mark" aria-hidden="true">
+    Be Yourself.&nbsp;&nbsp;Everyone&nbsp;Else&nbsp;Is&nbsp;Already&nbsp;Taken.
+  </div>
+
+  <!-- Stross — paraphrase along the Charybdis vortex -->
+  <div class="q-stross" aria-hidden="true">
+    every gadget arrives haunted by its sequel.
+  </div>
+
+  <!-- Farquhar — public-domain song refrain from The Recruiting Officer (1706) -->
+  <div class="q-farquhar" aria-hidden="true">
+    Over the hills and far away.
+  </div>
+
+  <!-- Shudraka — public-domain Mṛcchakaṭika (c. 5th c. CE) -->
+  <div class="q-shudraka" aria-hidden="true">
+    The wheel of fortune lifts and lowers, like the well-rope and the bucket.
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="meta">"Become a great mad thing."&nbsp;&nbsp;— Warren Ellis</div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <div class="pinkbar"></div>
+    <span class="lean">LEAN</span>
+    <span class="into">into</span>
+    <span class="your">your</span>
+    <span class="weird">
+      <span class="l1">W</span><span class="l2">E</span><span class="l3">I</span><span class="l4">R</span><span class="l5">D</span><span class="l6">N</span><span class="l7">E</span><span class="l8">S</span><span class="l9">S</span><span class="dot">.</span>
+    </span>
+  </div>
+
+  <div class="subtitle">
+    <div class="lede">
+      The thing they keep telling you to <s>tone down</s> is the only part of your work
+      <em>nobody else can ship.</em>
+    </div>
+  </div>
+
+  <!-- BOLD STATEMENT BAND -->
+  <section class="pitch">
+    <h2>
+      The world has enough <s>professionals.</s>
+    </h2>
+  </section>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- 01 — THE COST OF NORMAL -->
+    <section class="b-cost">
+      <div class="bmark">
+        <span class="num">01</span>
+        <span class="meta"><span>The Trade / Quiet Exchange</span><span class="tri"></span></span>
+      </div>
+      <h3>What you traded to <em>fit in.</em></h3>
+      <p class="lead">
+        Normal is a treaty signed on your behalf — a quiet exchange of voltage
+        for permission. The terms, in plain language:
+      </p>
+      <div class="balance">
+        <div class="row"><span class="normal">Be agreeable</span><span class="arrow">→</span><span class="weird-side">Be <em>specific</em></span></div>
+        <div class="row"><span class="normal">Round the edges</span><span class="arrow">→</span><span class="weird-side">Sharpen them</span></div>
+        <div class="row"><span class="normal">Hedge the take</span><span class="arrow">→</span><span class="weird-side">Sign the take</span></div>
+        <div class="row"><span class="normal">Desire paths</span><span class="arrow">→</span><span class="weird-side">Pave a private one</span></div>
+        <div class="row"><span class="normal">Quote the consensus</span><span class="arrow">→</span><span class="weird-side">Quote the obsession</span></div>
+        <div class="row"><span class="normal">Be hard to dismiss</span><span class="arrow">→</span><span class="weird-side">Be hard to <em>imitate</em></span></div>
+      </div>
+    </section>
+
+    <!-- 02 — SYMPTOMS -->
+    <section class="b-sym">
+      <div class="label"><span>02 / Diagnosis</span><span class="num">/02</span></div>
+      <ul class="stack-list">
+        <li><span class="n">i.</span>You re-read the footnotes</li>
+        <li><span class="n">ii.</span>You finish the side project</li>
+        <li class="hot"><span class="n">iii.</span>You make the wrong joke</li>
+        <li><span class="n">iv.</span>You fix the kerning</li>
+        <li><span class="n">v.</span>You bring up the obscure album</li>
+        <li><span class="n">vi.</span>You correct the etymology</li>
+        <li class="hot"><span class="n">vii.</span>You ship the strange version</li>
+      </ul>
+    </section>
+
+    <!-- 03 — PATRON SAINTS -->
+    <section class="b-saints">
+      <div class="bmark">
+        <span class="num red">03</span>
+        <span class="meta"><span>Patron Saints / Refusenik Index</span><span class="tri"></span></span>
+      </div>
+      <h3>Famous for the part they <em>refused to fix.</em></h3>
+      <div class="saints-grid two">
+        <div class="saint">
+          <div class="n">/A — Print</div>
+          <h4>David Carson</h4>
+          <p class="what">Set an interview in Zapf Dingbats because the subject was boring. <i>Ray Gun</i>'s house style was its illegibility — and it sold.</p>
+          <div class="quirk">"Don't mistake legibility for communication."</div>
+        </div>
+        <div class="saint">
+          <div class="n">/B — Cinema</div>
+          <h4 class="italic">Werner Herzog</h4>
+          <p class="what">Hauled a steamship over a mountain because the film required it. Ate his shoe to settle a bet about a film he doubted would finish.</p>
+          <div class="quirk">"The poet must not avert his eyes."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — PRACTICES (dark) -->
+    <section class="b-prac">
+      <div class="bmark dark">
+        <span class="num">04</span>
+        <span class="meta"><span>Practices / The Three Moves</span><span class="tri"></span></span>
+      </div>
+      <h3>How to actually <em>lean.</em></h3>
+      <div class="practices">
+        <div class="prac">
+          <div class="k">/A — Subtract</div>
+          <h5>Cut the parts a stranger would have made.</h5>
+          <p>Most "polish" is sanding off fingerprints. Find the moves only you would make and let the rest stay rough. Texture is not a defect.</p>
+        </div>
+        <div class="prac">
+          <div class="k">/B — Confess</div>
+          <h5>Make the obsession the brief.</h5>
+          <p>The thing you've been quietly reading about for ten years is the thing nobody else has read about for ten years. Stop treating it as a hobby.</p>
+        </div>
+        <div class="prac">
+          <div class="k">/C — Refuse the smoothing</div>
+          <h5>Your editor wants to make you legible.</h5>
+          <p>Every system around you is gradient descent toward the median. Add friction. Keep the strange sentence; <em>everything else is negotiable.</em></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — STANDING ORDER (full-width) -->
+    <section class="b-vow">
+      <div class="label"><span>05 / Standing Order</span><span class="num">/05</span></div>
+      <p class="vow">
+        I will keep the <em>strange sentence.</em> I will ship the version
+        that scares me a little. I will let my work be a fingerprint, not a stencil.
+      </p>
+      <div class="alex-margin">
+        <span class="alex-tag">QWAN</span>
+        <span class="alex-note"><i>"It is a subtle kind of freedom from inner contradictions."</i></span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Carey running edge — quiet perimeter -->
+  <div class="carey-edge carey-top" aria-hidden="true">
+    Be absolute. Be yourself, until you bleed.<span class="sep">·</span>Normal consciousness will resume.
+  </div>
+  <div class="carey-edge carey-right" aria-hidden="true">
+    The right idea at the right time is like a dandelion; you may hack it down, but you only spread the seeds abroad.
+  </div>
+  <div class="carey-edge carey-bottom" aria-hidden="true">
+    If you kill the messenger, in the long run, you just get less mail.<span class="sep">·</span>This moment meets that one. What might be becomes what is.
+  </div>
+  <div class="carey-edge carey-left" aria-hidden="true">
+    Beliefs are collars to which leashes can be attached.
+  </div>
+
+  <!-- For the ones who notice (small) -->
+  <div class="bous" aria-hidden="true">
+    <span class="ltr">PROMETHEUS&nbsp;&gt;</span>
+    <span class="rtl">PROCRUSTES</span>
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="big">
+      <span class="alex-foot">Cf. C. Alexander, <i>Systems Generating Systems</i> — patterns that generate further patterns; this poster among them.</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
