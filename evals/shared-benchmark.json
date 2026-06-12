@@ -1,0 +1,974 @@
+{
+  "version": 1,
+  "skill_name": "swiss-poster-skill",
+  "harness": {
+    "name": "skill-eval-harness",
+    "url": "https://github.com/adewale/skill-eval-harness",
+    "version": ">=0.4.0"
+  },
+  "skill_paths": [
+    "swiss-poster/SKILL.md"
+  ],
+  "old_skill_paths": [],
+  "variants": [
+    "with_skill",
+    "without_skill"
+  ],
+  "optional_variants": [
+    "old_skill"
+  ],
+  "split_policy": {
+    "tune": "Visible cases used during iteration. Failures may drive skill/reference edits.",
+    "holdout": "Hidden cases scored only at end-of-round or merge. Prefer prompt_ref files outside committed docs/examples.",
+    "holdback": "Examples not shown in SKILL.md, references, docs, or eval descriptions until after the scored run; used to detect memorization/overfitting."
+  },
+  "run_protocol": {
+    "paired": "Run with_skill and without_skill in the same round; optionally run old_skill from a pinned artifact/branch.",
+    "outputs": "Save outputs as runs/<case_id>/<variant>/output.md and metadata as runs/<case_id>/<variant>/metadata.json.",
+    "metadata": [
+      "elapsed_ms",
+      "input_tokens",
+      "output_tokens",
+      "total_tokens",
+      "model"
+    ],
+    "analyst_pass": "After benchmark, review saturated, flaky, non-discriminating, and with-skill-failed cases before editing the skill."
+  },
+  "notes": "",
+  "cases": [
+    {
+      "id": "pos-bland-landing",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Transform this bland landing page into Tailwind Swiss-poster style.",
+      "expected_behavior": [
+        "Apply core design rules with Tailwind/static checks where possible."
+      ],
+      "assertions": [
+        {
+          "name": "detect-bland-landing",
+          "type": "contains_any",
+          "values": [
+            "grid",
+            "scale",
+            "overlap",
+            "accent"
+          ]
+        },
+        {
+          "name": "style-core",
+          "type": "contains_any",
+          "values": [
+            "IBM Plex",
+            "stone",
+            "grid",
+            "accent"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster energy",
+            "Accessibility",
+            "Responsive discipline"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-component-set",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Design hero/nav/cards/CTA component set with Swiss poster energy.",
+      "expected_behavior": [
+        "Apply core design rules with Tailwind/static checks where possible."
+      ],
+      "assertions": [
+        {
+          "name": "detect-component-set",
+          "type": "contains_any",
+          "values": [
+            "hero",
+            "nav",
+            "cards",
+            "CTA"
+          ]
+        },
+        {
+          "name": "style-core",
+          "type": "contains_any",
+          "values": [
+            "IBM Plex",
+            "stone",
+            "grid",
+            "accent"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster energy",
+            "Accessibility",
+            "Responsive discipline"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-dark-mode",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create a dark-mode Swiss poster variant.",
+      "expected_behavior": [
+        "Apply core design rules with Tailwind/static checks where possible."
+      ],
+      "assertions": [
+        {
+          "name": "detect-dark-mode",
+          "type": "contains_any",
+          "values": [
+            "dark",
+            "stone",
+            "accent"
+          ]
+        },
+        {
+          "name": "style-core",
+          "type": "contains_any",
+          "values": [
+            "IBM Plex",
+            "stone",
+            "grid",
+            "accent"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster energy",
+            "Accessibility",
+            "Responsive discipline"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-mobile-320",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Adapt a Tailwind Swiss-poster layout for 320px mobile: keep poster scale, enforce no horizontal scroll, and preserve 44px touch targets.",
+      "expected_behavior": [
+        "Show responsive Tailwind/static checks: overflow clipping, fluid type, mobile breakpoints, and 44px targets."
+      ],
+      "assertions": [
+        {
+          "name": "mobile-contract",
+          "type": "contains_all",
+          "values": [
+            "320",
+            "44px",
+            "no horizontal"
+          ]
+        },
+        {
+          "name": "mobile-scroll-guard",
+          "type": "contains_any",
+          "values": [
+            "overflow-hidden",
+            "overflow-x-hidden",
+            "overflow-clip"
+          ]
+        },
+        {
+          "name": "style-core",
+          "type": "contains_any",
+          "values": [
+            "IBM Plex",
+            "stone",
+            "grid",
+            "accent"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster energy",
+            "No horizontal scroll at 320px",
+            "44px touch target discipline"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-poster-composition",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero section, not an SVG-only poster. Include mega type, a 12-column grid, deliberate overlap and bleed, default Swiss red (#C8102E) as the only accent, no horizontal scroll at 320px, and a 44px-safe CTA.",
+      "expected_behavior": [
+        "Return Tailwind/HTML or CSS that applies the poster rules concretely rather than a standalone SVG.",
+        "Evidence one accent, clipped bleed/no horizontal scroll, extreme scale, 12-column grid, and mobile/accessibility boundaries."
+      ],
+      "assertions": [
+        {
+          "name": "tailwind-poster-contract",
+          "type": "contains_all",
+          "values": [
+            "grid-cols-12",
+            "text-[clamp(",
+            "leading-[0.85]",
+            "#C8102E"
+          ]
+        },
+        {
+          "name": "poster-scroll-guard",
+          "type": "contains_any",
+          "values": [
+            "overflow-hidden",
+            "overflow-x-hidden",
+            "overflow-clip"
+          ]
+        },
+        {
+          "name": "default-single-accent",
+          "type": "contains_any",
+          "values": [
+            "one accent",
+            "single accent",
+            "only accent"
+          ],
+          "description": "Must explicitly constrain to one/single/only accent."
+        },
+        {
+          "name": "mobile-boundary",
+          "type": "contains_any",
+          "values": [
+            "no horizontal scroll",
+            "prevent 320px horizontal scroll",
+            "prevents 320px horizontal scroll",
+            "320px horizontal scroll",
+            "overflow-x-hidden"
+          ],
+          "description": "Must mention or implement 320px/no-horizontal-scroll safety."
+        },
+        {
+          "name": "extreme-scale-code",
+          "type": "contains_all",
+          "values": [
+            "text-[clamp(",
+            "text-[11px]"
+          ]
+        },
+        {
+          "name": "not-svg-only",
+          "type": "not_regex",
+          "pattern": "(?is)(save as [^\\n]*\\.svg|```\\s*svg)"
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster energy from scale/overlap/bleed, not generic minimalism",
+            "Single-accent discipline",
+            "No horizontal scroll at 320px with accessible touch targets"
+          ]
+        },
+        {
+          "name": "accent-token-present",
+          "type": "contains_any",
+          "values": [
+            "#C8102E",
+            "--poster-accent",
+            "--accent"
+          ],
+          "description": "Must use the Swiss red accent or a semantic accent token."
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-swiss-country",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "Tell me about Swiss geography.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "avoid-swiss-country",
+          "type": "contains_any",
+          "values": [
+            "NO_TRIGGER",
+            "geography"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-swiss-tax",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "Explain Swiss tax residency.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "avoid-swiss-tax",
+          "type": "contains_any",
+          "values": [
+            "NO_TRIGGER",
+            "tax"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-corporate-minimal",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "I want clean corporate Swiss minimalism, not poster drama.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "avoid-corporate-minimal",
+          "type": "contains_any",
+          "values": [
+            "minimal",
+            "not poster",
+            "restrain"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-multi-accent-gradient",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "Use multiple accents and purple gradients with rounded SaaS cards.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "avoid-multi-accent-gradient",
+          "type": "contains_any",
+          "values": [
+            "one accent",
+            "single accent",
+            "one accent hue"
+          ]
+        },
+        {
+          "name": "reject-gradient-saas",
+          "type": "contains_any",
+          "values": [
+            "no purple",
+            "no gradients",
+            "no rounded"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement",
+            "Reject multi-accent gradient SaaS drift"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-excessive-rotation",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "Rotate every section dramatically.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "avoid-excessive-rotation",
+          "type": "contains_any",
+          "values": [
+            "limited rotation",
+            "discipline"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-horizontal-scroll",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "Let elements bleed horizontally even if mobile scrolls sideways.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "reject-horizontal-scroll",
+          "type": "contains_any",
+          "values": [
+            "no horizontal scroll",
+            "no sideways scroll",
+            "must not cause horizontal scroll"
+          ]
+        },
+        {
+          "name": "clip-bleed-implementation",
+          "type": "contains_any",
+          "values": [
+            "overflow-hidden",
+            "overflow-x-hidden",
+            "overflow-clip",
+            "clip the bleed"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement",
+            "Clipped bleed without mobile sideways scroll"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "neg-inaccessible-touch",
+      "split": "tune",
+      "kind": "adversarial",
+      "prompt": "Make tiny decorative buttons under 44px.",
+      "expected_behavior": [
+        "Respect style boundaries and gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "avoid-inaccessible-touch",
+          "type": "contains_any",
+          "values": [
+            "44px",
+            "touch",
+            "accessibility"
+          ]
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Boundary handling",
+            "Gotcha enforcement"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "trig-swiss-poster",
+      "split": "tune",
+      "kind": "trigger",
+      "prompt": "Trigger decision eval. User prompt: Swiss Poster style landing page\n\nReturn exactly one label first: TRIGGER or NO_TRIGGER. Then give one short reason.",
+      "expected_behavior": [
+        "Should return TRIGGER for this skill."
+      ],
+      "assertions": [
+        {
+          "name": "expected-trigger-label",
+          "type": "regex",
+          "pattern": "(?m)^\\s*TRIGGER\\b",
+          "description": "First line must be the exact trigger decision label."
+        }
+      ],
+      "tags": [
+        "trigger"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "implicit"
+    },
+    {
+      "id": "trig-poster-energy",
+      "split": "tune",
+      "kind": "trigger",
+      "prompt": "Trigger decision eval. User prompt: give this Tailwind page poster energy\n\nReturn exactly one label first: TRIGGER or NO_TRIGGER. Then give one short reason.",
+      "expected_behavior": [
+        "Should return TRIGGER for this skill."
+      ],
+      "assertions": [
+        {
+          "name": "expected-trigger-label",
+          "type": "regex",
+          "pattern": "(?m)^\\s*TRIGGER\\b",
+          "description": "First line must be the exact trigger decision label."
+        }
+      ],
+      "tags": [
+        "trigger"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "implicit"
+    },
+    {
+      "id": "trig-break-grid",
+      "split": "tune",
+      "kind": "trigger",
+      "prompt": "Trigger decision eval. User prompt: break the grid dramatically\n\nReturn exactly one label first: TRIGGER or NO_TRIGGER. Then give one short reason.",
+      "expected_behavior": [
+        "Should return TRIGGER for this skill."
+      ],
+      "assertions": [
+        {
+          "name": "expected-trigger-label",
+          "type": "regex",
+          "pattern": "(?m)^\\s*TRIGGER\\b",
+          "description": "First line must be the exact trigger decision label."
+        }
+      ],
+      "tags": [
+        "trigger"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "implicit"
+    },
+    {
+      "id": "trig-geography",
+      "split": "tune",
+      "kind": "trigger",
+      "prompt": "Trigger decision eval. User prompt: Swiss geography facts\n\nReturn exactly one label first: TRIGGER or NO_TRIGGER. Then give one short reason.",
+      "expected_behavior": [
+        "Should return NO_TRIGGER for this skill."
+      ],
+      "assertions": [
+        {
+          "name": "expected-trigger-label",
+          "type": "regex",
+          "pattern": "(?m)^\\s*NO_TRIGGER\\b",
+          "description": "First line must be the exact trigger decision label."
+        }
+      ],
+      "tags": [
+        "trigger"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "negative-near-miss"
+    },
+    {
+      "id": "trig-translation",
+      "split": "tune",
+      "kind": "trigger",
+      "prompt": "Trigger decision eval. User prompt: translate this to Swiss German\n\nReturn exactly one label first: TRIGGER or NO_TRIGGER. Then give one short reason.",
+      "expected_behavior": [
+        "Should return NO_TRIGGER for this skill."
+      ],
+      "assertions": [
+        {
+          "name": "expected-trigger-label",
+          "type": "regex",
+          "pattern": "(?m)^\\s*NO_TRIGGER\\b",
+          "description": "First line must be the exact trigger decision label."
+        }
+      ],
+      "tags": [
+        "trigger"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "negative-near-miss"
+    },
+    {
+      "id": "trig-neutral-cleanup",
+      "split": "tune",
+      "kind": "trigger",
+      "prompt": "Trigger decision eval. User prompt: generic UI cleanup with neutral corporate minimalism\n\nReturn exactly one label first: TRIGGER or NO_TRIGGER. Then give one short reason.",
+      "expected_behavior": [
+        "Should return NO_TRIGGER for this skill."
+      ],
+      "assertions": [
+        {
+          "name": "expected-trigger-label",
+          "type": "regex",
+          "pattern": "(?m)^\\s*NO_TRIGGER\\b",
+          "description": "First line must be the exact trigger decision label."
+        }
+      ],
+      "tags": [
+        "trigger"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "trigger"
+      ],
+      "trigger_type": "negative-near-miss"
+    },
+    {
+      "id": "holdout-rendered-tailwind-01",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Unseen HTML/Tailwind page rendered to screenshot",
+      "prompt_ref": "holdout/rendered-tailwind-01.txt",
+      "expected_behavior": [
+        "Judge poster rules and static gotchas."
+      ],
+      "assertions": [
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster composition",
+            "No horizontal scroll"
+          ]
+        }
+      ],
+      "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdback-nonposter-swiss-like-01",
+      "split": "holdback",
+      "kind": "adversarial",
+      "scenario": "Private holdback case. Exact scenario and answer key live outside committed docs/eval descriptions.",
+      "prompt_ref": "holdback/nonposter-swiss-like-01.txt",
+      "answer_ref": "holdback/answers/nonposter-swiss-like-01.json",
+      "expected_behavior": [
+        "Private holdback scoring: load prompt and answer key only for the scored run, then reveal after scoring if desired."
+      ],
+      "assertions": [
+        {
+          "name": "private-holdback-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private answer key; do not rely on public manifest wording."
+          ]
+        }
+      ],
+      "tags": [
+        "holdback-private"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-tailwind-poster-responsive-proof",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Build a Swiss-poster-inspired Tailwind hero for a landing page. It must be implementable HTML/CSS, not SVG-only, use a 12-column grid, one red accent, huge cropped type, and be safe at 320px without horizontal scroll.",
+      "expected_behavior": [
+        "Produce implementable Tailwind/HTML rather than SVG.",
+        "Include 12-col grid, one accent, huge cropped type, and 320px/no-horizontal-scroll safeguards."
+      ],
+      "assertions": [
+        {
+          "name": "tailwind-grid-contract",
+          "type": "contains_all",
+          "values": [
+            "grid",
+            "grid-cols-12"
+          ]
+        },
+        {
+          "name": "single-red-accent",
+          "type": "contains_any",
+          "values": [
+            "one red accent",
+            "single accent",
+            "only accent",
+            "#C8102E"
+          ]
+        },
+        {
+          "name": "cropped-huge-type",
+          "type": "contains_any",
+          "values": [
+            "huge cropped type",
+            "clamp(",
+            "mega type",
+            "cropped"
+          ]
+        },
+        {
+          "name": "mobile-no-scroll",
+          "type": "contains_any",
+          "values": [
+            "320px",
+            "no horizontal scroll",
+            "overflow-x-hidden"
+          ]
+        },
+        {
+          "name": "not-svg-only",
+          "type": "not_regex",
+          "pattern": "(?is)(```\\s*svg|save as [^\\n]*\\.svg|svg-only)"
+        },
+        {
+          "name": "round-2-qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster energy",
+            "Implementability",
+            "Responsive discipline"
+          ]
+        }
+      ],
+      "tags": [
+        "round-2",
+        "anthropic-gap",
+        "responsive-proof"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "round3-fixture-poster-html-audit",
+      "split": "tune",
+      "kind": "style-output",
+      "files": [
+        "fixtures/round3-poster/current.html"
+      ],
+      "prompt": "Audit the attached poster HTML and propose the corrected Tailwind direction. It must be implementable, 12-column, one accent, not SVG-only, and 320px safe.",
+      "expected_behavior": [
+        "Replace/redirect SVG-only poster content into implementable HTML/Tailwind.",
+        "Require grid-cols-12, one accent, overflow clipping/no horizontal scroll."
+      ],
+      "assertions": [
+        {
+          "name": "requires-12-col",
+          "type": "contains_all",
+          "values": [
+            "grid-cols-12",
+            "12"
+          ]
+        },
+        {
+          "name": "fixture-script-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/fixture_oracle.py",
+            "{output_dir}",
+            "round3-fixture-poster-html-audit"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Deterministic fixture-backed oracle; run benchmark with --allow-scripts."
+        },
+        {
+          "name": "round-3-qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster implementability",
+            "Responsive discipline",
+            "Swiss style constraints"
+          ]
+        }
+      ],
+      "tags": [
+        "round-3",
+        "fixture-backed",
+        "audit-manifest"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    }
+  ],
+  "ablations": [
+    {
+      "id": "no-six-principles",
+      "removed_component": "six principles",
+      "expected_regressions": [
+        "Output loses scale/overlap/bleed/tension."
+      ],
+      "applies_to_cases": []
+    },
+    {
+      "id": "no-gotchas",
+      "removed_component": "gotchas",
+      "expected_regressions": [
+        "Allows scroll, excessive rotation, multiple accents."
+      ],
+      "applies_to_cases": []
+    },
+    {
+      "id": "no-components",
+      "removed_component": "Tailwind component references",
+      "expected_regressions": [
+        "Output is vague prose not implementable classes."
+      ],
+      "applies_to_cases": []
+    },
+    {
+      "id": "no-tokens",
+      "removed_component": "design-system tokens",
+      "expected_regressions": [
+        "Palette/type drift."
+      ],
+      "applies_to_cases": []
+    },
+    {
+      "id": "no-research",
+      "removed_component": "designer research",
+      "expected_regressions": [
+        "Style becomes generic SaaS or Swiss-minimal only."
+      ],
+      "applies_to_cases": []
+    }
+  ]
+}
