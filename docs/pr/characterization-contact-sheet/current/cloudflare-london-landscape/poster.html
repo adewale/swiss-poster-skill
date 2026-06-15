@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Landscape</title>
+<style>
+  :root{
+    --stone-50:#fafaf9;
+    --stone-100:#f5f5f4;
+    --stone-200:#e7e5e4;
+    --stone-800:#292524;
+    --stone-900:#1c1917;
+    --stone-950:#0c0a09;
+    --accent:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--stone-200);font-family:Arial,Helvetica,system-ui,sans-serif;color:var(--stone-950)}
+  body{display:grid;place-items:start center;min-height:100vh}
+  .poster{
+    width:840px;height:1200px;position:relative;overflow:hidden;background:var(--stone-50);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(12,1fr);
+  }
+  .photo{
+    grid-column:1/13;grid-row:1/6;position:relative;overflow:hidden;background:var(--stone-950);
+  }
+  .photo img{position:absolute;inset:-16px 0 0 0;width:100%;height:112%;object-fit:cover;filter:grayscale(1) contrast(1.5);mix-blend-mode:screen;opacity:.78}
+  .photo:after{content:"";position:absolute;inset:0;background:var(--accent);mix-blend-mode:multiply;opacity:.82}
+  .photo:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(250,250,249,.18) 0 1px,transparent 1px 13px);z-index:2}
+  .orange-slab{
+    position:absolute;left:0;top:392px;width:610px;height:238px;background:var(--accent);z-index:8;
+  }
+  .black-slab{
+    position:absolute;right:0;top:475px;width:305px;height:650px;background:var(--stone-950);z-index:6;
+  }
+  .ghost{
+    position:absolute;left:-34px;top:575px;font-size:248px;line-height:.78;font-weight:900;letter-spacing:-.09em;color:rgba(12,10,9,.055);
+    white-space:nowrap;z-index:1;pointer-events:none;
+  }
+  .title{
+    grid-column:1/10;grid-row:5/8;align-self:start;z-index:30;padding:34px 0 0 42px;
+  }
+  h1{margin:0;font-size:104px;line-height:.84;letter-spacing:-.075em;font-weight:900;color:var(--stone-950)}
+  .subtitle{margin:24px 0 0 4px;width:468px;font-size:22px;line-height:1.12;font-weight:700;color:var(--stone-950)}
+  .meta-top{
+    position:absolute;left:42px;top:32px;z-index:30;color:var(--stone-50);font-size:11px;letter-spacing:.16em;text-transform:uppercase;line-height:1.45;font-weight:700;
+  }
+  .coord{
+    position:absolute;right:34px;top:34px;z-index:30;color:var(--stone-50);font-size:11px;letter-spacing:.14em;text-transform:uppercase;line-height:1.45;text-align:right;font-weight:700;
+  }
+  .side-word{
+    position:absolute;right:-14px;top:520px;z-index:9;writing-mode:vertical-rl;transform:rotate(180deg);
+    color:var(--stone-50);font-size:86px;line-height:.8;font-weight:900;letter-spacing:-.06em;
+  }
+  .facts{
+    grid-column:2/8;grid-row:8/12;z-index:20;align-self:start;display:grid;grid-template-columns:repeat(2,1fr);gap:18px 28px;padding-top:26px;
+  }
+  .fact{border-top:3px solid var(--stone-950);padding-top:10px;min-height:92px}
+  .n{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:rgba(12,10,9,.55)}
+  .t{margin-top:8px;font-size:25px;line-height:1.02;letter-spacing:-.035em;font-weight:800}
+  .small{margin-top:8px;font-size:13px;line-height:1.25;color:rgba(12,10,9,.72);font-weight:600}
+  .black-copy{
+    position:absolute;right:34px;top:690px;width:226px;z-index:25;color:var(--stone-50);
+  }
+  .black-copy .k{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:rgba(250,250,249,.62);font-weight:800}
+  .black-copy .big{margin-top:14px;font-size:31px;line-height:1.02;letter-spacing:-.045em;font-weight:900}
+  .black-copy .body{margin-top:18px;font-size:14px;line-height:1.32;color:rgba(250,250,249,.8);font-weight:600}
+  .cta{
+    position:absolute;left:42px;bottom:42px;width:405px;z-index:30;background:var(--stone-950);color:var(--stone-50);
+    padding:18px 20px;font-size:18px;line-height:1.05;font-weight:900;letter-spacing:-.015em;
+  }
+  .cta span{display:block;margin-top:8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(250,250,249,.62)}
+  .rule-a{position:absolute;left:0;bottom:168px;width:840px;height:12px;background:var(--accent);z-index:4}
+  .rule-b{position:absolute;left:486px;top:618px;width:390px;height:12px;background:var(--accent);z-index:10;transform:rotate(-31deg);transform-origin:left center}
+  .micro{
+    position:absolute;left:42px;top:646px;z-index:20;font-size:11px;letter-spacing:.18em;text-transform:uppercase;line-height:1.5;font-weight:800;color:rgba(12,10,9,.48)
+  }
+  .caption{
+    position:absolute;left:42px;top:520px;z-index:31;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;color:rgba(12,10,9,.7)
+  }
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Cloudflare London Landscape poster">
+  <section class="photo" data-reference="matter-photomontage" data-image-role="place">
+    <img src="assets/tweet-image-orange.jpg" alt="County Hall view across the Thames toward Westminster">
+  </section>
+  <div class="meta-top" data-critical="date">London User Group<br>County Hall / Thames view</div>
+  <div class="coord">Westminster skyline<br>recap notes / community night</div>
+  <div class="orange-slab" aria-hidden="true"></div>
+  <div class="black-slab" aria-hidden="true"></div>
+  <div class="ghost" aria-hidden="true">LONDON</div>
+  <div class="title">
+    <h1 data-critical="title">Cloudflare<br>London<br>Landscape</h1>
+    <p class="subtitle" data-critical="body">A wide-field recap from the London User Group: edge networks, media transport, identity flows, and the city seen through orange glass.</p>
+  </div>
+  <div class="caption">View anchor: County Hall → Thames → Westminster</div>
+  <div class="micro">CF LON / user group / evening session / orange overprint / landscape edition</div>
+  <div class="side-word" aria-hidden="true">EDGE</div>
+  <section class="facts" data-critical="body">
+    <div class="fact" data-beat="venue">
+      <div class="n">01 / place</div>
+      <div class="t">London room, river line, civic horizon.</div>
+      <div class="small">The venue view becomes the poster’s wide anchor.</div>
+    </div>
+    <div class="fact" data-beat="community">
+      <div class="n">02 / people</div>
+      <div class="t">Builders, operators, product teams.</div>
+      <div class="small">A local meet-up shaped as a public technical recap.</div>
+    </div>
+    <div class="fact" data-beat="media">
+      <div class="n">03 / transport</div>
+      <div class="t">MoQ, latency, live distribution.</div>
+      <div class="small">Media over modern network paths, discussed from the edge.</div>
+    </div>
+    <div class="fact" data-beat="identity">
+      <div class="n">04 / trust</div>
+      <div class="t">Credential Broker and access patterns.</div>
+      <div class="small">Identity as infrastructure: fewer seams, clearer control.</div>
+    </div>
+  </section>
+  <section class="black-copy">
+    <div class="k">recap index</div>
+    <div class="big">Orange network notes from a grey London evening.</div>
+    <div class="body">Short talks, hallway questions, and a skyline that turned the event into a landscape: infrastructure made visible, then compressed into a poster.</div>
+  </section>
+  <div class="rule-a" aria-hidden="true"></div>
+  <div class="rule-b" aria-hidden="true"></div>
+  <div class="cta" data-critical="cta">Read the recap. Follow the next London session.<span>community / edge / media / identity</span></div>
+</main>
+</body>
+</html>

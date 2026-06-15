@@ -14,10 +14,143 @@ Read the existing code and identify:
 - Is there any compositional tension? (asymmetric whitespace, overlapping elements, cropped type)
 - Is body text wider than 60ch? (it should not be)
 - Are there decorative colors being used for hierarchy? (should be opacity instead)
+- What is the **one dominant graphic event**? (cropped word, giant date, huge shape, hard split, or masked photo)
+- Does that event communicate the actual subject, or is it arbitrary decoration?
+- Is the primary title/date/CTA readable at a glance?
+- Is critical copy the dominant contrast event inside its local reading zone, rather than competing with a route line/photo/mega-glyph?
+- Which edge is under pressure? (a major element should touch, bleed, or be cropped by the frame)
+- Where is the microtype/data layer? (2–4 tiny metadata clusters make the large move feel deliberate)
+- Is there a hard field/inversion? (stone-900/stone-50 mass, split field, or `mix-blend-difference`)
+- Is there a graphic system beyond a thin accent line? (rings, bars, dot/line rhythm, repetition, halftone, or photo treatment)
+- What source-ledger items must be preserved exactly? (names, dates, places, sequence beats, quotes, assets)
+- Do images have explicit roles: place, person, evidence, sequence, metaphor, product?
+- Do diagrams encode real variables, or are arrows/nodes decorative?
+- What historical move is embodied in layout logic, not visible name-dropping?
+- Which period/genre lineage fits the subject: object poster, travel/lithographic, Zurich public notice, Basel figure-ground, Geigy scientific, Matter photomontage, Weingart type disruption, Troxler rhythm, or contemporary Swiss cultural poster?
+- Are color, typography, material surface, grid behavior, and image/diagram logic consistent with that lineage instead of defaulting to late-modern black/red type violence?
+- Does the rendered artifact prove the lineage visually, or only through `data-*` metadata?
+- Are we using UI/product language (button modules, dashboards, cards, “learn more” blocks) where a print-poster instruction would be stronger?
+- Does typography match the period/genre stance, or does everything feel like the same IBM Plex tech artifact?
+- Is the palette intentionally one accent, or does the lineage call for a limited flat-ink palette with 2–3 meaningful colors?
+- Are images authored through crop/scale/overprint/mask, or merely placed?
+- Does the artifact format match the brief/baseline (poster, landscape, one-page recap, thread, matrix, specimen)?
 
-### 2. Collapse the palette
+### 1b. Choose the dramatic event
 
-The most common fix: too many colors.
+Before writing classes, decide what carries the poster. Do not start with nav/hero/cards; start with one of these:
+
+| Event | Best for | Must include |
+| --- | --- | --- |
+| Cropped word | Product/concept name | `text-[clamp(...)]`, `whitespace-nowrap`, edge crop, tiny labels |
+| Giant date/number | Events, launches, reports | Numeral/date at 40%+ section area, content reduced to metadata grid |
+| Split field | High contrast statement | Light/dark halves and display type crossing via `mix-blend-difference` |
+| Geometric subject | Abstract or technical story | Oversized circle/ring/bar/triangle, not a small decorative icon |
+| Masked photo | People/place/product imagery | Grayscale/duotone crop, overprint field/type, no rounded image cards |
+| Rhythm layer | Music/data/motion | Repeating lines/dots/words or concentric/radiating structure |
+| Stacked collage | Multi-asset story | Hard-edged overlaps with explicit z-index, no soft shadows |
+
+If the design is centered, evenly spaced, and card-based, it is still too timid. Add a dominant anchor, force an edge crop, and demote secondary content into microtype. If the design is hard to read, it is not dramatic enough — it is just noisy. Move collisions to the anchor/background and keep the primary reading path clear.
+
+### 1c. Allocate contrast channels
+
+Do not translate readability guidance into lower drama. Translate it into signal assignment:
+
+- **Critical signal:** title/date/body/CTA. It wins locally. Mark dense-poster HTML with `data-critical="title"`, `data-critical="body"`, `data-critical="date"`, or `data-critical="cta"`.
+- **Dramatic signal:** image, route, slash, giant numeral, cropped word, object, diagram. It may be brutal, high-contrast, and edge-cropped, but not through critical glyphs.
+- **Texture signal:** halftone, contour, ghost type, grid, tiny labels. It can sit under text only when visibly demoted.
+
+Use these moves before reducing intensity:
+
+```html
+<!-- Critical signal: the reading zone is also a hard graphic block -->
+<div class="relative z-40 col-span-12 md:col-span-5 bg-stone-950 p-6 md:p-8 text-stone-50">
+  <h1 data-critical="title" class="text-[clamp(3.5rem,11vw,9rem)] font-bold leading-[0.82] tracking-[-0.06em]">
+    Night Closure
+  </h1>
+  <p data-critical="body" class="mt-5 max-w-[34ch] text-lg leading-snug text-stone-50/85">
+    Last trains reroute at 23:40. Use the marked transfer corridor.
+  </p>
+  <a data-critical="cta" class="mt-7 inline-flex min-h-11 items-center bg-[#C8102E] px-5 text-[11px] font-bold uppercase tracking-widest text-stone-50">
+    Check route
+  </a>
+</div>
+
+<!-- Dramatic signal: maximum contrast, but routed outside the reading zone -->
+<div data-channel="dramatic" aria-hidden="true" class="pointer-events-none absolute left-[50%] top-0 z-10 h-full w-4 -rotate-12 bg-[#C8102E]"></div>
+
+<!-- Texture signal: can pass behind because it is demoted -->
+<p data-channel="texture" aria-hidden="true" class="pointer-events-none absolute -bottom-[0.1em] right-[-0.08em] z-0 text-[clamp(8rem,28vw,24rem)] font-bold leading-none text-stone-900/[0.06]">
+  23:40
+</p>
+```
+
+Test the local channel: inside the title/body/CTA rectangle, is critical text the strongest readable signal? If yes, keep the surrounding poster violent. If no, route/cut/demote the competing graphic.
+
+### 1d. Select period/genre lineage, then preserve artifact fidelity
+
+Before styling, choose a lineage and keep it auditable without visible name-dropping:
+
+```html
+<section data-lineage="geigy-scientific" data-period="1950s-1970s" data-genre="scientific-plate" data-print-process="flat-ink-overprint">
+  ...
+</section>
+```
+
+Use the lineage to avoid default collapse:
+
+- object poster: object/silhouette is the anchor; type is restrained;
+- travel/photomontage: image/place and lithographic color lead;
+- Zurich public notice: facts, hierarchy, and proportions lead;
+- Basel/Hofmann: 2–3 contrast axes and figure-ground lead;
+- Geigy/scientific: specimen/matrix/plate and measured labels lead;
+- Weingart/Troxler: use only for subjects that need type disruption or performance rhythm.
+
+Before styling a source-heavy poster, write a private ledger:
+
+```text
+title:
+date/place/time:
+required names/entities:
+sequence beats:
+assets and roles:
+diagram variables:
+CTA/source note:
+artifact format/aspect:
+historical move:
+```
+
+Then make the HTML auditable without showing process labels:
+
+```html
+<!-- historical move: matter-photomontage; source ledger: six thread beats -->
+<article class="grid grid-cols-12 overflow-hidden">
+  <figure data-image-role="place" class="col-span-7 overflow-hidden">
+    <img src="assets/venue.jpg" alt="County Hall view" class="h-full w-full object-cover grayscale contrast-125" />
+  </figure>
+  <ol class="col-span-5">
+    <li data-beat="01" data-source="tweet-01">Venue opens at Waterloo.</li>
+    <li data-beat="02" data-source="tweet-02">Prada marks the entrance.</li>
+  </ol>
+  <svg data-encoding="tweet order → vertical position; topic group → x-position" aria-hidden="true"></svg>
+</article>
+```
+
+Visible poster copy must not include `source material`, `brief`, `current skill`, hex colors, screenshot dimensions, or other prompt/eval metadata. Microtype must be real credits, source notes, captions, coordinates, index numbers, or schedule — never fake filler.
+
+### 1e. Prove the poster in the rendered image
+
+Markup attributes are only audit hooks. The final screenshot must make the claim visible:
+
+- claimed lineage visible at thumbnail scale;
+- critical text readable in the raster image, not just present in DOM;
+- source facts visible without opening HTML;
+- image roles visible through crop/scale/overprint, not merely `data-image-role`;
+- print-material choices visible but not interfering with the reading path;
+- no UI-card/dashboard scaffolding unless the subject is explicitly UI.
+
+### 2. Collapse or discipline the palette
+
+The most common fix: too many colors. The second most common over-correction: forcing every poster into red/orange plus black/white even when travel, lithographic, scientific, civic, or cultural history calls for a different limited print palette.
 
 ```
 Before:  bg-white, bg-gray-100, bg-gray-200, text-gray-500, text-gray-700
@@ -25,6 +158,8 @@ After:   bg-stone-50, bg-stone-100, text-stone-900/70, text-stone-900/40
 ```
 
 Remove mid-scale stone values (stone-400–700) that are used for text hierarchy. Replace with opacity modifiers on stone-900 (light) or stone-50 (dark).
+
+If the lineage calls for richer color, keep it disciplined: 2–3 flat inks plus paper tone, each mapped to a semantic role. No gradients unless the subject is optical/color study.
 
 ### 3. Introduce scale contrast
 
@@ -95,7 +230,7 @@ Before:  px-8 on everything
 After:   Large left margin, tight right margin — or vice versa
 ```
 
-### 7. Add geometric decoration at poster scale
+### 7. Add a graphic system at poster scale
 
 ```html
 <!-- Before: No visual anchors -->
@@ -103,7 +238,7 @@ After:   Large left margin, tight right margin — or vice versa
 <!-- After: Oversized background numeral (8–12% opacity, not invisible 3%) -->
 <div class="absolute top-0 right-0 text-[20rem] font-bold leading-none text-stone-900/[0.10] select-none pointer-events-none">01</div>
 
-<!-- After: Bold accent rule -->
+<!-- After: Bold accent rule (minimum; not enough by itself for a dramatic poster) -->
 <div class="w-16 h-1.5 bg-[#C8102E] mb-8"></div>
 
 <!-- After: Diagonal slash -->
@@ -254,7 +389,7 @@ Before declaring a design done, assess against every criterion below. Each is a 
 - [ ] **Extreme weight contrast** — `font-bold` or `font-thin` used at display sizes (not just `font-light` everywhere)
 - [ ] **Type at architectural scale** — at least one element sized so letterforms function as graphic shapes (`clamp(6rem, 15vw, 20rem)` or similar)
 - [ ] **Size ratio >= 10:1** — largest type is at least 10× the smallest (e.g., 14rem display vs 11px label)
-- [ ] **Tight leading at display sizes** — `leading-[0.85]` or `leading-none` on mega/display type
+- [ ] **Tight leading at display sizes** — `leading-[0.85]`, tighter custom leading, or `leading-none` on mega/display type
 - [ ] **Letterspacing manipulated expressively** — at least one instance of extreme `tracking-[0.3em]` expansion or collision-tight spacing
 - [ ] **Type on non-horizontal axes** — at least one readable text element rotated (`-rotate-90`, `rotate-90`, or diagonal)
 - [ ] **Type used as texture** — background letterforms at 8–12% opacity (not 3% — must be visible), cropped by viewport
@@ -330,6 +465,42 @@ Before declaring a design done, assess against every criterion below. Each is a 
 - [ ] **Scale creates depth** — larger reads as closer, smaller as distant
 - [ ] **Single letter fills composition** — one typographic element dominates entire visual
 
+### Dramatic Poster Outcome (14 criteria)
+
+- [ ] **One dominant graphic event** — first viewport/hero is organized around one anchor, not a generic hero stack
+- [ ] **Anchor occupies 35–70% of the hero** — cropped word, giant date/number, shape, field, or image fragment has real mass
+- [ ] **Anchor is meaningful** — the big element translates the subject/message, not arbitrary decoration
+- [ ] **Primary reading path is clear** — title, essential date/info, and CTA remain readable at a glance
+- [ ] **Period/genre lineage is selected** — the poster does not default to late-1960s/1980s black-white-red typographic disruption unless the subject calls for it
+- [ ] **Palette fits lineage** — one accent is still disciplined, but not every non-Cloudflare poster defaults to red/orange
+- [ ] **Typographic violence is earned** — cropped mega-type appears only when type/image-as-form is the chosen lineage; object/travel/scientific posters may be quieter
+- [ ] **Font category fits lineage** — neo-grotesk, condensed, serif/display, mono/technical, or custom lettering is chosen for the era/subject, not reflexively IBM Plex Sans everywhere
+- [ ] **Grid reads as proportion, not web UI** — no visible dashboard/card/module scaffolding unless the subject is explicitly UI
+- [ ] **Material process is chosen where relevant** — overprint, halftone, duotone, lithographic grain, screenprint slab, or paper tone supports the subject
+- [ ] **Diagram restraint** — diagrams/routes/nodes appear only when marks encode real systems/data
+- [ ] **Restraint can be drama** — 2–3 contrast axes are chosen and unrelated effects are suppressed
+- [ ] **Genre breadth is respected** — travel placard, object poster, scientific plate, public notice, concert, theatre, typographic specimen, photomontage, and cultural poster are distinct solutions
+- [ ] **Source ledger is preserved** — required names, dates, places, sequence beats, and factual claims are visible without invented specifics
+- [ ] **Source-support copy is readable** — small factual lines remain legible at rendered image scale; no word disappears at a split-field or low-contrast boundary
+- [ ] **Website CTAs are filtered** — web navigation/buttons like “View documentation,” “Get started,” or “Read the docs” are not copied into poster CTA copy unless the task is explicitly UI
+- [ ] **Images have semantic roles** — assets are subject/place/evidence/sequence/metaphor, not wallpaper texture
+- [ ] **Diagrams encode real variables** — routes, nodes, axes, and targets map to source facts via visible labels or non-visible `data-encoding`
+- [ ] **Historical move is embodied** — the layout carries Müller-Brockmann/Hofmann/Matter/Ruder/Weingart/Troxler/Odermatt-Tissi logic rather than visible designer-name garnish
+- [ ] **Artifact format is respected** — landscape, one-page recap, thread, matrix, specimen, or poster requirements are not collapsed into the same portrait template
+- [ ] **No prompt-shaped visible copy** — no screenshot dimensions, hex values, “single accent,” “brief,” “source material,” “generated,” or eval/provenance labels inside artwork
+- [ ] **Protected reading zone exists** — title/body/CTA sit on an uninterrupted quiet field, not directly over high-contrast mega-type, route lines, diagrams, or photos
+- [ ] **Contrast is allocated, not reduced** — the poster keeps brutal fields/anchors, but critical copy is the dominant contrast signal inside its local zone
+- [ ] **Critical copy is marked for dense HTML** — use `data-critical="title/body/date/cta"` on essential reading blocks when layers are complex
+- [ ] **Graphic and reading layers are separated** — decorative anchors use `aria-hidden`, `pointer-events-none`, low opacity, clipping, or lower z-index; critical copy uses `relative z-30`/`z-40`
+- [ ] **Edge pressure is visible** — the dominant element touches, bleeds past, or is cropped by at least one edge
+- [ ] **Microtype/data layer present** — 2–4 tiny tracked labels/dates/index clusters counterbalance the anchor
+- [ ] **Hard figure/ground relationship** — large stone light/dark field, split background, or `mix-blend-difference` moment
+- [ ] **Graphic system beyond accent line** — rings, bars, line/dot rhythm, repeated type, halftone, or image treatment
+- [ ] **Tonal mass ratio is deliberate** — e.g. 60/30/10 or 45/45/10 across light/dark/accent surfaces
+- [ ] **Secondary content is demoted** — body copy/cards do not compete with the anchor; they sit in grid cells as support
+- [ ] **UI chrome disappears** — no rounded card grid, soft shadow stack, pill-heavy SaaS layer, or centered marketing template
+- [ ] **Mobile preserves drama** — anchor remains dominant at 320px while offsets/overlaps simplify safely
+
 ### Energy / Movement (10 criteria)
 
 - [ ] **Diagonal elements present** — at least one major element on a diagonal axis
@@ -345,22 +516,22 @@ Before declaring a design done, assess against every criterion below. Each is a 
 
 ### Anti-Slop — no AI tells (11 criteria)
 
-The presence of any single tell below is disqualifying, no matter how well the rest scores. These check for the reflexive AI-generated defaults catalogued by Paul Bakaus at <https://impeccable.style/slop/>. Run `npx impeccable detect <file-or-url>` to verify automatically.
+The presence of any single tell below is disqualifying, no matter how well the rest scores. These check for reflexive AI-generated defaults catalogued by Paul Bakaus at <https://impeccable.style/slop/>. Run `npx impeccable detect <file-or-url>` to verify automatically.
 
 - [ ] **No AI palette** — no purple/violet gradients, no default cyan-on-black
 - [ ] **No gradient text** — every text fill is a solid color
 - [ ] **No reflexive glow** — colored `box-shadow`/text-glow only if it is the poster's deliberate subject
 - [ ] **No pure `#000`/`#fff`** — stone-950 / stone-50 (warm-tinted), never raw black/white
 - [ ] **Dark mode is a decision** — not defaulted to for "safety"; light is allowed and often stronger
-- [ ] **Distinctive typeface** — IBM Plex or an approved fallback; never Inter/Roboto/Geist/Space Grotesk/Plus Jakarta Sans
+- [ ] **Distinctive typeface** — IBM Plex or an approved fallback; avoid Inter/Roboto/Geist/Space Grotesk/Plus Jakarta Sans
 - [ ] **Monospace earns its place** — used for code/data/IDs/metadata, not as "technical" decoration
-- [ ] **No card slop** — no identical icon-tile feature-card grid, no nested cards, no side-tab accent stripe
+- [ ] **No card slop** — no identical icon-tile feature-card grid, nested cards, side-tab accent stripes, or rounded SaaS cards
 - [ ] **No template metrics** — charts carry real information; no sparkline garnish or big-number-plus-three-stats block
 - [ ] **Not everything centered** — asymmetric composition, flush-left body copy
 - [ ] **No quality bugs** — passes WCAG AA contrast, no cramped padding, no justified text
 
 ---
 
-**Total: 82 criteria across 9 categories.**
+**Total: 117 criteria across 10 categories.**
 
-A strong Swiss Poster implementation should pass >= 70 criteria **and all 11 Anti-Slop checks**. The remaining gaps are acceptable only if they involve techniques not applicable to the medium (e.g., photomontage in a CSS-only site) — the Anti-Slop checks are never optional.
+A strong Swiss Poster implementation should pass >= 100 criteria **and all 11 Anti-Slop checks**. The remaining gaps are acceptable only if they involve techniques not applicable to the medium (e.g., photomontage in a CSS-only site) — the Dramatic Poster Outcome, protected reading zone, and Anti-Slop checks are never optional.

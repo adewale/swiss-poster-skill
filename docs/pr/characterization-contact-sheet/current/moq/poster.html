@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media over QUIC</title>
+<style>
+:root{
+  --paper: rgb(250,250,249);
+  --ink: rgb(28,25,23);
+  --muted: rgba(28,25,23,.62);
+  --faint: rgba(28,25,23,.14);
+  --line: rgba(28,25,23,.28);
+  --accent: rgb(243,128,32);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+.poster{
+  width:840px;height:1200px;position:relative;overflow:hidden;background:var(--paper);
+}
+.grid{
+  position:relative;z-index:20;display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:min-content;column-gap:18px;
+  height:100%;padding:54px 50px 46px 50px;
+}
+.rule-grid{
+  position:absolute;inset:0;z-index:0;opacity:.36;
+  background-image:
+    linear-gradient(90deg, transparent 49px, var(--faint) 50px, transparent 51px),
+    repeating-linear-gradient(0deg, transparent 0 79px, rgba(28,25,23,.08) 80px);
+}
+.title{
+  grid-column:1/9;grid-row:1;align-self:start;z-index:40;
+  font-size:94px;line-height:.88;letter-spacing:-.075em;font-weight:800;margin:0;
+}
+.subtitle{
+  grid-column:9/13;grid-row:1;z-index:40;margin-top:6px;
+  font-size:16px;line-height:1.18;font-weight:500;letter-spacing:-.015em;
+}
+.meta{
+  grid-column:1/5;grid-row:2;z-index:40;margin-top:34px;
+  display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;
+  font-size:11px;line-height:1.18;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);
+}
+.meta b{display:block;color:var(--ink);font-size:15px;letter-spacing:-.01em;text-transform:none;margin-top:5px}
+.quic{
+  position:absolute;z-index:4;left:-28px;top:238px;font-size:286px;line-height:.75;font-weight:900;letter-spacing:-.12em;
+  color:rgba(28,25,23,.065);white-space:nowrap;pointer-events:none;
+}
+.orange-slab{
+  position:absolute;z-index:5;right:-160px;top:320px;width:610px;height:168px;background:var(--accent);
+  transform:rotate(-16deg);transform-origin:center;pointer-events:none;
+}
+.orange-slab:after{
+  content:"";position:absolute;left:80px;top:50%;width:430px;height:2px;background:rgba(250,250,249,.72);
+}
+.axis{
+  grid-column:2/12;grid-row:3;z-index:30;margin-top:150px;height:430px;position:relative;border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);
+}
+.axis:before{content:"latency";position:absolute;left:-34px;top:0;writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.axis:after{content:"scale";position:absolute;right:0;bottom:-30px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.quadrant{
+  position:absolute;border-top:1px solid var(--line);border-right:1px solid var(--line);
+}
+.q1{left:0;top:0;width:50%;height:50%}
+.q2{right:0;top:0;width:50%;height:50%}
+.q3{left:0;bottom:0;width:50%;height:50%}
+.q4{right:0;bottom:0;width:50%;height:50%}
+.qtxt{position:absolute;font-size:12px;line-height:1.15;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.tl{left:18px;top:18px}.tr{right:18px;top:18px;text-align:right}.bl{left:18px;bottom:18px}.br{right:18px;bottom:18px;text-align:right;color:var(--ink);font-weight:700}
+.target{
+  position:absolute;right:72px;bottom:68px;width:168px;height:168px;border:18px solid var(--accent);border-radius:50%;
+}
+.target:before,.target:after{content:"";position:absolute;inset:34px;border:2px solid var(--ink);border-radius:50%}
+.target:after{inset:69px;background:var(--ink)}
+.path{
+  position:absolute;left:82px;bottom:116px;width:452px;height:134px;border-bottom:10px solid var(--ink);border-right:10px solid var(--ink);
+}
+.path:before{content:"";position:absolute;left:-13px;bottom:-18px;width:27px;height:27px;background:var(--ink)}
+.path:after{content:"";position:absolute;right:-22px;top:-12px;width:36px;height:36px;background:var(--accent)}
+.stamp{
+  position:absolute;right:34px;bottom:38px;background:var(--paper);padding:10px 12px 9px 12px;border:2px solid var(--ink);
+  font-size:12px;text-transform:uppercase;letter-spacing:.13em;font-weight:800;
+}
+.body{
+  grid-column:1/6;grid-row:4;z-index:40;margin-top:58px;font-size:21px;line-height:1.09;font-weight:600;letter-spacing:-.025em;
+}
+.facts{
+  grid-column:7/13;grid-row:4;z-index:40;margin-top:50px;display:grid;grid-template-columns:1fr 1fr;gap:22px 22px;
+}
+.fact{border-top:3px solid var(--ink);padding-top:9px;font-size:13px;line-height:1.18;color:var(--muted)}
+.fact strong{display:block;color:var(--ink);font-size:23px;line-height:.95;letter-spacing:-.04em;margin-bottom:6px}
+.footer{
+  grid-column:1/13;grid-row:5;align-self:end;z-index:40;display:grid;grid-template-columns:repeat(12,1fr);column-gap:18px;align-items:end;
+}
+.cta{
+  grid-column:1/6;background:var(--ink);color:var(--paper);min-height:54px;display:flex;align-items:center;padding:0 18px;
+  font-size:13px;text-transform:uppercase;letter-spacing:.16em;font-weight:800;
+}
+.footer-note{
+  grid-column:7/13;font-size:11px;line-height:1.35;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);
+}
+.pulse{
+  position:absolute;z-index:3;right:-160px;bottom:118px;width:560px;height:560px;border-radius:50%;
+  background:repeating-radial-gradient(circle, transparent 0 35px, rgba(243,128,32,.34) 36px 42px, transparent 43px 72px);
+  pointer-events:none;
+}
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Media over QUIC poster">
+  <div class="rule-grid" aria-hidden="true"></div>
+  <div class="quic" aria-hidden="true" data-reference="weingart-controlled-disruption">QUIC</div>
+  <div class="orange-slab" aria-hidden="true" data-encoding="relay cut-through → diagonal carrier"></div>
+  <div class="pulse" aria-hidden="true" data-encoding="broadcast fanout → radial repetition"></div>
+  <section class="grid">
+    <h1 class="title" data-critical="title">Media<br>over<br>QUIC</h1>
+    <p class="subtitle" data-critical="body">Real-time media transport for broadcast delivery, relay networks, and interoperable clients.</p>
+    <div class="meta" data-critical="date">
+      <span>target<b>sub-second</b></span>
+      <span>mode<b>broadcast</b></span>
+      <span>relay<b>CDN edge</b></span>
+      <span>goal<b>interop</b></span>
+    </div>
+    <div class="axis" data-encoding="latency versus scale quadrant">
+      <div class="quadrant q1"></div><div class="quadrant q2"></div><div class="quadrant q3"></div><div class="quadrant q4"></div>
+      <span class="qtxt tl">high delay<br>small audience</span>
+      <span class="qtxt tr">high delay<br>mass reach</span>
+      <span class="qtxt bl">low delay<br>direct session</span>
+      <span class="qtxt br">low delay<br>large audience</span>
+      <div class="path" aria-hidden="true"></div>
+      <div class="target" aria-hidden="true"></div>
+      <div class="stamp">MoQ zone</div>
+    </div>
+    <p class="body" data-critical="body">A flat transport layer for live media: cache-friendly relays, fanout at the edge, and predictable delivery without protocol theatrics.</p>
+    <div class="facts">
+      <div class="fact" data-beat="latency"><strong>Less waiting</strong>Designed around live paths where seconds matter.</div>
+      <div class="fact" data-beat="scale"><strong>More reach</strong>Relay once, distribute many, closer to viewers.</div>
+      <div class="fact" data-beat="cdn"><strong>Edge relay</strong>CDN-style routing becomes part of the media system.</div>
+      <div class="fact" data-beat="interop"><strong>Common wire</strong>Independent senders, relays, and players can meet.</div>
+    </div>
+    <footer class="footer">
+      <div class="cta" data-critical="cta">Build the path viewers can join</div>
+      <div class="footer-note">Transport clarity / measured latency / shared delivery primitives / no vague spectacle</div>
+    </footer>
+  </section>
+</main>
+</body>
+</html>

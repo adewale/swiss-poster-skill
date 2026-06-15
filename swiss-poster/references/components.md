@@ -65,6 +65,68 @@ All components use IBM Plex Sans, the stone palette, and a single accent color (
 
 These are the signature patterns of the Swiss Poster style — compositions where elements deliberately escape their containers.
 
+### Protected reading zone / contrast-channel pattern
+
+Use this wrapper whenever a dramatic route, slash, giant word, photo, or diagram could collide with primary copy. The graphic can break the grid; the critical copy gets a quiet field and higher layer. Do not reduce the whole poster's contrast; allocate it into channels.
+
+```html
+<section data-reference="hofmann-figure-ground" class="relative min-h-[100svh] overflow-hidden bg-stone-50 text-stone-900">
+  <!-- Dramatic signal: allowed to crop, overlap, and bleed. It is not the reading path. -->
+  <div data-channel="dramatic" aria-hidden="true" class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    <div class="absolute -right-[18vw] top-[12vh] h-[62vw] w-[62vw] rounded-full border-[2rem] border-[#C8102E]"></div>
+    <div class="absolute left-[8vw] top-[46vh] h-3 w-[90vw] -rotate-6 bg-[#C8102E]"></div>
+    <p data-channel="texture" class="absolute -left-[4vw] bottom-[6vh] text-[clamp(8rem,28vw,28rem)] font-bold leading-none tracking-[-0.1em] text-stone-900/[0.06]">
+      SIGNAL
+    </p>
+  </div>
+
+  <div class="relative z-10 grid min-h-[100svh] grid-cols-12 gap-6 px-6 py-8 md:px-12">
+    <p class="col-span-5 text-[11px] uppercase tracking-widest text-stone-900/55">Basel / Public notice / 01</p>
+
+    <!-- Critical signal: uninterrupted quiet field, strong local contrast, above graphic layer. -->
+    <div class="relative z-40 col-span-12 mt-[18vh] max-w-[46rem] bg-stone-50/95 p-1 md:col-span-7">
+      <h1 data-critical="title" class="text-[clamp(3.5rem,10vw,9rem)] font-bold leading-[0.82] tracking-[-0.06em]">
+        Clear title stays readable.
+      </h1>
+      <p data-critical="body" class="mt-5 max-w-[44ch] text-lg leading-snug text-stone-900/80">
+        Body copy never sits directly on high-contrast mega-type, diagrams, or route lines.
+      </p>
+      <a data-critical="cta" class="mt-7 inline-flex min-h-[44px] items-center bg-stone-900 px-5 text-[11px] font-bold uppercase tracking-widest text-stone-50">
+        Action remains clear
+      </a>
+    </div>
+  </div>
+</section>
+```
+
+### Source-ledger / encoded-diagram pattern
+
+Use this when the source has tweets, images, historical facts, or a real system diagram. The visible result stays poster-like; the markup remains auditable.
+
+```html
+<section data-reference="matter-photomontage" class="relative min-h-[100svh] overflow-hidden bg-stone-50 text-stone-950">
+  <div class="grid min-h-[100svh] grid-cols-12 gap-4 px-6 py-8 md:px-10">
+    <figure data-image-role="place" class="col-span-12 overflow-hidden bg-stone-950 md:col-span-7">
+      <img src="assets/venue.jpg" alt="County Hall view across the Thames" class="h-full w-full object-cover grayscale contrast-125" />
+    </figure>
+
+    <div class="relative z-40 col-span-12 bg-stone-50 p-6 md:col-span-5">
+      <h1 data-critical="title" class="text-[clamp(3rem,9vw,7rem)] font-bold leading-[0.84] tracking-[-0.06em]">London Thread</h1>
+      <p data-critical="body" class="mt-4 max-w-[34ch] text-lg font-semibold leading-snug">Six public notes become one evening map.</p>
+      <ol class="mt-8 space-y-3 text-sm leading-tight">
+        <li data-beat="01" data-source="tweet-01"><b>01</b> County Hall opens the sequence.</li>
+        <li data-beat="02" data-source="tweet-02"><b>02</b> Prada marks the entrance.</li>
+        <li data-beat="03" data-source="tweet-03"><b>03</b> Demos move from links to room.</li>
+      </ol>
+    </div>
+
+    <svg data-channel="dramatic" data-encoding="tweet order → route position; topic → node shape" aria-hidden="true" class="pointer-events-none absolute inset-0 z-10">
+      <!-- real diagram marks only; no decorative fake nodes -->
+    </svg>
+  </div>
+</section>
+```
+
 ```html
 <!-- 1. Oversized type with overlapping accent block -->
 <section class="relative py-32 overflow-hidden">
@@ -146,6 +208,82 @@ These are the signature patterns of the Swiss Poster style — compositions wher
         </p>
       </div>
     </div>
+  </div>
+</section>
+```
+
+---
+
+## Dramatic Poster Archetypes
+
+Use these when the first attempt feels like a tidy Swiss webpage rather than a poster. Each archetype has one dominant anchor, an edge crop, microtype, and a hard field/graphic system.
+
+### 1. Cropped word + corner metadata
+
+```html
+<section class="relative min-h-[100svh] overflow-hidden bg-stone-50 text-stone-900 px-4 md:px-8 py-8 font-sans">
+  <div class="grid grid-cols-12 gap-4 md:gap-8 min-h-[calc(100svh-4rem)]">
+    <p class="col-span-6 md:col-span-2 text-[11px] leading-none tracking-widest uppercase text-stone-900/50">Kunsthalle<br>Basel<br>1962</p>
+    <p class="col-span-6 md:col-span-2 md:col-start-11 text-right text-[11px] leading-none tracking-widest uppercase text-stone-900/50">Fig. 01<br>Grid 12<br>Offset</p>
+    <div class="col-span-12 self-end relative">
+      <div class="absolute -right-[12vw] bottom-[12%] h-[38vh] w-[68vw] bg-[#C8102E] z-0"></div>
+      <h1 class="relative z-10 -ml-[0.07em] whitespace-nowrap text-[clamp(5.5rem,24vw,24rem)] font-bold uppercase leading-[0.78] tracking-[-0.08em]">
+        FORM
+      </h1>
+    </div>
+    <p class="col-span-12 md:col-span-4 md:col-start-8 self-start max-w-[42ch] text-base leading-relaxed text-stone-900/70">
+      One cropped word does the visual labor. The content stays small and gridded.
+    </p>
+  </div>
+</section>
+```
+
+### 2. Giant date / event poster
+
+```html
+<section class="relative min-h-[90svh] overflow-hidden bg-stone-900 text-stone-50 px-4 md:px-8 py-8">
+  <div class="absolute inset-y-0 right-0 w-[32vw] bg-[#C8102E]"></div>
+  <div class="grid grid-cols-12 gap-4 md:gap-8 relative z-10 min-h-[calc(90svh-4rem)]">
+    <div class="col-span-12 md:col-span-7 self-center overflow-hidden">
+      <p class="-ml-[0.08em] whitespace-nowrap text-[clamp(9rem,34vw,34rem)] font-bold leading-[0.75] tracking-[-0.1em]">19</p>
+      <p class="-mt-[0.18em] ml-[0.18em] whitespace-nowrap text-[clamp(9rem,34vw,34rem)] font-thin leading-[0.75] tracking-[-0.1em]">62</p>
+    </div>
+    <div class="col-span-12 md:col-span-4 md:col-start-9 self-end pb-8">
+      <p class="text-[11px] uppercase tracking-widest leading-normal text-stone-50/50">Zürich / Tonhalle / 20:00 / Grid 04</p>
+      <h2 class="mt-8 text-4xl md:text-6xl font-bold leading-none tracking-tight">Musica Viva</h2>
+      <a class="mt-8 inline-flex min-h-11 items-center bg-stone-50 px-6 text-sm font-medium uppercase tracking-widest text-stone-900">Reserve</a>
+    </div>
+  </div>
+</section>
+```
+
+### 3. Masked photo as graphic material
+
+```html
+<section class="relative min-h-[85svh] overflow-hidden bg-stone-50 text-stone-900">
+  <div class="grid grid-cols-12 min-h-[85svh]">
+    <div class="col-span-12 md:col-span-7 relative overflow-hidden bg-stone-950">
+      <img src="/image.jpg" alt="" class="absolute inset-0 h-full w-full object-cover grayscale contrast-150 opacity-80 mix-blend-screen" />
+      <div class="absolute bottom-0 left-0 h-24 w-full bg-[#C8102E]/90 mix-blend-multiply"></div>
+    </div>
+    <div class="col-span-12 md:col-span-5 relative p-6 md:p-10 overflow-hidden">
+      <p class="text-[11px] tracking-widest uppercase text-stone-900/50">Photo becomes field / not card</p>
+      <h2 class="absolute -left-[0.08em] bottom-8 whitespace-nowrap text-[clamp(5rem,16vw,18rem)] font-bold leading-[0.8] tracking-[-0.08em]">CUT</h2>
+    </div>
+  </div>
+</section>
+```
+
+### 4. Rhythm / optical vibration layer
+
+```html
+<section class="relative overflow-hidden bg-stone-50 text-stone-900 px-4 md:px-8 py-24 md:py-32">
+  <div class="absolute inset-0 text-stone-900/[0.08] pointer-events-none"
+    style="background-image: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 9px)"></div>
+  <div class="absolute -right-[20%] -bottom-[40%] h-[75vw] w-[75vw] rounded-full border-[12px] border-[#C8102E]"></div>
+  <div class="grid grid-cols-12 gap-4 md:gap-8 relative z-10">
+    <p class="col-span-12 md:col-span-2 text-[11px] uppercase tracking-widest text-stone-900/50">Line field / moiré / repetition</p>
+    <h2 class="col-span-12 md:col-span-8 md:col-start-4 text-[clamp(4rem,14vw,15rem)] font-bold uppercase leading-[0.85] tracking-[-0.06em]">Signal</h2>
   </div>
 </section>
 ```

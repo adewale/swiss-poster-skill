@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Tweets</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --faint:rgba(28,25,23,.13);
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1}
+  body{font-family:"IBM Plex Sans","Hanken Grotesk","Barlow",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+  .poster{
+    width:840px;height:1200px;margin:0 auto;background:var(--paper);position:relative;overflow:hidden;
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(12,1fr);
+  }
+  .gridlines{
+    position:absolute;inset:0;pointer-events:none;opacity:.36;
+    background-image:
+      linear-gradient(90deg,rgba(28,25,23,.08) 1px,transparent 1px),
+      linear-gradient(0deg,rgba(28,25,23,.055) 1px,transparent 1px);
+    background-size:70px 100px;
+  }
+  .orange-field{position:absolute;left:0;top:0;width:302px;height:1200px;background:var(--orange);z-index:1}
+  .river{
+    position:absolute;left:214px;top:-160px;width:160px;height:1540px;background:var(--paper);z-index:2;
+    transform:rotate(12deg);transform-origin:top center;
+    box-shadow:34px 0 0 rgba(28,25,23,.09),-26px 0 0 rgba(28,25,23,.08);
+  }
+  .mega{
+    position:absolute;z-index:3;left:240px;top:42px;
+    font-size:196px;line-height:.75;font-weight:800;letter-spacing:-.095em;color:rgba(28,25,23,.10);
+    writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;pointer-events:none;
+  }
+  .nodes{position:absolute;inset:0;z-index:4;pointer-events:none}
+  .node{position:absolute;border:3px solid var(--ink);background:var(--paper);width:34px;height:34px}
+  .node.orange{background:var(--orange);border-color:var(--ink)}
+  .route{position:absolute;height:4px;background:var(--ink);transform-origin:left top}
+  .r1{left:96px;top:250px;width:382px;transform:rotate(17deg)}
+  .r2{left:470px;top:365px;width:260px;transform:rotate(-28deg)}
+  .r3{left:132px;top:680px;width:420px;transform:rotate(-8deg)}
+  .n1{left:78px;top:238px}.n2{left:458px;top:350px}.n3{left:690px;top:230px}
+  .n4{left:118px;top:650px}.n5{left:520px;top:594px}.n6{left:705px;top:940px}
+  header{
+    grid-column:5/13;grid-row:2/5;z-index:20;padding:2px 54px 0 0;align-self:start;
+  }
+  h1{
+    margin:0;font-size:86px;line-height:.86;font-weight:800;letter-spacing:-.07em;
+    max-width:520px;
+  }
+  .subtitle{
+    margin:26px 0 0 0;width:430px;font-size:21px;line-height:1.12;font-weight:500;
+  }
+  .date{
+    position:absolute;z-index:30;left:44px;top:54px;width:194px;color:var(--ink);
+    font-size:15px;line-height:1.15;font-weight:800;letter-spacing:.02em;
+  }
+  .date small{display:block;margin-top:10px;font-size:10px;text-transform:uppercase;letter-spacing:.16em;font-weight:700}
+  .caption-left{
+    position:absolute;z-index:25;left:42px;bottom:42px;width:205px;
+    font-size:10px;line-height:1.35;text-transform:uppercase;letter-spacing:.13em;font-weight:700;
+  }
+  .beats{
+    grid-column:5/12;grid-row:6/10;z-index:24;display:grid;grid-template-columns:repeat(2,1fr);
+    gap:0;border-top:3px solid var(--ink);border-left:3px solid var(--ink);background:var(--paper);
+    align-self:start;margin-top:4px;
+  }
+  .beat{
+    min-height:118px;padding:15px 16px 12px 16px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);
+    position:relative;
+  }
+  .beat b{display:block;font-size:11px;line-height:1;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px}
+  .beat span{display:block;font-size:20px;line-height:1.05;font-weight:650;letter-spacing:-.025em}
+  .beat:nth-child(3){background:rgba(243,128,32,.16)}
+  .beat:nth-child(6){background:var(--ink);color:var(--paper)}
+  .index{
+    position:absolute;right:12px;bottom:10px;font-size:46px;line-height:.8;font-weight:800;letter-spacing:-.08em;
+    color:rgba(28,25,23,.14)
+  }
+  .beat:nth-child(6) .index{color:rgba(250,250,249,.20)}
+  .pigeon{
+    position:absolute;z-index:18;left:54px;top:424px;width:178px;height:214px;border:4px solid var(--ink);
+    background:var(--paper);clip-path:polygon(17% 0,100% 0,83% 100%,0 100%);
+  }
+  .pigeon:before{
+    content:"";position:absolute;left:35px;top:35px;width:92px;height:92px;border:5px solid var(--ink);
+    transform:rotate(-18deg);background:var(--orange);
+  }
+  .pigeon:after{
+    content:"Prada";position:absolute;left:23px;bottom:22px;font-size:34px;line-height:.8;font-weight:800;letter-spacing:-.06em;
+  }
+  .vertical{
+    position:absolute;z-index:26;right:30px;top:86px;writing-mode:vertical-rl;text-orientation:mixed;
+    font-size:10px;line-height:1;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700;
+  }
+  .lower{
+    position:absolute;z-index:22;left:302px;right:0;bottom:0;height:255px;background:var(--ink);color:var(--paper);
+    display:grid;grid-template-columns:repeat(8,1fr);padding:32px 42px 36px 42px;gap:20px;
+  }
+  .closing{grid-column:1/6;align-self:end}
+  .closing h2{margin:0 0 18px 0;font-size:46px;line-height:.92;letter-spacing:-.055em}
+  .closing p{margin:0;font-size:16px;line-height:1.22;color:rgba(250,250,249,.78);max-width:420px}
+  .cta{
+    grid-column:6/9;align-self:end;border:3px solid var(--paper);min-height:104px;padding:14px 14px 12px 14px;
+    font-size:18px;line-height:1.04;font-weight:750;letter-spacing:-.02em;
+  }
+  .cta small{display:block;margin-bottom:18px;font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(250,250,249,.66)}
+  .micro{
+    position:absolute;z-index:28;left:346px;top:535px;width:392px;
+    display:flex;justify-content:space-between;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:700;
+  }
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Cloudflare London User Group public recap poster">
+  <div class="gridlines" aria-hidden="true"></div>
+  <div class="orange-field" aria-hidden="true" data-reference="odermatt-tissi-commercial-clarity"></div>
+  <div class="river" aria-hidden="true" data-encoding="Waterloo arrival and County Hall view → diagonal place cut"></div>
+  <div class="mega" aria-hidden="true">WATERLOO</div>
+  <div class="nodes" aria-hidden="true" data-encoding="six-tweet sequence → six route nodes">
+    <i class="route r1"></i><i class="route r2"></i><i class="route r3"></i>
+    <i class="node n1 orange"></i><i class="node n2"></i><i class="node n3"></i>
+    <i class="node n4"></i><i class="node n5 orange"></i><i class="node n6"></i>
+  </div>
+  <div class="date" data-critical="date">
+    Inaugural evening<br>Cloudflare London User Group
+    <small>Waterloo offices · public recap</small>
+  </div>
+  <header>
+    <h1 data-critical="title">Cloudflare London Tweets</h1>
+    <p class="subtitle" data-critical="body">Six field notes turn a first user-group night into one concise public record: place, host, demos, agent talks, and the next monthly rhythm.</p>
+  </header>
+  <div class="pigeon" aria-hidden="true" data-beat="Prada the pigeon"></div>
+  <div class="micro" aria-hidden="true">
+    <span>County Hall view</span><span>Venue arrival</span><span>Group photo close</span>
+  </div>
+  <section class="beats" data-critical="body">
+    <article class="beat" data-source="tweet-01"><b>01 / venue</b><span>First meeting at the Waterloo office.</span><em class="index">01</em></article>
+    <article class="beat" data-source="tweet-02"><b>02 / mascot</b><span>Prada the pigeon becomes the hello point.</span><em class="index">02</em></article>
+    <article class="beat" data-source="tweet-03"><b>03 / live</b><span>Two link demos shown in the room.</span><em class="index">03</em></article>
+    <article class="beat" data-source="tweet-04"><b>04 / talk</b><span>Alpesh Doshi on agent orchestration.</span><em class="index">04</em></article>
+    <article class="beat" data-source="tweet-05"><b>05 / security</b><span>Yigit Erol on safer agents, sandboxes, and zero-trust egress.</span><em class="index">05</em></article>
+    <article class="beat" data-source="tweet-06"><b>06 / community</b><span>Organizers thanked; demo calls open.</span><em class="index">06</em></article>
+  </section>
+  <div class="vertical">Security · Agents · Sandboxes · Community</div>
+  <p class="caption-left">A thread-shaped recap from @ade_oshineye: six moments, one room, a new London cadence.</p>
+  <section class="lower">
+    <div class="closing">
+      <h2>Monthly sessions begin here.</h2>
+      <p>Bring practical Cloudflare demos, work-in-progress questions, and safer workflow experiments for the next gathering.</p>
+    </div>
+    <div class="cta" data-critical="cta"><small>Next move</small>Say hi, show the demo, keep the group moving.</div>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lean Into Your Weirdness</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --ghost:rgba(28,25,23,.09);
+    --red:#C8102E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1;color:var(--ink);font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,50px);
+  }
+  .red-slab{
+    position:absolute;
+    left:-80px;
+    top:475px;
+    width:1000px;
+    height:305px;
+    background:var(--red);
+    transform:skewY(-7deg);
+    transform-origin:left center;
+    z-index:1;
+  }
+  .black-field{
+    position:absolute;
+    right:0;
+    top:0;
+    width:255px;
+    height:1200px;
+    background:var(--ink);
+    z-index:0;
+  }
+  .ghost{
+    position:absolute;
+    left:-54px;
+    bottom:-58px;
+    font-size:236px;
+    line-height:.72;
+    letter-spacing:-18px;
+    font-weight:900;
+    color:var(--ghost);
+    z-index:0;
+    white-space:nowrap;
+    transform:rotate(-6deg);
+    pointer-events:none;
+  }
+  .gridlines{
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(to right, rgba(28,25,23,.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(28,25,23,.045) 1px, transparent 1px);
+    background-size:70px 50px;
+    z-index:0;
+    pointer-events:none;
+  }
+  header{
+    grid-column:1/10;
+    grid-row:2/7;
+    padding-left:42px;
+    z-index:4;
+  }
+  .kicker{
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+  h1{
+    margin:0;
+    font-size:88px;
+    line-height:.86;
+    letter-spacing:-5px;
+    font-weight:300;
+  }
+  h1 strong{
+    display:block;
+    font-weight:900;
+    letter-spacing:-7px;
+  }
+  .side-meta{
+    position:absolute;
+    right:32px;
+    top:44px;
+    z-index:3;
+    color:var(--paper);
+    font-size:11px;
+    line-height:1.45;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    width:170px;
+  }
+  .side-meta b{display:block;color:var(--paper);font-size:20px;letter-spacing:-.02em;text-transform:none;margin-bottom:8px}
+  .weirdness{
+    position:absolute;
+    left:34px;
+    top:330px;
+    z-index:5;
+    width:930px;
+    white-space:nowrap;
+    color:var(--ink);
+    letter-spacing:-18px;
+    line-height:.78;
+  }
+  .weirdness span{display:inline-block;vertical-align:baseline}
+  .w1{font-size:204px;font-weight:900;transform:translateY(10px) skewX(-8deg)}
+  .w2{font-size:176px;font-weight:100;transform:translate(-8px,-38px) rotate(-7deg)}
+  .w3{font-size:226px;font-weight:700;font-style:italic;transform:translate(-22px,28px)}
+  .w4{font-size:160px;font-weight:500;transform:translate(-34px,-22px) scaleY(1.32)}
+  .w5{font-size:218px;font-weight:900;transform:translate(-52px,2px) rotate(5deg)}
+  .w6{font-size:150px;font-weight:200;font-style:italic;transform:translate(-68px,-48px)}
+  .w7{font-size:206px;font-weight:800;transform:translate(-86px,34px) scaleX(.82)}
+  .w8{font-size:168px;font-weight:600;transform:translate(-106px,-26px) rotate(-4deg)}
+  .w9{font-size:232px;font-weight:100;transform:translate(-132px,22px)}
+  .quiet{
+    position:absolute;
+    left:42px;
+    top:805px;
+    z-index:6;
+    width:742px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:18px;
+  }
+  .subtitle{
+    grid-column:1/7;
+    font-size:25px;
+    line-height:1.05;
+    letter-spacing:-.025em;
+    font-weight:650;
+    background:var(--paper);
+    padding:18px 20px 20px 0;
+  }
+  .notes{
+    grid-column:8/13;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px 18px;
+    background:var(--paper);
+    padding:18px 0 20px 20px;
+  }
+  .note{
+    border-top:3px solid var(--ink);
+    padding-top:7px;
+    font-size:13px;
+    line-height:1.13;
+    letter-spacing:.005em;
+  }
+  .note b{
+    display:block;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:5px;
+  }
+  .diagnosis{
+    position:absolute;
+    left:42px;
+    top:1018px;
+    z-index:6;
+    width:430px;
+    background:var(--ink);
+    color:var(--paper);
+    padding:20px 24px 23px;
+    font-size:15px;
+    line-height:1.28;
+  }
+  .diagnosis b{
+    display:block;
+    color:var(--paper);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    margin-bottom:10px;
+  }
+  .cta{
+    position:absolute;
+    right:42px;
+    bottom:42px;
+    z-index:6;
+    width:250px;
+    border:4px solid var(--red);
+    padding:16px 18px 18px;
+    background:var(--paper);
+    font-size:29px;
+    line-height:.93;
+    letter-spacing:-.04em;
+    font-weight:850;
+  }
+  .vertical{
+    position:absolute;
+    left:12px;
+    top:742px;
+    z-index:7;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Lean Into Your Weirdness manifesto poster">
+  <div class="gridlines" aria-hidden="true"></div>
+  <div class="black-field" aria-hidden="true"></div>
+  <div class="red-slab" aria-hidden="true"></div>
+  <div class="ghost" aria-hidden="true">ODD<br>TRUE</div>
+  <header>
+    <div class="kicker">Manifesto for useful asymmetry</div>
+    <h1 data-critical="title">Lean Into Your <strong>Weirdness</strong></h1>
+  </header>
+  <div class="side-meta" data-critical="date">
+    <b>Standing order</b>
+    Keep the signal. Refuse the beige correction. Make the strange part do work.
+  </div>
+  <section class="weirdness" aria-label="The word weirdness shown in mixed styles">
+    <span class="w1">W</span><span class="w2">E</span><span class="w3">I</span><span class="w4">R</span><span class="w5">D</span><span class="w6">N</span><span class="w7">E</span><span class="w8">S</span><span class="w9">S</span>
+  </section>
+  <div class="vertical">Tradeoffs / diagnosis / practice</div>
+  <section class="quiet" data-critical="body">
+    <div class="subtitle">The part that made you hard to file is often the part that makes you precise.</div>
+    <div class="notes">
+      <div class="note"><b>Tradeoff</b>Less instant approval; more unmistakable work.</div>
+      <div class="note"><b>Diagnosis</b>If the edges vanish, so does the instrument.</div>
+      <div class="note"><b>Patron saints</b>The awkward first draft. The obsessive margin note.</div>
+      <div class="note"><b>Practice</b>Name the oddity, test it, sharpen it, ship it.</div>
+      <div class="note"><b>Risk</b>Performance without craft becomes noise.</div>
+      <div class="note"><b>Reward</b>A recognizable frequency under pressure.</div>
+    </div>
+  </section>
+  <div class="diagnosis">
+    <b>Working rule</b>
+    Do not sand down the anomaly before you understand what it is protecting. Strange is not the opposite of rigorous.
+  </div>
+  <div class="cta" data-critical="cta">Stay legible.<br>Stay bent.</div>
+</main>
+</body>
+</html>

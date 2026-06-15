@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Onepage</title>
+<style>
+  :root{--stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-800:#292524;--stone-900:#1c1917;--stone-950:#0c0a09;--accent:#F38020}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--stone-200);font-family:"IBM Plex Sans","Hanken Grotesk","Barlow",system-ui,sans-serif;color:var(--stone-950)}
+  .poster{position:relative;width:840px;height:1200px;margin:0 auto;background:var(--stone-50);overflow:hidden}
+  .grid{position:relative;z-index:20;display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:min-content;gap:16px;height:100%;padding:42px 44px}
+  .mega{position:absolute;z-index:1;left:-34px;top:72px;font-size:236px;line-height:.78;font-weight:800;letter-spacing:-.09em;color:rgba(28,25,23,.06);white-space:nowrap;pointer-events:none}
+  .orange-slab{position:absolute;z-index:2;right:-112px;top:0;width:430px;height:760px;background:var(--accent);transform:skewX(-11deg);transform-origin:top}
+  .black-slab{position:absolute;z-index:3;left:0;bottom:0;width:840px;height:338px;background:var(--stone-950)}
+  .rule-field{position:absolute;z-index:4;left:0;top:0;width:100%;height:100%;opacity:.18;background-image:repeating-linear-gradient(90deg,rgba(12,10,9,.45) 0 1px,transparent 1px 36px),repeating-linear-gradient(0deg,rgba(12,10,9,.18) 0 1px,transparent 1px 36px);pointer-events:none}
+  .title{grid-column:1/9;grid-row:1;z-index:40;margin:0;padding-top:8px;font-size:91px;line-height:.86;font-weight:780;letter-spacing:-.07em}
+  .subtitle{grid-column:1/7;grid-row:2;z-index:40;margin:6px 0 0;font-size:24px;line-height:1.05;font-weight:520;letter-spacing:-.03em}
+  .meta-top{grid-column:10/13;grid-row:1;z-index:40;align-self:start;background:var(--stone-950);color:var(--stone-50);padding:14px 14px 16px;font-size:11px;line-height:1.35;text-transform:uppercase;letter-spacing:.12em}
+  .meta-top b{display:block;color:var(--accent);font-size:38px;line-height:.85;letter-spacing:-.04em;margin-bottom:9px}
+  .claim{grid-column:1/8;grid-row:3;z-index:35;margin-top:24px;background:var(--stone-950);color:var(--stone-50);padding:22px 24px 26px;font-size:39px;line-height:.92;font-weight:760;letter-spacing:-.05em}
+  .claim span{color:var(--accent)}
+  .photo-place{grid-column:8/13;grid-row:2/5;z-index:10;position:relative;height:318px;overflow:hidden;margin-top:4px;background:var(--stone-900)}
+  .photo-place img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.38);mix-blend-mode:screen;opacity:.86}
+  .photo-place:after{content:"";position:absolute;inset:0;background:var(--accent);mix-blend-mode:multiply;opacity:.72}
+  .caption{position:absolute;left:10px;bottom:10px;z-index:3;color:var(--stone-50);font-size:10px;line-height:1;text-transform:uppercase;letter-spacing:.12em}
+  .sequence{grid-column:1/13;grid-row:5;z-index:35;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:16px}
+  .beat{min-height:104px;border-top:5px solid var(--stone-950);padding-top:9px;font-size:14px;line-height:1.05;font-weight:650;letter-spacing:-.02em}
+  .beat small{display:block;margin-bottom:12px;font-size:10px;line-height:1;text-transform:uppercase;letter-spacing:.14em;color:rgba(28,25,23,.55);font-weight:650}
+  .strip{grid-column:1/13;grid-row:6;z-index:34;display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:10px;margin-top:10px;height:142px}
+  .thumb{position:relative;overflow:hidden;background:var(--stone-900)}
+  .thumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.2);opacity:.94}
+  .thumb:nth-child(even) img{mix-blend-mode:luminosity}
+  .thumb .tag{position:absolute;left:8px;top:8px;background:var(--stone-50);color:var(--stone-950);padding:5px 7px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;line-height:1}
+  .diagram{grid-column:1/8;grid-row:7;z-index:36;margin-top:18px;display:grid;grid-template-columns:86px 1fr;gap:14px;align-items:start}
+  .num{font-size:118px;line-height:.78;font-weight:790;letter-spacing:-.09em;color:var(--accent)}
+  .copy{font-size:20px;line-height:1.12;font-weight:520;letter-spacing:-.035em}
+  .copy p{margin:0 0 10px}
+  .copy .micro{font-size:11px;line-height:1.38;text-transform:uppercase;letter-spacing:.12em;color:rgba(28,25,23,.58);font-weight:600}
+  .orange-note{grid-column:8/13;grid-row:7;z-index:38;margin-top:18px;background:var(--accent);color:var(--stone-950);padding:18px 18px 20px;font-size:27px;line-height:.96;font-weight:760;letter-spacing:-.045em}
+  .bottom-title{grid-column:1/9;grid-row:8;z-index:40;align-self:end;margin-top:58px;color:var(--stone-50);font-size:64px;line-height:.86;font-weight:780;letter-spacing:-.06em}
+  .bottom-copy{grid-column:9/13;grid-row:8;z-index:40;align-self:end;margin-top:58px;color:var(--stone-50);font-size:13px;line-height:1.24;font-weight:520}
+  .bottom-copy b{display:block;color:var(--accent);font-size:11px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
+  .cta{display:inline-block;margin-top:18px;background:var(--stone-50);color:var(--stone-950);padding:12px 14px;font-size:11px;line-height:1;text-transform:uppercase;letter-spacing:.14em;font-weight:750}
+  .side{position:absolute;z-index:31;right:18px;bottom:366px;writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;line-height:1;text-transform:uppercase;letter-spacing:.16em;color:rgba(12,10,9,.58)}
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Cloudflare London Onepage poster">
+  <div class="mega" aria-hidden="true">LON</div>
+  <div class="orange-slab" aria-hidden="true"></div>
+  <div class="black-slab" aria-hidden="true"></div>
+  <div class="rule-field" aria-hidden="true"></div>
+  <div class="side">County Hall · first to last · six public notes</div>
+  <section class="grid">
+    <h1 class="title" data-critical="title">Cloudflare<br>London<br>Onepage</h1>
+    <p class="subtitle" data-critical="body">A compressed field report from the user group: invitation, venue, talks, demo, drinks, river light.</p>
+    <div class="meta-top" data-critical="date"><b>8h<br>11m</b>Six-part thread<br>first → last</div>
+    <div class="claim" data-critical="body">Swarms can drift together. <span>Systems need rails.</span></div>
+    <figure class="photo-place" data-reference="matter-photomontage" data-image-role="place">
+      <img src="assets/thread-media-2049452285139276131-1.jpg" alt="Sunset over Big Ben from Cloudflare County Hall">
+      <figcaption class="caption">Westminster / closing light</figcaption>
+    </figure>
+    <div class="sequence" data-encoding="six thread beats → six columns">
+      <div class="beat" data-beat="invitation"><small>01 Invite</small>London user group gathers at Cloudflare County Hall.</div>
+      <div class="beat" data-beat="venue"><small>02 Venue</small>River edge, Big Ben, orange letters, evening arrivals.</div>
+      <div class="beat" data-beat="talk"><small>03 Talk</small>Alpesh Doshi frames agentic systems and their failure modes.</div>
+      <div class="beat" data-beat="demo"><small>04 Demo</small>Yigit Erol maps sandboxes, Zero Trust, and safe execution.</div>
+      <div class="beat" data-beat="community"><small>05 Room</small>Organizers, builders, questions, post-talk drinks.</div>
+      <div class="beat" data-beat="closing"><small>06 Image</small>Prada the pigeon lands the civic punchline.</div>
+    </div>
+    <div class="strip" data-reference="ruder-typographic-function">
+      <figure class="thumb" data-image-role="evidence"><img src="assets/thread-media-2049531960716914824-2.jpg" alt="Prada the pigeon on Cloudflare letters"><span class="tag">pigeon</span></figure>
+      <figure class="thumb" data-image-role="speaker"><img src="assets/thread-media-2049559654208856175-3.jpg" alt="Alpesh Doshi presenting an agentic system slide"><span class="tag">agentic</span></figure>
+      <figure class="thumb" data-image-role="speaker"><img src="assets/thread-media-2049562905536795033-4.jpg" alt="Yigit Erol presenting sandboxes and Zero Trust material"><span class="tag">sandbox</span></figure>
+      <figure class="thumb" data-image-role="community"><img src="assets/thread-media-2049575911872160076-5.jpg" alt="Organizers chatting at post-talk drinks"><span class="tag">drinks</span></figure>
+    </div>
+    <div class="diagram">
+      <div class="num">6</div>
+      <div class="copy">
+        <p>One frame holds the whole meetup arc: public invitation → technical talks → live demo logic → community evidence → closing story.</p>
+        <div class="micro">Cloudflare London User Group · County Hall · MoQ-adjacent infrastructure conversations · credentialed trust as operating principle</div>
+      </div>
+    </div>
+    <div class="orange-note" data-critical="body">Hallucination is social. Verification must be architectural.</div>
+    <div class="bottom-title" data-critical="title">Meetup recap<br>as system map.</div>
+    <div class="bottom-copy" data-critical="cta"><b>Closing label</b>Read the room, trace the chain, keep the agents inside bounded trust.<span class="cta">Revisit the thread</span></div>
+  </section>
+</main>
+</body>
+</html>

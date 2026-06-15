@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ten Principles for Bad Design</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --faint:rgba(28,25,23,.14);
+    --red:#C8102E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1}
+  body{font-family:Arial, Helvetica, system-ui, sans-serif;color:var(--ink)}
+  .poster{
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+  }
+  .grid{
+    position:absolute;
+    inset:56px 54px 48px 54px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:18px;
+    z-index:3;
+  }
+  .ghost{
+    position:absolute;
+    left:-62px;
+    bottom:-96px;
+    font-weight:800;
+    font-size:350px;
+    line-height:.78;
+    letter-spacing:-.09em;
+    color:rgba(28,25,23,.055);
+    user-select:none;
+    pointer-events:none;
+    z-index:0;
+  }
+  .bar{
+    position:absolute;
+    right:-58px;
+    top:0;
+    width:190px;
+    height:1200px;
+    background:var(--red);
+    z-index:1;
+  }
+  .cut{
+    position:absolute;
+    right:83px;
+    top:0;
+    width:22px;
+    height:1200px;
+    background:var(--paper);
+    z-index:2;
+  }
+  .topline{
+    grid-column:1 / span 12;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:18px;
+    height:74px;
+    border-top:2px solid var(--ink);
+    padding-top:12px;
+  }
+  .meta{
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .m1{grid-column:1 / span 3}
+  .m2{grid-column:5 / span 3}
+  .m3{grid-column:9 / span 3}
+  h1{
+    grid-column:1 / span 9;
+    margin:34px 0 0 -8px;
+    font-size:108px;
+    line-height:.88;
+    letter-spacing:-.07em;
+    font-weight:800;
+    max-width:640px;
+  }
+  .subtitle{
+    grid-column:1 / span 5;
+    margin-top:28px;
+    font-size:19px;
+    line-height:1.22;
+    letter-spacing:-.02em;
+  }
+  .side-note{
+    grid-column:9 / span 3;
+    margin-top:40px;
+    font-size:12px;
+    line-height:1.45;
+    color:var(--paper);
+    position:relative;
+    z-index:4;
+  }
+  .matrix{
+    grid-column:1 / span 10;
+    margin-top:72px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:36px;
+    row-gap:0;
+    border-top:2px solid var(--ink);
+    position:relative;
+    z-index:4;
+  }
+  .item{
+    min-height:93px;
+    border-bottom:1px solid var(--ink);
+    display:grid;
+    grid-template-columns:42px 1fr;
+    column-gap:12px;
+    padding:16px 0 13px;
+  }
+  .num{
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--muted);
+    padding-top:4px;
+  }
+  .txt b{
+    display:block;
+    font-size:22px;
+    line-height:.98;
+    letter-spacing:-.045em;
+    font-weight:700;
+    margin-bottom:7px;
+  }
+  .txt span{
+    display:block;
+    font-size:12px;
+    line-height:1.28;
+    color:var(--muted);
+    max-width:230px;
+  }
+  .eleven{
+    position:absolute;
+    left:54px;
+    right:54px;
+    bottom:66px;
+    height:126px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:18px;
+    z-index:5;
+  }
+  .eleven .rule{
+    grid-column:1 / span 12;
+    border-top:2px solid var(--ink);
+    height:0;
+  }
+  .eleven .label{
+    grid-column:1 / span 2;
+    margin-top:18px;
+    font-size:11px;
+    line-height:1.2;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .eleven .statement{
+    grid-column:4 / span 5;
+    margin-top:14px;
+    font-size:32px;
+    line-height:.96;
+    letter-spacing:-.055em;
+    font-weight:800;
+  }
+  .eleven .cta{
+    grid-column:10 / span 2;
+    align-self:end;
+    margin-bottom:2px;
+    min-height:48px;
+    background:var(--ink);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    padding:0 14px;
+    font-size:11px;
+    line-height:1.15;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+  }
+  .ticks{
+    position:absolute;
+    inset:0;
+    background-image:repeating-linear-gradient(90deg, transparent 0 53px, rgba(28,25,23,.075) 53px 54px);
+    z-index:0;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Ten Principles for Bad Design">
+    <div class="ticks" aria-hidden="true"></div>
+    <div class="bar" aria-hidden="true"></div>
+    <div class="cut" aria-hidden="true"></div>
+    <div class="ghost" aria-hidden="true">BAD<br>BAD</div>
+    <section class="grid">
+      <div class="topline">
+        <div class="meta m1" data-critical="date">Design conduct<br>in reverse</div>
+        <div class="meta m2">A useful warning<br>for makers</div>
+        <div class="meta m3">Read against<br>the habit</div>
+      </div>
+      <h1 data-critical="title">Ten Principles for Bad Design</h1>
+      <p class="subtitle" data-critical="body">A calm catalogue of failure: each line names the mistake so the page itself can refuse it.</p>
+      <p class="side-note">Bad design is loudest when it forgets that people came to understand something.</p>
+      <div class="matrix" data-critical="body">
+        <div class="item"><div class="num">01</div><div class="txt"><b>Hide the purpose.</b><span>Make the object explain itself only after effort.</span></div></div>
+        <div class="item"><div class="num">02</div><div class="txt"><b>Add noise.</b><span>Decorate before the structure has earned attention.</span></div></div>
+        <div class="item"><div class="num">03</div><div class="txt"><b>Confuse hierarchy.</b><span>Let captions, titles, and details compete equally.</span></div></div>
+        <div class="item"><div class="num">04</div><div class="txt"><b>Break trust.</b><span>Promise one action; deliver another consequence.</span></div></div>
+        <div class="item"><div class="num">05</div><div class="txt"><b>Ignore use.</b><span>Design for the photograph, not for the hand or eye.</span></div></div>
+        <div class="item"><div class="num">06</div><div class="txt"><b>Chase fashion.</b><span>Let novelty replace proportion, repair, and clarity.</span></div></div>
+        <div class="item"><div class="num">07</div><div class="txt"><b>Waste material.</b><span>Spend weight, ink, code, and time without necessity.</span></div></div>
+        <div class="item"><div class="num">08</div><div class="txt"><b>Flatten character.</b><span>Remove every particular quality until nothing remains.</span></div></div>
+        <div class="item"><div class="num">09</div><div class="txt"><b>Refuse honesty.</b><span>Disguise limits, mechanisms, costs, and intentions.</span></div></div>
+        <div class="item"><div class="num">10</div><div class="txt"><b>Forget the reader.</b><span>Let the system admire itself while the message disappears.</span></div></div>
+      </div>
+    </section>
+    <section class="eleven">
+      <div class="rule"></div>
+      <div class="label">Special placement<br>after the list</div>
+      <div class="statement">The last mistake is believing the list is enough.</div>
+      <div class="cta" data-critical="cta">Design the opposite.</div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fork the Planet</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --ghost:rgba(28,25,23,.10);
+    --dark:#292524;
+    --red:#C8102E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1}
+  body{font-family:Arial, Helvetica, system-ui, sans-serif;color:var(--ink)}
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    overflow:hidden;
+    background:var(--paper);
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:16px;
+    padding:48px;
+    z-index:3;
+  }
+  .branch{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+  }
+  .trunk{
+    position:absolute;
+    left:318px;
+    top:-70px;
+    width:128px;
+    height:1370px;
+    background:var(--ink);
+    transform:rotate(8deg);
+    transform-origin:50% 0;
+  }
+  .fork{
+    position:absolute;
+    background:var(--ink);
+    height:96px;
+    transform-origin:0 50%;
+  }
+  .fork.a{left:373px;top:262px;width:540px;transform:rotate(-30deg)}
+  .fork.b{left:382px;top:448px;width:440px;transform:rotate(26deg)}
+  .fork.c{left:312px;top:671px;width:465px;transform:rotate(-18deg)}
+  .fork.d{left:276px;top:823px;width:640px;transform:rotate(13deg)}
+  .fork.e{left:168px;top:548px;width:315px;transform:rotate(38deg)}
+  .cut{
+    position:absolute;
+    background:var(--paper);
+    z-index:2;
+  }
+  .cut.one{left:48px;top:64px;width:356px;height:258px}
+  .cut.two{right:0;top:650px;width:328px;height:248px}
+  .red-slab{
+    position:absolute;
+    left:-120px;
+    bottom:88px;
+    width:590px;
+    height:178px;
+    background:var(--red);
+    z-index:2;
+    transform:rotate(-8deg);
+  }
+  .mega{
+    position:absolute;
+    left:-28px;
+    top:124px;
+    z-index:0;
+    font-size:210px;
+    line-height:.78;
+    font-weight:900;
+    letter-spacing:-.105em;
+    color:var(--ghost);
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    user-select:none;
+  }
+  .title{
+    grid-column:1 / span 7;
+    align-self:start;
+    z-index:20;
+    padding-top:4px;
+  }
+  h1{
+    margin:0;
+    font-size:112px;
+    line-height:.82;
+    letter-spacing:-.075em;
+    font-weight:900;
+  }
+  .subtitle{
+    margin-top:22px;
+    max-width:375px;
+    font-size:22px;
+    line-height:1.05;
+    letter-spacing:-.03em;
+    font-weight:700;
+  }
+  .index{
+    grid-column:10 / span 3;
+    z-index:20;
+    padding-top:10px;
+    font-size:11px;
+    line-height:1.25;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    color:var(--muted);
+  }
+  .index b{display:block;color:var(--ink);font-size:28px;line-height:.9;letter-spacing:-.04em;margin-bottom:12px}
+  .factblock{
+    grid-column:2 / span 4;
+    align-self:center;
+    z-index:20;
+    background:var(--paper);
+    padding:22px 20px 20px 0;
+    margin-top:100px;
+  }
+  .fact{
+    display:grid;
+    grid-template-columns:42px 1fr;
+    gap:10px;
+    border-top:2px solid var(--ink);
+    padding:12px 0 14px;
+    font-size:16px;
+    line-height:1.08;
+    letter-spacing:-.015em;
+  }
+  .fact .n{
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--muted);
+    padding-top:2px;
+  }
+  .planet{
+    position:absolute;
+    right:-170px;
+    top:250px;
+    width:520px;
+    height:520px;
+    border:52px solid var(--red);
+    border-radius:50%;
+    z-index:2;
+    pointer-events:none;
+  }
+  .orbit{
+    position:absolute;
+    right:-126px;
+    top:291px;
+    width:438px;
+    height:438px;
+    border:2px solid rgba(200,16,46,.38);
+    border-radius:50%;
+    z-index:2;
+  }
+  .caption{
+    position:absolute;
+    right:46px;
+    top:802px;
+    width:235px;
+    z-index:20;
+    background:var(--paper);
+    padding:18px 0 18px 18px;
+    font-size:11px;
+    line-height:1.35;
+    text-transform:uppercase;
+    letter-spacing:.13em;
+    color:var(--muted);
+  }
+  .caption strong{display:block;color:var(--ink);font-size:16px;line-height:1.05;letter-spacing:-.01em;text-transform:none;margin-bottom:8px}
+  .bottom{
+    position:absolute;
+    left:48px;
+    right:48px;
+    bottom:42px;
+    z-index:30;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:16px;
+    align-items:end;
+  }
+  .cta{
+    grid-column:1 / span 5;
+    color:var(--paper);
+    font-weight:900;
+    font-size:34px;
+    line-height:.92;
+    letter-spacing:-.05em;
+    text-transform:uppercase;
+  }
+  .meta{
+    grid-column:7 / span 6;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    font-size:11px;
+    line-height:1.3;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .vertical{
+    position:absolute;
+    left:18px;
+    top:470px;
+    z-index:20;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:var(--muted);
+  }
+  .ticks{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background-image:repeating-linear-gradient(90deg, transparent 0 67px, rgba(28,25,23,.055) 67px 68px);
+  }
+</style>
+</head>
+<body>
+  <main class="poster" data-reference="weingart-controlled-disruption">
+    <div class="ticks" aria-hidden="true"></div>
+    <div class="mega" aria-hidden="true">FORK</div>
+    <div class="branch" aria-hidden="true" data-encoding="branching code culture → splitting trunk and off-frame limbs">
+      <div class="trunk"></div>
+      <div class="fork a"></div>
+      <div class="fork b"></div>
+      <div class="fork c"></div>
+      <div class="fork d"></div>
+      <div class="fork e"></div>
+    </div>
+    <div class="planet" aria-hidden="true"></div>
+    <div class="orbit" aria-hidden="true"></div>
+    <div class="cut one" aria-hidden="true"></div>
+    <div class="cut two" aria-hidden="true"></div>
+    <div class="red-slab" aria-hidden="true"></div>
+    <section class="grid">
+      <header class="title" data-critical="title">
+        <h1>Fork<br>the<br>Planet</h1>
+        <div class="subtitle">Branching as culture: copy, split, remix, collide, release.</div>
+      </header>
+      <aside class="index" data-critical="date">
+        <b>∞</b>
+        distributed software folklore<br>
+        public branch system<br>
+        remake / reroute / return
+      </aside>
+      <div class="factblock" data-critical="body">
+        <div class="fact"><div class="n">01</div><div>The fork is the subject: a living split with memory.</div></div>
+        <div class="fact"><div class="n">02</div><div>Every branch carries a prior world and a different exit.</div></div>
+        <div class="fact"><div class="n">03</div><div>Crash energy becomes method: break, inspect, override.</div></div>
+        <div class="fact"><div class="n">04</div><div>Remix is not ornament; it is planetary maintenance.</div></div>
+        <div class="fact"><div class="n">05</div><div>Authorship mutates when the copy learns to route itself.</div></div>
+      </div>
+    </section>
+    <div class="vertical">branch / merge / rupture / repeat</div>
+    <aside class="caption">
+      <strong>Software culture at planetary scale</strong>
+      copied trees, hostile merges, cereal-box handles, night terminals, public mirrors, impossible aliases
+    </aside>
+    <footer class="bottom">
+      <div class="cta" data-critical="cta">Choose a branch.<br>Leave a trace.</div>
+      <div class="meta">
+        <div>mode<br>forking / branching / remixing</div>
+        <div>signal<br>crash override energy</div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

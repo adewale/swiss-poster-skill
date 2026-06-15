@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare Connect London</title>
+<style>
+  :root{
+    --stone-50:#fafaf9;
+    --stone-100:#f5f5f4;
+    --stone-200:#e7e5e4;
+    --stone-800:#292524;
+    --stone-900:#1c1917;
+    --stone-950:#0c0a09;
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--stone-200);font-family:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;color:var(--stone-950)}
+  body{display:grid;place-items:start center;min-height:100vh}
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    overflow:hidden;
+    background:var(--stone-50);
+    isolation:isolate;
+  }
+  .grid{
+    position:relative;
+    z-index:30;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:18px;
+    height:100%;
+    padding:44px 52px 48px 52px;
+  }
+  .venue{
+    position:absolute;
+    z-index:2;
+    right:-70px;
+    top:0;
+    width:570px;
+    height:1200px;
+    object-fit:cover;
+    filter:grayscale(1) contrast(1.45);
+    opacity:.54;
+    mix-blend-mode:multiply;
+  }
+  .orange-slab{
+    position:absolute;
+    z-index:5;
+    right:-84px;
+    top:0;
+    width:378px;
+    height:1200px;
+    background:var(--orange);
+    mix-blend-mode:multiply;
+  }
+  .globe{
+    position:absolute;
+    z-index:12;
+    right:-128px;
+    top:112px;
+    width:610px;
+    height:610px;
+    opacity:.82;
+    filter:contrast(1.5);
+  }
+  .mega{
+    position:absolute;
+    z-index:8;
+    left:-36px;
+    bottom:18px;
+    font-size:250px;
+    line-height:.74;
+    font-weight:800;
+    letter-spacing:-.085em;
+    color:rgba(28,25,23,.07);
+    white-space:nowrap;
+    pointer-events:none;
+    user-select:none;
+  }
+  .route{
+    position:absolute;
+    z-index:18;
+    left:-110px;
+    top:630px;
+    width:1020px;
+    height:13px;
+    background:var(--stone-950);
+    transform:rotate(-18deg);
+    transform-origin:center;
+  }
+  .route::after{
+    content:"";
+    position:absolute;
+    right:205px;
+    top:-18px;
+    width:50px;
+    height:50px;
+    background:var(--orange);
+  }
+  .topcode{
+    grid-column:1/5;
+    align-self:start;
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.7);
+  }
+  .date{
+    grid-column:9/13;
+    align-self:start;
+    justify-self:start;
+    position:relative;
+    z-index:40;
+    background:var(--stone-950);
+    color:var(--stone-50);
+    padding:16px 18px 18px;
+    width:218px;
+    font-size:12px;
+    line-height:1.25;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .date strong{
+    display:block;
+    font-size:44px;
+    line-height:.9;
+    letter-spacing:-.06em;
+    margin-top:10px;
+    color:var(--orange);
+  }
+  .title{
+    grid-column:1/9;
+    margin:118px 0 0 -8px;
+    position:relative;
+    z-index:45;
+  }
+  h1{
+    margin:0;
+    font-size:104px;
+    line-height:.84;
+    letter-spacing:-.075em;
+    font-weight:800;
+  }
+  .title span{
+    display:block;
+    background:var(--stone-50);
+    width:max-content;
+    max-width:100%;
+    padding:0 12px 7px 0;
+  }
+  .subtitle{
+    margin-top:25px;
+    width:430px;
+    background:var(--stone-950);
+    color:var(--stone-50);
+    padding:18px 22px 20px;
+    font-size:22px;
+    line-height:1.06;
+    letter-spacing:-.025em;
+    font-weight:500;
+  }
+  .sequence{
+    grid-column:1/7;
+    align-self:end;
+    margin-bottom:210px;
+    position:relative;
+    z-index:42;
+    background:var(--stone-50);
+    border-top:8px solid var(--stone-950);
+    padding-top:18px;
+  }
+  .sequence h2{
+    margin:0 0 18px;
+    font-size:13px;
+    line-height:1;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+  .item{
+    display:grid;
+    grid-template-columns:54px 1fr;
+    gap:16px;
+    border-top:1px solid var(--stone-900);
+    padding:13px 0 14px;
+  }
+  .num{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.62);
+    padding-top:3px;
+  }
+  .copy{
+    font-size:29px;
+    line-height:.94;
+    letter-spacing:-.04em;
+    font-weight:700;
+  }
+  .copy small{
+    display:block;
+    margin-top:7px;
+    font-size:11px;
+    line-height:1.2;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-weight:500;
+    color:rgba(28,25,23,.64);
+  }
+  .side{
+    grid-column:10/13;
+    align-self:end;
+    margin-bottom:275px;
+    position:relative;
+    z-index:44;
+    color:var(--stone-50);
+    font-size:11px;
+    line-height:1.35;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+  }
+  .side b{
+    display:block;
+    color:var(--stone-950);
+    background:var(--orange);
+    padding:8px 8px 9px;
+    margin-bottom:10px;
+  }
+  .cta{
+    position:absolute;
+    z-index:50;
+    left:52px;
+    bottom:48px;
+    width:348px;
+    background:var(--orange);
+    color:var(--stone-950);
+    padding:20px 22px 22px;
+    font-size:20px;
+    line-height:1;
+    letter-spacing:-.02em;
+    font-weight:800;
+  }
+  .cta small{
+    display:block;
+    margin-top:12px;
+    font-size:11px;
+    letter-spacing:.16em;
+    line-height:1.2;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+  .micro{
+    position:absolute;
+    z-index:35;
+    right:52px;
+    bottom:48px;
+    width:220px;
+    color:var(--stone-50);
+    font-size:11px;
+    line-height:1.35;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+  }
+  .ticks{
+    position:absolute;
+    z-index:1;
+    inset:0;
+    background-image:linear-gradient(90deg,rgba(28,25,23,.08) 1px,transparent 1px);
+    background-size:70px 100%;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Cloudflare Connect London event poster">
+  <div class="ticks" aria-hidden="true"></div>
+  <img class="venue" src="assets/connect-venue-orange.jpg" alt="" data-image-role="place">
+  <div class="orange-slab" aria-hidden="true" data-reference="matter-photomontage"></div>
+  <img class="globe" src="assets/globe-uk.svg" alt="" data-image-role="location" data-encoding="UK-centred event location → cropped globe anchor">
+  <div class="route" aria-hidden="true" data-encoding="talk sequence → diagonal transfer line"></div>
+  <div class="mega" aria-hidden="true">LON</div>
+  <section class="grid">
+    <div class="topcode" data-critical="date">
+      Developer track<br>
+      London<br>
+      Opening session<br>
+      Live demos
+    </div>
+    <div class="date" data-critical="date">
+      Cloudflare Connect
+      <strong>LDN</strong>
+      United Kingdom
+    </div>
+    <header class="title" data-critical="title">
+      <h1>
+        <span>Cloudflare</span>
+        <span>Connect</span>
+        <span>London</span>
+      </h1>
+      <div class="subtitle">A developer track on realtime media, identity patterns, and shipping on the edge.</div>
+    </header>
+    <section class="sequence" data-critical="body">
+      <h2>Talk sequence</h2>
+      <div class="item" data-beat="opening keynote">
+        <div class="num">01</div>
+        <div class="copy">Opening keynote<small>Platform direction and developer momentum</small></div>
+      </div>
+      <div class="item" data-beat="realtime media over MoQ">
+        <div class="num">02</div>
+        <div class="copy">Realtime media over MoQ<small>Low-latency transport for live experiences</small></div>
+      </div>
+      <div class="item" data-beat="credential broker patterns">
+        <div class="num">03</div>
+        <div class="copy">Credential broker patterns<small>Identity handoff, trust boundaries, access flows</small></div>
+      </div>
+      <div class="item" data-beat="workers demos deployment">
+        <div class="num">04</div>
+        <div class="copy">Workers, demos, deployment<small>Build, verify, release at the edge</small></div>
+      </div>
+    </section>
+    <aside class="side">
+      <b>UK-centred systems map</b>
+      Edge compute<br>
+      Media transport<br>
+      Brokered credentials<br>
+      Production workflow
+    </aside>
+  </section>
+  <div class="cta" data-critical="cta">
+    Join the developer track
+    <small>Keynote · technical talks · edge demos</small>
+  </div>
+  <div class="micro">
+    Real talks, practical patterns, and deployment paths for builders working across London and the wider Cloudflare network.
+  </div>
+</main>
+</body>
+</html>

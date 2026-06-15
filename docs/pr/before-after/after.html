@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>After — dramatic Swiss poster recipe with readable signal</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#fafaf9;color:#1c1917;font-family:'IBM Plex Sans',Arial,sans-serif;overflow:hidden}
+  .poster{position:relative;width:1200px;height:900px;margin:0 auto;overflow:hidden;background:#fafaf9}
+  .dark{position:absolute;right:0;top:0;width:39%;height:100%;background:#1c1917}
+  .lines{position:absolute;inset:0;color:rgba(28,25,23,.075);background-image:repeating-linear-gradient(90deg,currentColor 0 1px,transparent 1px 10px);clip-path:polygon(0 0,66% 0,54% 100%,0 100%)}
+  .cut{position:absolute;left:0;top:0;width:168px;height:116px;background:#1c1917;clip-path:polygon(0 0,100% 0,65% 100%,0 100%)}
+  .ring1{position:absolute;right:-360px;top:58px;width:560px;height:560px;border-radius:50%;border:34px solid #C8102E;z-index:1}
+  .ring2{position:absolute;right:-260px;top:154px;width:370px;height:370px;border-radius:50%;border:12px solid rgba(200,16,46,.45);z-index:1}
+  .bar{position:absolute;left:440px;top:470px;width:292px;height:94px;background:#C8102E;z-index:1}
+  .jazz{position:absolute;left:-30px;bottom:-42px;font-size:310px;line-height:.72;letter-spacing:-.11em;font-weight:800;color:#1c1917;z-index:2;text-transform:uppercase}
+  .grid{position:relative;z-index:4;height:100%;display:grid;grid-template-columns:repeat(12,1fr);gap:0 24px;padding:42px 56px}
+  .micro{font-size:13px;line-height:1.25;text-transform:uppercase;letter-spacing:.2em;color:rgba(28,25,23,.62);font-weight:600}
+  .m1{grid-column:2/4}.m2{grid-column:5/7}.m3{grid-column:10/13;color:rgba(250,250,249,.72);text-align:right}
+  .axis{position:absolute;left:30px;top:380px;z-index:5;transform:rotate(-90deg);transform-origin:left top;font-size:12px;text-transform:uppercase;letter-spacing:.24em;color:rgba(28,25,23,.52);font-weight:600}
+  .title{position:absolute;right:78px;top:336px;width:360px;z-index:5;color:#fafaf9}
+  .title h1{font-size:78px;line-height:.88;letter-spacing:-.065em;margin:0 0 26px;text-transform:uppercase;font-weight:800}
+  .title p{font-size:18px;line-height:1.45;color:rgba(250,250,249,.80);max-width:340px;margin:0 0 28px}
+  .cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 24px;background:#fafaf9;color:#1c1917;text-decoration:none;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:800}
+  .caption{position:absolute;right:58px;bottom:42px;z-index:5;width:380px;font-size:12px;line-height:1.35;text-transform:uppercase;letter-spacing:.19em;color:rgba(250,250,249,.66);font-weight:600;text-align:right}
+</style>
+<body>
+  <main class="poster">
+    <div class="lines"></div>
+    <div class="dark"></div>
+    <div class="cut"></div>
+    <div class="ring1"></div>
+    <div class="ring2"></div>
+    <div class="bar"></div>
+    <div class="jazz">JAZZ</div>
+    <div class="axis">edge pressure / rhythm made visible</div>
+    <section class="grid">
+      <p class="micro m1">Kulturhaus<br>Basel<br>Festival 04</p>
+      <p class="micro m2">Grid 12<br>Sound wave<br>Door 20:00</p>
+      <p class="micro m3">Fig. Rhythm<br>No horizontal scroll<br>44px target</p>
+    </section>
+    <div class="title">
+      <h1>Signal<br>Night</h1>
+      <p>The large form is the music: cropped type, pulse rings, and a red structural beat. The message stays readable.</p>
+      <a class="cta">Reserve ticket</a>
+    </div>
+    <div class="caption">Passes drama: semantic anchor / clear title / hard field / rhythm system</div>
+  </main>
+</body>
+</html>

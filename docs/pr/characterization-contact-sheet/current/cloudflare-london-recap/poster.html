@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Recap</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:#78716c;
+    --soft:#e7e5e4;
+    --dark:#292524;
+    --accent:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans","Hanken Grotesk","Barlow","Host Grotesk","DM Sans",system-ui,sans-serif}
+  body{overflow-x:hidden}
+  .poster{
+    width:840px;height:1200px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);
+  }
+  .grid{
+    position:relative;z-index:30;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,50px);height:100%;gap:0 16px;padding:42px 48px;
+  }
+  .orange-field{
+    position:absolute;z-index:4;left:0;top:0;width:54%;height:100%;background:var(--accent);
+  }
+  .dark-field{
+    position:absolute;z-index:3;right:0;top:0;width:46%;height:100%;background:var(--dark);
+  }
+  .river{
+    position:absolute;z-index:8;left:335px;top:-80px;width:190px;height:1370px;background:var(--paper);
+    transform:skewX(-9deg);transform-origin:top center;
+  }
+  .river:before{
+    content:"";position:absolute;left:58px;top:0;width:2px;height:100%;
+    background:repeating-linear-gradient(to bottom,var(--ink) 0 12px,transparent 12px 28px);opacity:.28;
+  }
+  .sun{
+    position:absolute;z-index:12;right:-185px;top:90px;width:440px;height:440px;border:26px solid var(--accent);border-radius:50%;
+  }
+  .sun:before,.sun:after{
+    content:"";position:absolute;border-radius:50%;border:1px solid var(--accent);inset:42px;opacity:.55;
+  }
+  .sun:after{inset:94px;opacity:.35}
+  .mega{
+    position:absolute;z-index:10;left:-40px;bottom:130px;font-size:220px;line-height:.78;font-weight:800;letter-spacing:-.09em;color:rgba(28,25,23,.13);white-space:nowrap;
+  }
+  .routes{
+    position:absolute;z-index:16;left:0;right:0;top:0;bottom:0;pointer-events:none;
+  }
+  .route{
+    position:absolute;height:8px;background:var(--ink);transform-origin:left center;
+  }
+  .r1{left:54px;top:288px;width:392px;transform:rotate(0deg)}
+  .r2{left:430px;top:292px;width:360px;background:var(--accent);transform:rotate(22deg)}
+  .r3{left:128px;top:805px;width:560px;transform:rotate(-18deg);opacity:.86}
+  .r4{left:495px;top:766px;width:260px;background:var(--paper);transform:rotate(90deg);opacity:.85}
+  .node{
+    position:absolute;width:22px;height:22px;background:var(--paper);border:5px solid var(--ink);
+  }
+  .n1{left:118px;top:277px}.n2{left:425px;top:281px}.n3{left:612px;top:358px;border-color:var(--accent)}
+  .n4{left:248px;top:763px}.n5{left:640px;top:638px;background:var(--accent)}
+  .kicker{
+    grid-column:1/5;grid-row:1/2;align-self:start;font-size:11px;line-height:1.2;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .date{
+    grid-column:8/13;grid-row:1/3;color:var(--paper);font-size:13px;line-height:1.25;font-weight:700;letter-spacing:.14em;text-transform:uppercase;text-align:left;
+  }
+  h1{
+    grid-column:1/12;grid-row:3/8;margin:0;align-self:end;font-size:104px;line-height:.84;font-weight:800;letter-spacing:-.075em;color:var(--ink);
+  }
+  h1 span{display:block}
+  .subtitle{
+    grid-column:7/13;grid-row:7/10;align-self:start;background:var(--paper);padding:18px 20px 20px 22px;
+    font-size:25px;line-height:1.02;font-weight:650;letter-spacing:-.035em;
+  }
+  .venue{
+    grid-column:1/5;grid-row:10/13;align-self:start;font-size:15px;line-height:1.25;font-weight:650;
+  }
+  .venue b{display:block;font-size:37px;line-height:.88;letter-spacing:-.055em;margin-bottom:10px}
+  .sequence{
+    grid-column:6/13;grid-row:11/17;background:var(--dark);color:var(--paper);padding:24px 26px;
+    display:grid;grid-template-columns:42px 1fr;align-content:start;gap:15px 18px;
+  }
+  .num{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:800;padding-top:4px}
+  .item{font-size:21px;line-height:1.02;font-weight:650;letter-spacing:-.035em}
+  .item small{display:block;margin-top:5px;font-size:11px;line-height:1.25;letter-spacing:.11em;text-transform:uppercase;color:rgba(250,250,249,.66);font-weight:650}
+  .pigeon{
+    grid-column:1/5;grid-row:15/19;position:relative;align-self:start;height:178px;
+  }
+  .pigeon .body{
+    position:absolute;left:14px;top:50px;width:172px;height:82px;background:var(--ink);clip-path:polygon(6% 60%,25% 18%,68% 8%,94% 38%,78% 76%,34% 88%);
+  }
+  .pigeon .head{
+    position:absolute;left:138px;top:28px;width:62px;height:55px;background:var(--ink);clip-path:polygon(0 58%,38% 8%,82% 20%,100% 58%,60% 92%,18% 86%);
+  }
+  .pigeon .beak{
+    position:absolute;left:193px;top:51px;width:50px;height:20px;background:var(--paper);clip-path:polygon(0 26%,100% 50%,0 74%);
+  }
+  .pigeon .label{
+    position:absolute;left:0;bottom:0;font-size:11px;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;font-weight:750;
+  }
+  .recap{
+    grid-column:2/8;grid-row:19/23;align-self:start;background:var(--paper);padding:22px 24px;
+    font-size:18px;line-height:1.16;font-weight:550;letter-spacing:-.02em;
+  }
+  .recap strong{font-weight:800}
+  .cta{
+    grid-column:8/13;grid-row:21/24;align-self:end;background:var(--accent);color:var(--ink);padding:20px 22px 23px;
+    font-size:28px;line-height:.95;font-weight:800;letter-spacing:-.05em;
+  }
+  .cta small{display:block;margin-bottom:13px;font-size:11px;line-height:1;letter-spacing:.17em;text-transform:uppercase;font-weight:800}
+  .micro{
+    position:absolute;z-index:35;font-size:11px;line-height:1.28;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:rgba(250,250,249,.72);
+  }
+  .m1{right:48px;top:420px;writing-mode:vertical-rl}
+  .m2{left:48px;bottom:44px;color:rgba(28,25,23,.62)}
+  .m3{right:48px;bottom:44px;text-align:right}
+  .ticks{
+    position:absolute;z-index:18;left:468px;top:530px;width:320px;height:210px;
+    background-image:repeating-linear-gradient(90deg,rgba(250,250,249,.22) 0 1px,transparent 1px 16px);
+  }
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Cloudflare London Recap">
+  <div class="orange-field" aria-hidden="true"></div>
+  <div class="dark-field" aria-hidden="true"></div>
+  <div class="river" aria-hidden="true" data-reference="route-as-place"></div>
+  <div class="sun" aria-hidden="true" data-reference="network-ring"></div>
+  <div class="mega" aria-hidden="true">LON</div>
+  <div class="routes" aria-hidden="true" data-encoding="thread sequence to route segments">
+    <div class="route r1"></div><div class="route r2"></div><div class="route r3"></div><div class="route r4"></div>
+    <div class="node n1"></div><div class="node n2"></div><div class="node n3"></div><div class="node n4"></div><div class="node n5"></div>
+  </div>
+  <div class="ticks" aria-hidden="true"></div>
+  <section class="grid grid-cols-12" data-reference="swiss-grid-breakout">
+    <div class="kicker" data-critical="date">29 Apr 2026<br>Waterloo, London</div>
+    <div class="date">Inaugural Cloudflare London User Group<br>County Hall view / community demos</div>
+    <h1 data-critical="title"><span>Cloudflare</span><span>London</span><span>Recap</span></h1>
+    <div class="subtitle" data-critical="body">A first evening of builders, demos, agents, sandboxes, and zero-trust egress beside the river.</div>
+    <div class="venue" data-beat="venue-view"><b>Waterloo<br>office</b>Arrivals with a County Hall skyline before the talks began.</div>
+    <div class="sequence" data-critical="body">
+      <div class="num">01</div><div class="item">Doors open<small>new group, new room, first round of hellos</small></div>
+      <div class="num">02</div><div class="item">Live demo<small>builders showing what shipped, not slides alone</small></div>
+      <div class="num">03</div><div class="item">Alpesh on agents<small>practical patterns for automated work</small></div>
+      <div class="num">04</div><div class="item">Yigit on sandboxes<small>controlled execution and zero-trust egress</small></div>
+      <div class="num">05</div><div class="item">Group photo<small>the room becomes a monthly London cadence</small></div>
+    </div>
+    <div class="pigeon" data-beat="prada-the-pigeon">
+      <div class="body" aria-hidden="true"></div><div class="head" aria-hidden="true"></div><div class="beak" aria-hidden="true"></div>
+      <div class="label">Prada the pigeon<br>unofficial guest critic</div>
+    </div>
+    <div class="recap" data-critical="body"><strong>Public recap:</strong> one thread turned the night into a clear sequence: the view, the arrivals, the talks, the live work, and the closing photo.</div>
+    <div class="cta" data-critical="cta"><small>Next cadence</small>Monthly community demos in London.</div>
+  </section>
+  <div class="micro m1">County Hall / Waterloo / demos / agents / sandboxes</div>
+  <div class="micro m2">Six-part public thread by Ade Oshineye</div>
+  <div class="micro m3">London user group<br>meeting no. 01</div>
+</main>
+</body>
+</html>

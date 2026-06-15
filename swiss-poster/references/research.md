@@ -47,6 +47,37 @@ The expressive tradition that took the grid as a starting point and learned when
 
 ---
 
+## Visual heuristics from the inspiration set
+
+The reference gallery at <https://swiss.ziki.boo/inspiration> is useful because the dramatic examples are not merely “Swiss minimal.” They share concrete poster moves:
+
+- **A single dominant event:** concentric arcs, repeated translucent circles, a huge cropped letterform, a giant wheel/photo fragment, or a blocky color geometry often owns most of the frame.
+- **Severe edge pressure:** the strongest compositions pin the graphic to an edge or crop it hard; centered large type alone feels weaker.
+- **Tiny typographic authority:** small tracked titles, dates, locations, and index marks sit in disciplined clusters against oversized forms.
+- **Hard figure/ground drama:** black/white mass, split fields, and reversal carry as much drama as the accent hue.
+- **Protected public reading:** the strongest historical posters distinguish display form from public instruction. Muller-Brockmann's music arcs, Hofmann's abstract figure/ground shapes, Matter's photomontage, and Weingart's disruption do not make the event name/date/action disappear; they create a clear signal path inside the drama.
+- **Geometry as subject:** circles, arcs, hexagons, bars, and line fields are the image, not decoration.
+- **Photography made graphic:** photos are cropped, high-contrast, monochrome/duotone, and often overprinted; they are not presented as rounded content cards.
+- **Rhythm and repetition:** repeated circles, arcs, stripes, dot matrices, and type rows create motion/optical vibration.
+
+The historical reason is not “make it chaotic.” Posters had to work in public: read at distance, compete in the street, communicate fast, and stay cheap/reproducible in print. The big forms were usually **semantic compression**: Müller-Brockmann’s arcs make music visible through rhythm and repetition; Hofmann’s figure-ground/photo abstractions turn theater or exhibition subjects into one memorable sign; Matter’s photomontage makes travel desire immediate through scale juxtaposition; Weingart later breaks Swiss typography from inside the system, but still starts from its discipline.
+
+Translate those into web work by requiring each hero or major section to choose one archetype: cropped-word, giant-date, split-field, geometric-anchor, masked-photo, rhythm/texture, or stacked-collage. The skill should reject outputs that stop at a tidy centered heading, paragraph, and equal card grid.
+
+The relevant cognitive principle is signal separation: a reader parses a poster through preattentive grouping, contrast, figure/ground separation, and visual hierarchy before reading every word. WCAG and related legibility work are useful here only as measurement physics: contrast is local to the actual backing behind text, and competing foreground signals reduce readability. Do not import a bland compliance aesthetic. Swiss poster drama works when contrast is allocated into channels — critical text wins in its local reading zone, while the surrounding field can remain severe, high-contrast, cropped, and noisy.
+
+Swiss history also rejects style-only generation:
+
+- **Müller-Brockmann:** grid and geometry are systems for organizing public information, not a default layout fingerprint. Concert arcs and repetitions translate rhythm into structure.
+- **Ruder:** typography is functional; microtype still has a reader, source, or index purpose.
+- **Hofmann:** contrast is compositional structure — large/small, light/dark, static/dynamic, point/line/plane — not random noise.
+- **Matter:** photomontage makes place/action/evidence visible through crop, scale, and overprint; photographs are not wallpaper.
+- **Weingart/Troxler/Odermatt & Tissi:** expressive disruption is allowed only when hierarchy and the public message remain intentional.
+
+For generated posters, this means every visual move should be auditable: visible text maps to the source ledger, images have semantic roles, diagrams encode real variables, and historical references are embodied as compositional moves rather than designer-name garnish. It should also reject the opposite failure: illegible overlaps, arbitrary giant numerals, and microtype that exists only as decoration.
+
+---
+
 ## Sources
 
 ### Primary references

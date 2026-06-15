@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cloudflare London</title>
+<style>
+:root{
+  --paper:#fafaf9;
+  --ink:#1c1917;
+  --muted:rgba(28,25,23,.62);
+  --quiet:rgba(28,25,23,.22);
+  --dark:#1c1917;
+  --accent:#F38020;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#d6d3d1;color:var(--ink);font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+.poster{
+  width:840px;height:1200px;margin:0 auto;background:var(--paper);position:relative;overflow:hidden;
+  display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,50px);
+}
+.edge-field{position:absolute;inset:0;pointer-events:none}
+.orange-slab{position:absolute;left:0;top:410px;width:560px;height:360px;background:var(--accent)}
+.dark-slab{position:absolute;right:0;top:0;width:280px;height:1200px;background:var(--dark)}
+.route{
+  position:absolute;left:-110px;top:120px;width:1030px;height:930px;opacity:.95;
+}
+.route svg{width:100%;height:100%}
+.node{position:absolute;border:16px solid var(--accent);background:var(--paper)}
+.n1{width:148px;height:148px;left:522px;top:154px}
+.n2{width:92px;height:92px;left:196px;top:642px;background:var(--dark)}
+.n3{width:118px;height:118px;left:666px;top:856px;background:var(--paper)}
+.mega{
+  position:absolute;left:-24px;bottom:18px;font-size:224px;line-height:.78;font-weight:800;letter-spacing:-.105em;
+  color:rgba(28,25,23,.08);white-space:nowrap;pointer-events:none;
+}
+.kicker{
+  grid-column:2/7;grid-row:2/3;align-self:end;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  position:relative;z-index:30;font-weight:700;
+}
+.title{
+  grid-column:2/10;grid-row:4/8;position:relative;z-index:40;margin:0;
+  font-size:104px;line-height:.84;font-weight:800;letter-spacing:-.065em;
+}
+.title span{display:block}
+.datebox{
+  grid-column:8/12;grid-row:8/11;position:relative;z-index:40;background:var(--dark);color:var(--paper);
+  padding:22px 18px 18px 22px;align-self:start;
+}
+.datebox .day{font-size:74px;line-height:.82;font-weight:800;letter-spacing:-.05em;color:var(--accent)}
+.datebox .meta{margin-top:14px;font-size:18px;line-height:1.05;font-weight:700}
+.subtitle{
+  grid-column:2/7;grid-row:10/13;position:relative;z-index:40;background:var(--paper);
+  padding:18px 22px 18px 0;font-size:28px;line-height:1.05;font-weight:600;letter-spacing:-.03em;
+}
+.talks{
+  grid-column:2/8;grid-row:15/20;position:relative;z-index:40;background:var(--paper);padding:22px 26px 20px 0;
+}
+.talks h2,.community h2{margin:0 0 18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:18px;border-top:2px solid var(--ink);padding:13px 0;font-size:24px;line-height:1.05;font-weight:700;letter-spacing:-.025em}
+.talk b{font-size:11px;letter-spacing:.16em;color:var(--accent);padding-top:5px}
+.community{
+  grid-column:8/12;grid-row:14/18;position:relative;z-index:40;background:var(--paper);
+  padding:20px 18px;color:var(--ink);
+}
+.community p{margin:0;font-size:18px;line-height:1.17;font-weight:600;letter-spacing:-.015em}
+.cta{
+  grid-column:8/12;grid-row:20/22;position:relative;z-index:40;background:var(--accent);color:var(--dark);
+  padding:18px 20px;font-size:24px;line-height:1;font-weight:800;letter-spacing:-.035em;
+}
+.micro{
+  position:absolute;z-index:45;font-size:11px;line-height:1.25;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);
+  writing-mode:vertical-rl;right:22px;top:34px;font-weight:700;
+}
+.caption{
+  position:absolute;z-index:35;left:80px;top:792px;font-size:11px;line-height:1.35;letter-spacing:.15em;text-transform:uppercase;color:rgba(28,25,23,.68);
+  width:270px;font-weight:700;
+}
+.coords{
+  position:absolute;z-index:45;right:26px;bottom:34px;color:rgba(250,250,249,.72);
+  font-size:11px;line-height:1.35;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+}
+.rule-a{position:absolute;left:70px;top:96px;width:1px;height:930px;background:rgba(28,25,23,.18)}
+.rule-b{position:absolute;left:490px;top:0;width:2px;height:1200px;background:rgba(250,250,249,.16)}
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Cloudflare London event recap">
+  <div class="edge-field" aria-hidden="true" data-reference="route-map-network-grammar">
+    <div class="orange-slab"></div>
+    <div class="dark-slab"></div>
+    <div class="rule-a"></div>
+    <div class="rule-b"></div>
+    <div class="route" data-encoding="talk sequence and edge network → routed connection lines">
+      <svg viewBox="0 0 1030 930" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M44 820 C210 690 250 616 334 504 C424 384 540 348 660 236 C764 138 828 96 1002 36" stroke="#F38020" stroke-width="30" stroke-linecap="square"/>
+        <path d="M72 184 L388 184 L388 622 L704 622 L704 882" stroke="#1c1917" stroke-width="10"/>
+        <path d="M170 762 L438 528 L760 528 L976 318" stroke="#fafaf9" stroke-width="12"/>
+      </svg>
+    </div>
+    <div class="node n1"></div>
+    <div class="node n2"></div>
+    <div class="node n3"></div>
+    <div class="mega">LON</div>
+  </div>
+  <div class="kicker" data-critical="body">User group recap · Waterloo</div>
+  <h1 class="title" data-critical="title"><span>Cloudflare</span><span>London</span></h1>
+  <section class="datebox" data-critical="date">
+    <div class="day">29<br>Apr</div>
+    <div class="meta">2026<br>Waterloo<br>Three talks</div>
+  </section>
+  <div class="subtitle" data-critical="body">Edge systems, realtime media, and identity patterns from the community floor.</div>
+  <section class="talks" data-critical="body">
+    <h2>Session line-up</h2>
+    <div class="talk"><b>01</b><span>Edge platform lessons from production</span></div>
+    <div class="talk"><b>02</b><span>MoQ and realtime media</span></div>
+    <div class="talk"><b>03</b><span>Credential Broker pattern</span></div>
+  </section>
+  <section class="community" data-critical="body">
+    <h2>Community note</h2>
+    <p>Monthly sessions continue, with space for practical demos and unusual builds from local makers.</p>
+  </section>
+  <div class="cta" data-critical="cta">RSVP, recap, and bring a demo.</div>
+  <div class="caption">Venue view: Waterloo evening, edge network conversations, operators and builders in one room.</div>
+  <div class="micro">London · community · production · media · identity</div>
+  <div class="coords">Waterloo SE1<br>Recap index 03<br>Monthly from now on</div>
+</main>
+</body>
+</html>
