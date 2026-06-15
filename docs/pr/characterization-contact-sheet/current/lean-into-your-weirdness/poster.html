@@ -9,250 +9,145 @@
     --paper:#fafaf9;
     --ink:#1c1917;
     --muted:rgba(28,25,23,.62);
-    --ghost:rgba(28,25,23,.09);
+    --ghost:rgba(28,25,23,.08);
     --red:#C8102E;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:#d6d3d1;color:var(--ink);font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+  html,body{margin:0;min-height:100%;background:#d6d3d1}
+  body{font-family:"IBM Plex Sans","Hanken Grotesk","Barlow","Host Grotesk","DM Sans",system-ui,sans-serif;color:var(--ink)}
   .poster{
-    position:relative;
-    width:840px;
-    height:1200px;
-    margin:0 auto;
-    overflow:hidden;
-    background:var(--paper);
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    grid-template-rows:repeat(24,50px);
+    width:840px;height:1200px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,50px);
   }
-  .red-slab{
-    position:absolute;
-    left:-80px;
-    top:475px;
-    width:1000px;
-    height:305px;
-    background:var(--red);
-    transform:skewY(-7deg);
-    transform-origin:left center;
-    z-index:1;
-  }
-  .black-field{
-    position:absolute;
-    right:0;
-    top:0;
-    width:255px;
-    height:1200px;
-    background:var(--ink);
-    z-index:0;
-  }
-  .ghost{
-    position:absolute;
-    left:-54px;
-    bottom:-58px;
-    font-size:236px;
-    line-height:.72;
-    letter-spacing:-18px;
-    font-weight:900;
-    color:var(--ghost);
-    z-index:0;
-    white-space:nowrap;
-    transform:rotate(-6deg);
-    pointer-events:none;
-  }
-  .gridlines{
-    position:absolute;
-    inset:0;
-    background-image:
-      linear-gradient(to right, rgba(28,25,23,.055) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(28,25,23,.045) 1px, transparent 1px);
+  .gridline{
+    position:absolute;inset:0;pointer-events:none;opacity:.42;
+    background-image:linear-gradient(90deg,rgba(28,25,23,.065) 1px,transparent 1px),linear-gradient(0deg,rgba(28,25,23,.04) 1px,transparent 1px);
     background-size:70px 50px;
-    z-index:0;
-    pointer-events:none;
   }
-  header{
-    grid-column:1/10;
-    grid-row:2/7;
-    padding-left:42px;
-    z-index:4;
+  .red-slab{position:absolute;left:-86px;top:388px;width:1010px;height:178px;background:var(--red);transform:rotate(-7deg);z-index:2}
+  .black-slab{position:absolute;right:-130px;bottom:0;width:438px;height:540px;background:var(--ink);z-index:1}
+  .ghost-word{
+    position:absolute;left:-38px;top:628px;font-size:212px;line-height:.78;font-weight:900;letter-spacing:-.09em;
+    color:var(--ghost);white-space:nowrap;z-index:0;transform:scaleX(1.08);
   }
-  .kicker{
-    font-size:11px;
-    line-height:1.25;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    color:var(--muted);
-    margin-bottom:18px;
+  .top-meta{
+    grid-column:2/8;grid-row:2/3;z-index:5;font-size:11px;line-height:1.2;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    display:grid;grid-template-columns:1fr 1fr;gap:28px;
   }
-  h1{
-    margin:0;
-    font-size:88px;
-    line-height:.86;
-    letter-spacing:-5px;
-    font-weight:300;
+  .serial{grid-column:10/12;grid-row:2/4;z-index:5;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:right}
+  .title{
+    grid-column:2/11;grid-row:4/9;z-index:6;align-self:end;
   }
-  h1 strong{
-    display:block;
-    font-weight:900;
-    letter-spacing:-7px;
+  .title .lean{display:block;font-size:92px;line-height:.86;font-weight:300;letter-spacing:-.07em}
+  .title .into{display:block;margin-left:210px;font-size:88px;line-height:.82;font-weight:800;letter-spacing:-.075em}
+  .weird{
+    position:absolute;left:28px;top:396px;z-index:7;color:var(--paper);font-size:135px;line-height:.78;letter-spacing:-.095em;white-space:nowrap;
+    font-kerning:none;
   }
-  .side-meta{
-    position:absolute;
-    right:32px;
-    top:44px;
-    z-index:3;
-    color:var(--paper);
-    font-size:11px;
-    line-height:1.45;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    width:170px;
-  }
-  .side-meta b{display:block;color:var(--paper);font-size:20px;letter-spacing:-.02em;text-transform:none;margin-bottom:8px}
-  .weirdness{
-    position:absolute;
-    left:34px;
-    top:330px;
-    z-index:5;
-    width:930px;
-    white-space:nowrap;
-    color:var(--ink);
-    letter-spacing:-18px;
-    line-height:.78;
-  }
-  .weirdness span{display:inline-block;vertical-align:baseline}
-  .w1{font-size:204px;font-weight:900;transform:translateY(10px) skewX(-8deg)}
-  .w2{font-size:176px;font-weight:100;transform:translate(-8px,-38px) rotate(-7deg)}
-  .w3{font-size:226px;font-weight:700;font-style:italic;transform:translate(-22px,28px)}
-  .w4{font-size:160px;font-weight:500;transform:translate(-34px,-22px) scaleY(1.32)}
-  .w5{font-size:218px;font-weight:900;transform:translate(-52px,2px) rotate(5deg)}
-  .w6{font-size:150px;font-weight:200;font-style:italic;transform:translate(-68px,-48px)}
-  .w7{font-size:206px;font-weight:800;transform:translate(-86px,34px) scaleX(.82)}
-  .w8{font-size:168px;font-weight:600;transform:translate(-106px,-26px) rotate(-4deg)}
-  .w9{font-size:232px;font-weight:100;transform:translate(-132px,22px)}
-  .quiet{
-    position:absolute;
-    left:42px;
-    top:805px;
-    z-index:6;
-    width:742px;
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:18px;
-  }
+  .weird span{display:inline-block}
+  .w1{font-weight:900;transform:translateY(3px) rotate(-2deg)}
+  .w2{font-weight:100;font-style:italic;transform:translateY(-11px) scaleY(1.22)}
+  .w3{font-weight:700;transform:translateY(14px) scaleX(.82)}
+  .w4{font-weight:300;font-style:italic;transform:translateY(-2px) rotate(4deg)}
+  .w5{font-weight:950;transform:translateY(20px) scaleY(.76)}
+  .w6{font-weight:200;transform:translateY(-16px) scaleX(1.28)}
+  .w7{font-weight:800;font-style:italic;transform:translateY(8px) rotate(-5deg)}
+  .w8{font-weight:500;transform:translateY(-7px) scaleY(1.1)}
+  .w9{font-weight:900;transform:translateY(17px) scaleX(.9)}
   .subtitle{
-    grid-column:1/7;
-    font-size:25px;
-    line-height:1.05;
-    letter-spacing:-.025em;
-    font-weight:650;
-    background:var(--paper);
-    padding:18px 20px 20px 0;
-  }
-  .notes{
-    grid-column:8/13;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px 18px;
-    background:var(--paper);
-    padding:18px 0 20px 20px;
-  }
-  .note{
-    border-top:3px solid var(--ink);
-    padding-top:7px;
-    font-size:13px;
-    line-height:1.13;
-    letter-spacing:.005em;
-  }
-  .note b{
-    display:block;
-    font-size:10px;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    color:var(--muted);
-    margin-bottom:5px;
+    grid-column:2/7;grid-row:12/14;z-index:5;font-size:27px;line-height:1.03;font-weight:450;letter-spacing:-.035em;
   }
   .diagnosis{
-    position:absolute;
-    left:42px;
-    top:1018px;
-    z-index:6;
-    width:430px;
-    background:var(--ink);
-    color:var(--paper);
-    padding:20px 24px 23px;
-    font-size:15px;
-    line-height:1.28;
+    grid-column:8/12;grid-row:12/17;z-index:5;background:var(--paper);padding:20px 0 0 24px;border-left:8px solid var(--ink);
   }
-  .diagnosis b{
-    display:block;
-    color:var(--paper);
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.16em;
-    margin-bottom:10px;
+  .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .diagnosis p{margin:0 0 13px;font-size:21px;line-height:1.05;letter-spacing:-.03em}
+  .tradeoffs{
+    grid-column:2/7;grid-row:16/21;z-index:5;display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;align-content:start;
   }
-  .cta{
-    position:absolute;
-    right:42px;
-    bottom:42px;
-    z-index:6;
-    width:250px;
-    border:4px solid var(--red);
-    padding:16px 18px 18px;
-    background:var(--paper);
-    font-size:29px;
-    line-height:.93;
-    letter-spacing:-.04em;
-    font-weight:850;
+  .item{border-top:2px solid var(--ink);padding-top:9px}
+  .item b{display:block;font-size:13px;line-height:1;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+  .item span{display:block;font-size:18px;line-height:1.06;letter-spacing:-.025em;color:rgba(28,25,23,.78)}
+  .saints{
+    grid-column:8/12;grid-row:18/22;z-index:5;color:var(--paper);padding:0 0 0 24px;
   }
-  .vertical{
-    position:absolute;
-    left:12px;
-    top:742px;
-    z-index:7;
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--muted);
+  .saints .kicker{color:rgba(250,250,249,.62)}
+  .saints ul{list-style:none;margin:0;padding:0}
+  .saints li{font-size:24px;line-height:.98;letter-spacing:-.04em;margin-bottom:10px}
+  .order{
+    grid-column:2/9;grid-row:22/24;z-index:8;background:var(--red);color:var(--paper);padding:18px 22px;
+    display:grid;grid-template-columns:160px 1fr;gap:20px;align-items:center;
   }
+  .order b{font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .order span{font-size:31px;line-height:.93;font-weight:800;letter-spacing:-.055em}
+  .edge-note{
+    position:absolute;left:18px;bottom:28px;z-index:8;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(28,25,23,.55)
+  }
+  .ticks{position:absolute;right:392px;top:590px;bottom:70px;width:1px;background:rgba(28,25,23,.35);z-index:4}
+  .ticks i{position:absolute;left:-16px;width:32px;height:2px;background:var(--ink)}
+  .ticks i:nth-child(1){top:0}.ticks i:nth-child(2){top:18%}.ticks i:nth-child(3){top:37%}.ticks i:nth-child(4){top:61%}.ticks i:nth-child(5){top:100%}
 </style>
 </head>
 <body>
-<main class="poster" aria-label="Lean Into Your Weirdness manifesto poster">
-  <div class="gridlines" aria-hidden="true"></div>
-  <div class="black-field" aria-hidden="true"></div>
+<main class="poster" data-lineage="weingart-controlled-disruption" data-reference="typographic-rupture">
+  <div class="gridline" aria-hidden="true"></div>
   <div class="red-slab" aria-hidden="true"></div>
-  <div class="ghost" aria-hidden="true">ODD<br>TRUE</div>
-  <header>
-    <div class="kicker">Manifesto for useful asymmetry</div>
-    <h1 data-critical="title">Lean Into Your <strong>Weirdness</strong></h1>
-  </header>
-  <div class="side-meta" data-critical="date">
-    <b>Standing order</b>
-    Keep the signal. Refuse the beige correction. Make the strange part do work.
-  </div>
-  <section class="weirdness" aria-label="The word weirdness shown in mixed styles">
+  <div class="black-slab" aria-hidden="true"></div>
+  <div class="ghost-word" aria-hidden="true">NORMAL</div>
+  <div class="ticks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <section class="top-meta" data-critical="date">
+    <div>Manifesto sheet<br>for difficult signals</div>
+    <div>Field notes<br>against polite erasure</div>
+  </section>
+  <div class="serial">No. 07<br>stand apart</div>
+
+  <h1 class="title" data-critical="title">
+    <span class="lean">Lean</span>
+    <span class="into">Into Your</span>
+  </h1>
+
+  <div class="weird" aria-label="Weirdness" data-critical="title">
     <span class="w1">W</span><span class="w2">E</span><span class="w3">I</span><span class="w4">R</span><span class="w5">D</span><span class="w6">N</span><span class="w7">E</span><span class="w8">S</span><span class="w9">S</span>
-  </section>
-  <div class="vertical">Tradeoffs / diagnosis / practice</div>
-  <section class="quiet" data-critical="body">
-    <div class="subtitle">The part that made you hard to file is often the part that makes you precise.</div>
-    <div class="notes">
-      <div class="note"><b>Tradeoff</b>Less instant approval; more unmistakable work.</div>
-      <div class="note"><b>Diagnosis</b>If the edges vanish, so does the instrument.</div>
-      <div class="note"><b>Patron saints</b>The awkward first draft. The obsessive margin note.</div>
-      <div class="note"><b>Practice</b>Name the oddity, test it, sharpen it, ship it.</div>
-      <div class="note"><b>Risk</b>Performance without craft becomes noise.</div>
-      <div class="note"><b>Reward</b>A recognizable frequency under pressure.</div>
-    </div>
-  </section>
-  <div class="diagnosis">
-    <b>Working rule</b>
-    Do not sand down the anomaly before you understand what it is protecting. Strange is not the opposite of rigorous.
   </div>
-  <div class="cta" data-critical="cta">Stay legible.<br>Stay bent.</div>
+
+  <p class="subtitle" data-critical="body">
+    Your odd angle is not noise. It is the instrument that finds the hidden door.
+  </p>
+
+  <section class="diagnosis" data-critical="body">
+    <div class="kicker">Diagnosis</div>
+    <p>If the room goes quiet, ask what pattern you just touched.</p>
+    <p>If the draft looks too clean, put the dangerous sentence back.</p>
+    <p>If everyone agrees too fast, widen the frame.</p>
+  </section>
+
+  <section class="tradeoffs">
+    <div class="item"><b>Tradeoff</b><span>Legibility over belonging when the truth needs a shape.</span></div>
+    <div class="item"><b>Practice</b><span>Name the constraint before you decorate the escape.</span></div>
+    <div class="item"><b>Practice</b><span>Protect one strange habit long enough to measure it.</span></div>
+    <div class="item"><b>Cost</b><span>Some rooms will call precision eccentric.</span></div>
+    <div class="item"><b>Use</b><span>Turn awkwardness into a repeatable method.</span></div>
+    <div class="item"><b>Rule</b><span>Never sand off the edge that does the work.</span></div>
+  </section>
+
+  <section class="saints">
+    <div class="kicker">Patron saints</div>
+    <ul>
+      <li>the misfit diagram</li>
+      <li>the crooked question</li>
+      <li>the beautiful refusal</li>
+      <li>the note nobody filed</li>
+    </ul>
+  </section>
+
+  <div class="order" data-critical="cta">
+    <b>Standing order</b>
+    <span>Keep the signal weird. Make the result undeniable.</span>
+  </div>
+
+  <div class="edge-note">readable / strange / useful</div>
 </main>
 </body>
 </html>

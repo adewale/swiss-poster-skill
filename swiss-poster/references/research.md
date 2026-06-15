@@ -74,7 +74,9 @@ Swiss history also rejects style-only generation:
 - **Matter:** photomontage makes place/action/evidence visible through crop, scale, and overprint; photographs are not wallpaper.
 - **Weingart/Troxler/Odermatt & Tissi:** expressive disruption is allowed only when hierarchy and the public message remain intentional.
 
-For generated posters, this means every visual move should be auditable: visible text maps to the source ledger, images have semantic roles, diagrams encode real variables, and historical references are embodied as compositional moves rather than designer-name garnish. It should also reject the opposite failure: illegible overlaps, arbitrary giant numerals, and microtype that exists only as decoration.
+For generated posters, this means every visual move should be auditable: visible text maps to the source ledger, images have semantic roles, diagrams encode real variables, and historical references are embodied as compositional moves rather than designer-name garnish.
+
+The generation system must also resist period collapse. Swiss poster history spans object posters, travel photomontage, lithographic placards, Zurich International Typographic Style, Basel figure/ground pedagogy, Geigy scientific plates, Weingart's New Wave typography, Troxler's performance posters, and contemporary cultural work. If every output looks like black-white-red late-modern typographic disruption, the skill has learned a narrow slice of Swiss history rather than Swiss poster design as a broad problem-solving tradition. It should also reject the opposite failure: illegible overlaps, arbitrary giant numerals, and microtype that exists only as decoration.
 
 ---
 

@@ -2,133 +2,272 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=840, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Breaking the 35</title>
 <style>
   :root{
     --paper:#fafaf9;
     --ink:#1c1917;
-    --muted:#78716c;
+    --muted:#57534e;
     --soft:#e7e5e4;
     --red:#C8102E;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--paper);font-family:Arial,Helvetica,system-ui,sans-serif;color:var(--ink)}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  body{display:grid;place-items:start center;min-height:100vh}
   .poster{
-    width:840px;height:1200px;position:relative;overflow:hidden;background:var(--paper);
-    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(12,1fr);
+    position:relative;
+    width:840px;
+    height:1200px;
+    overflow:hidden;
+    background:var(--paper);
+    isolation:isolate;
   }
   .grid{
-    position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,1fr);opacity:.16;pointer-events:none;
-    background-image:linear-gradient(90deg,rgba(28,25,23,.16) 1px,transparent 1px);
-    background-size:70px 100%;
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:16px;
+    padding:46px 48px;
+    z-index:10;
   }
   .red-slab{
-    position:absolute;left:0;top:448px;width:840px;height:268px;background:var(--red);
-    transform:skewY(-7deg);transform-origin:left center;z-index:2;
+    position:absolute;
+    left:-70px;
+    top:0;
+    width:360px;
+    height:100%;
+    background:var(--red);
+    transform:skewX(-8deg);
+    transform-origin:top left;
+    z-index:1;
+  }
+  .black-field{
+    position:absolute;
+    right:0;
+    bottom:0;
+    width:480px;
+    height:470px;
+    background:var(--ink);
+    z-index:2;
   }
   .menu{
-    position:absolute;right:-78px;top:38px;width:344px;height:760px;background:var(--ink);color:var(--paper);z-index:3;
-    padding:28px 28px 28px 34px;
+    position:absolute;
+    top:84px;
+    left:245px;
+    width:455px;
+    z-index:3;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:18px;
+    line-height:1.05;
+    letter-spacing:-.03em;
+    color:rgba(28,25,23,.2);
+    transform:rotate(-7deg);
+    user-select:none;
   }
-  .menu h2{font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 24px;color:rgba(250,250,249,.72);font-weight:700}
-  .font-list{display:grid;grid-template-columns:1fr;gap:8px;font-size:19px;line-height:1.05}
-  .font-list span{display:block;border-bottom:1px solid rgba(250,250,249,.18);padding-bottom:4px}
-  .font-list span:nth-child(4n){font-weight:900;letter-spacing:-.06em}
-  .font-list span:nth-child(5n){font-family:Georgia,serif;font-style:italic}
-  .font-list span:nth-child(7n){font-family:"Courier New",monospace;text-transform:uppercase;font-size:16px;letter-spacing:.05em}
-  .font-list .strike{background:var(--red);color:var(--paper);padding:4px 8px;margin-left:-8px;border:0}
-  .giant{
-    position:absolute;left:-42px;top:120px;z-index:1;font-size:390px;line-height:.78;font-weight:900;letter-spacing:-.105em;
-    color:rgba(28,25,23,.08);white-space:nowrap;pointer-events:none;
-  }
-  .title{
-    grid-column:2/10;grid-row:2/5;z-index:6;align-self:start;margin-top:34px;
-  }
-  h1{font-size:118px;line-height:.82;letter-spacing:-.08em;margin:0;font-weight:900}
-  .subtitle{
-    margin-top:22px;width:455px;background:var(--paper);padding:16px 18px 18px 0;
-    font-size:25px;line-height:1.04;letter-spacing:-.035em;font-weight:700;
-  }
-  .years{
-    grid-column:2/7;grid-row:5/7;z-index:7;align-self:center;
-    font-size:70px;line-height:.9;font-weight:900;letter-spacing:-.07em;color:var(--paper);
-  }
-  .years small{display:block;font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:10px;color:rgba(250,250,249,.82)}
+  .menu span{display:block;border-bottom:1px solid rgba(28,25,23,.08);padding:2px 0}
   .ransom{
-    position:absolute;left:70px;top:625px;z-index:8;display:flex;gap:8px;align-items:flex-end;transform:rotate(-4deg);
+    position:absolute;
+    left:36px;
+    top:512px;
+    z-index:4;
+    width:760px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    gap:8px 10px;
+    transform:rotate(-3deg);
+    user-select:none;
   }
-  .ransom b{display:block;background:var(--paper);color:var(--ink);padding:4px 7px;font-size:26px;line-height:.9;box-shadow:0 0 0 1px rgba(28,25,23,.25)}
-  .ransom b:nth-child(even){font-family:Georgia,serif;font-style:italic;font-size:33px}
-  .ransom b:nth-child(3n){font-family:"Courier New",monospace;font-size:23px}
+  .ransom b{
+    display:inline-block;
+    background:var(--ink);
+    color:var(--paper);
+    padding:.01em .08em .04em;
+    font-weight:900;
+    line-height:.85;
+    letter-spacing:-.08em;
+  }
+  .ransom b:nth-child(2n){background:var(--paper);color:var(--ink);border:2px solid var(--ink);transform:translateY(-10px) rotate(2deg)}
+  .ransom b:nth-child(3n){background:var(--red);color:var(--paper);transform:translateY(8px) rotate(-2deg)}
+  .ransom .big{font-size:116px}
+  .ransom .mid{font-size:82px}
+  .ransom .small{font-size:64px}
+  .title{
+    grid-column:5 / 13;
+    align-self:start;
+    margin-top:242px;
+    position:relative;
+    z-index:30;
+    background:var(--paper);
+    padding:18px 0 22px 26px;
+  }
+  h1{
+    margin:0;
+    font-size:96px;
+    line-height:.86;
+    letter-spacing:-.085em;
+    font-weight:900;
+    max-width:560px;
+  }
+  .subtitle{
+    margin:18px 0 0;
+    max-width:455px;
+    font-size:22px;
+    line-height:1.08;
+    letter-spacing:-.03em;
+    font-weight:650;
+  }
+  .date{
+    grid-column:1 / 4;
+    grid-row:1;
+    z-index:30;
+    color:var(--paper);
+    margin-top:6px;
+  }
+  .kicker,.label{
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:750;
+  }
+  .date .years{
+    margin-top:14px;
+    font-size:50px;
+    line-height:.86;
+    letter-spacing:-.07em;
+    font-weight:900;
+  }
   .facts{
-    grid-column:2/8;grid-row:8/12;z-index:7;margin-top:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px 28px;
+    grid-column:2 / 7;
+    align-self:end;
+    margin-bottom:52px;
+    z-index:35;
+    color:var(--paper);
   }
-  .fact{border-top:4px solid var(--ink);padding-top:10px}
-  .fact strong{display:block;font-size:19px;line-height:1.02;letter-spacing:-.025em}
-  .fact span{display:block;margin-top:8px;font-size:11px;line-height:1.25;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
-  .sidebar{
-    grid-column:9/12;grid-row:8/12;z-index:7;margin-top:28px;background:var(--ink);color:var(--paper);padding:24px 20px;
+  .facts ol{margin:16px 0 0;padding:0;list-style:none;border-top:1px solid rgba(250,250,249,.45)}
+  .facts li{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:14px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(250,250,249,.35);
+    font-size:15px;
+    line-height:1.12;
+    letter-spacing:-.015em;
   }
-  .sidebar .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(250,250,249,.62);font-weight:700}
-  .sidebar p{font-size:24px;line-height:1.02;letter-spacing:-.04em;font-weight:800;margin:28px 0 0}
+  .facts em{font-style:normal;color:rgba(250,250,249,.62);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+  .right-meta{
+    grid-column:8 / 13;
+    align-self:end;
+    margin-bottom:58px;
+    z-index:35;
+    color:var(--paper);
+  }
+  .right-meta h2{
+    margin:0;
+    font-size:44px;
+    line-height:.9;
+    letter-spacing:-.07em;
+    font-weight:850;
+  }
+  .right-meta p{
+    margin:18px 0 0;
+    max-width:300px;
+    font-size:15px;
+    line-height:1.25;
+    color:rgba(250,250,249,.78);
+  }
   .cta{
-    position:absolute;right:52px;bottom:42px;z-index:9;background:var(--red);color:var(--paper);
-    padding:16px 18px;font-size:14px;line-height:1;letter-spacing:.14em;text-transform:uppercase;font-weight:900;
+    margin-top:34px;
+    display:inline-block;
+    color:var(--ink);
+    background:var(--paper);
+    padding:12px 14px 13px;
+    min-height:44px;
+    font-size:12px;
+    line-height:1;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:850;
   }
-  .micro{
-    position:absolute;left:70px;bottom:44px;z-index:9;font-size:10px;line-height:1.35;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700;
+  .side{
+    position:absolute;
+    right:30px;
+    top:48px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    z-index:30;
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:750;
+    color:rgba(28,25,23,.54);
   }
-  .vertical{
-    position:absolute;left:24px;top:760px;z-index:7;writing-mode:vertical-rl;transform:rotate(180deg);
-    font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700;
+  .baseline{
+    position:absolute;
+    left:0;
+    right:0;
+    top:458px;
+    height:18px;
+    background:repeating-linear-gradient(90deg,rgba(28,25,23,.35) 0 1px,transparent 1px 12px);
+    z-index:2;
   }
-  .rules{position:absolute;inset:0;z-index:4;pointer-events:none}
-  .rules i{position:absolute;display:block;background:var(--ink);height:2px;width:930px;left:-46px;opacity:.9}
-  .rules i:nth-child(1){top:508px;transform:rotate(-7deg)}
-  .rules i:nth-child(2){top:542px;transform:rotate(-7deg)}
-  .rules i:nth-child(3){top:576px;transform:rotate(-7deg)}
-  .rules i:nth-child(4){top:610px;transform:rotate(-7deg)}
+  .ghost35{
+    position:absolute;
+    left:275px;
+    top:690px;
+    z-index:1;
+    font-size:390px;
+    line-height:.8;
+    letter-spacing:-.12em;
+    font-weight:900;
+    color:rgba(28,25,23,.055);
+    user-select:none;
+  }
 </style>
 </head>
 <body>
-<main class="poster" aria-label="Breaking the 35 typographic history poster">
-  <div class="grid" aria-hidden="true"></div>
-  <div class="giant" aria-hidden="true">35</div>
+<main class="poster" data-lineage="weingart-controlled-disruption" data-reference="typographic-menu-rupture">
   <div class="red-slab" aria-hidden="true"></div>
-  <div class="rules" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-  <section class="title" data-critical="title">
-    <h1>Breaking<br>the 35</h1>
-    <div class="subtitle">A decade of designers escaping the default PostScript font menu.</div>
-  </section>
-  <aside class="menu" data-reference="weingart-controlled-disruption" aria-label="LaserWriter default menu">
-    <h2>LaserWriter menu / 1985</h2>
-    <div class="font-list">
-      <span>Times</span><span>Helvetica</span><span>Courier</span><span>Symbol</span><span>Avant Garde</span>
-      <span>Bookman</span><span>Helvetica Narrow</span><span>New Century</span><span>Palatino</span><span class="strike">Zapf Chancery</span>
-      <span>Zapf Dingbats</span><span>ITC Garamond</span><span>Souvenir</span><span>Lubalin Graph</span><span>Korinna</span>
-      <span>Serifa</span><span>Stone</span><span>Optima</span><span>Galliard</span><span>Benguiat</span>
-      <span>Franklin Gothic</span><span>Frutiger</span><span>Univers</span><span>Futura</span><span>Gill Sans</span>
-      <span>Minion</span><span>Myriad</span><span>Tekton</span><span>Trajan</span><span>Charlemagne</span>
+  <div class="black-field" aria-hidden="true"></div>
+  <div class="baseline" aria-hidden="true"></div>
+  <div class="ghost35" aria-hidden="true">35</div>
+  <div class="menu" aria-hidden="true">
+    <span>Avant Garde</span><span>Bookman</span><span>Courier</span><span>Helvetica</span><span>Helvetica Narrow</span><span>New Century Schoolbook</span><span>Palatino</span><span>Symbol</span><span>Times</span><span>Zapf Chancery</span><span>Zapf Dingbats</span>
+  </div>
+  <div class="ransom" aria-hidden="true">
+    <b class="big">P</b><b class="mid">o</b><b class="big">s</b><b class="small">t</b><b class="mid">S</b><b class="big">c</b><b class="small">r</b><b class="mid">i</b><b class="big">p</b><b class="small">t</b>
+  </div>
+  <div class="side">font menu versus street alphabet</div>
+  <section class="grid">
+    <div class="date" data-critical="date">
+      <div class="kicker">desktop publishing break</div>
+      <div class="years">1985<br>1995</div>
     </div>
-  </aside>
-  <div class="years" data-critical="date"><small>Desktop publishing rupture</small>1985–1995</div>
-  <div class="ransom" aria-hidden="true"><b>N</b><b>O</b><b>T</b><b> </b><b>O</b><b>N</b><b> </b><b>T</b><b>H</b><b>E</b><b> </b><b>M</b><b>E</b><b>N</b><b>U</b></div>
-  <section class="facts" data-critical="body">
-    <div class="fact" data-beat="default-menu"><strong>PostScript 35 set the default vocabulary.</strong><span>LaserWriter era / office typography hardens into a menu</span></div>
-    <div class="fact" data-beat="brody-fontshop"><strong>Neville Brody and FontShop made type a cultural weapon.</strong><span>Independent distribution / designer-made faces</span></div>
-    <div class="fact" data-beat="emigre"><strong>Emigre published pixels, migration, argument.</strong><span>Magazine as foundry / type as editorial position</span></div>
-    <div class="fact" data-beat="schools"><strong>CalArts and Cranbrook taught the page to misbehave.</strong><span>Layering / vernacular / anti-neutral systems</span></div>
-    <div class="fact" data-beat="ransom-note"><strong>Ransom-note typography became a refusal of clean defaults.</strong><span>Cut, paste, scan, distort, recompose</span></div>
-    <div class="fact" data-beat="postmodern-break"><strong>The break was not anti-type. It was anti-obedience.</strong><span>From menu choice to authored language</span></div>
+    <header class="title" data-critical="title">
+      <h1>Breaking<br>the 35</h1>
+      <p class="subtitle">A decade of type rebellion against the LaserWriter’s default menu.</p>
+    </header>
+    <section class="facts" data-critical="body">
+      <div class="label">fault lines</div>
+      <ol>
+        <li><em>01</em><span>PostScript 35 turns taste into a pull-down list.</span></li>
+        <li><em>02</em><span>Ransom-note pages reject clean corporate defaults.</span></li>
+        <li><em>03</em><span>Neville Brody makes magazines behave like noise.</span></li>
+        <li><em>04</em><span>FontShop sells independent faces into the new desktop.</span></li>
+        <li><em>05</em><span>Emigre, CalArts, Cranbrook push type past obedience.</span></li>
+      </ol>
+    </section>
+    <section class="right-meta">
+      <h2>Default<br>menu /<br>broken</h2>
+      <p>The alphabet stops pretending to be neutral: bitmap grit, cut-up headlines, found lettering, and postmodern systems enter the page.</p>
+      <span class="cta" data-critical="cta">choose outside the list</span>
+    </section>
   </section>
-  <aside class="sidebar">
-    <div class="kicker">After the menu</div>
-    <p>Fonts stopped behaving like office supplies and started acting like voices.</p>
-  </aside>
-  <div class="vertical">PostScript / foundries / schools / magazines / rebellion</div>
-  <div class="micro">Default menu challenged by Brody, FontShop, Emigre, CalArts, Cranbrook and a generation of postmodern page-makers.</div>
-  <div class="cta" data-critical="cta">Choose outside the list</div>
 </main>
 </body>
 </html>

@@ -20,7 +20,7 @@ It adds:
 - A semantic/legibility eval for the specific “dramatic but hard to read / arbitrary giant date” failure mode.
 - Motif-diversity evals for object, route/map, data/diagram, typographic specimen, photomontage, and civic/safety archetypes.
 - A protected-reading-zone / contrast-channel heuristic and readability oracle for the “dramatic but unreadable” regression found in characterization posters.
-- Artifact-fidelity and historical-grounding rules for source ledgers, semantic image roles, encoded diagrams, functional microtype, prompt-leak prevention, and designer-to-move mapping.
+- Artifact-fidelity, historical-grounding, and period/genre breadth rules for source ledgers, semantic image roles, encoded diagrams, functional microtype, prompt-leak prevention, designer-to-move mapping, palette lineage, material process, and avoiding accidental late-New-Wave anchoring.
 - Before/after visual evidence for the intended output shift.
 
 ## Why
@@ -147,6 +147,23 @@ Added:
 
 Evidence: `eval-runs/current-round10-artifact-integrity-20260615/` has `with_skill=1.0`, `without_skill=0.2`, `ablation:no-artifact-fidelity=0.2`, `ablation:no-historical-grounding=0.6` across the five new objective cases. Two materialized copied-skill ablations also fail as intended.
 
+## New period/genre breadth evals
+
+Added ten round-11 cases for the remaining after-image issues:
+
+- accidental late-1960s/1980s anchoring;
+- black/white/red-or-orange palette narrowing;
+- typographic violence overuse;
+- visible web-grid/card scaffolding;
+- weak lithographic/material surface;
+- systems-diagram overuse;
+- visible citation instead of embodied historical reference;
+- weak photomontage authorship;
+- insufficient Hofmann/Ruder restraint;
+- missing genre breadth, especially Geigy/scientific plates.
+
+Each has a paired ablation (`no-period-lineage-selection`, `no-palette-lineage-breadth`, `no-object-poster-restraint`, `no-print-proportion-audit`, `no-material-process-surface`, `no-diagram-restraint`, `no-embodied-reference-discipline`, `no-photomontage-authorship`, `no-restraint-as-drama`, `no-genre-breadth-selection`).
+
 ## Testing
 
 Commands run:
@@ -164,7 +181,7 @@ git diff --check
 
 Results:
 
-- Manifest validates: 46 cases, 14 ablations.
+- Manifest validates: 56 cases, 24 ablations.
 - Holdout dry-run prepare emits 14 hidden-prompt task rows: 7 holdout cases x with/without skill.
 - Combined visible tune suite in `eval-runs/current-full-plus-round7-boundary-20260613/`:
   - `with_skill`: 1.000 objective / 1.000 combined

@@ -53,3 +53,20 @@ Materialized copied-skill ablations:
 | `pos-historical-rhythm-public-concert` | removed historical-grounding/designer-to-move section | `0.0` |
 
 Interpretation: output cases discriminate strongly. The audit fixture is intentionally saturated because its prompt names the defects; it is useful as regression coverage, not lift evidence.
+
+## Round-11 period/genre breadth coverage
+
+Added ten additional cases and paired ablations for the remaining after-image issues:
+
+| Issue | Case | Ablation |
+|---|---|---|
+| Accidental late-New-Wave time anchoring | `pos-period-lineage-travel-photomontage` | `no-period-lineage-selection` |
+| Black/white/red-or-orange palette narrowing | `pos-palette-lineage-lake-travel` | `no-palette-lineage-breadth` |
+| Typographic violence overuse | `pos-object-poster-typographic-restraint` | `no-object-poster-restraint` |
+| Web-grid / card scaffolding | `pos-print-proportion-no-web-grid` | `no-print-proportion-audit` |
+| Weak lithographic/material process | `pos-material-process-lithographic-market` | `no-material-process-surface` |
+| Systems diagram overuse | `pos-diagram-restraint-theatre-figure-ground` | `no-diagram-restraint` |
+| Visible citation instead of embodied reference | `pos-embodied-reference-no-visible-citation` | `no-embodied-reference-discipline` |
+| Weak photomontage authorship | `pos-photomontage-authorship-editorial` | `no-photomontage-authorship` |
+| Insufficient restraint | `pos-hofmann-restraint-two-contrasts` | `no-restraint-as-drama` |
+| Missing genre breadth / Geigy scientific lineage | `pos-genre-breadth-geigy-scientific` | `no-genre-breadth-selection` |

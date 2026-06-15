@@ -191,7 +191,7 @@ BASE_PROMPT = """Use the loaded swiss-poster skill to create one standalone post
 Return ONLY a complete self-contained HTML document beginning with <!doctype html>. Do not use Markdown fences. Do not explain.
 
 Canvas and rendering:
-- Design for an 840px wide by 1200px tall browser screenshot.
+- Design for a {width}px wide by {height}px tall browser screenshot. Match this artifact shape; do not collapse landscape, thread, or one-page formats into the same portrait template.
 - Use internal CSS only; do not fetch scripts, fonts, Tailwind CDN, or remote assets.
 - Use system sans-serif/monospace fallbacks if needed.
 
@@ -280,6 +280,19 @@ def copy_row_assets(row: dict) -> list[dict]:
     return copied
 
 
+def row_canvas(row: dict) -> tuple[int, int]:
+    sizes = {
+        "cloudflare-london-user-group": (840, 1856),
+        "cloudflare-london-tweets": (840, 2200),
+        "cloudflare-london-recap": (840, 1796),
+        "cloudflare-london-onepage": (840, 1188),
+        "cloudflare-london-landscape": (1200, 800),
+        "cloudflare-connect-london": (1200, 800),
+        "slop-to-hillclimbing": (1200, 840),
+    }
+    return sizes.get(row["id"], (840, 1200))
+
+
 def resources_prompt(row: dict, copied_assets: list[dict]) -> str:
     source_material = row.get("source_material", [])
     if not copied_assets and not source_material:
@@ -302,7 +315,8 @@ def run_pi(row: dict, force: bool = False) -> dict:
     raw_path = run_dir / "raw.txt"
     if html_path.exists() and not force:
         return {"id": row["id"], "cached": True, "assets": len(copied_assets)}
-    prompt = BASE_PROMPT.format(title=row["title"], brief=row["brief"], resources=resources_prompt(row, copied_assets))
+    width, height = row_canvas(row)
+    prompt = BASE_PROMPT.format(title=row["title"], brief=row["brief"], resources=resources_prompt(row, copied_assets), width=width, height=height)
     cmd = [
         "pi",
         "--thinking", "minimal",
@@ -348,12 +362,13 @@ def render_current() -> None:
     for row in POSTERS:
         html_path = CURRENT / row["id"] / "poster.html"
         png_path = CURRENT / row["id"] / "poster.png"
+        width, height = row_canvas(row)
         subprocess.run([
             chrome,
             "--headless=new",
             "--disable-gpu",
             "--hide-scrollbars",
-            "--window-size=840,1200",
+            f"--window-size={width},{height}",
             f"--screenshot={png_path}",
             f"file://{html_path}",
         ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, timeout=60)
@@ -404,6 +419,7 @@ def make_sheet() -> None:
             "current_png": str(CURRENT / row["id"] / "poster.png"),
             "prompt_provenance": row["prompt_provenance"],
             "brief": row["brief"],
+            "canvas": {"width": row_canvas(row)[0], "height": row_canvas(row)[1]},
             "assets": [
                 {"source": asset["path"], "local": str(CURRENT / row["id"] / "assets" / asset_name(asset["path"])), "alt": asset.get("alt", "")}
                 for asset in row.get("assets", [])

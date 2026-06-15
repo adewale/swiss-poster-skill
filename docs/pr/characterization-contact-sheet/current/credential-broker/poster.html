@@ -6,153 +6,169 @@
 <title>Credential Broker</title>
 <style>
   :root{
-    --paper: rgb(250,250,249);
-    --ink: rgb(28,25,23);
-    --muted: rgba(28,25,23,.64);
-    --quiet: rgba(28,25,23,.34);
-    --dark: rgb(41,37,36);
-    --accent: rgb(243,128,32);
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --soft:rgba(28,25,23,.12);
+    --dark:#292524;
+    --orange:#F38020;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--paper);font-family:"Helvetica Neue",Arial,system-ui,sans-serif;color:var(--ink)}
+  html,body{margin:0;background:#d6d3d1}
+  body{font-family:Arial,Helvetica,system-ui,sans-serif;color:var(--ink)}
   .poster{
-    width:840px;height:1200px;position:relative;overflow:hidden;background:var(--paper);
-    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,50px);
+    width:840px;height:1200px;margin:0 auto;position:relative;overflow:hidden;
+    background:var(--paper);display:grid;grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
   }
-  .gridlines{
-    position:absolute;inset:0;pointer-events:none;opacity:.12;
-    background-image:
-      linear-gradient(90deg, var(--ink) 0 1px, transparent 1px),
-      linear-gradient(0deg, var(--ink) 0 1px, transparent 1px);
-    background-size:70px 50px;
+  .grid{
+    position:absolute;inset:0;opacity:.22;pointer-events:none;
+    background-image:linear-gradient(90deg,rgba(28,25,23,.08) 1px,transparent 1px);
+    background-size:70px 100%;
   }
   .sandbox{
-    grid-column:1/8;grid-row:1/25;background:var(--dark);position:relative;overflow:hidden;
+    grid-column:1/8;grid-row:1/13;background:var(--dark);position:relative;overflow:hidden;
   }
   .broker{
-    grid-column:8/13;grid-row:1/25;background:var(--paper);position:relative;overflow:hidden;
-    border-left:18px solid var(--accent);
+    grid-column:7/13;grid-row:3/11;background:var(--orange);position:relative;z-index:4;
+    clip-path:polygon(10% 0,100% 0,100% 100%,0 100%);
   }
-  .giant{
-    position:absolute;left:-56px;top:22px;font-weight:800;font-size:176px;line-height:.78;letter-spacing:-.095em;
-    color:rgba(250,250,249,.08);text-transform:uppercase;white-space:pre;user-select:none;
+  .boundary{
+    position:absolute;left:472px;top:-80px;width:28px;height:1360px;background:var(--paper);
+    transform:rotate(8deg);z-index:8;
   }
-  .orange-slab{
-    position:absolute;width:560px;height:260px;background:var(--accent);left:385px;top:528px;
-    transform:skewY(-13deg);transform-origin:left top;z-index:3;
+  .boundary:before,.boundary:after{
+    content:"";position:absolute;left:7px;top:0;width:4px;height:100%;
+    background:repeating-linear-gradient(to bottom,var(--ink) 0 16px,transparent 16px 32px);
+    opacity:.75;
   }
-  .orange-slab:after{
-    content:"";position:absolute;left:86px;top:104px;width:360px;height:18px;background:var(--paper);
-    box-shadow:0 44px 0 var(--paper),0 88px 0 var(--paper);
+  .boundary:after{left:17px;opacity:.28}
+  .ghost{
+    position:absolute;left:-58px;bottom:42px;font-size:210px;line-height:.78;font-weight:900;
+    letter-spacing:-.09em;color:rgba(250,250,249,.08);text-transform:uppercase;
+    transform:rotate(-90deg);transform-origin:left bottom;white-space:nowrap;
   }
-  .boundary-label{
-    position:absolute;left:526px;top:36px;writing-mode:vertical-rl;transform:rotate(180deg);
-    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;z-index:10;
+  .rings{
+    position:absolute;right:-210px;top:110px;width:620px;height:620px;border:32px solid rgba(28,25,23,.18);
+    border-radius:50%;z-index:5;
   }
-  .title{
-    grid-column:2/12;grid-row:3/8;z-index:20;align-self:start;
-    font-size:104px;line-height:.82;letter-spacing:-.07em;font-weight:800;color:var(--paper);
-    max-width:690px;
+  .rings:before,.rings:after{content:"";position:absolute;border-radius:50%;inset:82px;border:18px solid rgba(28,25,23,.18)}
+  .rings:after{inset:190px;border-width:10px;background:rgba(250,250,249,.18)}
+  .tokens{
+    position:absolute;left:44px;top:470px;width:330px;height:380px;z-index:6;
   }
-  .title span{display:block}
-  .title .light{font-weight:300;letter-spacing:-.08em}
+  .token{
+    height:38px;background:var(--paper);margin:0 0 18px 0;position:relative;
+  }
+  .token:nth-child(2){width:78%;margin-left:52px}
+  .token:nth-child(3){width:112%;margin-left:-22px}
+  .token:nth-child(4){width:64%;margin-left:112px}
+  .token:after{
+    content:"";position:absolute;right:-74px;top:15px;width:74px;height:8px;background:var(--orange);
+  }
+  .cut{
+    position:absolute;left:410px;top:0;width:260px;height:1200px;background:var(--paper);
+    transform:skewX(-8deg);z-index:3;
+  }
+  header{
+    grid-column:1/13;grid-row:1/4;z-index:30;padding:52px 56px 0 56px;position:relative;
+  }
+  .kicker{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(250,250,249,.72);
+    margin-bottom:22px;font-weight:700;
+  }
+  h1{
+    margin:0;color:var(--paper);font-size:116px;line-height:.82;letter-spacing:-.075em;
+    font-weight:900;max-width:620px;
+  }
+  .title-break{display:block;color:var(--orange)}
   .subtitle{
-    grid-column:2/7;grid-row:10/13;z-index:20;color:var(--paper);
-    font-size:25px;line-height:1.08;letter-spacing:-.02em;font-weight:500;
-  }
-  .meta-left{
-    grid-column:2/6;grid-row:17/20;z-index:20;color:rgba(250,250,249,.76);
-    font-size:11px;line-height:1.55;letter-spacing:.16em;text-transform:uppercase;
-  }
-  .agent{
-    position:absolute;left:94px;bottom:125px;width:170px;height:170px;border:12px solid var(--paper);z-index:8;
-  }
-  .agent:before{
-    content:"untrusted\Aagent\Asandbox";white-space:pre;position:absolute;left:18px;top:18px;
-    color:var(--paper);font-size:13px;line-height:1.15;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
-  }
-  .agent:after{
-    content:"";position:absolute;right:-120px;top:68px;width:120px;height:12px;background:var(--paper);
-  }
-  .lock{
-    position:absolute;right:74px;top:345px;width:164px;height:190px;border:14px solid var(--ink);z-index:12;background:var(--paper);
-  }
-  .lock:before{
-    content:"";position:absolute;left:28px;top:-92px;width:80px;height:95px;border:14px solid var(--ink);border-bottom:0;
-  }
-  .lock:after{
-    content:"";position:absolute;left:58px;top:62px;width:28px;height:70px;background:var(--accent);
-  }
-  .right-title{
-    grid-column:9/13;grid-row:15/17;z-index:20;font-size:38px;line-height:.9;letter-spacing:-.04em;font-weight:800;
+    position:absolute;right:56px;top:64px;width:242px;color:var(--ink);
+    font-size:20px;line-height:1.12;font-weight:700;z-index:40;
   }
   .facts{
-    grid-column:9/13;grid-row:17/22;z-index:20;padding-right:40px;
-    display:grid;gap:16px;align-content:start;
+    grid-column:8/13;grid-row:5/10;z-index:35;padding:38px 42px 0 18px;position:relative;
   }
-  .fact{border-top:2px solid var(--ink);padding-top:9px}
-  .fact b{display:block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px}
-  .fact span{display:block;font-size:20px;line-height:1.05;letter-spacing:-.025em}
-  .micro{
-    position:absolute;right:36px;bottom:34px;width:250px;color:var(--quiet);
-    font-size:10px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;z-index:20;
+  .fact{border-top:2px solid rgba(28,25,23,.55);padding:14px 0 17px 0}
+  .fact b{display:block;font-size:30px;line-height:.95;letter-spacing:-.04em}
+  .fact span{display:block;margin-top:7px;font-size:12px;line-height:1.25;letter-spacing:.08em;text-transform:uppercase}
+  .agent{
+    position:absolute;left:54px;bottom:126px;width:288px;z-index:20;color:var(--paper);
   }
+  .agent .label,.meta .label{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;opacity:.68;
+  }
+  .agent p{
+    font-size:18px;line-height:1.22;margin:14px 0 0 0;color:rgba(250,250,249,.86);
+  }
+  .meta{
+    position:absolute;left:56px;bottom:50px;z-index:30;color:var(--paper);
+    display:grid;grid-template-columns:128px 128px 128px;gap:18px;
+  }
+  .meta div{font-size:12px;line-height:1.25;color:rgba(250,250,249,.7)}
   .cta{
-    position:absolute;left:478px;top:828px;z-index:30;background:var(--ink);color:var(--paper);
-    padding:18px 22px 16px 22px;font-size:13px;line-height:1;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+    position:absolute;right:56px;bottom:54px;z-index:40;background:var(--ink);color:var(--paper);
+    width:304px;padding:20px 22px 22px 22px;font-size:24px;line-height:1.02;font-weight:900;
+    letter-spacing:-.03em;
   }
-  .nodes{position:absolute;inset:0;z-index:5;pointer-events:none}
-  .node{position:absolute;width:16px;height:16px;background:var(--accent)}
-  .n1{left:252px;top:938px}.n2{left:344px;top:938px}.n3{left:432px;top:700px}.n4{left:630px;top:642px}
-  .thin{position:absolute;height:2px;background:rgba(250,250,249,.45);transform-origin:left center}
-  .l1{left:264px;top:946px;width:88px}
-  .l2{left:350px;top:941px;width:270px;transform:rotate(-48deg);background:var(--accent);height:6px}
-  .l3{left:440px;top:706px;width:200px;transform:rotate(-17deg);background:var(--accent);height:6px}
-  .labels div{
-    position:absolute;z-index:21;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--ink)
+  .cta small{
+    display:block;margin-top:11px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+    color:rgba(250,250,249,.72);
   }
-  .lb1{left:606px;top:584px}.lb2{left:604px;top:790px}.lb3{left:83px;top:1070px;color:var(--paper)!important}
+  .side{
+    position:absolute;right:20px;top:512px;z-index:50;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:rgba(28,25,23,.56);
+  }
+  .node{
+    position:absolute;width:22px;height:22px;background:var(--paper);border:5px solid var(--ink);z-index:11;
+  }
+  .n1{left:392px;top:492px}.n2{left:427px;top:690px}.n3{left:476px;top:870px;background:var(--orange)}
+  .rule{
+    position:absolute;height:4px;background:var(--ink);z-index:10;transform-origin:left center;
+  }
+  .r1{left:404px;top:502px;width:210px;transform:rotate(20deg)}
+  .r2{left:438px;top:702px;width:240px;transform:rotate(-15deg)}
+  .r3{left:486px;top:882px;width:184px;transform:rotate(-35deg)}
 </style>
 </head>
 <body>
-<main class="poster" aria-label="Credential Broker poster">
+<main class="poster" data-lineage="geigy-scientific" data-reference="ruder-typographic-function">
+  <div class="grid" aria-hidden="true"></div>
   <section class="sandbox" aria-hidden="true">
-    <div class="giant">NO<br>KEYS<br>IN<br>HERE</div>
+    <div class="ghost">sandbox</div>
   </section>
-  <section class="broker" aria-hidden="true"></section>
-  <div class="gridlines" aria-hidden="true"></div>
-  <div class="orange-slab" aria-hidden="true"></div>
-  <div class="boundary-label">trust boundary</div>
-  <h1 class="title" data-critical="title"><span>Credential</span><span class="light">Broker</span></h1>
-  <p class="subtitle" data-critical="body">Secrets stay outside the sandbox. A trusted outbound worker spends capabilities for the agent, only under declared policy.</p>
-  <div class="meta-left" data-critical="date">
-    Outbound worker pattern<br>
-    Brokered access<br>
-    Intercepting proxy<br>
-    Least privilege by design
+  <div class="cut" aria-hidden="true"></div>
+  <section class="broker" aria-hidden="true">
+    <div class="rings"></div>
+  </section>
+  <div class="boundary" aria-hidden="true" data-encoding="trust boundary → diagonal white cut"></div>
+  <header>
+    <div class="kicker">Outbound worker pattern</div>
+    <h1 data-critical="title">Credential<span class="title-break">Broker</span></h1>
+    <div class="subtitle" data-critical="body">A trusted spending layer between an untrusted agent and protected capability.</div>
+  </header>
+  <div class="tokens" aria-hidden="true" data-encoding="requested capabilities → broker-mediated bars">
+    <div class="token"></div><div class="token"></div><div class="token"></div><div class="token"></div>
   </div>
-  <div class="agent" aria-hidden="true"></div>
-  <div class="lock" aria-hidden="true"></div>
-  <div class="nodes" aria-hidden="true">
-    <span class="node n1"></span><span class="node n2"></span><span class="node n3"></span><span class="node n4"></span>
-    <span class="thin l1"></span><span class="thin l2"></span><span class="thin l3"></span>
-  </div>
-  <h2 class="right-title">held<br>spent<br>logged</h2>
+  <div class="node n1" aria-hidden="true"></div><div class="node n2" aria-hidden="true"></div><div class="node n3" aria-hidden="true"></div>
+  <div class="rule r1" aria-hidden="true"></div><div class="rule r2" aria-hidden="true"></div><div class="rule r3" aria-hidden="true"></div>
   <section class="facts" data-critical="body">
-    <div class="fact"><b>01 outside</b><span>Credentials never enter the untrusted runtime.</span></div>
-    <div class="fact"><b>02 broker</b><span>A trusted service holds tokens and performs the action.</span></div>
-    <div class="fact"><b>03 policy</b><span>Scope, rate, destination, and approval are enforced at the boundary.</span></div>
-    <div class="fact"><b>04 record</b><span>Every spend becomes an auditable decision.</span></div>
+    <div class="fact"><b>Secrets stay out</b><span>No keys inside the agent workspace.</span></div>
+    <div class="fact"><b>Broker spends</b><span>Requests are fulfilled by a trusted service.</span></div>
+    <div class="fact"><b>Terms apply</b><span>Scope, rate, approval, expiry, and logging.</span></div>
+    <div class="fact"><b>Proxy intercepts</b><span>Capability crosses only through policy.</span></div>
   </section>
-  <div class="labels" aria-hidden="true">
-    <div class="lb1">vaulted capability</div>
-    <div class="lb2">approved egress</div>
-    <div class="lb3">request without possession</div>
-  </div>
-  <div class="cta" data-critical="cta">Give agents power, not keys.</div>
-  <div class="micro">
-    Capabilities are delegated at execution time. Revocation happens at the broker. The sandbox sees intent and result, not reusable authority.
-  </div>
+  <section class="agent" data-critical="body">
+    <div class="label">Untrusted side</div>
+    <p>The agent can ask. It cannot hold the credential. The boundary is architecture, not etiquette.</p>
+  </section>
+  <section class="meta" data-critical="date">
+    <div><span class="label">01</span><br>Agent sandbox</div>
+    <div><span class="label">02</span><br>Trusted broker</div>
+    <div><span class="label">03</span><br>External service</div>
+  </section>
+  <div class="side">trust boundary</div>
+  <div class="cta" data-critical="cta">Keep power outside the box.<small>Delegate access, not secrets</small></div>
 </main>
 </body>
 </html>
