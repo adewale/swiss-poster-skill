@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Harness Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* ── Brand mark — the Flue glyph rebuilt from the favicon grid ── */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* TITLE — the Flue wordmark + mark lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 14px;
+    z-index: 4;
+  }
+  .title .mark { width: 122px; height: 122px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 178px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── Equation band — the whole idea, full bleed blue ── */
+  .equation {
+    background: var(--blue);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 20px 64px 24px 64px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 3;
+  }
+  .equation .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250, 250, 249, 0.88);
+    border-top: 1.5px solid var(--stone-50);
+    padding-top: 7px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .equation .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 78px;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    color: var(--stone-50);
+  }
+  .equation .eq .op { color: rgba(250, 250, 249, 0.55); font-weight: 300; }
+  .equation .eq .harness {
+    font-style: italic;
+    box-shadow: inset 0 -10px 0 rgba(250, 250, 249, 0.25);
+  }
+  .equation .gloss {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16.5px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: rgba(250, 250, 249, 0.92);
+    margin-top: 14px;
+    max-width: 80ch;
+  }
+  .equation .gloss b { font-weight: 700; }
+
+  /* Section markers */
+  .bmark {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 14px;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 6px;
+  }
+  .bmark .n {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    padding: 3px 11px 5px 11px;
+    margin-top: -6px;
+  }
+  .bmark .n.blue { background: var(--blue); }
+  .bmark .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    padding-top: 6px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── 01 THE SHIFT ─────────────────────────────────────────────── */
+  .shift { position: relative; z-index: 4; margin-bottom: 18px; }
+  .shift-grid {
+    display: grid;
+    grid-template-columns: 1fr 64px 1fr;
+    align-items: stretch;
+  }
+  .shift-panel {
+    border: 1.5px solid var(--stone-900);
+    padding: 14px 18px 14px 18px;
+    display: flex;
+    flex-direction: column;
+  }
+  .shift-panel.old { border-style: dashed; border-color: var(--stone-500); }
+  .shift-panel .h {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .shift-panel.new .h { color: var(--blue-2); }
+
+  /* old: a rigid, hand-wired pipeline */
+  .pipe { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 9px; }
+  .pipe .step {
+    border: 1.5px solid var(--stone-700);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--stone-700);
+    padding: 7px 10px;
+    text-align: center;
+    position: relative;
+  }
+  .pipe .step.call { background: var(--stone-100); }
+  .pipe .down {
+    text-align: center;
+    color: var(--stone-500);
+    font-size: 14px;
+    line-height: 0.4;
+  }
+
+  /* new: the agent loop inside a harness ring */
+  .loop { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
+  .loop .task, .loop .done {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .loop .ring {
+    border: 2px solid var(--blue);
+    background: rgba(0, 122, 255, 0.06);
+    width: 100%;
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .loop .ring .cyc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue-2);
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+  .loop .ring .cyc .turn { color: var(--blue); font-weight: 700; font-size: 17px; }
+  .loop .ring .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+  }
+  .loop .arr { color: var(--blue); font-size: 15px; line-height: 0.4; }
+
+  .shift-cap {
+    margin-top: 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--stone-500);
+    line-height: 1.35;
+    text-align: center;
+  }
+  .shift-panel.new .shift-cap { color: var(--blue-2); }
+  .shift-mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 200;
+    font-size: 52px;
+    color: var(--blue);
+  }
+  .shift-pull {
+    margin-top: 16px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--stone-900);
+    text-align: center;
+  }
+  .shift-pull b { font-weight: 700; }
+  .shift-pull em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* ── 02 THE STACK ─────────────────────────────────────────────── */
+  .stack { position: relative; z-index: 4; margin-bottom: 18px; }
+  .harness-box {
+    border: 2.5px solid var(--blue);
+    position: relative;
+  }
+  .harness-head {
+    background: var(--blue);
+    color: var(--stone-50);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 9px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .harness-head .what {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250, 250, 249, 0.85);
+  }
+  .harness-inner {
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(0, 122, 255, 0.05);
+  }
+  .lyr { border: 1.5px solid var(--stone-700); background: var(--stone-50); }
+  .lyr-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone-900);
+    padding: 8px 14px;
+    border-bottom: 1.5px solid var(--stone-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .lyr-name .tiny {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--blue-2);
+  }
+  .lyr-body {
+    padding: 12px 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--stone-700);
+  }
+  .lyr-body b { color: var(--stone-900); font-weight: 600; }
+  .lyr-body code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: var(--stone-100);
+    padding: 1px 5px;
+    color: var(--blue-2);
+  }
+  .model-box { display: flex; flex-direction: column; }
+  .model-box .lyr-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .model-box .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--stone-900);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .sandbox-box { padding: 14px; }
+  .sandbox-box > .lyr-name { border: 0; padding: 0 0 12px 0; }
+  .fs-box { border: 1.5px dashed var(--stone-400); }
+  .stack-foot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    text-align: center;
+    margin-top: 12px;
+  }
+  .stack-foot b { color: var(--blue-2); }
+
+  /* ── 03 BUILD ONE ─────────────────────────────────────────────── */
+  .build {
+    position: relative;
+    z-index: 4;
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    column-gap: 28px;
+  }
+  .build-intro {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    margin-bottom: 14px;
+  }
+  .build-intro b { font-weight: 700; }
+  .build-intro em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .parts {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: var(--stone-700);
+  }
+  .parts .pair {
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px dotted var(--stone-300);
+    padding: 2px 0;
+    gap: 12px;
+  }
+  .parts .pair:last-child { border-bottom: 0; }
+  .parts .k { color: var(--blue-2); font-weight: 600; flex: 0 0 96px; }
+  .parts .v { color: var(--stone-900); flex: 1; }
+  .parts .v .tail {
+    color: var(--stone-500);
+    font-style: italic;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+  }
+
+  .code-block {
+    background: var(--stone-900);
+    color: var(--stone-50);
+    padding: 14px 18px 16px 18px;
+    align-self: start;
+  }
+  .code-block .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-lt);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .code-block .label .dim { color: rgba(250,250,249,0.4); }
+  .code-block pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--stone-50);
+    white-space: pre;
+  }
+  .code-block pre .kw { color: var(--blue-lt); font-weight: 600; }
+  .code-block pre .st { color: #B6E0AA; }
+  .code-block pre .fn { color: var(--stone-50); font-weight: 600; }
+  .code-block pre .pr { color: #7FC4FF; }
+  .code-block pre .cm { color: rgba(250,250,249,0.45); font-style: italic; }
+
+  /* ── 04 BATTERIES INCLUDED ────────────────────────────────────── */
+  .feat { position: relative; z-index: 4; }
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--stone-300);
+  }
+  .feat-cell {
+    border-bottom: 1px solid var(--stone-200);
+    border-right: 1px solid var(--stone-200);
+    padding: 9px 12px 10px 0;
+  }
+  .feat-cell:nth-child(5n) { border-right: 0; }
+  .feat-cell h4 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    margin-bottom: 3px;
+  }
+  .feat-cell h4 .b { color: var(--blue); }
+  .feat-cell p {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.3;
+    color: var(--stone-500);
+  }
+  .packages {
+    margin-top: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--stone-500);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .packages .pk-label {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    margin-right: 4px;
+  }
+  .packages b { color: var(--stone-900); font-weight: 600; }
+  .packages .sep { color: var(--blue); }
+
+  /* Lineage */
+  .lineage {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 56px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border-bottom: 1px dotted var(--stone-300);
+    padding-bottom: 8px;
+  }
+  .lineage .tag {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    margin-right: 6px;
+    flex: 0 0 auto;
+  }
+  .lineage .phrase { flex: 1; }
+  .lineage .phrase b { color: var(--stone-900); font-weight: 700; letter-spacing: 0.1em; }
+  .lineage .arrow { color: var(--blue); font-weight: 700; margin: 0 2px; }
+  .lineage .phrase:last-of-type { text-align: right; flex: 0 0 auto; }
+  .lineage .phrase:last-of-type b { color: var(--blue-2); }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · Agent Harness Framework</div>
+      <div class="meta">programmable typescript runtime</div>
+    </div>
+    <div class="right">
+      <div>withastro · Apache-2.0</div>
+      <div class="meta">flueframework.com</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+
+  <!-- EQUATION BAND -->
+  <section class="equation">
+    <div class="label"><span>The whole idea</span><span>not another SDK</span></div>
+    <div class="eq">Agent <span class="op">=</span> Model <span class="op">+</span> <span class="harness">Harness</span></div>
+    <div class="gloss">The model <b>reasons.</b> The harness gives it context, tools, a sandbox, and a loop to run on — so it can <b>act, remember, and recover.</b> Flue is the harness.</div>
+  </section>
+
+  <!-- 01 THE SHIFT -->
+  <section class="shift">
+    <div class="bmark">
+      <span class="n blue">01</span>
+      <span class="meta"><span>The shift / why a harness</span><span>scripted steps → an autonomous loop</span></span>
+    </div>
+    <div class="shift-grid">
+      <div class="shift-panel old">
+        <div class="h"><span>The old way</span><span>orchestration</span></div>
+        <div class="pipe">
+          <div class="step">task</div>
+          <div class="down">↓</div>
+          <div class="step call">prompt → parse</div>
+          <div class="down">↓</div>
+          <div class="step call">prompt → parse</div>
+          <div class="down">↓</div>
+          <div class="step">output</div>
+        </div>
+        <div class="shift-cap">You script every step. The model is a function you call.</div>
+      </div>
+      <div class="shift-mid">→</div>
+      <div class="shift-panel new">
+        <div class="h"><span>With a harness</span><span>autonomy</span></div>
+        <div class="loop">
+          <div class="task">a task ↓</div>
+          <div class="ring">
+            <span class="arr">↻</span>
+            <span class="cyc"><span class="turn">reason → act → observe</span><br><span class="tag">the agent loop · tools · sandbox</span></span>
+            <span class="arr">↺</span>
+          </div>
+          <div class="done">↓ done</div>
+        </div>
+        <div class="shift-cap">You give a task. The agent decides the steps and runs the loop.</div>
+      </div>
+    </div>
+    <div class="shift-pull">
+      You give it <b>a task — not a pre-defined series of steps —</b> and <em>trust it to finish.</em>
+    </div>
+  </section>
+
+  <!-- 02 THE STACK -->
+  <section class="stack">
+    <div class="bmark">
+      <span class="n">02</span>
+      <span class="meta"><span>The stack / the new architecture</span><span>filesystem · sandbox · harness · model</span></span>
+    </div>
+    <div class="harness-box">
+      <div class="harness-head">
+        <span>HARNESS · Flue</span>
+        <span class="what">context · agent loop · tools · durable state</span>
+      </div>
+      <div class="harness-inner">
+        <div class="lyr model-box">
+          <div class="lyr-name">Model <span class="tiny">the brain</span></div>
+          <div class="lyr-body">
+            <div class="big">claude-sonnet-4-6</div>
+            Reasons over the task and <b>picks the next action.</b> Swap any model — Flue stays the same.
+          </div>
+        </div>
+        <div class="lyr sandbox-box">
+          <div class="lyr-name">Sandbox <span class="tiny">secure · isolated</span></div>
+          <div class="lyr-body" style="padding:0 0 12px 0">Where the agent does <b>real work</b> — run code, call tools, edit files — without touching your machine.</div>
+          <div class="fs-box">
+            <div class="lyr-name" style="border-bottom:1.5px dashed var(--stone-300)">Filesystem <span class="tiny">the workspace</span></div>
+            <div class="lyr-body">Files, <b>skills</b> (<code>SKILL.md</code>), and the artifacts the agent reads and writes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stack-foot">Flue is the <b>harness</b> — the programmable layer between your model and the world</div>
+  </section>
+
+  <!-- 03 BUILD ONE -->
+  <section class="build">
+    <div class="left">
+      <div class="bmark">
+        <span class="n">03</span>
+        <span class="meta"><span>Build one / define an agent</span></span>
+      </div>
+      <div class="build-intro">
+        An agent is a small, <b>declarative</b> object: pick a model, hand it tools and skills, give it a sandbox, <em>describe the goal.</em>
+      </div>
+      <div class="parts">
+        <div class="pair"><span class="k">model</span><span class="v">the LLM that reasons</span></div>
+        <div class="pair"><span class="k">tools</span><span class="v">typed actions it can call <span class="tail">— your APIs</span></span></div>
+        <div class="pair"><span class="k">skills</span><span class="v">expertise it loads <span class="tail">— SKILL.md</span></span></div>
+        <div class="pair"><span class="k">sandbox</span><span class="v">where it runs safely <span class="tail">— local()</span></span></div>
+        <div class="pair"><span class="k">instructions</span><span class="v">the task, in plain words</span></div>
+      </div>
+    </div>
+    <section class="code-block">
+      <div class="label"><span>— agents/triage.ts</span><span class="dim">@flue/runtime</span></div>
+<pre><span class="kw">import</span> { <span class="fn">createAgent</span> } <span class="kw">from</span> <span class="st">'@flue/runtime'</span>;
+<span class="kw">import</span> { <span class="fn">local</span> } <span class="kw">from</span> <span class="st">'@flue/runtime/node'</span>;
+<span class="kw">import</span> triage <span class="kw">from</span> <span class="st">'../skills/triage/SKILL.md'</span>
+  <span class="kw">with</span> { type: <span class="st">'skill'</span> };
+<span class="kw">import</span> * <span class="kw">as</span> gh <span class="kw">from</span> <span class="st">'../tools/github.ts'</span>;
+
+<span class="kw">export default</span> <span class="fn">createAgent</span>(() => ({
+  <span class="pr">model</span>:   <span class="st">'anthropic/claude-sonnet-4-6'</span>,
+  <span class="pr">tools</span>:   [...gh],
+  <span class="pr">skills</span>:  [triage],
+  <span class="pr">sandbox</span>: <span class="fn">local</span>(),
+  <span class="pr">instructions</span>,  <span class="cm">// triage a bug, end to end</span>
+}));</pre>
+    </section>
+  </section>
+
+  <!-- 04 BATTERIES INCLUDED -->
+  <section class="feat">
+    <div class="bmark">
+      <span class="n blue">04</span>
+      <span class="meta"><span>Batteries included / the harness, unpacked</span><span>ten primitives, one runtime</span></span>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-cell"><h4>Agents</h4><p>Context that persists toward a goal</p></div>
+      <div class="feat-cell"><h4>Workflows</h4><p>Code-guided agent reasoning</p></div>
+      <div class="feat-cell"><h4>Sandboxes</h4><p>Secure, isolated execution</p></div>
+      <div class="feat-cell"><h4>Durable&nbsp;Exec</h4><p>Survive failures &amp; restarts</p></div>
+      <div class="feat-cell"><h4>Subagents</h4><p>Delegate to specialists</p></div>
+      <div class="feat-cell"><h4>Tools</h4><p>Typed actions for any API</p></div>
+      <div class="feat-cell"><h4>Skills</h4><p>Loadable expertise packages</p></div>
+      <div class="feat-cell"><h4>MCP&nbsp;Servers</h4><p>Connect external tools</p></div>
+      <div class="feat-cell"><h4>Observability</h4><p>Traces → OTel · Sentry</p></div>
+      <div class="feat-cell"><h4>Channels</h4><p>Slack · Teams · Discord · GitHub</p></div>
+    </div>
+    <div class="packages">
+      <span class="pk-label">Packages</span>
+      <b>@flue/runtime</b><span class="sep">·</span><b>@flue/cli</b><span class="sep">·</span><b>@flue/sdk</b><span class="sep">·</span><b>@flue/opentelemetry</b><span class="sep">·</span><b>@flue/postgres</b>
+    </div>
+  </section>
+
+  <!-- LINEAGE -->
+  <div class="lineage">
+    <span class="tag">The arc</span>
+    <span class="phrase"><b>raw API calls</b></span>
+    <span class="arrow">→</span>
+    <span class="phrase"><b>orchestration frameworks</b></span>
+    <span class="arrow">→</span>
+    <span class="phrase"><b>real agents · Claude Code · Codex</b></span>
+    <span class="arrow">→</span>
+    <span class="phrase"><b>a harness you program</b></span>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The model thinks; the <b>harness</b> lets it act, remember, and recover</div>
+    <div>withastro / Flue</div>
+  </div>
+
+</div>
+</body>
+</html>
