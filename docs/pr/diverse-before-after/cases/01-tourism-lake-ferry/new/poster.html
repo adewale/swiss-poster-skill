@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lake Sound Ferry</title>
+<style>
+  :root{
+    --paper:#f4efe3;
+    --ink:#1e2523;
+    --soft:#d8d1bd;
+    --lake:#2f7f98;
+    --deep:#17465a;
+    --mist:#e8e0cf;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#cfc7b5}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,1fr);
+    box-shadow:0 22px 60px rgba(30,37,35,.22);
+  }
+  .sky{
+    position:absolute;
+    inset:0 0 430px 0;
+    background:
+      linear-gradient(180deg,#e9e1cd 0%,#f5efdf 45%,#d9d2bf 100%);
+  }
+  .mountains{
+    position:absolute;
+    left:-70px;
+    top:130px;
+    width:980px;
+    height:420px;
+    background:var(--deep);
+    clip-path:polygon(0 76%,13% 46%,22% 62%,34% 28%,49% 68%,63% 35%,78% 70%,91% 42%,100% 78%,100% 100%,0 100%);
+    opacity:.94;
+  }
+  .mountains:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--paper);
+    clip-path:polygon(34% 28%,38% 44%,32% 41%,63% 35%,67% 50%,60% 48%,91% 42%,94% 55%,88% 53%);
+    opacity:.86;
+  }
+  .lake{
+    position:absolute;
+    left:-40px;
+    right:-40px;
+    top:475px;
+    height:430px;
+    background:
+      repeating-linear-gradient(176deg,rgba(244,239,227,.45) 0 2px,transparent 2px 18px),
+      linear-gradient(180deg,var(--lake),#69a0a7 58%,#bac6b5 100%);
+    transform:skewY(-3deg);
+    transform-origin:left top;
+  }
+  .photo-cut{
+    position:absolute;
+    left:92px;
+    top:372px;
+    width:650px;
+    height:345px;
+    overflow:hidden;
+    mix-blend-mode:multiply;
+    opacity:.72;
+    clip-path:polygon(0 8%,100% 0,88% 100%,7% 92%);
+  }
+  .photo-cut img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(1) contrast(1.35);
+  }
+  .photo-cut:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--lake);
+    mix-blend-mode:screen;
+    opacity:.55;
+  }
+  .wake{
+    position:absolute;
+    right:-180px;
+    top:610px;
+    width:760px;
+    height:220px;
+    border-top:24px solid rgba(244,239,227,.82);
+    border-bottom:10px solid rgba(244,239,227,.55);
+    transform:rotate(-11deg);
+  }
+  .ferry{
+    position:absolute;
+    right:78px;
+    top:545px;
+    width:285px;
+    height:112px;
+    background:var(--paper);
+    clip-path:polygon(0 62%,13% 32%,72% 32%,88% 52%,100% 60%,92% 80%,9% 80%);
+    box-shadow:0 14px 0 rgba(30,37,35,.18);
+  }
+  .ferry:before{
+    content:"";
+    position:absolute;
+    left:58px;
+    top:10px;
+    width:128px;
+    height:40px;
+    background:var(--ink);
+    clip-path:polygon(0 100%,10% 15%,78% 15%,100% 100%);
+  }
+  .ferry:after{
+    content:"";
+    position:absolute;
+    left:76px;
+    top:23px;
+    width:92px;
+    height:13px;
+    background:var(--paper);
+    box-shadow:34px 0 0 var(--paper),68px 0 0 var(--paper);
+  }
+  .mast{
+    position:absolute;
+    right:270px;
+    top:492px;
+    width:7px;
+    height:110px;
+    background:var(--ink);
+    transform:rotate(-5deg);
+  }
+  .title{
+    grid-column:2 / 12;
+    grid-row:2 / 6;
+    position:relative;
+    z-index:10;
+    font-size:98px;
+    line-height:.86;
+    letter-spacing:-.065em;
+    font-weight:800;
+  }
+  .title span{display:block}
+  .notice{
+    grid-column:2 / 6;
+    grid-row:7 / 9;
+    position:relative;
+    z-index:12;
+    font-size:14px;
+    line-height:1.22;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .time{
+    grid-column:2 / 7;
+    grid-row:16 / 20;
+    position:relative;
+    z-index:18;
+    background:var(--paper);
+    padding:22px 24px 18px 22px;
+    border-left:18px solid var(--lake);
+  }
+  .time .big{
+    font-size:116px;
+    line-height:.82;
+    letter-spacing:-.07em;
+    font-weight:800;
+  }
+  .time .small{
+    margin-top:10px;
+    font-size:22px;
+    line-height:1.02;
+    letter-spacing:-.02em;
+    font-weight:700;
+  }
+  .route{
+    grid-column:7 / 12;
+    grid-row:17 / 21;
+    position:relative;
+    z-index:16;
+    color:var(--paper);
+    background:var(--deep);
+    padding:24px 22px;
+    align-self:start;
+  }
+  .route .label{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.82;
+    margin-bottom:42px;
+    font-weight:700;
+  }
+  .route .places{
+    font-size:38px;
+    line-height:1;
+    letter-spacing:-.045em;
+    font-weight:800;
+  }
+  .cta{
+    grid-column:8 / 12;
+    grid-row:22 / 23;
+    position:relative;
+    z-index:20;
+    align-self:center;
+    font-size:29px;
+    line-height:1;
+    letter-spacing:-.035em;
+    font-weight:800;
+    padding-top:15px;
+    border-top:12px solid var(--lake);
+  }
+  .micro-a,.micro-b,.micro-c{
+    position:absolute;
+    z-index:11;
+    font-size:10px;
+    line-height:1.35;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:rgba(30,37,35,.58);
+  }
+  .micro-a{left:62px;bottom:72px}
+  .micro-b{right:62px;top:72px;text-align:right}
+  .micro-c{left:604px;top:300px;writing-mode:vertical-rl}
+  .pier-line{
+    position:absolute;
+    left:-90px;
+    bottom:180px;
+    width:980px;
+    height:20px;
+    background:var(--ink);
+    transform:rotate(-4deg);
+    z-index:8;
+  }
+  .pier-line:after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:34px;
+    width:980px;
+    height:7px;
+    background:rgba(30,37,35,.42);
+  }
+  .paper-grain{
+    pointer-events:none;
+    position:absolute;
+    inset:0;
+    z-index:40;
+    opacity:.18;
+    background-image:
+      radial-gradient(rgba(30,37,35,.18) .7px,transparent .8px),
+      radial-gradient(rgba(244,239,227,.75) .6px,transparent .7px);
+    background-size:9px 11px,13px 15px;
+    mix-blend-mode:multiply;
+  }
+  @media (max-width:900px){
+    body{place-items:start center}
+    .poster{transform-origin:top center;transform:scale(calc(100vw / 840));}
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Lake Sound Ferry travel poster">
+    <div class="sky" aria-hidden="true"></div>
+    <div class="mountains" aria-hidden="true"></div>
+    <div class="lake" aria-hidden="true"></div>
+    <div class="photo-cut" aria-hidden="true"><img src="lake-ferry.jpg" alt=""></div>
+    <div class="wake" aria-hidden="true"></div>
+    <div class="mast" aria-hidden="true"></div>
+    <div class="ferry" aria-hidden="true"></div>
+    <div class="pier-line" aria-hidden="true"></div>
+
+    <h1 class="title" data-critical="title"><span>Lake Sound</span><span>Ferry</span></h1>
+
+    <div class="notice" data-critical="body">
+      Public pier notice<br>
+      Summer route
+    </div>
+
+    <section class="time" data-critical="date">
+      <div class="big">18:30</div>
+      <div class="small">departure</div>
+    </section>
+
+    <section class="route" data-critical="body">
+      <div class="label">Lausanne to Vevey</div>
+      <div class="places">Lausanne<br>→ Vevey</div>
+    </section>
+
+    <div class="cta" data-critical="cta">See departures</div>
+
+    <div class="micro-a">Lac Léman service<br>Evening crossing</div>
+    <div class="micro-b">Quai public<br>Summer timetable</div>
+    <div class="micro-c">Alpine lake passage</div>
+    <div class="paper-grain" aria-hidden="true"></div>
+  </main>
+</body>
+</html>

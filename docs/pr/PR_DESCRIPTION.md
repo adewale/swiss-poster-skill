@@ -61,26 +61,16 @@ Source HTML for reproducing screenshots:
 
 ## Ablations
 
-Yes — `evals/shared-benchmark.json` now has 10 ablations:
+Yes — `evals/shared-benchmark.json` now has 26 ablations covering the original skill surface plus every major new guidance layer: output contract, dramatic recipe, anti-slop, communication-before-spectacle, subject archetypes, protected reading zones, contrast channels, artifact fidelity, historical grounding, period/genre selection, palette breadth, object-poster restraint, print proportion, material surface, diagram restraint, embodied references, photomontage authorship, restraint-as-drama, genre breadth, rendered-poster proof, and web-CTA filtering.
 
-1. `no-six-principles`
-2. `no-gotchas`
-3. `no-components`
-4. `no-tokens`
-5. `no-research`
-6. `no-output-contract`
-7. `no-dramatic-recipe`
-8. `no-anti-slop`
-9. `no-communication-before-spectacle`
-10. `no-subject-archetype-selection`
+Latest all-component ablation smoke:
 
-The new ablations specifically target the added PR surface:
+- Report: `docs/pr/ablation-studies/ABLATION_STUDY-20260616.md`
+- Raw summary: `docs/pr/ablation-studies/ablation-summary.json`
+- New generation run: `eval-runs/current-all-ablation-sentinels-20260616/`
+- Retry run for failed period baselines: `eval-runs/current-period-with-skill-retry-20260616/`
 
-- removing the output contract should regress implementability / SVG-only avoidance / mobile safety;
-- removing the dramatic recipe should regress back to tidy Swiss minimalism;
-- removing anti-slop should allow gradient/card/SaaS drift;
-- removing communication-before-spectacle should allow unreadable overlaps, arbitrary giant dates/numerals, and decorative anchors that do not communicate the subject;
-- removing subject-archetype selection should regress to the same dark-field/red-bar/cropped-word/ring-line recipe instead of choosing the archetype from the subject.
+Result: 25/25 ablation IDs covered with one targeted sentinel each. Six ablations produced objective regressions, sixteen instruction-simulated sentinels saturated/no-dropped, and three period/genre ablations are inconclusive because the current `with_skill` baseline still fails the strict marker oracle. Existing materialized copied-skill ablations remain the strongest causal evidence for contrast-channel, artifact-fidelity, and historical-grounding removals.
 
 ## New semantic/legibility eval
 
@@ -164,6 +154,27 @@ Added ten round-11 cases for the remaining after-image issues:
 
 Each has a paired ablation (`no-period-lineage-selection`, `no-palette-lineage-breadth`, `no-object-poster-restraint`, `no-print-proportion-audit`, `no-material-process-surface`, `no-diagram-restraint`, `no-embodied-reference-discipline`, `no-photomontage-authorship`, `no-restraint-as-drama`, `no-genre-breadth-selection`).
 
+## New rendered-poster proof eval
+
+Added `evals/oracles/rendered_poster_oracle.py` and `pos-rendered-critical-text-civic-notice`. The oracle renders extracted HTML in headless Chrome and checks `[data-critical]` elements for viewport bounds, center obstruction, readable font size, opacity, local pixel contrast, high-variance backing, and horizontal overflow. Targeted run: `eval-runs/current-round12-rendered-proof-20260615/` with `with_skill=1.0`, `without_skill=0.0`, `ablation:no-rendered-poster-proof=0.0`.
+
+## New Flue Framework readability / web-CTA eval
+
+A generated Flue Framework poster exposed two remaining gaps: source-support copy outside `[data-critical]` could still be unreadable (`locally` before `via CLI`), and website button copy could leak into poster CTA copy (`View Documentation`). The poster artifact was removed from PR evidence and converted into eval coverage:
+
+- `evals/oracles/flue_framework_oracle.py`
+- `evals/fixtures/round13-flue-framework/`
+- `pos-flue-framework-poster`
+- `round13-audit-flue-readability-cta`
+- ablation: `no-web-cta-filter`
+- note: `docs/pr/FLUE_EVAL_NOTE.md`
+
+Targeted run: `eval-runs/current-round13-flue-20260616/`; the audit case passes, while the positive generation case currently fails because the model put `data-critical` on 11px microcopy, which is useful evidence that the readability contract still needs work.
+
+## Diverse before/after contact sheet
+
+Added `docs/pr/diverse-before-after/` to address corpus bias and contact-sheet scale. It generates ten non-Cloudflare prompts across tourism, theatre, object/product, civic, scientific, political, market/lithographic, editorial photomontage, typographic specimen, and landscape travel. Each pair uses the same prompt with old skill from `origin/main` vs current skill, renders full-size PNG/HTML, and creates a high-resolution contact sheet plus full-size links in `index.html`.
+
 ## Testing
 
 Commands run:
@@ -181,7 +192,7 @@ git diff --check
 
 Results:
 
-- Manifest validates: 56 cases, 24 ablations.
+- Manifest validates: 59 cases, 26 ablations.
 - Holdout dry-run prepare emits 14 hidden-prompt task rows: 7 holdout cases x with/without skill.
 - Combined visible tune suite in `eval-runs/current-full-plus-round7-boundary-20260613/`:
   - `with_skill`: 1.000 objective / 1.000 combined

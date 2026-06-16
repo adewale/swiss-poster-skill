@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Housing Yes / Speculation No</title>
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --ink:#1f1c18;
+    --muted:rgba(31,28,24,.66);
+    --quiet:rgba(31,28,24,.28);
+    --accent:#2d6a4f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d0c3}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    color:var(--ink);
+    box-shadow:0 24px 70px rgba(0,0,0,.22);
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    gap:0;
+    padding:58px 54px 54px 54px;
+    z-index:5;
+  }
+  .house{
+    position:absolute;
+    left:88px;
+    top:150px;
+    width:560px;
+    height:560px;
+    background:var(--accent);
+    clip-path:polygon(50% 0,100% 34%,100% 100%,0 100%,0 34%);
+    z-index:1;
+  }
+  .house:before{
+    content:"";
+    position:absolute;
+    left:106px;
+    top:235px;
+    width:88px;
+    height:88px;
+    background:var(--paper);
+    box-shadow:135px 0 0 var(--paper),270px 0 0 var(--paper),
+               0 135px 0 var(--paper),135px 135px 0 var(--paper),270px 135px 0 var(--paper);
+    opacity:.95;
+  }
+  .slash{
+    position:absolute;
+    width:1060px;
+    height:58px;
+    background:var(--ink);
+    left:-120px;
+    top:458px;
+    transform:rotate(-31deg);
+    transform-origin:center;
+    z-index:3;
+  }
+  .ballot{
+    position:absolute;
+    right:-130px;
+    top:112px;
+    width:420px;
+    height:420px;
+    border:42px solid var(--ink);
+    border-radius:50%;
+    z-index:2;
+    opacity:.94;
+  }
+  .yes{
+    grid-column:1/8;
+    grid-row:1/3;
+    font-size:164px;
+    line-height:.78;
+    letter-spacing:-.075em;
+    font-weight:800;
+    z-index:10;
+  }
+  .no{
+    grid-column:7/13;
+    grid-row:6/8;
+    align-self:start;
+    justify-self:end;
+    font-size:214px;
+    line-height:.76;
+    letter-spacing:-.085em;
+    font-weight:800;
+    color:var(--accent);
+    z-index:10;
+  }
+  .title{
+    grid-column:1/10;
+    grid-row:8/10;
+    align-self:start;
+    font-size:62px;
+    line-height:.94;
+    letter-spacing:-.045em;
+    font-weight:700;
+    z-index:20;
+    max-width:650px;
+  }
+  .date{
+    grid-column:1/5;
+    grid-row:11/12;
+    align-self:start;
+    font-size:25px;
+    line-height:1.08;
+    font-weight:700;
+    z-index:20;
+  }
+  .facts{
+    grid-column:5/9;
+    grid-row:11/12;
+    align-self:start;
+    font-size:25px;
+    line-height:1.08;
+    font-weight:500;
+    z-index:20;
+  }
+  .cta{
+    grid-column:9/13;
+    grid-row:11/13;
+    align-self:start;
+    justify-self:end;
+    width:214px;
+    min-height:118px;
+    background:var(--accent);
+    color:var(--paper);
+    padding:18px 18px 16px;
+    font-size:42px;
+    line-height:.9;
+    letter-spacing:-.04em;
+    font-weight:800;
+    z-index:25;
+  }
+  .label{
+    position:absolute;
+    left:56px;
+    top:730px;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    transform:rotate(-90deg);
+    transform-origin:left top;
+    z-index:20;
+  }
+  .rules{
+    position:absolute;
+    inset:54px;
+    z-index:0;
+    background:
+      linear-gradient(90deg, transparent 0, transparent 60px, rgba(31,28,24,.055) 61px, transparent 62px);
+    background-size:61px 100%;
+  }
+  .block-a{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:390px;
+    height:300px;
+    background:rgba(45,106,79,.16);
+    z-index:0;
+  }
+  .block-b{
+    position:absolute;
+    right:54px;
+    bottom:258px;
+    width:236px;
+    height:26px;
+    background:var(--ink);
+    z-index:4;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Housing Yes / Speculation No political poster">
+    <div class="rules"></div>
+    <div class="block-a"></div>
+    <div class="house"></div>
+    <div class="ballot"></div>
+    <div class="slash"></div>
+    <div class="block-b"></div>
+    <div class="label">municipal vote</div>
+    <section class="grid">
+      <div class="yes">YES</div>
+      <div class="no">NO</div>
+      <h1 class="title">Housing Yes / Speculation No</h1>
+      <div class="date">Municipal vote<br>3 March</div>
+      <div class="facts">Protect rent<br>Build cooperatives</div>
+      <div class="cta">Vote<br>yes</div>
+    </section>
+  </main>
+</body>
+</html>

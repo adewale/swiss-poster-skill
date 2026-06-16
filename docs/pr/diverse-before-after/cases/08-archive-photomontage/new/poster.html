@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archive Room 4</title>
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --ink:#1c1917;
+    --muted:#78716c;
+    --accent:#8b5a2b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    box-shadow:0 24px 60px rgba(28,25,23,.28);
+    isolation:isolate;
+  }
+  .grain{
+    position:absolute;
+    inset:0;
+    opacity:.18;
+    pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg, rgba(28,25,23,.05) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(90deg, rgba(28,25,23,.035) 0 1px, transparent 1px 7px);
+    z-index:50;
+    mix-blend-mode:multiply;
+  }
+  .doc{
+    position:absolute;
+    left:-54px;
+    top:84px;
+    width:610px;
+    height:760px;
+    overflow:hidden;
+    z-index:4;
+    transform:rotate(-2.5deg);
+    background:#ddd6c9;
+  }
+  .doc img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(1) contrast(1.45) sepia(.28);
+    opacity:.88;
+    mix-blend-mode:multiply;
+    transform:scale(1.18) translate(-4%, -1%);
+  }
+  .portrait{
+    position:absolute;
+    right:-118px;
+    top:230px;
+    width:575px;
+    height:705px;
+    overflow:hidden;
+    z-index:12;
+    background:var(--ink);
+    clip-path:polygon(16% 0,100% 0,100% 100%,0 100%,0 12%);
+  }
+  .portrait img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:46% 45%;
+    filter:grayscale(1) contrast(1.65);
+    opacity:.82;
+    mix-blend-mode:screen;
+    transform:scale(1.09);
+  }
+  .overprint-a{
+    position:absolute;
+    right:0;
+    top:160px;
+    width:470px;
+    height:850px;
+    background:var(--accent);
+    opacity:.72;
+    mix-blend-mode:multiply;
+    z-index:15;
+  }
+  .overprint-b{
+    position:absolute;
+    left:128px;
+    top:510px;
+    width:720px;
+    height:178px;
+    background:var(--ink);
+    transform:rotate(-8deg);
+    z-index:18;
+    mix-blend-mode:multiply;
+  }
+  .cut{
+    position:absolute;
+    left:0;
+    top:710px;
+    width:560px;
+    height:250px;
+    background:var(--paper);
+    z-index:24;
+  }
+  .title{
+    grid-column:2 / 12;
+    grid-row:1 / 4;
+    align-self:end;
+    position:relative;
+    z-index:40;
+    font-size:104px;
+    line-height:.86;
+    letter-spacing:-.07em;
+    font-weight:800;
+    margin:0 0 14px 0;
+  }
+  .title span{display:block}
+  .room{
+    position:absolute;
+    z-index:20;
+    left:-44px;
+    top:790px;
+    font-size:280px;
+    line-height:.72;
+    letter-spacing:-.095em;
+    font-weight:900;
+    color:rgba(28,25,23,.09);
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  .dateblock{
+    position:absolute;
+    left:70px;
+    top:750px;
+    width:394px;
+    z-index:42;
+    background:var(--paper);
+    padding:22px 24px 26px 24px;
+    border-top:12px solid var(--ink);
+  }
+  .dateblock .k{
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:18px;
+    font-weight:700;
+  }
+  .dateblock .d{
+    font-size:49px;
+    line-height:.95;
+    letter-spacing:-.045em;
+    font-weight:800;
+  }
+  .facts{
+    position:absolute;
+    left:70px;
+    bottom:82px;
+    width:320px;
+    z-index:42;
+    font-size:18px;
+    line-height:1.18;
+    letter-spacing:-.012em;
+    font-weight:500;
+  }
+  .facts p{margin:0 0 12px}
+  .cta{
+    position:absolute;
+    right:64px;
+    bottom:72px;
+    width:326px;
+    z-index:42;
+    background:var(--ink);
+    color:var(--paper);
+    padding:28px 30px 30px;
+    font-size:41px;
+    line-height:.92;
+    letter-spacing:-.045em;
+    font-weight:800;
+  }
+  .micro{
+    position:absolute;
+    z-index:35;
+    font-size:10px;
+    line-height:1.35;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.62);
+    font-weight:700;
+  }
+  .m1{left:70px;top:52px}
+  .m2{right:56px;top:54px;text-align:right}
+  .m3{right:44px;top:994px;writing-mode:vertical-rl;transform:rotate(180deg)}
+  .rule{
+    position:absolute;
+    z-index:30;
+    background:var(--ink);
+  }
+  .r1{left:70px;top:54px;width:262px;height:2px}
+  .r2{left:70px;bottom:54px;width:692px;height:2px}
+  .r3{left:520px;top:64px;width:2px;height:132px}
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Archive Room 4 poster" data-lineage="matter-photomontage" data-print-process="lithographic-overprint">
+    <div class="doc" aria-hidden="true" data-image-role="evidence">
+      <img src="archive-document.jpg" alt="">
+    </div>
+    <div class="portrait" aria-hidden="true" data-image-role="person">
+      <img src="archive-portrait.jpg" alt="">
+    </div>
+    <div class="overprint-a" aria-hidden="true"></div>
+    <div class="overprint-b" aria-hidden="true"></div>
+    <div class="cut" aria-hidden="true"></div>
+    <div class="room" aria-hidden="true">04</div>
+    <div class="micro m1">Public viewing</div>
+    <div class="micro m2">Document crop<br>Portrait crop</div>
+    <div class="micro m3">materials: one archival document crop and one portrait crop</div>
+    <div class="rule r1" aria-hidden="true"></div>
+    <div class="rule r2" aria-hidden="true"></div>
+    <div class="rule r3" aria-hidden="true"></div>
+    <h1 class="title" data-critical="title">
+      <span>Archive</span>
+      <span>Room 4</span>
+    </h1>
+    <section class="dateblock" data-critical="date">
+      <div class="k">Public viewing</div>
+      <div class="d">17 May</div>
+    </section>
+    <section class="facts" data-critical="body">
+      <p>Materials: one archival document crop and one portrait crop.</p>
+      <p>Image fragments argue through crop, scale, and overprint.</p>
+    </section>
+    <div class="cta" data-critical="cta">Read the record.</div>
+    <div class="grain" aria-hidden="true"></div>
+  </main>
+</body>
+</html>

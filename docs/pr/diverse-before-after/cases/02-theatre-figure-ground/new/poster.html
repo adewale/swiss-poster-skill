@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Empty Chair</title>
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --ink:#171412;
+    --muted:#6f665d;
+    --accent:#b58a38;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d2c6}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  }
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    overflow:hidden;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    gap:0;
+  }
+  .dark-mass{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:575px;
+    height:790px;
+    background:var(--ink);
+    clip-path:polygon(0 0, 100% 17%, 100% 100%, 0 100%);
+  }
+  .stage-light{
+    position:absolute;
+    right:-95px;
+    bottom:83px;
+    width:505px;
+    height:812px;
+    background:var(--paper);
+    transform:skewY(-9deg);
+  }
+  .void{
+    position:absolute;
+    left:247px;
+    top:478px;
+    width:205px;
+    height:322px;
+    border:18px solid var(--paper);
+    background:var(--ink);
+  }
+  .chair{
+    position:absolute;
+    right:118px;
+    bottom:228px;
+    width:236px;
+    height:338px;
+  }
+  .chair .back{
+    position:absolute;
+    left:56px;
+    top:0;
+    width:112px;
+    height:142px;
+    border:16px solid var(--ink);
+    background:var(--paper);
+  }
+  .chair .seat{
+    position:absolute;
+    left:17px;
+    top:166px;
+    width:189px;
+    height:24px;
+    background:var(--ink);
+  }
+  .chair .leg{
+    position:absolute;
+    top:186px;
+    width:15px;
+    height:151px;
+    background:var(--ink);
+    transform-origin:top;
+  }
+  .chair .l1{left:31px;transform:skewX(-9deg)}
+  .chair .l2{left:176px;transform:skewX(9deg)}
+  .chair .brace{
+    position:absolute;
+    left:43px;
+    top:256px;
+    width:145px;
+    height:10px;
+    background:var(--ink);
+  }
+  .title-field{
+    position:absolute;
+    z-index:20;
+    left:72px;
+    top:70px;
+    width:612px;
+    height:250px;
+    background:var(--paper);
+    display:flex;
+    align-items:flex-start;
+  }
+  h1{
+    margin:0;
+    padding:0;
+    font-size:102px;
+    line-height:.89;
+    letter-spacing:-5px;
+    font-weight:700;
+  }
+  .facts{
+    position:absolute;
+    z-index:25;
+    left:72px;
+    top:340px;
+    width:280px;
+    font-size:20px;
+    line-height:1.28;
+    letter-spacing:.01em;
+    font-weight:500;
+  }
+  .cta{
+    position:absolute;
+    z-index:25;
+    left:72px;
+    bottom:72px;
+    color:var(--paper);
+    font-size:47px;
+    line-height:.95;
+    letter-spacing:-1.8px;
+    font-weight:700;
+  }
+  .micro{
+    position:absolute;
+    z-index:15;
+    font-size:11px;
+    line-height:1.2;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .m1{right:72px;top:84px;text-align:right}
+  .m2{right:74px;top:342px;color:rgba(23,20,18,.55)}
+  .m3{left:72px;bottom:176px;color:rgba(245,241,232,.58)}
+  .rule{
+    position:absolute;
+    height:1px;
+    background:rgba(23,20,18,.32);
+  }
+  .r1{left:72px;top:329px;width:610px}
+  .r2{right:74px;top:376px;width:145px}
+  .accent{
+    position:absolute;
+    right:73px;
+    top:407px;
+    width:17px;
+    height:288px;
+    background:var(--accent);
+  }
+  .small-square{
+    position:absolute;
+    left:517px;
+    top:356px;
+    width:34px;
+    height:34px;
+    background:var(--accent);
+  }
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="basel-hofmann-figure-ground" data-reference="severe-mass-absence-chair">
+  <div class="grid" aria-hidden="true"></div>
+  <section class="title-field" data-critical="title">
+    <h1>The Empty<br>Chair</h1>
+  </section>
+  <div class="facts" data-critical="date">
+    Fri 21:00<br>
+    Schauspielhaus Basel
+  </div>
+  <div class="cta" data-critical="cta">Book seats</div>
+  <div class="dark-mass" aria-hidden="true"></div>
+  <div class="stage-light" aria-hidden="true"></div>
+  <div class="void" aria-hidden="true"></div>
+  <div class="chair" aria-hidden="true">
+    <div class="back"></div>
+    <div class="seat"></div>
+    <div class="leg l1"></div>
+    <div class="leg l2"></div>
+    <div class="brace"></div>
+  </div>
+  <div class="accent" aria-hidden="true"></div>
+  <div class="small-square" aria-hidden="true"></div>
+  <div class="rule r1" aria-hidden="true"></div>
+  <div class="rule r2" aria-hidden="true"></div>
+  <div class="micro m1">Basel<br>Theatre sheet<br>Absence / stage / object</div>
+  <div class="micro m2">One chair<br>one room<br>one witness</div>
+  <div class="micro m3">Schauspielhaus Basel<br>Friday performance<br>doors before 21:00</div>
+</main>
+</body>
+</html>

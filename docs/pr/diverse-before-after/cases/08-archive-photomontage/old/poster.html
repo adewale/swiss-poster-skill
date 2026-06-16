@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archive Room 4</title>
+<style>
+  :root{
+    --paper:#f5f2ea;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --quiet:rgba(28,25,23,.34);
+    --field:#d8d0c1;
+    --accent:#7b2f25;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#ded8cc}
+  body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink)}
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,50px);
+  }
+  .grain{
+    position:absolute;inset:0;opacity:.18;pointer-events:none;z-index:80;
+    background:
+      linear-gradient(90deg, transparent 0 3px, rgba(28,25,23,.06) 3px 4px),
+      linear-gradient(0deg, transparent 0 5px, rgba(28,25,23,.035) 5px 6px);
+    mix-blend-mode:multiply;
+  }
+  .red-field{
+    position:absolute;
+    left:-74px;top:318px;
+    width:1010px;height:338px;
+    background:var(--accent);
+    transform:rotate(-7deg);
+    transform-origin:left center;
+    opacity:.93;
+    z-index:10;
+  }
+  .doc{
+    position:absolute;
+    left:-30px;top:104px;
+    width:570px;height:760px;
+    object-fit:cover;
+    object-position:34% 44%;
+    filter:grayscale(1) contrast(1.28) sepia(.18);
+    opacity:.78;
+    mix-blend-mode:multiply;
+    z-index:12;
+  }
+  .portrait{
+    position:absolute;
+    right:-118px;top:252px;
+    width:562px;height:720px;
+    object-fit:cover;
+    object-position:43% 30%;
+    filter:grayscale(1) contrast(1.22);
+    opacity:.86;
+    mix-blend-mode:multiply;
+    z-index:18;
+  }
+  .portrait-mask{
+    position:absolute;
+    right:-92px;top:188px;
+    width:410px;height:930px;
+    background:rgba(245,242,234,.45);
+    z-index:19;
+    mix-blend-mode:screen;
+    transform:skewY(-8deg);
+  }
+  .crop-line{
+    position:absolute;
+    background:var(--ink);
+    opacity:.78;
+    z-index:25;
+  }
+  .l1{left:70px;top:92px;width:1px;height:1010px}
+  .l2{left:350px;top:0;width:1px;height:1200px;opacity:.18}
+  .l3{left:630px;top:0;width:1px;height:1200px;opacity:.14}
+  .h1{left:0;top:835px;width:840px;height:1px;opacity:.25}
+  .title{
+    grid-column:2/12;
+    grid-row:15/19;
+    align-self:start;
+    z-index:40;
+    font-size:118px;
+    line-height:.82;
+    letter-spacing:-7px;
+    font-weight:800;
+    color:var(--paper);
+    text-transform:uppercase;
+    max-width:760px;
+    text-shadow:0 1px 0 rgba(28,25,23,.18);
+  }
+  .title span{display:block}
+  .ghost{
+    position:absolute;
+    left:300px;top:-42px;
+    font-size:360px;
+    line-height:.8;
+    font-weight:800;
+    letter-spacing:-24px;
+    color:rgba(28,25,23,.055);
+    z-index:2;
+  }
+  .meta{
+    grid-column:2/6;
+    grid-row:2/5;
+    z-index:45;
+    font-size:15px;
+    line-height:1.22;
+    letter-spacing:.02em;
+    font-weight:600;
+  }
+  .meta small{
+    display:block;
+    font-size:10px;
+    line-height:1;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:13px;
+    font-weight:700;
+  }
+  .facts{
+    grid-column:8/12;
+    grid-row:20/23;
+    z-index:45;
+    font-size:22px;
+    line-height:1.05;
+    font-weight:500;
+    letter-spacing:-.02em;
+  }
+  .facts small{
+    display:block;
+    font-size:10px;
+    line-height:1;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:12px;
+    font-weight:700;
+  }
+  .cta{
+    position:absolute;
+    left:70px;bottom:62px;
+    z-index:50;
+    font-size:43px;
+    line-height:.95;
+    letter-spacing:-1.8px;
+    font-weight:800;
+    color:var(--ink);
+  }
+  .cta:before{
+    content:"";
+    position:absolute;
+    left:0;top:-24px;
+    width:248px;height:12px;
+    background:var(--accent);
+  }
+  .side{
+    position:absolute;
+    left:28px;top:1014px;
+    transform:rotate(-90deg);
+    transform-origin:left top;
+    z-index:48;
+    font-size:10px;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .index{
+    position:absolute;
+    right:48px;top:66px;
+    z-index:50;
+    font-size:94px;
+    line-height:.8;
+    font-weight:200;
+    letter-spacing:-6px;
+    color:var(--accent);
+  }
+  .block{
+    position:absolute;
+    left:350px;top:842px;
+    width:280px;height:124px;
+    background:var(--field);
+    z-index:22;
+    mix-blend-mode:multiply;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Archive Room 4 poster">
+    <div class="ghost">04</div>
+    <div class="red-field"></div>
+    <img class="doc" src="archive-document.jpg" alt="">
+    <img class="portrait" src="archive-portrait.jpg" alt="">
+    <div class="portrait-mask"></div>
+    <div class="block"></div>
+    <div class="crop-line l1"></div>
+    <div class="crop-line l2"></div>
+    <div class="crop-line l3"></div>
+    <div class="crop-line h1"></div>
+    <section class="meta">
+      <small>Public viewing</small>
+      17 May
+    </section>
+    <div class="index">4</div>
+    <h1 class="title"><span>Archive</span><span>Room 4</span></h1>
+    <section class="facts">
+      <small>Materials</small>
+      one archival document crop<br>
+      one portrait crop
+    </section>
+    <div class="cta">Read the record.</div>
+    <div class="side">editorial photomontage</div>
+    <div class="grain"></div>
+  </main>
+</body>
+</html>

@@ -70,3 +70,25 @@ Added ten additional cases and paired ablations for the remaining after-image is
 | Weak photomontage authorship | `pos-photomontage-authorship-editorial` | `no-photomontage-authorship` |
 | Insufficient restraint | `pos-hofmann-restraint-two-contrasts` | `no-restraint-as-drama` |
 | Missing genre breadth / Geigy scientific lineage | `pos-genre-breadth-geigy-scientific` | `no-genre-breadth-selection` |
+
+## Typography breadth follow-up
+
+See `docs/pr/LESSONS_LEARNED.md`. Research confirmed that IBM Plex/Helvetica-like typography is only one Swiss poster lineage. The skill now treats IBM Plex Sans as an open neo-grotesk proxy rather than a universal default, and adds condensed, serif/display, mono/technical, and custom-lettering categories for object, travel/lithographic, Geigy/scientific, New Wave, and contemporary cultural posters.
+
+## Round-12 rendered-poster proof
+
+Added `evals/oracles/rendered_poster_oracle.py` and `pos-rendered-critical-text-civic-notice` to move beyond token-level checks. The oracle renders HTML in headless Chrome and verifies `[data-critical]` boxes are in-canvas, unobscured at the center point, large enough, sufficiently opaque, do not cause horizontal overflow, and do not sit transparently across high-variance/split-field backings. It also uses a normal-vs-hidden screenshot differential to estimate local text contrast.
+
+Targeted run: `eval-runs/current-round12-rendered-proof-20260615/`:
+
+| Variant | Objective |
+|---|---:|
+| `with_skill` | `1.0` |
+| `without_skill` | `0.0` |
+| `ablation:no-rendered-poster-proof` | `0.0` |
+
+This caught the exact “The Empty Chair” failure mode: black title/date text crossing a light/dark split where z-index was correct but local pixel readability failed.
+
+## Diverse before/after evidence
+
+Added `docs/pr/diverse-before-after/`: ten generated prompts compare old skill (`origin/main`) to the current skill across non-Cloudflare domains: tourism, theatre, object/product, civic, scientific, political, market/lithographic, editorial photomontage, typography specimen, and landscape travel. The contact sheet is deliberately high resolution and the index links full-size PNG/HTML outputs so body copy, hierarchy, clipping, source fidelity, and visual grammar can be inspected beyond thumbnail gestalt.

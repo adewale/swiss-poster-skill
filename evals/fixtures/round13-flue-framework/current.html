@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flue Framework Poster</title>
+<style>
+  :root{
+    --paper:#f3efe4;
+    --paper-2:#e7e0d2;
+    --ink:#171412;
+    --ink-soft:#5f574e;
+    --field:#22201d;
+    --accent:#047857;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;overflow-x:hidden;background:#cbc5b7;color:var(--ink)}
+  body{font-family:"IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;display:grid;place-items:start center}
+  .poster{
+    position:relative;width:840px;height:1200px;overflow:hidden;background:var(--paper);
+    box-shadow:0 24px 70px rgba(23,20,18,.16);
+  }
+  .grid-cols-12{display:grid;grid-template-columns:repeat(12,1fr)}
+  .construction-grid{
+    position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.52;
+    background-image:
+      linear-gradient(90deg, rgba(23,20,18,.06) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(23,20,18,.045) 1px, transparent 1px);
+    background-size:70px 100px,70px 100px;
+  }
+  .field{
+    position:absolute;right:0;top:0;width:378px;height:1200px;background:var(--field);z-index:1;
+  }
+  .field::after{
+    content:"";position:absolute;left:-116px;top:205px;width:330px;height:780px;background:var(--paper);
+    transform:skewY(-9deg);transform-origin:top left;
+  }
+  .harness-frame{
+    position:absolute;left:302px;top:176px;width:598px;height:728px;z-index:3;pointer-events:none;
+    border-top:38px solid var(--accent);border-right:38px solid var(--accent);border-bottom:38px solid var(--accent);
+    transform:skewY(-8deg);opacity:.96;
+  }
+  .harness-frame::before{
+    content:"";position:absolute;left:-76px;top:226px;width:178px;height:38px;background:var(--accent);
+  }
+  .harness-frame::after{
+    content:"";position:absolute;right:-38px;bottom:-104px;width:38px;height:180px;background:var(--accent);
+  }
+  .core-cut{
+    position:absolute;left:362px;top:360px;width:294px;height:380px;z-index:4;background:var(--paper);
+    clip-path:polygon(15% 0,100% 0,85% 100%,0 100%);
+  }
+  .layer-stack{position:absolute;left:388px;top:405px;width:330px;z-index:6}
+  .layer{
+    display:grid;grid-template-columns:58px 1fr;align-items:stretch;height:70px;margin-bottom:18px;
+    border-top:2px solid var(--ink);background:rgba(243,239,228,.96);
+  }
+  .layer b{display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--paper);font-size:22px;letter-spacing:-.04em}
+  .layer span{display:block;padding:15px 12px 0 18px;font-size:19px;font-weight:700;letter-spacing:-.03em;text-transform:uppercase}
+  .layer small{display:block;font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase;margin-top:6px;line-height:1.1}
+  .title-field{
+    position:absolute;left:50px;top:58px;width:432px;min-height:318px;z-index:20;background:var(--paper);
+    padding:12px 16px 18px 0;
+  }
+  h1{margin:0;font-size:126px;line-height:.76;letter-spacing:-9px;font-weight:800;color:var(--ink)}
+  .kicker{margin:0 0 24px 3px;font-size:11px;line-height:1.15;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+  .claim{
+    position:absolute;left:52px;top:408px;width:344px;z-index:22;background:var(--paper);padding:10px 14px 12px 0;
+    font-size:28px;line-height:1.02;letter-spacing:-1.2px;font-weight:700;color:var(--ink);
+  }
+  .support{
+    position:absolute;left:52px;top:520px;width:278px;z-index:16;font-size:14px;line-height:1.28;color:var(--ink);font-weight:500;
+    background:var(--paper);padding:8px 12px 10px 0;
+  }
+  .support strong{font-weight:800}
+  .repo-mark{
+    position:absolute;left:52px;top:704px;z-index:12;width:236px;color:var(--ink-soft);font-size:11px;line-height:1.35;
+    letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+  }
+  .repo-mark::before{content:"";display:block;width:190px;height:7px;background:var(--accent);margin-bottom:24px}
+  .packages{
+    position:absolute;left:52px;bottom:86px;z-index:12;width:326px;color:rgba(23,20,18,.68);
+    font-size:10px;line-height:1.45;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+  }
+  .packages .row{display:grid;grid-template-columns:28px 1fr;border-top:1px solid rgba(23,20,18,.22);padding:7px 0}
+  .packages .row:last-child{border-bottom:1px solid rgba(23,20,18,.22)}
+  .packages b{color:var(--ink)}
+  .micro-top{
+    position:absolute;right:58px;top:62px;z-index:12;color:rgba(243,239,228,.78);font-size:11px;line-height:1.35;
+    letter-spacing:.21em;text-transform:uppercase;font-weight:700;text-align:right;
+  }
+  .deploy{
+    position:absolute;right:58px;top:934px;z-index:14;width:250px;color:rgba(243,239,228,.68);
+    font-size:10px;line-height:1.55;letter-spacing:.18em;text-transform:uppercase;font-weight:700;text-align:right;
+  }
+  .cta{
+    position:absolute;right:52px;bottom:52px;z-index:30;background:var(--paper);color:var(--ink);
+    padding:16px 18px 15px 20px;font-size:32px;line-height:.92;letter-spacing:-1.2px;font-weight:800;
+    min-width:270px;text-align:left;
+  }
+  .axis{
+    position:absolute;left:356px;top:108px;height:1010px;width:1px;background:rgba(23,20,18,.45);z-index:10;
+  }
+  .axis::before,.axis::after{content:"";position:absolute;left:-5px;width:11px;height:11px;background:var(--ink)}
+  .axis::before{top:0}.axis::after{bottom:0}
+  .side-label{
+    position:absolute;left:334px;top:126px;z-index:11;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+    writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;
+  }
+  .caption{
+    position:absolute;left:392px;top:812px;z-index:8;width:302px;color:var(--ink-soft);font-size:10px;line-height:1.45;
+    letter-spacing:.15em;text-transform:uppercase;font-weight:700;
+  }
+  .plate-number{
+    position:absolute;right:30px;top:512px;z-index:2;color:rgba(243,239,228,.08);font-size:310px;line-height:1;font-weight:800;letter-spacing:-.12em;
+    transform:rotate(90deg);
+  }
+  .halftone{
+    position:absolute;left:360px;top:92px;width:480px;height:1028px;z-index:2;pointer-events:none;opacity:.22;
+    background-image:radial-gradient(circle, var(--ink) 1px, transparent 1.2px);background-size:13px 13px;
+    mask-image:linear-gradient(90deg, transparent 0%, black 18%, black 74%, transparent 100%);
+  }
+  @media (max-width:860px){
+    body{place-items:start center}.poster{width:100vw;height:calc(100vw * 1.428571);transform-origin:top center}
+  }
+</style>
+</head>
+<body>
+<main class="poster grid grid-cols-12" data-lineage="geigy-scientific-zurich-technical-plate" data-reference="ruder-typographic-function" data-genre="technical-framework-poster" data-print-process="flat-screenprint-plate" data-palette="paper-ink-one-green-accent">
+  <div class="construction-grid" aria-hidden="true"></div>
+  <div class="field" aria-hidden="true"></div>
+  <div class="halftone" data-channel="texture" aria-hidden="true"></div>
+  <div class="plate-number" data-channel="texture" aria-hidden="true">04</div>
+
+  <div class="harness-frame" data-channel="dramatic" data-encoding="Flue harness concept → open frame around agent architecture layers" aria-hidden="true"></div>
+  <div class="core-cut" data-channel="dramatic" aria-hidden="true"></div>
+
+  <section class="title-field">
+    <p class="kicker">Programmable TypeScript harness</p>
+    <h1 data-critical="title">Flue</h1>
+  </section>
+
+  <p class="claim" data-critical="body">The Agent<br>Harness Framework</p>
+  <p class="support" data-source="site-readme-framework-claim"><strong>Build autonomous agents</strong> with sessions, tools, skills, instructions, filesystem access, and a secure sandbox.</p>
+
+  <div class="axis" aria-hidden="true"></div>
+  <div class="side-label" aria-hidden="true">agent harness / context / action</div>
+
+  <section class="layer-stack" data-encoding="source architecture order → stacked plate layers">
+    <div class="layer" data-source="site-universal-agent-architecture"><b>04</b><span>Filesystem<small>read · write · grep · glob</small></span></div>
+    <div class="layer" data-source="site-universal-agent-architecture"><b>03</b><span>Sandbox<small>bash · security · network</small></span></div>
+    <div class="layer" data-source="site-universal-agent-architecture"><b>02</b><span>Harness<small>skills · memory · sessions</small></span></div>
+    <div class="layer" data-source="site-universal-agent-architecture"><b>01</b><span>Model<small>tokens · tools · prompts</small></span></div>
+  </section>
+
+  <p class="caption">Universal agent architecture: model, harness, sandbox, filesystem. The diagram is the subject, not decoration.</p>
+
+  <div class="micro-top" data-source="github-repository-facts">withastro/flue<br>TypeScript<br>Apache-2.0</div>
+  <div class="repo-mark" data-source="site-readme-primary-claim readme-feature-list">Not another SDK. Agents keep context across conversations and events while working toward a goal.</div>
+
+  <section class="packages" data-source="readme-package-list">
+    <div class="row"><b>01</b><span>@flue/runtime — harness, sessions, tools, sandbox</span></div>
+    <div class="row"><b>02</b><span>@flue/cli — command line and build tooling</span></div>
+    <div class="row"><b>03</b><span>@flue/sdk — consuming deployed agents</span></div>
+    <div class="row"><b>04</b><span>@flue/postgres — persistence adapter</span></div>
+  </section>
+
+  <div class="deploy" data-source="readme-deploy-anywhere">Run locally via CLI or deploy to Node.js, Workers, Actions, GitLab CI/CD, Daytona, or Render.</div>
+  <div class="cta" data-critical="cta">View<br>Documentation</div>
+</main>
+</body>
+</html>

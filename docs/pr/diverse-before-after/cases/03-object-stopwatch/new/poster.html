@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minerva 55</title>
+<style>
+  :root{
+    --paper:#eee9df;
+    --ink:#1f1b16;
+    --muted:rgba(31,27,22,.58);
+    --hair:rgba(31,27,22,.22);
+    --accent:#8f2018;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d1c6}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:Arial, Helvetica, system-ui, sans-serif;
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 45% 35%, rgba(255,255,255,.34) 0 1px, transparent 1.4px) 0 0/12px 12px,
+      linear-gradient(90deg, rgba(31,27,22,.035) 1px, transparent 1px) 0 0/70px 100%,
+      var(--paper);
+    color:var(--ink);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+  }
+  .object-field{
+    grid-column:1/13;
+    grid-row:1/10;
+    position:relative;
+    z-index:1;
+  }
+  .halo{
+    position:absolute;
+    width:760px;
+    height:760px;
+    left:21px;
+    top:97px;
+    border-radius:50%;
+    border:1px solid rgba(31,27,22,.16);
+  }
+  .halo:before,.halo:after{
+    content:"";
+    position:absolute;
+    inset:58px;
+    border-radius:50%;
+    border:1px solid rgba(31,27,22,.11);
+  }
+  .halo:after{
+    inset:126px;
+    border-color:rgba(143,32,24,.20);
+  }
+  .stopwatch{
+    position:absolute;
+    width:760px;
+    left:36px;
+    top:16px;
+    filter:grayscale(1) contrast(1.16) brightness(.97);
+    mix-blend-mode:multiply;
+  }
+  .crop-mask{
+    position:absolute;
+    left:-70px;
+    top:650px;
+    width:980px;
+    height:310px;
+    background:var(--paper);
+    border-top:1px solid rgba(31,27,22,.14);
+    z-index:3;
+  }
+  .title{
+    grid-column:2/11;
+    grid-row:8/10;
+    z-index:10;
+    align-self:end;
+    margin:0 0 4px 0;
+    font-size:112px;
+    line-height:.88;
+    letter-spacing:-7px;
+    font-weight:700;
+  }
+  .facts{
+    grid-column:2/7;
+    grid-row:10/12;
+    z-index:10;
+    align-self:start;
+    padding-top:30px;
+    font-size:25px;
+    line-height:1.22;
+    letter-spacing:-.25px;
+    font-weight:400;
+  }
+  .facts div{margin-bottom:8px}
+  .cta{
+    grid-column:8/12;
+    grid-row:11/12;
+    z-index:10;
+    align-self:end;
+    justify-self:start;
+    margin-bottom:34px;
+    padding-top:14px;
+    border-top:5px solid var(--accent);
+    font-size:36px;
+    line-height:.95;
+    letter-spacing:-1.3px;
+    font-weight:700;
+  }
+  .micro{
+    position:absolute;
+    z-index:12;
+    font-size:11px;
+    line-height:1.2;
+    letter-spacing:1.7px;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .m1{left:72px;top:70px}
+  .m2{right:72px;top:84px;text-align:right}
+  .m3{left:72px;bottom:58px}
+  .rule-v{
+    position:absolute;
+    top:48px;
+    bottom:48px;
+    left:70px;
+    border-left:1px solid var(--hair);
+    z-index:2;
+  }
+  .rule-h{
+    position:absolute;
+    left:70px;
+    right:70px;
+    bottom:252px;
+    border-top:1px solid var(--hair);
+    z-index:9;
+  }
+  .accent{
+    position:absolute;
+    right:0;
+    bottom:0;
+    width:132px;
+    height:382px;
+    background:var(--accent);
+    z-index:0;
+  }
+  .register{
+    position:absolute;
+    right:70px;
+    bottom:270px;
+    font-size:168px;
+    line-height:.78;
+    letter-spacing:-12px;
+    font-weight:700;
+    color:rgba(143,32,24,.18);
+    z-index:4;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" data-lineage="object-poster" aria-label="Minerva 55 poster">
+    <div class="accent" aria-hidden="true"></div>
+    <div class="rule-v" aria-hidden="true"></div>
+    <div class="rule-h" aria-hidden="true"></div>
+    <div class="micro m1">mechanical stopwatch</div>
+    <div class="micro m2">Minerva<br>precision register</div>
+    <div class="micro m3">split timing instrument</div>
+    <section class="object-field" aria-hidden="true">
+      <div class="halo"></div>
+      <img class="stopwatch" src="stopwatch.png" alt="">
+      <div class="crop-mask"></div>
+      <div class="register">55</div>
+    </section>
+    <h1 class="title" data-critical="title">Minerva 55</h1>
+    <section class="facts" data-critical="body">
+      <div>55 minute register</div>
+      <div>split-second hand</div>
+      <div data-critical="date">service date 1962</div>
+    </section>
+    <div class="cta" data-critical="cta">Wind once.</div>
+  </main>
+</body>
+</html>

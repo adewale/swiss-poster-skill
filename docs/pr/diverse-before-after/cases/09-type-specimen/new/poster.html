@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neue Haas / Narrow Study</title>
+<style>
+  :root{
+    --paper:#f4f1e8;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.54);
+    --hair:rgba(28,25,23,.28);
+    --accent:#2f5f54;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d3c7}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    box-shadow:0 24px 70px rgba(0,0,0,.18);
+  }
+  .grid{
+    position:absolute;
+    inset:54px 56px 54px 56px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:16px;
+    z-index:5;
+  }
+  .rule-field{
+    position:absolute;
+    left:56px;
+    right:56px;
+    top:284px;
+    height:588px;
+    z-index:1;
+  }
+  .h-rule{
+    position:absolute;
+    left:0;
+    right:0;
+    height:1px;
+    background:var(--hair);
+  }
+  .h-rule.base{top:410px;background:var(--ink);height:2px}
+  .h-rule.x{top:254px}
+  .h-rule.cap{top:104px}
+  .label{
+    position:absolute;
+    right:0;
+    transform:translateY(-50%);
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .label.cap{top:104px}
+  .label.x{top:254px}
+  .label.base{top:410px;color:var(--ink)}
+  .specimen{
+    position:absolute;
+    left:28px;
+    top:224px;
+    z-index:3;
+    font-stretch:condensed;
+    font-size:374px;
+    line-height:.78;
+    letter-spacing:-.105em;
+    font-weight:700;
+    white-space:nowrap;
+    color:var(--ink);
+  }
+  .ghost{
+    position:absolute;
+    right:-92px;
+    top:694px;
+    z-index:0;
+    font-size:232px;
+    line-height:.8;
+    letter-spacing:-.09em;
+    font-weight:700;
+    color:rgba(47,95,84,.18);
+    transform:rotate(-90deg);
+    transform-origin:center;
+    white-space:nowrap;
+  }
+  .title{
+    grid-column:1 / span 8;
+    padding-top:2px;
+    z-index:20;
+  }
+  h1{
+    margin:0;
+    font-size:61px;
+    line-height:.91;
+    letter-spacing:-.052em;
+    font-weight:700;
+  }
+  .title small{
+    display:block;
+    margin-top:12px;
+    font-size:12px;
+    line-height:1.15;
+    letter-spacing:.19em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .index{
+    grid-column:10 / span 3;
+    padding-top:2px;
+    font-size:11px;
+    line-height:1.38;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    z-index:20;
+  }
+  .vertical-note{
+    position:absolute;
+    left:56px;
+    top:894px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    line-height:1.2;
+    letter-spacing:.17em;
+    text-transform:uppercase;
+    color:var(--muted);
+    z-index:20;
+  }
+  .accent-block{
+    position:absolute;
+    left:438px;
+    top:884px;
+    width:346px;
+    height:214px;
+    background:var(--accent);
+    z-index:2;
+  }
+  .tracking{
+    position:absolute;
+    left:112px;
+    top:918px;
+    width:284px;
+    z-index:30;
+    font-size:22px;
+    line-height:1.05;
+    letter-spacing:-.025em;
+    font-weight:500;
+  }
+  .tracking .micro{
+    display:block;
+    margin-bottom:15px;
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .cta{
+    position:absolute;
+    left:462px;
+    top:928px;
+    width:244px;
+    z-index:30;
+    color:var(--paper);
+    font-size:46px;
+    line-height:.93;
+    letter-spacing:-.045em;
+    font-weight:700;
+  }
+  .measure{
+    position:absolute;
+    left:56px;
+    right:56px;
+    bottom:54px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:16px;
+    z-index:20;
+    border-top:2px solid var(--ink);
+    padding-top:13px;
+  }
+  .measure div{
+    font-size:11px;
+    line-height:1.28;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .measure div:nth-child(1){grid-column:1 / span 3}
+  .measure div:nth-child(2){grid-column:5 / span 3}
+  .measure div:nth-child(3){grid-column:9 / span 4;color:var(--ink)}
+  .tick{
+    position:absolute;
+    top:284px;
+    bottom:328px;
+    width:1px;
+    background:rgba(28,25,23,.12);
+    z-index:1;
+  }
+  .t1{left:112px}.t2{left:178px}.t3{left:244px}.t4{left:310px}.t5{left:376px}
+  .t6{left:442px}.t7{left:508px}.t8{left:574px}.t9{left:640px}.t10{left:706px}
+</style>
+</head>
+<body>
+  <main class="poster" data-lineage="zurich-typographic-specimen" data-reference="ruder-typographic-function">
+    <div class="tick t1" aria-hidden="true"></div><div class="tick t2" aria-hidden="true"></div>
+    <div class="tick t3" aria-hidden="true"></div><div class="tick t4" aria-hidden="true"></div>
+    <div class="tick t5" aria-hidden="true"></div><div class="tick t6" aria-hidden="true"></div>
+    <div class="tick t7" aria-hidden="true"></div><div class="tick t8" aria-hidden="true"></div>
+    <div class="tick t9" aria-hidden="true"></div><div class="tick t10" aria-hidden="true"></div>
+
+    <section class="grid">
+      <header class="title">
+        <h1 data-critical="title">Neue Haas /<br>Narrow Study</h1>
+        <small>Typographic specimen</small>
+      </header>
+      <div class="index" aria-label="specimen notes">
+        HnRg<br>
+        width trial<br>
+        optical spacing<br>
+        grotesk form
+      </div>
+    </section>
+
+    <div class="rule-field" aria-hidden="true">
+      <div class="h-rule cap"></div>
+      <div class="h-rule x"></div>
+      <div class="h-rule base"></div>
+      <span class="label cap">cap height</span>
+      <span class="label x">x-height</span>
+      <span class="label base">baseline</span>
+    </div>
+
+    <div class="specimen" aria-label="specimen letters">HnRg</div>
+    <div class="ghost" aria-hidden="true">narrow</div>
+
+    <div class="vertical-note">baseline / x-height / cap height</div>
+
+    <section class="tracking" data-critical="body">
+      <span class="micro">tracking note</span>
+      Tighten capitals optically. Let the lowercase shoulder breathe before the terminal.
+    </section>
+
+    <div class="accent-block" aria-hidden="true"></div>
+    <section class="cta" data-critical="cta">Study the spacing.</section>
+
+    <footer class="measure">
+      <div>Specimen letters<br>HnRg</div>
+      <div>Reference lines<br>baseline, x-height, cap height</div>
+      <div>Tracking note<br>optical spacing over mechanical interval</div>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lake Sound Ferry</title>
+<style>
+  :root{
+    --paper:#f4f1e8;
+    --ink:#1f2421;
+    --muted:rgba(31,36,33,.62);
+    --line:rgba(31,36,33,.22);
+    --blue:#2f6381;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d2c3}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    overflow:hidden;
+    background:var(--paper);
+    box-shadow:0 22px 60px rgba(0,0,0,.22);
+  }
+  .grid{
+    position:absolute;
+    inset:54px 58px 46px 58px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    column-gap:14px;
+    z-index:3;
+  }
+  .photo{
+    position:absolute;
+    left:58px;
+    top:262px;
+    width:724px;
+    height:512px;
+    overflow:hidden;
+    z-index:1;
+  }
+  .photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:saturate(.82) contrast(.98);
+  }
+  .photo::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(244,241,232,.02), rgba(244,241,232,.2));
+  }
+  .lake-block{
+    position:absolute;
+    left:-70px;
+    top:690px;
+    width:690px;
+    height:322px;
+    background:var(--blue);
+    z-index:2;
+  }
+  .lake-block::before{
+    content:"";
+    position:absolute;
+    right:-214px;
+    top:-58px;
+    width:430px;
+    height:430px;
+    border:2px solid rgba(244,241,232,.54);
+    transform:rotate(45deg);
+  }
+  .route{
+    grid-column:1 / 6;
+    grid-row:1 / 2;
+    font-size:15px;
+    line-height:1;
+    letter-spacing:.08em;
+    font-weight:700;
+    text-transform:uppercase;
+  }
+  .notice{
+    grid-column:10 / 13;
+    grid-row:1 / 2;
+    align-self:start;
+    font-size:11px;
+    line-height:1.22;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:left;
+  }
+  h1{
+    grid-column:1 / 13;
+    grid-row:2 / 4;
+    margin:0;
+    font-size:108px;
+    line-height:.86;
+    letter-spacing:-.075em;
+    font-weight:800;
+    z-index:5;
+  }
+  .sound{
+    display:block;
+    margin-left:156px;
+  }
+  .ferry{
+    display:block;
+    margin-left:310px;
+  }
+  .date{
+    grid-column:1 / 5;
+    grid-row:5 / 6;
+    align-self:end;
+    font-size:22px;
+    line-height:1.05;
+    font-weight:700;
+    letter-spacing:-.02em;
+    background:var(--paper);
+    padding:14px 16px 13px 0;
+    z-index:6;
+  }
+  .time{
+    grid-column:8 / 13;
+    grid-row:7 / 9;
+    align-self:end;
+    justify-self:end;
+    font-size:136px;
+    line-height:.82;
+    letter-spacing:-.08em;
+    font-weight:800;
+    color:var(--paper);
+    z-index:6;
+  }
+  .dep{
+    grid-column:9 / 13;
+    grid-row:9 / 10;
+    align-self:start;
+    font-size:16px;
+    line-height:1.2;
+    font-weight:700;
+    letter-spacing:.02em;
+    color:var(--paper);
+    z-index:6;
+  }
+  .facts{
+    grid-column:1 / 6;
+    grid-row:9 / 11;
+    align-self:start;
+    font-size:22px;
+    line-height:1.15;
+    font-weight:500;
+    letter-spacing:-.025em;
+    color:var(--paper);
+    z-index:7;
+  }
+  .caption{
+    grid-column:1 / 4;
+    grid-row:12 / 13;
+    align-self:end;
+    font-size:11px;
+    line-height:1.35;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .cta{
+    grid-column:8 / 13;
+    grid-row:12 / 13;
+    align-self:end;
+    justify-self:stretch;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:58px;
+    border-top:2px solid var(--ink);
+    border-bottom:2px solid var(--ink);
+    color:var(--ink);
+    text-decoration:none;
+    font-size:28px;
+    line-height:1;
+    letter-spacing:-.04em;
+    font-weight:800;
+    z-index:8;
+  }
+  .cta span:last-child{
+    font-size:42px;
+    transform:translateY(-2px);
+  }
+  .rule-a,.rule-b,.rule-c{
+    position:absolute;
+    background:var(--line);
+    z-index:4;
+  }
+  .rule-a{left:58px;right:58px;top:236px;height:2px}
+  .rule-b{left:58px;width:2px;top:54px;bottom:46px}
+  .rule-c{right:58px;width:2px;top:54px;bottom:46px}
+  .alps{
+    position:absolute;
+    left:404px;
+    top:790px;
+    width:520px;
+    height:210px;
+    z-index:5;
+    opacity:.96;
+  }
+  .alps svg{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Lake Sound Ferry travel poster">
+    <div class="rule-a"></div>
+    <div class="rule-b"></div>
+    <div class="rule-c"></div>
+    <div class="photo">
+      <img src="lake-ferry.jpg" alt="Lake ferry on alpine water">
+    </div>
+    <div class="lake-block"></div>
+    <div class="alps" aria-hidden="true">
+      <svg viewBox="0 0 520 210" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 178 L95 72 L142 118 L232 18 L315 126 L378 58 L520 178 Z" fill="#f4f1e8"/>
+        <path d="M95 72 L142 118 L122 112 L106 92 L79 102 Z" fill="rgba(47,99,129,.34)"/>
+        <path d="M232 18 L315 126 L278 106 L251 59 L215 83 Z" fill="rgba(47,99,129,.34)"/>
+        <path d="M378 58 L520 178 L430 139 L395 88 L355 105 Z" fill="rgba(47,99,129,.34)"/>
+      </svg>
+    </div>
+    <section class="grid">
+      <div class="route">Lausanne → Vevey</div>
+      <div class="notice">Public pier notice</div>
+      <h1>
+        <span>Lake</span>
+        <span class="sound">Sound</span>
+        <span class="ferry">Ferry</span>
+      </h1>
+      <div class="date">Summer route</div>
+      <div class="time">18:30</div>
+      <div class="dep">departure</div>
+      <div class="facts">Lausanne → Vevey<br>summer route<br>18:30 departure<br>public pier notice</div>
+      <div class="caption">Lake service<br>evening crossing</div>
+      <a class="cta" href="#"><span>See departures</span><span>→</span></a>
+    </section>
+  </main>
+</body>
+</html>

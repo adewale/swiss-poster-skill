@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minerva 55</title>
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --quiet:rgba(28,25,23,.34);
+    --accent:#8f1d14;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d0c3}
+  body{
+    font-family:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,50px);
+  }
+  .rule-top{
+    position:absolute;
+    left:70px;
+    top:70px;
+    width:700px;
+    height:1px;
+    background:var(--ink);
+    opacity:.78;
+  }
+  .register{
+    position:absolute;
+    left:70px;
+    top:88px;
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .service{
+    position:absolute;
+    right:70px;
+    top:88px;
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    text-align:right;
+    color:var(--muted);
+  }
+  .object-field{
+    position:absolute;
+    left:28px;
+    top:142px;
+    width:784px;
+    height:760px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+  }
+  .object-field:before{
+    content:"";
+    position:absolute;
+    width:520px;
+    height:520px;
+    border:1px solid rgba(28,25,23,.18);
+    border-radius:50%;
+    top:123px;
+    left:132px;
+  }
+  .object-field:after{
+    content:"";
+    position:absolute;
+    width:232px;
+    height:232px;
+    border:38px solid rgba(143,29,20,.13);
+    border-radius:50%;
+    top:268px;
+    left:276px;
+    z-index:0;
+  }
+  .watch{
+    position:relative;
+    z-index:3;
+    width:610px;
+    height:auto;
+    object-fit:contain;
+    filter:grayscale(1) contrast(1.08) sepia(.08);
+  }
+  .accent-block{
+    position:absolute;
+    left:0;
+    top:806px;
+    width:302px;
+    height:246px;
+    background:var(--accent);
+    z-index:1;
+  }
+  .number{
+    position:absolute;
+    left:302px;
+    top:781px;
+    z-index:0;
+    font-size:310px;
+    line-height:.82;
+    font-weight:700;
+    letter-spacing:-.09em;
+    color:rgba(28,25,23,.09);
+  }
+  .title{
+    position:absolute;
+    left:66px;
+    top:892px;
+    z-index:5;
+    margin:0;
+    font-size:106px;
+    line-height:.86;
+    font-weight:700;
+    letter-spacing:-.06em;
+  }
+  .title span{
+    display:block;
+  }
+  .facts{
+    position:absolute;
+    left:418px;
+    top:929px;
+    z-index:6;
+    width:310px;
+    font-size:24px;
+    line-height:1.12;
+    font-weight:400;
+    letter-spacing:-.02em;
+  }
+  .facts div{
+    padding:7px 0 8px;
+    border-top:1px solid rgba(28,25,23,.34);
+  }
+  .facts div:last-child{
+    border-bottom:1px solid rgba(28,25,23,.34);
+  }
+  .cta{
+    position:absolute;
+    left:70px;
+    bottom:64px;
+    z-index:7;
+    font-size:42px;
+    line-height:1;
+    font-weight:500;
+    letter-spacing:-.035em;
+  }
+  .cta:before{
+    content:"";
+    display:inline-block;
+    width:156px;
+    height:10px;
+    background:var(--accent);
+    margin-right:18px;
+    vertical-align:middle;
+    transform:translateY(-3px);
+  }
+  .maker{
+    position:absolute;
+    right:67px;
+    bottom:70px;
+    z-index:7;
+    font-size:11px;
+    line-height:1.35;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    text-align:right;
+    color:var(--quiet);
+  }
+  .side-mark{
+    position:absolute;
+    left:24px;
+    top:432px;
+    transform:rotate(-90deg);
+    transform-origin:left top;
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--quiet);
+    z-index:8;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Minerva 55 poster">
+    <div class="rule-top"></div>
+    <div class="register">55 minute register<br>split-second hand</div>
+    <div class="service">service date<br>1962</div>
+    <div class="side-mark">mechanical stopwatch</div>
+    <section class="object-field">
+      <img class="watch" src="stopwatch.png" alt="Minerva 55 mechanical stopwatch">
+    </section>
+    <div class="accent-block"></div>
+    <div class="number">55</div>
+    <h1 class="title"><span>Minerva</span><span>55</span></h1>
+    <section class="facts" aria-label="facts">
+      <div>55 minute register</div>
+      <div>split-second hand</div>
+      <div>service date 1962</div>
+    </section>
+    <div class="cta">Wind once.</div>
+    <div class="maker">Minerva<br>mechanical<br>timing instrument</div>
+  </main>
+</body>
+</html>

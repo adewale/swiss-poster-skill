@@ -1,0 +1,143 @@
+[
+  {
+    "id": "01-tourism-lake-ferry",
+    "title": "Lake Sound Ferry",
+    "domain": "tourism / travel placard",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss travel poster for Lake Sound Ferry, Lausanne → Vevey, summer route, 18:30 departure, public pier notice, CTA: See departures. Use a lake/alpine travel mood; avoid tech-event diagram language.",
+    "assets": [
+      "lake-ferry.jpg"
+    ],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/01-tourism-lake-ferry/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/01-tourism-lake-ferry/new/poster.png"
+  },
+  {
+    "id": "02-theatre-figure-ground",
+    "title": "The Empty Chair",
+    "domain": "theatre / Basel figure-ground",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss theatre poster for The Empty Chair, Fri 21:00, Schauspielhaus Basel, CTA: Book seats. The subject is absence, stage space, and a single chair; avoid route maps, product panels, and web CTAs. Keep the entire title wholly on one quiet light or dark field with no chair, void, split field, stripe, or graphic shape touching or crossing any title letters.",
+    "assets": [],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/02-theatre-figure-ground/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/02-theatre-figure-ground/new/poster.png"
+  },
+  {
+    "id": "03-object-stopwatch",
+    "title": "Minerva 55",
+    "domain": "object poster / product",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss object poster for Minerva 55 mechanical stopwatch. Required facts: 55 minute register, split-second hand, service date 1962, CTA: Wind once. The object should carry the argument; type should be direct and restrained.",
+    "assets": [
+      "stopwatch.png"
+    ],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/03-object-stopwatch/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/03-object-stopwatch/new/poster.png"
+  },
+  {
+    "id": "04-civic-clean-water",
+    "title": "Clean Water Vote",
+    "domain": "civic/public notice",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss civic notice poster for Clean Water Vote, Sunday 09:00–18:00, voting places: School Hall, Market Square, North Pier, CTA: Vote Sunday. It should read like public infrastructure communication, not a landing page.",
+    "assets": [],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/04-civic-clean-water/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/04-civic-clean-water/new/poster.png"
+  },
+  {
+    "id": "05-geigy-enzyme",
+    "title": "Enzyme K-17",
+    "domain": "scientific / Geigy-style plate",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss scientific poster plate for Enzyme K-17 inhibition study. Include method note, four measured facts: pH 7.2, 18°C, IC50 4.8µM, sample n=42. Use specimen/matrix logic and analytical labels; avoid meetup/event graphics.",
+    "assets": [],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/05-geigy-enzyme/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/05-geigy-enzyme/new/poster.png"
+  },
+  {
+    "id": "06-political-referendum",
+    "title": "Housing Yes / Speculation No",
+    "domain": "political/civic poster",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss political referendum poster: Housing Yes / Speculation No, municipal vote 3 March, protect rent, build cooperatives, CTA: Vote yes. Use public persuasion and symbolic form, not a product landing page.",
+    "assets": [],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/06-political-referendum/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/06-political-referendum/new/poster.png"
+  },
+  {
+    "id": "07-market-lithograph",
+    "title": "Basel Market",
+    "domain": "market / lithographic placard",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss market poster for Basel Market / Saturday, 06:00–13:00, Marktplatz, apples, bread, flowers, cheese, CTA: Bring a basket. It should feel like flat ink/lithographic public placard, not a tech diagram.",
+    "assets": [
+      "market-produce.jpg"
+    ],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/07-market-lithograph/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/07-market-lithograph/new/poster.png"
+  },
+  {
+    "id": "08-archive-photomontage",
+    "title": "Archive Room 4",
+    "domain": "editorial photomontage",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss editorial photomontage poster for Archive Room 4, public viewing 17 May, materials: one archival document crop and one portrait crop, CTA: Read the record. Make image fragments argue through crop, scale, and overprint.",
+    "assets": [
+      "archive-document.jpg",
+      "archive-portrait.jpg"
+    ],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/08-archive-photomontage/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/08-archive-photomontage/new/poster.png"
+  },
+  {
+    "id": "09-type-specimen",
+    "title": "Neue Haas / Narrow Study",
+    "domain": "typographic specimen",
+    "canvas": [
+      840,
+      1200
+    ],
+    "brief": "Swiss typographic specimen poster for Neue Haas / Narrow Study. Include baseline, x-height, cap height, tracking note, specimen letters HnRg, and CTA: Study the spacing. Type itself is the subject; avoid generic SaaS panels.",
+    "assets": [],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/09-type-specimen/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/09-type-specimen/new/poster.png"
+  },
+  {
+    "id": "10-landscape-ski-rail",
+    "title": "Snow Line Express",
+    "domain": "landscape travel poster",
+    "canvas": [
+      1200,
+      840
+    ],
+    "brief": "Landscape Swiss travel poster for Snow Line Express, Chur → Arosa, first train 07:12, winter rail, CTA: Take the first ascent. Preserve landscape format and travel-poster sense of place.",
+    "assets": [
+      "snow-rail.jpg"
+    ],
+    "old": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/10-landscape-ski-rail/old/poster.png",
+    "new": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/diverse-before-after/cases/10-landscape-ski-rail/new/poster.png"
+  }
+]

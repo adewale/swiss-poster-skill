@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basel Market</title>
+<style>
+  :root{
+    --paper:#f4ead7;
+    --ink:#27231d;
+    --soft:#ded0b7;
+    --accent:#2d6a4f;
+    --cream:#fff7df;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#cfc4ad}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 14%, rgba(45,106,79,.12) 0 1px, transparent 1.5px) 0 0/9px 9px,
+      linear-gradient(90deg, rgba(39,35,29,.045) 1px, transparent 1px) 0 0/28px 100%,
+      var(--paper);
+    box-shadow:0 22px 60px rgba(0,0,0,.25);
+  }
+  .grid{
+    position:absolute;
+    inset:54px 58px 48px 58px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    column-gap:14px;
+    z-index:5;
+  }
+  .top-rule{
+    position:absolute;
+    left:58px;
+    right:58px;
+    top:54px;
+    height:12px;
+    background:var(--ink);
+    z-index:20;
+  }
+  .market-band{
+    position:absolute;
+    left:-74px;
+    top:128px;
+    width:980px;
+    height:318px;
+    background:var(--accent);
+    transform:rotate(-3.2deg);
+    transform-origin:left center;
+    z-index:1;
+  }
+  .market-band:after{
+    content:"";
+    position:absolute;
+    inset:18px 0 auto 0;
+    height:5px;
+    background:rgba(255,247,223,.38);
+  }
+  .photo{
+    position:absolute;
+    right:-46px;
+    top:348px;
+    width:430px;
+    height:470px;
+    z-index:3;
+    overflow:hidden;
+    border:18px solid var(--cream);
+    transform:rotate(2.5deg);
+    background:var(--soft);
+  }
+  .photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(.15) contrast(1.22) saturate(.72);
+    mix-blend-mode:multiply;
+  }
+  .photo:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle, rgba(39,35,29,.22) 0 1px, transparent 1.5px) 0 0/7px 7px,
+      linear-gradient(rgba(244,234,215,.18), rgba(244,234,215,.18));
+    pointer-events:none;
+  }
+  .title{
+    grid-column:1/12;
+    grid-row:1/5;
+    align-self:end;
+    margin:0 0 -8px -10px;
+    color:var(--cream);
+    font-size:142px;
+    line-height:.78;
+    letter-spacing:-8px;
+    font-weight:900;
+    text-transform:none;
+    z-index:15;
+  }
+  .title span{
+    display:block;
+  }
+  .seal{
+    position:absolute;
+    left:68px;
+    top:426px;
+    width:202px;
+    height:202px;
+    border-radius:50%;
+    background:var(--cream);
+    border:16px solid var(--ink);
+    z-index:12;
+  }
+  .seal:before{
+    content:"";
+    position:absolute;
+    inset:34px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .seal:after{
+    content:"";
+    position:absolute;
+    left:72px;
+    top:26px;
+    width:46px;
+    height:122px;
+    border-radius:50% 50% 46% 46%;
+    background:var(--ink);
+    transform:rotate(-18deg);
+    box-shadow:38px 40px 0 -8px var(--ink), -30px 48px 0 -12px var(--ink);
+  }
+  .date{
+    grid-column:1/7;
+    grid-row:6/8;
+    align-self:start;
+    margin:10px 0 0 0;
+    font-size:44px;
+    line-height:.98;
+    font-weight:800;
+    letter-spacing:-1.8px;
+    z-index:15;
+  }
+  .time{
+    display:block;
+    font-size:64px;
+    letter-spacing:-3px;
+    color:var(--accent);
+  }
+  .place{
+    grid-column:1/6;
+    grid-row:8/9;
+    font-size:30px;
+    line-height:1;
+    font-weight:700;
+    padding-top:14px;
+    border-top:8px solid var(--ink);
+    z-index:15;
+  }
+  .list{
+    grid-column:1/7;
+    grid-row:9/11;
+    align-self:start;
+    margin:20px 0 0 0;
+    padding:0;
+    list-style:none;
+    z-index:15;
+    font-size:34px;
+    line-height:1.08;
+    font-weight:700;
+    letter-spacing:-1px;
+  }
+  .list li{
+    display:flex;
+    gap:14px;
+    align-items:baseline;
+  }
+  .list li:before{
+    content:"";
+    display:inline-block;
+    width:24px;
+    height:24px;
+    background:var(--accent);
+    transform:translateY(2px) rotate(45deg);
+    flex:0 0 auto;
+  }
+  .cta{
+    position:absolute;
+    left:58px;
+    right:58px;
+    bottom:50px;
+    background:var(--ink);
+    color:var(--cream);
+    z-index:20;
+    padding:24px 30px 22px;
+    font-size:58px;
+    line-height:.9;
+    font-weight:900;
+    letter-spacing:-2.6px;
+  }
+  .side{
+    position:absolute;
+    left:22px;
+    bottom:260px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    font-weight:700;
+    color:rgba(39,35,29,.62);
+    z-index:15;
+  }
+  .crop-word{
+    position:absolute;
+    right:-46px;
+    bottom:214px;
+    z-index:2;
+    font-size:168px;
+    line-height:.8;
+    font-weight:900;
+    letter-spacing:-10px;
+    color:rgba(45,106,79,.16);
+    transform:rotate(-90deg);
+    transform-origin:right bottom;
+    pointer-events:none;
+  }
+  .dots{
+    position:absolute;
+    left:310px;
+    top:720px;
+    width:138px;
+    height:138px;
+    background:radial-gradient(circle, var(--ink) 0 5px, transparent 5.5px) 0 0/26px 26px;
+    opacity:.28;
+    z-index:4;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Basel Market poster">
+    <div class="top-rule"></div>
+    <div class="market-band"></div>
+    <div class="photo"><img src="market-produce.jpg" alt=""></div>
+    <div class="seal"></div>
+    <div class="dots"></div>
+    <div class="crop-word">Markt</div>
+    <div class="side">apples · bread · flowers · cheese</div>
+    <section class="grid">
+      <h1 class="title"><span>Basel</span><span>Market</span></h1>
+      <div class="date">Saturday<span class="time">06:00–13:00</span></div>
+      <div class="place">Marktplatz</div>
+      <ul class="list">
+        <li>apples</li>
+        <li>bread</li>
+        <li>flowers</li>
+        <li>cheese</li>
+      </ul>
+    </section>
+    <div class="cta">Bring a basket.</div>
+  </main>
+</body>
+</html>
