@@ -11,7 +11,10 @@ const POSTERS = [
   { html: 'durable-objects.html',                 png: 'durable-objects.png' },
   { html: 'lean-into-your-weirdness.html',        png: 'lean-into-your-weirdness.png' },
   { html: 'ten-principles-for-bad-design.html',   png: 'ten-principles-for-bad-design.png' },
+  { html: 'flue.html',                            png: 'flue.png' },
 ];
+
+const ONLY = process.argv[2]; // optional: render a single html file by name
 
 (async () => {
   const browser = await chromium.launch();
@@ -22,6 +25,7 @@ const POSTERS = [
   const page = await context.newPage();
 
   for (const p of POSTERS) {
+    if (ONLY && p.html !== ONLY) continue;
     const url = 'file://' + path.resolve(__dirname, p.html);
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
