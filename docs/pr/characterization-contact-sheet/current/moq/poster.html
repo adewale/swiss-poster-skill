@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media over QUIC</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --faint:rgba(28,25,23,.14);
+    --soft:#e7e5e4;
+    --accent:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"IBM Plex Sans","Helvetica Neue",Arial,system-ui,sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    isolation:isolate;
+  }
+  .grid{
+    position:relative;
+    z-index:20;
+    height:100%;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,50px);
+    column-gap:16px;
+    padding:54px 48px 42px;
+  }
+  .ghost{
+    position:absolute;
+    z-index:1;
+    left:-72px;
+    top:120px;
+    font-size:282px;
+    line-height:.76;
+    letter-spacing:-.11em;
+    font-weight:800;
+    color:rgba(28,25,23,.055);
+    white-space:nowrap;
+    transform:rotate(-90deg);
+    transform-origin:0 0;
+    pointer-events:none;
+  }
+  .orange-field{
+    position:absolute;
+    z-index:3;
+    right:-105px;
+    top:292px;
+    width:552px;
+    height:552px;
+    background:var(--accent);
+    transform:rotate(-12deg);
+  }
+  .relay{
+    position:absolute;
+    z-index:4;
+    right:-170px;
+    top:374px;
+    width:590px;
+    height:590px;
+    border:34px solid var(--ink);
+    border-radius:50%;
+    opacity:.92;
+  }
+  .relay:before,.relay:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    inset:100px;
+    border:16px solid var(--paper);
+  }
+  .relay:after{
+    inset:214px;
+    border:30px solid var(--ink);
+    background:var(--paper);
+  }
+  .route-a,.route-b,.route-c{
+    position:absolute;
+    z-index:6;
+    height:16px;
+    background:var(--ink);
+    transform-origin:left center;
+  }
+  .route-a{left:94px;top:688px;width:506px;transform:rotate(-28deg)}
+  .route-b{left:318px;top:832px;width:404px;transform:rotate(-7deg);background:var(--paper)}
+  .route-c{left:108px;top:956px;width:498px;transform:rotate(-41deg);background:var(--accent)}
+  .node{
+    position:absolute;
+    z-index:8;
+    width:32px;height:32px;
+    background:var(--paper);
+    border:9px solid var(--ink);
+    transform:translate(-50%,-50%);
+  }
+  .n1{left:118px;top:680px}.n2{left:446px;top:523px}.n3{left:642px;top:793px}.n4{left:212px;top:885px}
+  .axis{
+    grid-column:1/8;
+    grid-row:12/21;
+    align-self:stretch;
+    position:relative;
+    z-index:14;
+    background:
+      linear-gradient(to right, var(--faint) 0 1px, transparent 1px) 0 0/64px 100%,
+      linear-gradient(to bottom, var(--faint) 0 1px, transparent 1px) 0 0/100% 64px;
+    border-left:2px solid var(--ink);
+    border-bottom:2px solid var(--ink);
+  }
+  .axis:before{
+    content:"latency";
+    position:absolute;
+    left:-4px;
+    top:-28px;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .axis:after{
+    content:"scale";
+    position:absolute;
+    right:0;
+    bottom:-30px;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .quad{
+    position:absolute;
+    right:18px;
+    top:34px;
+    width:176px;
+    height:118px;
+    background:var(--accent);
+  }
+  .quad span{
+    position:absolute;
+    left:14px;
+    top:13px;
+    font-size:18px;
+    line-height:1;
+    font-weight:700;
+  }
+  .dot{
+    position:absolute;
+    width:18px;
+    height:18px;
+    background:var(--ink);
+    transform:translate(-50%,-50%);
+  }
+  .d1{left:75%;top:25%}.d2{left:62%;top:38%;background:var(--paper);border:5px solid var(--ink)}
+  .title{
+    grid-column:1/10;
+    grid-row:1/6;
+    z-index:30;
+    align-self:start;
+  }
+  h1{
+    margin:0;
+    font-size:112px;
+    line-height:.84;
+    letter-spacing:-.075em;
+    font-weight:800;
+  }
+  .overline{
+    margin:0 0 18px;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .sub{
+    grid-column:1/7;
+    grid-row:7/10;
+    z-index:30;
+    align-self:start;
+    background:var(--paper);
+    padding:0 18px 18px 0;
+  }
+  .sub p{
+    margin:0;
+    max-width:390px;
+    font-size:27px;
+    line-height:1.05;
+    letter-spacing:-.025em;
+    font-weight:500;
+  }
+  .meta{
+    grid-column:10/13;
+    grid-row:1/5;
+    z-index:30;
+    font-size:11px;
+    line-height:1.45;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .facts{
+    grid-column:8/13;
+    grid-row:16/23;
+    z-index:30;
+    align-self:start;
+    background:var(--paper);
+    padding:28px 0 0 28px;
+    border-top:14px solid var(--ink);
+  }
+  .fact{
+    display:grid;
+    grid-template-columns:38px 1fr;
+    gap:12px;
+    padding:0 0 17px;
+    margin:0 0 15px;
+    border-bottom:1px solid var(--soft);
+  }
+  .num{
+    font-size:11px;
+    letter-spacing:.18em;
+    color:var(--muted);
+    padding-top:6px;
+  }
+  .fact b{
+    display:block;
+    font-size:22px;
+    line-height:.98;
+    letter-spacing:-.025em;
+  }
+  .fact small{
+    display:block;
+    margin-top:5px;
+    font-size:12px;
+    line-height:1.25;
+    color:var(--muted);
+  }
+  .vertical{
+    position:absolute;
+    z-index:30;
+    left:47px;
+    bottom:42px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .cta{
+    grid-column:2/7;
+    grid-row:23/25;
+    z-index:30;
+    align-self:end;
+    display:inline-block;
+    background:var(--ink);
+    color:var(--paper);
+    padding:16px 18px 15px;
+    font-size:13px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .micro{
+    position:absolute;
+    z-index:18;
+    right:49px;
+    bottom:42px;
+    width:214px;
+    font-size:10px;
+    line-height:1.35;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.52);
+  }
+</style>
+</head>
+<body>
+  <main class="poster" data-lineage="geigy-scientific" data-reference="measured-quadrant-and-relay-geometry">
+    <div class="ghost" aria-hidden="true">MOQ</div>
+    <div class="orange-field" aria-hidden="true"></div>
+    <div class="relay" aria-hidden="true" data-encoding="cdn-style relay → concentric distribution ring"></div>
+    <div class="route-a" aria-hidden="true"></div>
+    <div class="route-b" aria-hidden="true"></div>
+    <div class="route-c" aria-hidden="true"></div>
+    <i class="node n1" aria-hidden="true"></i><i class="node n2" aria-hidden="true"></i><i class="node n3" aria-hidden="true"></i><i class="node n4" aria-hidden="true"></i>
+    <section class="grid grid-cols-12">
+      <header class="title" data-critical="title">
+        <p class="overline">Transport sheet 01 / live media systems</p>
+        <h1>Media<br>over<br>QUIC</h1>
+      </header>
+      <aside class="meta" data-critical="date">
+        Sub-second target<br>
+        Relay-first delivery<br>
+        Broadcast ready<br>
+        Interop by design
+      </aside>
+      <div class="sub" data-critical="body">
+        <p>Real-time audio and video carried on QUIC streams, relayed at CDN scale without surrendering latency.</p>
+      </div>
+      <figure class="axis" data-encoding="lower latency + higher scale → upper-right quadrant">
+        <div class="quad"><span>target zone</span></div>
+        <i class="dot d1"></i><i class="dot d2"></i>
+      </figure>
+      <section class="facts" data-critical="body">
+        <div class="fact"><span class="num">01</span><span><b>Sub-second media</b><small>Designed for glass-to-glass responsiveness, not buffered page video.</small></span></div>
+        <div class="fact"><span class="num">02</span><span><b>CDN-style relay</b><small>Edge nodes fan out live streams while keeping transport semantics intact.</small></span></div>
+        <div class="fact"><span class="num">03</span><span><b>Broadcast delivery</b><small>One publisher can reach many receivers through measured distribution points.</small></span></div>
+        <div class="fact"><span class="num">04</span><span><b>Interoperable core</b><small>Clear protocol behavior over vague platform promises.</small></span></div>
+      </section>
+      <div class="cta" data-critical="cta">Measure latency. Scale the relay.</div>
+    </section>
+    <div class="vertical">live transport / low delay / open exchange</div>
+    <div class="micro">Quadrant reads upward for responsiveness and rightward for reach. The orange field marks the desired operating region for real-time media distribution.</div>
+  </main>
+</body>
+</html>

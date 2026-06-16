@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Landscape</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.64);
+    --quiet:rgba(28,25,23,.18);
+    --dark:#292524;
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);font-family:"IBM Plex Sans","Hanken Grotesk","Barlow",system-ui,sans-serif;color:var(--ink)}
+  body{min-height:100vh;display:grid;place-items:center}
+  .poster{
+    width:1200px;height:800px;position:relative;overflow:hidden;background:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(8,1fr);
+  }
+  .photo{
+    grid-column:1/8;grid-row:1/9;position:relative;overflow:hidden;background:var(--dark);
+  }
+  .photo img{
+    position:absolute;inset:-36px -80px -20px -40px;width:calc(100% + 150px);height:calc(100% + 70px);
+    object-fit:cover;filter:grayscale(1) contrast(1.28) sepia(.45) saturate(1.55);opacity:.9;
+  }
+  .photo:after{
+    content:"";position:absolute;inset:0;background:var(--orange);mix-blend-mode:multiply;opacity:.78;
+  }
+  .photo:before{
+    content:"";position:absolute;z-index:2;inset:0;
+    background:repeating-linear-gradient(90deg,rgba(250,250,249,.16) 0 1px,transparent 1px 10px);
+    opacity:.55;
+  }
+  .orange-slab{
+    position:absolute;right:-70px;top:0;width:430px;height:800px;background:var(--orange);z-index:1;
+    clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);
+  }
+  .quiet{
+    grid-column:6/13;grid-row:1/9;position:relative;z-index:4;padding:54px 58px 42px 70px;
+    display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(8,1fr);
+  }
+  .title{
+    grid-column:1/8;grid-row:1/4;align-self:start;margin:0;padding:10px 0 0;
+    font-size:clamp(72px,8.7vw,116px);line-height:.82;letter-spacing:-.07em;font-weight:800;
+    max-width:720px;
+  }
+  .subtitle{
+    grid-column:1/6;grid-row:4/5;margin:0;font-size:25px;line-height:1.08;font-weight:500;letter-spacing:-.02em;
+    background:var(--paper);padding:18px 22px 18px 0;
+  }
+  .meta{
+    grid-column:6/8;grid-row:1/3;align-self:start;justify-self:end;text-align:left;
+    font-size:11px;line-height:1.25;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+  }
+  .facts{
+    grid-column:1/8;grid-row:5/8;align-self:start;display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;
+    margin:0;padding:0;list-style:none;
+  }
+  .facts li{border-top:2px solid var(--ink);padding-top:10px;font-size:16px;line-height:1.18;font-weight:650}
+  .facts span{display:block;font-size:11px;line-height:1;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:750;margin-bottom:8px}
+  .cta{
+    grid-column:1/4;grid-row:8/9;align-self:end;background:var(--ink);color:var(--paper);
+    min-height:48px;display:flex;align-items:center;padding:0 18px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+  }
+  .smallnote{
+    grid-column:5/8;grid-row:8/9;align-self:end;font-size:11px;line-height:1.25;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  }
+  .mega{
+    position:absolute;z-index:3;left:-28px;bottom:-66px;font-size:238px;line-height:.78;letter-spacing:-.08em;
+    font-weight:900;color:rgba(250,250,249,.26);mix-blend-mode:screen;pointer-events:none;white-space:nowrap;
+  }
+  .rule-a{position:absolute;z-index:5;left:485px;top:0;width:16px;height:800px;background:var(--paper)}
+  .rule-b{position:absolute;z-index:6;left:501px;top:0;width:7px;height:800px;background:var(--ink)}
+  .index{
+    position:absolute;z-index:7;left:24px;top:30px;color:var(--paper);font-size:11px;line-height:1.35;
+    letter-spacing:.18em;text-transform:uppercase;font-weight:750;
+  }
+  .vertical{
+    position:absolute;z-index:7;left:30px;bottom:34px;color:var(--paper);font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;font-weight:750;writing-mode:vertical-rl;transform:rotate(180deg);
+  }
+  .circle{
+    position:absolute;z-index:2;right:210px;bottom:-160px;width:390px;height:390px;border:34px solid rgba(28,25,23,.16);
+    border-radius:50%;pointer-events:none;
+  }
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="matter-photomontage" data-reference="place-image-as-anchor">
+  <section class="photo" aria-hidden="true" data-image-role="place">
+    <img src="assets/tweet-image-orange.jpg" alt="">
+  </section>
+  <div class="orange-slab" aria-hidden="true"></div>
+  <div class="circle" aria-hidden="true"></div>
+  <div class="rule-a" aria-hidden="true"></div>
+  <div class="rule-b" aria-hidden="true"></div>
+  <div class="mega" aria-hidden="true">LONDON</div>
+  <div class="index">County Hall<br>Thames / Westminster<br>User Group</div>
+  <div class="vertical">edge network · community evening · recap</div>
+  <section class="quiet">
+    <h1 class="title" data-critical="title">Cloudflare London Landscape</h1>
+    <p class="meta" data-critical="date">London<br>Community recap<br>Wide view</p>
+    <p class="subtitle" data-critical="body">A Thames-side evening of infrastructure notes, product updates, hallway questions, and local operator stories.</p>
+    <ul class="facts" data-critical="body">
+      <li><span>01 / Place</span>County Hall view across the river to Westminster.</li>
+      <li><span>02 / Room</span>London User Group gathered for talks, demos, and discussion.</li>
+      <li><span>03 / Focus</span>Edge delivery, security posture, developer workflows.</li>
+      <li><span>04 / Signal</span>Short updates turned into practical questions from the floor.</li>
+      <li><span>05 / After</span>Notes, contacts, and next experiments carried back to teams.</li>
+      <li><span>06 / Frame</span>Orange city light, hard grid, public recap.</li>
+    </ul>
+    <div class="cta" data-critical="cta">Read the recap</div>
+    <div class="smallnote">Cloudflare London User Group / community record / venue outlook</div>
+  </section>
+</main>
+</body>
+</html>

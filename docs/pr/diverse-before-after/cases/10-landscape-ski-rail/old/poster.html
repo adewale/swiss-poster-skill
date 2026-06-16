@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snow Line Express</title>
+<style>
+  :root{
+    --paper:#f5f2ea;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.66);
+    --quiet:rgba(28,25,23,.38);
+    --accent:#2d6a4f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d3c7}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:1200px;
+    height:840px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    box-shadow:0 24px 80px rgba(28,25,23,.28);
+  }
+  .photo{
+    position:absolute;
+    left:470px;
+    top:0;
+    width:760px;
+    height:840px;
+    object-fit:cover;
+    filter:saturate(.72) contrast(1.06);
+    z-index:1;
+  }
+  .photo-wash{
+    position:absolute;
+    inset:0 0 0 430px;
+    background:linear-gradient(90deg,var(--paper) 0%,rgba(245,242,234,.28) 30%,rgba(45,106,79,.08) 100%);
+    z-index:2;
+  }
+  .green-field{
+    position:absolute;
+    left:-60px;
+    top:88px;
+    width:640px;
+    height:260px;
+    background:var(--accent);
+    z-index:3;
+  }
+  .slope{
+    position:absolute;
+    left:-80px;
+    bottom:126px;
+    width:1380px;
+    height:250px;
+    background:var(--paper);
+    transform:skewY(-8deg);
+    transform-origin:left bottom;
+    z-index:4;
+    border-top:12px solid var(--accent);
+  }
+  .rail-a,.rail-b{
+    position:absolute;
+    height:5px;
+    background:var(--ink);
+    opacity:.78;
+    transform:rotate(-8deg);
+    transform-origin:left center;
+    z-index:6;
+  }
+  .rail-a{left:126px;bottom:210px;width:1060px}
+  .rail-b{left:140px;bottom:164px;width:1030px}
+  .sleepers{
+    position:absolute;
+    left:150px;
+    bottom:142px;
+    width:920px;
+    height:120px;
+    z-index:5;
+    transform:rotate(-8deg);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 38px, rgba(28,25,23,.24) 38px 43px, transparent 43px 78px);
+    clip-path:polygon(0 36%,100% 0,100% 100%,0 72%);
+  }
+  .title{
+    grid-column:1 / 8;
+    grid-row:2 / 6;
+    z-index:10;
+    align-self:start;
+    padding-left:54px;
+    padding-top:16px;
+    font-size:102px;
+    line-height:.86;
+    letter-spacing:-.07em;
+    font-weight:800;
+    color:var(--paper);
+  }
+  .title span{
+    display:block;
+  }
+  .meta{
+    grid-column:1 / 5;
+    grid-row:6 / 8;
+    z-index:10;
+    padding-left:58px;
+    padding-top:22px;
+    font-size:31px;
+    line-height:1.05;
+    letter-spacing:-.025em;
+    font-weight:700;
+  }
+  .meta small{
+    display:block;
+    margin-bottom:12px;
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--quiet);
+    font-weight:700;
+  }
+  .time{
+    position:absolute;
+    right:54px;
+    top:54px;
+    z-index:10;
+    color:var(--paper);
+    background:var(--accent);
+    padding:18px 20px 16px;
+    font-size:78px;
+    line-height:.82;
+    letter-spacing:-.06em;
+    font-weight:800;
+  }
+  .time em{
+    display:block;
+    margin-top:10px;
+    font-style:normal;
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:rgba(245,242,234,.74);
+  }
+  .vertical{
+    position:absolute;
+    left:28px;
+    bottom:74px;
+    z-index:12;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .winter{
+    position:absolute;
+    left:54px;
+    bottom:56px;
+    z-index:10;
+    font-size:26px;
+    line-height:1;
+    letter-spacing:-.02em;
+    font-weight:500;
+  }
+  .cta{
+    position:absolute;
+    right:58px;
+    bottom:50px;
+    z-index:12;
+    width:360px;
+    color:var(--ink);
+    font-size:48px;
+    line-height:.92;
+    letter-spacing:-.055em;
+    font-weight:800;
+    text-align:left;
+  }
+  .route-band{
+    position:absolute;
+    left:458px;
+    bottom:348px;
+    z-index:11;
+    width:430px;
+    height:58px;
+    background:var(--ink);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    padding:0 24px;
+    font-size:20px;
+    letter-spacing:.01em;
+    font-weight:700;
+    transform:rotate(-8deg);
+  }
+  .ghost{
+    position:absolute;
+    left:36px;
+    top:388px;
+    z-index:2;
+    font-size:178px;
+    line-height:.8;
+    letter-spacing:-.085em;
+    font-weight:800;
+    color:rgba(28,25,23,.07);
+    white-space:nowrap;
+  }
+  .grid-lines{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:
+      linear-gradient(90deg, transparent calc(100% - 1px), rgba(28,25,23,.045) 0) 0 0/100px 100%,
+      linear-gradient(0deg, transparent calc(100% - 1px), rgba(28,25,23,.035) 0) 0 0/100% 70px;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Snow Line Express travel poster">
+    <div class="grid-lines"></div>
+    <img class="photo" src="snow-rail.jpg" alt="">
+    <div class="photo-wash"></div>
+    <div class="green-field"></div>
+    <div class="ghost">AROSA</div>
+    <h1 class="title"><span>Snow</span><span>Line</span><span>Express</span></h1>
+    <div class="time">07:12<em>first train</em></div>
+    <div class="meta"><small>Chur → Arosa</small>winter rail</div>
+    <div class="route-band">Chur → Arosa</div>
+    <div class="slope"></div>
+    <div class="sleepers"></div>
+    <div class="rail-a"></div>
+    <div class="rail-b"></div>
+    <div class="vertical">Swiss winter railway</div>
+    <div class="winter">first train 07:12</div>
+    <div class="cta">Take the first ascent.</div>
+  </main>
+</body>
+</html>

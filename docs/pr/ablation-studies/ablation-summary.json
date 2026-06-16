@@ -1,0 +1,1080 @@
+{
+  "covered_ablations": 26,
+  "total_ablations": 26,
+  "sentinel_run": "current-all-ablation-sentinels-20260616",
+  "rows": [
+    {
+      "ablation_id": "no-six-principles",
+      "case_id": "pos-poster-composition",
+      "removed_component": "six principles",
+      "expected_regressions": [
+        "Output loses scale/overlap/bleed/tension."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 0.75,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "default-single-accent",
+              "type": "contains_any",
+              "evidence": "none matched: ['one accent', 'single accent', 'only accent']"
+            },
+            {
+              "assertion": "mobile-boundary",
+              "type": "contains_any",
+              "evidence": "none matched: ['no horizontal scroll', 'prevent 320px horizontal scroll', 'prevents 320px horizontal scroll', '320px horizontal scroll', 'overflow-x-hidden']"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-gotchas",
+      "case_id": "neg-horizontal-scroll",
+      "removed_component": "gotchas",
+      "expected_regressions": [
+        "Allows scroll, excessive rotation, multiple accents."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "reject-horizontal-scroll",
+              "type": "contains_any",
+              "evidence": "none matched: ['no horizontal scroll', 'no sideways scroll', 'must not cause horizontal scroll', 'without creating horizontal page scroll', 'Mobile sideways scroll, no', 'won\u2019t allow mobile sideways scroll']"
+            },
+            {
+              "assertion": "clip-bleed-implementation",
+              "type": "contains_any",
+              "evidence": "none matched: ['overflow-hidden', 'overflow-x-hidden', 'overflow-clip', 'clip the bleed']"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.5,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "reject-horizontal-scroll",
+              "type": "contains_any",
+              "evidence": "none matched: ['no horizontal scroll', 'no sideways scroll', 'must not cause horizontal scroll', 'without creating horizontal page scroll', 'Mobile sideways scroll, no', 'won\u2019t allow mobile sideways scroll']"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-components",
+      "case_id": "pos-component-set",
+      "removed_component": "Tailwind component references",
+      "expected_regressions": [
+        "Output is vague prose not implementable classes."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-tokens",
+      "case_id": "pos-dark-mode",
+      "removed_component": "design-system tokens",
+      "expected_regressions": [
+        "Palette/type drift."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-research",
+      "case_id": "pos-historical-rhythm-public-concert",
+      "removed_component": "designer research",
+      "expected_regressions": [
+        "Style becomes generic SaaS or Swiss-minimal only."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round10-artifact-integrity-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round10-artifact-integrity-20260615",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "historical-grounding-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-historical-rhythm-public-concert\n- missing historical move marker\n- missing critical reading annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "historical-grounding-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-historical-rhythm-public-concert\n- visible/prompt-shaped leakage: #(?:C8102E|F38020)\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-output-contract",
+      "case_id": "pos-poster-composition",
+      "removed_component": "Output contract for web/UI tasks",
+      "expected_regressions": [
+        "Returns SVG-only or prose instead of implementable Tailwind/HTML; misses 320px/no-scroll/accessibility gates."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 0.75,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "default-single-accent",
+              "type": "contains_any",
+              "evidence": "none matched: ['one accent', 'single accent', 'only accent']"
+            },
+            {
+              "assertion": "mobile-boundary",
+              "type": "contains_any",
+              "evidence": "none matched: ['no horizontal scroll', 'prevent 320px horizontal scroll', 'prevents 320px horizontal scroll', '320px horizontal scroll', 'overflow-x-hidden']"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-dramatic-recipe",
+      "case_id": "pos-dramatic-event-poster",
+      "removed_component": "Dramatic poster recipe",
+      "expected_regressions": [
+        "Output becomes tidy Swiss minimalism: centered hero, small accent line, weak edge pressure, no dominant anchor or microtype."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 0.75,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "drama-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL drama oracle: pos-dramatic-event-poster\n- missing drama carrier: single accent token\n- missing drama carrier: mobile safety\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-anti-slop",
+      "case_id": "neg-multi-accent-gradient",
+      "removed_component": "Anti-Slop",
+      "expected_regressions": [
+        "Allows gradient text, purple/cyan palette drift, rounded card grids, soft shadows, and generic SaaS chrome."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "avoid-multi-accent-gradient",
+              "type": "contains_any",
+              "evidence": "none matched: ['one accent', 'single accent', 'one accent hue']"
+            },
+            {
+              "assertion": "reject-gradient-saas",
+              "type": "contains_any",
+              "evidence": "none matched: ['no purple', 'no gradients', 'no rounded']"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-communication-before-spectacle",
+      "case_id": "pos-semantic-legible-jazz",
+      "removed_component": "Communication before spectacle / No illegible drama",
+      "expected_regressions": [
+        "Allows unreadable overlaps, arbitrary giant dates/numerals, and decorative anchors that do not communicate the subject."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-full-plus-round7-boundary-20260613",
+          "score": 0.3333333333333333,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "semantic-legibility-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL semantic drama oracle: pos-semantic-legible-jazz\n- missing accessible action\n"
+            },
+            {
+              "assertion": "drama-carrier-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL drama oracle: pos-semantic-legible-jazz\n- missing drama carrier: single accent token\n- missing drama carrier: hard field/inversion\n- missing drama carrier: mobile safety\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-subject-archetype-selection",
+      "case_id": "pos-object-poster-archetype",
+      "removed_component": "Choose by subject, not by default",
+      "expected_regressions": [
+        "Model reuses the same dark-right-field/red-bar/cropped-word/ring-line recipe instead of selecting object, route-map, data-diagram, typographic-specimen, photomontage, or civic-safety archetypes by subject."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round7-motif-20260613",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round7-motif-20260613",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "motif-archetype-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL motif diversity oracle: pos-object-poster-archetype\n- missing readable primary path\n- missing object-poster semantics\n- missing object/image implementation\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-protected-reading-zone",
+      "case_id": "round8-audit-overlapped-critical-text",
+      "removed_component": "Protected reading zone heuristic",
+      "expected_regressions": [
+        "Allows dramatic anchors, route lines, trust-boundary bars, diagrams, or giant type to overlap critical title/body/CTA text, producing unreadable poster drama."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round8-readability-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round8-readability-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-contrast-channel-discipline",
+      "case_id": "pos-contrast-channel-night-closure",
+      "removed_component": "Contrast-channel discipline",
+      "expected_regressions": [
+        "Model either reduces poster drama into a polite readable layout or lets high-contrast dramatic anchors compete with title/body/CTA in the same reading zone."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round9-contrast-channel-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round9-contrast-channel-20260615",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "contrast-channel-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL readability oracle: pos-contrast-channel-night-closure\n- missing 12-column poster structure\n- missing critical text annotations\n- missing separated dramatic channel\n- missing hard contrast field remains dramatic\n- missing critical signal sits above graphics\n- missing demoted texture/behind layer exists\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-artifact-fidelity",
+      "case_id": "pos-source-ledger-thread-recap",
+      "removed_component": "Artifact fidelity / source ledger / image-role / diagram-encoding rules",
+      "expected_regressions": [
+        "Model collapses source material into generic slogans, uses images as wallpaper, prints prompt metadata, or draws diagrams whose marks do not encode source facts."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round10-artifact-integrity-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round10-artifact-integrity-20260615",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "artifact-integrity-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-source-ledger-thread-recap\n- missing source ledger markers\n- missing critical text annotations\n- missing image role or explicit no-asset handling\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "artifact-integrity-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-source-ledger-thread-recap\n- missing source ledger markers\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-historical-grounding",
+      "case_id": "pos-historical-rhythm-public-concert",
+      "removed_component": "Historical grounding / designer-to-move mapping",
+      "expected_regressions": [
+        "Model name-drops Swiss designers or repeats generic default motifs instead of translating historical references into subject-matched visual carriers."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round10-artifact-integrity-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round10-artifact-integrity-20260615",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "historical-grounding-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-historical-rhythm-public-concert\n- missing historical move marker\n- missing critical reading annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "historical-grounding-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-historical-rhythm-public-concert\n- missing historical move marker\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-period-lineage-selection",
+      "case_id": "pos-period-lineage-travel-photomontage",
+      "removed_component": "Historical period/lineage selection",
+      "expected_regressions": [
+        "Outputs default to late-1960s/1980s black-white-red typographic disruption regardless of subject."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-period-with-skill-retry-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-period-lineage-travel-photomontage\n- missing travel/photomontage lineage marker\n"
+            }
+          ]
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-period-lineage-travel-photomontage\n- missing travel/photomontage lineage marker\n- missing critical reading annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-period-lineage-travel-photomontage\n- missing travel/photomontage lineage marker\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-palette-lineage-breadth",
+      "case_id": "pos-palette-lineage-lake-travel",
+      "removed_component": "Palette breadth by lineage",
+      "expected_regressions": [
+        "Outputs default to black/white/red or Cloudflare-orange even when another Swiss lineage calls for lake, alpine, lithographic, or analytical color."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-period-with-skill-retry-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-palette-lineage-lake-travel\n- missing one accent discipline\n"
+            }
+          ]
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-palette-lineage-lake-travel\n- missing one accent discipline\n- missing travel/material lineage\n- missing critical text annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-palette-lineage-lake-travel\n- missing one accent discipline\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-object-poster-restraint",
+      "case_id": "pos-object-poster-typographic-restraint",
+      "removed_component": "Object-poster / Sachplakat restraint",
+      "expected_regressions": [
+        "Product/object posters become giant-type collision posters instead of object-led direct communication."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-period-with-skill-retry-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-object-poster-typographic-restraint\n- missing critical reading annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-print-proportion-audit",
+      "case_id": "pos-print-proportion-no-web-grid",
+      "removed_component": "Print proportion instead of web grid",
+      "expected_regressions": [
+        "Outputs expose web/card/dashboard scaffolding instead of using grid as invisible print proportion."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-period-with-skill-retry-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-print-proportion-no-web-grid\n- missing print artifact marker\n"
+            }
+          ]
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-print-proportion-no-web-grid\n- missing print artifact marker\n- missing critical text annotations\n- web UI/card scaffolding appears in a print-proportion case\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-print-proportion-no-web-grid\n- missing print artifact marker\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-material-process-surface",
+      "case_id": "pos-material-process-lithographic-market",
+      "removed_component": "Material print-process surface",
+      "expected_regressions": [
+        "Outputs remain flat digital CSS slabs with no lithographic, halftone, overprint, paper, or screenprint surface where relevant."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-material-process-lithographic-market\n- missing critical text remains protected\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-diagram-restraint",
+      "case_id": "pos-diagram-restraint-theatre-figure-ground",
+      "removed_component": "Diagram restraint by genre",
+      "expected_regressions": [
+        "Routes, nodes, axes, quadrants, and diagrams appear on subjects that need figure-ground, object, image, or typographic solutions."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-diagram-restraint-theatre-figure-ground\n- missing figure-ground carriers\n- missing critical text annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-embodied-reference-discipline",
+      "case_id": "pos-embodied-reference-no-visible-citation",
+      "removed_component": "Embodied reference instead of visible citation",
+      "expected_regressions": [
+        "Outputs name-drop designers visibly instead of embodying the historical move through layout carriers."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-embodied-reference-no-visible-citation\n- missing critical text annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-photomontage-authorship",
+      "case_id": "pos-photomontage-authorship-editorial",
+      "removed_component": "Photomontage authorship and image roles",
+      "expected_regressions": [
+        "Images become wallpaper, cards, or decorative strips instead of authored crops with place/person/evidence/sequence roles."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-photomontage-authorship-editorial\n- missing image roles\n- missing critical text annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-restraint-as-drama",
+      "case_id": "pos-hofmann-restraint-two-contrasts",
+      "removed_component": "Hofmann/Ruder restraint as drama",
+      "expected_regressions": [
+        "Outputs add too many effects and miss the drama of limited contrast axes and negative space."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-period-with-skill-retry-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-hofmann-restraint-two-contrasts\n- missing Basel/Hofmann lineage\n- missing declared contrast axes\n- missing critical text annotations\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-hofmann-restraint-two-contrasts\n- visible/prompt-shaped leakage: #(?:C8102E|F38020)\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-genre-breadth-selection",
+      "case_id": "pos-genre-breadth-geigy-scientific",
+      "removed_component": "Swiss poster genre breadth",
+      "expected_regressions": [
+        "Scientific/object/travel/public-notice prompts collapse into the same tech-event or typographic disruption poster genre."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "period-genre-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL artifact integrity oracle: pos-genre-breadth-geigy-scientific\n- missing source/data encoding\n- missing critical text annotations\n- visible/prompt-shaped leakage: single accent\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-rendered-poster-proof",
+      "case_id": "pos-rendered-critical-text-civic-notice",
+      "removed_component": "Rendered poster proof / image-level critical text validation",
+      "expected_regressions": [
+        "Model satisfies HTML/token rules but critical text is clipped, covered, too small, outside the canvas, or creates horizontal overflow in the rendered poster."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round12-rendered-proof-20260615",
+          "score": 1.0,
+          "n": 1,
+          "failures": []
+        },
+        "without_skill": {
+          "run": "current-round12-rendered-proof-20260615",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "rendered-critical-text-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL rendered poster oracle\n- cta: too much low-contrast rendered text (42%)\n{\n  \"viewport\": {\n    \"width\": 840,\n    \"height\": 1113\n  },\n  \"scrollWidth\": 840,\n  \"scrollHeight\": 1128,\n  \"bodyScrollWidth\": 840,\n  \"critical\": [\n    {\n      \"role\": \"title\",\n      \"text\": \"Clean Water Vote\",\n      \"left\": 254.6875,\n      \"top\": 236.78125,\n      \"right\": 695.5,\n      \"bottom\": 486.5,\n      \"width\": 440.8125,\n      \"height\": 249.71875,\n      \"fontSize\": 78,\n      \"opacity\": 1,\n      \"color\": \"rgb(17, 17, 17)\",\n      \"backgroundColor\": \"rgba(0, 0, 0, 0)\",\n      \"centerCovered\": false,\n      \"topTag\": \"H1\",\n      \"topText\": \"Clean Water Vote\"\n    },\n    {\n      \"role\": \"date\",\n      \"text\": \"PUBLIC VOTE Sunday 09:00\\u201318:00\",\n      \"left\": 89.390625,\n      \"top\": 528.921875,\n     "
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-all-ablation-sentinels-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "rendered-critical-text-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL rendered poster oracle\n- body: too much low-contrast rendered text (46%)\n- date: transparent critical text crosses a high-variance background; add a quiet field or split-color treatment\n{\n  \"viewport\": {\n    \"width\": 840,\n    \"height\": 1113\n  },\n  \"scrollWidth\": 840,\n  \"scrollHeight\": 1179,\n  \"bodyScrollWidth\": 840,\n  \"critical\": [\n    {\n      \"role\": \"title\",\n      \"text\": \"CLEAN WATER VOTE\",\n      \"left\": 64,\n      \"top\": 123.5,\n      \"right\": 585,\n      \"bottom\": 392.09375,\n      \"width\": 521,\n      \"height\": 268.59375,\n      \"fontSize\": 109.2,\n      \"opacity\": 1,\n      \"color\": \"rgb(12, 10, 9)\",\n      \"backgroundColor\": \"rgba(0, 0, 0, 0)\",\n      \"centerCovered\": false,\n      \"topTag\": \"H1\",\n      \"topText\": \"CLEAN WATER VOTE\"\n    },\n    {\n      \"role\": \"body\",\n     "
+            }
+          ]
+        }
+      },
+      "missing": []
+    },
+    {
+      "ablation_id": "no-web-cta-filter",
+      "case_id": "pos-flue-framework-poster",
+      "removed_component": "Poster-source CTA filtering / website navigation-to-poster-copy discipline",
+      "expected_regressions": [
+        "Website navigation or button labels such as 'View Documentation', 'Get Started', or 'Read the docs' are copied into poster CTAs even when the subject calls for a print artifact rather than web UI."
+      ],
+      "scores": {
+        "with_skill": {
+          "run": "current-round13-flue-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "flue-framework-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL Flue Framework oracle: pos-flue-framework-poster\n- body: font too small (11.0px)\n- title: font too small (11.0px)\n"
+            }
+          ]
+        },
+        "without_skill": {
+          "run": "current-round13-flue-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "flue-framework-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL Flue Framework oracle: pos-flue-framework-poster\n- missing source/audit carriers\n- missing critical text annotations\n- expected at least 3 [data-critical] elements, found 0\n- missing data-critical='title'\n- missing body/date/cta critical role\n"
+            }
+          ]
+        },
+        "ablation": {
+          "run": "current-round13-flue-20260616",
+          "score": 0.0,
+          "n": 1,
+          "failures": [
+            {
+              "assertion": "flue-framework-oracle",
+              "type": "script",
+              "evidence": "exit=1\nstdout:\nFAIL Flue Framework oracle: pos-flue-framework-poster\n- body: font too small (11.0px)\n- body: transparent critical text crosses a high-variance background; add a quiet field or split-color treatment\n- body: transparent critical text crosses a high-variance background; add a quiet field or split-color treatment\n- body: transparent critical text crosses a high-variance background; add a quiet field or split-color treatment\n- body: transparent critical text crosses a high-variance background; add a quiet field or split-color treatment\n- body: transparent critical text crosses a high-variance background; add a quiet field or split-color treatment\n- cta: font too small (11.0px)\n"
+            }
+          ]
+        }
+      },
+      "missing": []
+    }
+  ],
+  "existing_context": [
+    {
+      "run": "current-round7-motif-20260613",
+      "cases": [
+        "pos-civic-safety-archetype",
+        "pos-data-diagram-archetype",
+        "pos-object-poster-archetype",
+        "pos-photomontage-archetype",
+        "pos-route-map-archetype",
+        "pos-typographic-specimen-archetype"
+      ],
+      "summary": {
+        "with_skill": 1.0,
+        "without_skill": 0.16666666666666666,
+        "ablation:no-subject-archetype-selection": 0.6666666666666666
+      }
+    },
+    {
+      "run": "current-round8-readability-20260615",
+      "cases": [
+        "pos-protected-reading-zone-credential",
+        "round8-audit-overlapped-critical-text"
+      ],
+      "summary": {
+        "with_skill": 1.0,
+        "without_skill": 0.5,
+        "ablation:no-protected-reading-zone": 1.0
+      }
+    },
+    {
+      "run": "current-round9-contrast-channel-20260615",
+      "cases": [
+        "pos-contrast-channel-night-closure",
+        "pos-protected-reading-zone-credential"
+      ],
+      "summary": {
+        "with_skill": 1.0,
+        "without_skill": 0.0,
+        "ablation:no-contrast-channel-discipline": 1.0,
+        "materialized-no-contrast-channel-discipline": 0.0
+      }
+    },
+    {
+      "run": "current-round10-artifact-integrity-20260615",
+      "cases": [
+        "pos-encoded-diagram-moq",
+        "pos-historical-figure-ground-theatre",
+        "pos-historical-rhythm-public-concert",
+        "pos-source-ledger-thread-recap",
+        "round10-audit-after-image-defects"
+      ],
+      "summary": {
+        "with_skill": 1.0,
+        "without_skill": 0.2,
+        "ablation:no-artifact-fidelity": 0.2,
+        "ablation:no-historical-grounding": 0.6,
+        "materialized-no-artifact-fidelity": 0.0,
+        "materialized-no-historical-grounding": 0.0
+      }
+    },
+    {
+      "run": "current-round12-rendered-proof-20260615",
+      "cases": [
+        "pos-rendered-critical-text-civic-notice"
+      ],
+      "summary": {
+        "with_skill": 1.0,
+        "without_skill": 0.0,
+        "ablation:no-rendered-poster-proof": 0.0
+      }
+    }
+  ]
+}

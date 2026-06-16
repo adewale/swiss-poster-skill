@@ -1,8 +1,14 @@
 # Swiss Poster Design System — Research & Sources
 
-## The Two Traditions
+## The plural traditions
 
-Swiss graphic design contains two distinct lineages that this system draws from:
+Swiss graphic design is not one Helvetica-like lineage. This system draws from several poster traditions: object/Sachplakat commercial posters, lithographic travel posters, Matter-style photomontage, Zurich/Basel International Typographic Style, Geigy/scientific corporate plates, New Wave typography, Troxler/performance rhythm, and contemporary cultural posters.
+
+### Before the grid: object and travel posters
+
+- **Sachplakat / object posters** foreground a product or artifact as the image. Typography is often sparse, commercial, and direct: a product name, a maker, and a few factual labels. The object carries the drama, not a giant neutral type system.
+- **Travel and lithographic posters** rely on scenic image, destination desire, flat print color, and poster lettering that may be condensed, painted, serifed, or custom. They are Swiss posters without being Helvetica posters.
+- **Herbert Matter's tourism photomontage** bridges travel and modernism: photographic fragments, scale shifts, diagonals, and overprint integrate type with image rather than leaving type as a clean grid overlay.
 
 ### The Grid (Zurich School, 1950s–60s)
 
@@ -27,6 +33,10 @@ The expressive tradition that took the grid as a starting point and learned when
 - **Herbert Matter** (1907–1984) — Photomontage pioneer. Swiss tourism posters (1930s) that combined extreme scale juxtaposition (giant close-up face against distant landscape), diagonal compositions, and bold sans-serif type. Bridged photography and graphic design.
 - **Max Bill** (1908–1994) — Concrete artist and designer. His work established that geometric forms (circles, squares, lines) are compositional elements in their own right. Flat, unshaded, mathematically precise — structure made visible.
 
+### Scientific / corporate diversity (Geigy and related Basel practice)
+
+Geigy-era Swiss scientific and pharmaceutical design shows that corporate Swiss modernism was not only neutral Helvetica grids. Scientific specimens, molecules, insects, plants, diagrams, measured captions, narrow labels, and restrained but varied color systems were part of the language. Typography can be technical, narrow, mono-like, or specimen-driven, with image/data as the dominant anchor.
+
 ---
 
 ## Key Works Referenced
@@ -47,9 +57,75 @@ The expressive tradition that took the grid as a starting point and learned when
 
 ---
 
+## Visual heuristics from the inspiration set
+
+The reference gallery at <https://swiss.ziki.boo/inspiration> is useful because the dramatic examples are not merely “Swiss minimal.” They share concrete poster moves:
+
+- **A single dominant event:** concentric arcs, repeated translucent circles, a huge cropped letterform, a giant wheel/photo fragment, or a blocky color geometry often owns most of the frame.
+- **Severe edge pressure:** the strongest compositions pin the graphic to an edge or crop it hard; centered large type alone feels weaker.
+- **Tiny typographic authority:** small tracked titles, dates, locations, and index marks sit in disciplined clusters against oversized forms.
+- **Hard figure/ground drama:** black/white mass, split fields, and reversal carry as much drama as the accent hue.
+- **Protected public reading:** the strongest historical posters distinguish display form from public instruction. Muller-Brockmann's music arcs, Hofmann's abstract figure/ground shapes, Matter's photomontage, and Weingart's disruption do not make the event name/date/action disappear; they create a clear signal path inside the drama.
+- **Geometry as subject:** circles, arcs, hexagons, bars, and line fields are the image, not decoration.
+- **Photography made graphic:** photos are cropped, high-contrast, monochrome/duotone, and often overprinted; they are not presented as rounded content cards.
+- **Rhythm and repetition:** repeated circles, arcs, stripes, dot matrices, and type rows create motion/optical vibration.
+
+The historical reason is not “make it chaotic.” Posters had to work in public: read at distance, compete in the street, communicate fast, and stay cheap/reproducible in print. The big forms were usually **semantic compression**: Müller-Brockmann’s arcs make music visible through rhythm and repetition; Hofmann’s figure-ground/photo abstractions turn theater or exhibition subjects into one memorable sign; Matter’s photomontage makes travel desire immediate through scale juxtaposition; Weingart later breaks Swiss typography from inside the system, but still starts from its discipline.
+
+Translate those into web work by requiring each hero or major section to choose one archetype: cropped-word, giant-date, split-field, geometric-anchor, masked-photo, rhythm/texture, or stacked-collage. The skill should reject outputs that stop at a tidy centered heading, paragraph, and equal card grid.
+
+The relevant cognitive principle is signal separation: a reader parses a poster through preattentive grouping, contrast, figure/ground separation, and visual hierarchy before reading every word. WCAG and related legibility work are useful here only as measurement physics: contrast is local to the actual backing behind text, and competing foreground signals reduce readability. Do not import a bland compliance aesthetic. Swiss poster drama works when contrast is allocated into channels — critical text wins in its local reading zone, while the surrounding field can remain severe, high-contrast, cropped, and noisy.
+
+Swiss history also rejects style-only generation:
+
+- **Müller-Brockmann:** grid and geometry are systems for organizing public information, not a default layout fingerprint. Concert arcs and repetitions translate rhythm into structure.
+- **Ruder:** typography is functional; microtype still has a reader, source, or index purpose.
+- **Hofmann:** contrast is compositional structure — large/small, light/dark, static/dynamic, point/line/plane — not random noise.
+- **Matter:** photomontage makes place/action/evidence visible through crop, scale, and overprint; photographs are not wallpaper.
+- **Weingart/Troxler/Odermatt & Tissi:** expressive disruption is allowed only when hierarchy and the public message remain intentional.
+
+For generated posters, this means every visual move should be auditable: visible text maps to the source ledger, images have semantic roles, diagrams encode real variables, and historical references are embodied as compositional moves rather than designer-name garnish.
+
+The generation system must also resist period collapse. Swiss poster history spans object posters, travel photomontage, lithographic placards, Zurich International Typographic Style, Basel figure/ground pedagogy, Geigy scientific plates, Weingart's New Wave typography, Troxler's performance posters, and contemporary cultural work. If every output looks like black-white-red late-modern typographic disruption, the skill has learned a narrow slice of Swiss history rather than Swiss poster design as a broad problem-solving tradition. If every output uses the same IBM Plex/Helvetica-like mega-word treatment, the skill has also collapsed typographic history into one convenient web-font proxy. It should reject the opposite failure too: illegible overlaps, arbitrary giant numerals, and microtype that exists only as decoration.
+
+Typography should therefore be chosen as part of lineage selection:
+
+- object posters may need custom/product lettering and restrained labels;
+- travel/lithographic posters may need condensed, serifed, painted, or destination-style display lettering;
+- Zurich/Basel International Style can use neo-grotesk rationalism;
+- Geigy/scientific plates may use narrow grotesk, mono, specimen labels, and measured captions;
+- New Wave/contemporary cultural posters may use fragments, distorted spacing, or custom type/image fusion.
+
+## Academic literature lessons
+
+Recent design-history scholarship, especially the open-access *Swiss Graphic Design Histories* project, teaches that Swiss poster design should be treated as a contested public system, not as a style preset.
+
+- **Swiss graphic design is a constructed label.** “Swiss Graphic Design,” “Swiss Style,” “Swiss Typography,” and “International Typographic Style” have been used inconsistently as style labels, practice labels, national branding, and economic arguments. The canon was partly produced by practitioners through books, lectures, exhibitions, and self-authored histories. Do not treat canonical names as a complete or neutral map.
+- **Use microhistory, not one heroic chronology.** Contemporary scholarship argues for fragmented, archival, and counter-archival histories. In generated work, prefer a prompt-specific source ledger and lineage choice over generic Swiss aesthetics.
+- **Poster form is infrastructure.** Sara Zeller’s work on Weltformat shows that the Swiss poster was shaped by the F4/Weltformat standard, APG billposting, printers, outdoor stands, exhibitions, and city regulation. A poster should feel like public display matter: fixed proportion, street-distance hierarchy, edge pressure, captions, and print logic.
+- **Awards create taste, not just measure it.** The national poster award judged artistic approach, advertising force, and printing quality, while also exercising stylistic authority. Evals should judge communication, source fidelity, and print plausibility rather than only checking for familiar style tokens.
+- **School labels simplify messy institutions.** “Basel School,” “Zurich School,” and “Swiss Style” compress many actors, courses, practices, and motives. Use school names as shorthand for specific moves, never as visible garnish or as proof of historical grounding.
+- **Typography is technological history.** Typesetting, phototypesetting, desktop tools, and digital foundries changed what typography meant and who practiced it. Font choice should follow era, production method, and subject, not a single Helvetica/Plex default.
+- **Swiss neutrality is a myth to handle carefully.** “Swiss Style” abroad also functioned as cultural diplomacy and commercial distinction. Preserve client, institution, place, sector, audience, and purpose rather than erasing them under a neutral grid.
+- **The archive is biased.** Museums, collectors, exhibitions, awards, and cultural-export programs shaped what survived and what became canonical. Characterization evidence should sample beyond famous International Style posters and beyond current Cloudflare-heavy baselines.
+- **Ephemera is meaningful.** Cultural posters, invitations, catalogs, and captions act as interfaces between institution and public. Dates, venues, sponsors, captions, and source-bearing details are not decorative microtype; they must remain readable.
+- **Scripts are not texture.** Postcolonial critiques of modernist typography warn against treating unfamiliar scripts as pure visual form. Non-Latin text must be meaningful, accurate, and readable, not exotic patterning.
+
+---
+
 ## Sources
 
-### Primary references
+### Primary / institutional references
+
+- Museum für Gestaltung Zürich eMuseum — https://www.emuseum.ch/
+- Swiss National Library poster collection — https://www.nb.admin.ch/snl/en/home/collections/posters.html
+- Cooper Hewitt collection search (Baumberger, Cardinaux, Swiss object/travel posters) — https://collection.cooperhewitt.org/search/collection/
+- Britannica, postwar graphic design in Switzerland — https://www.britannica.com/art/graphic-design/Postwar-graphic-design-in-Japan-and-Switzerland
+- AIGA medalists: Josef Müller-Brockmann, Armin Hofmann, Herbert Matter, Wolfgang Weingart — https://www.aiga.org/medalist-josefmullerbrockmann / https://www.aiga.org/medalist-arminhofmann / https://www.aiga.org/medalist-herbertmatter / https://www.aiga.org/medalist-wolfgangweingart
+- Lars Müller Publishers, *Corporate Diversity* (Geigy) — https://www.lars-mueller-publishers.com/corporate-diversity
+- MoMA collection search (Herbert Matter, Niklaus Troxler) — https://www.moma.org/search/
+
+### Secondary references
 
 - International Typographic Style — https://en.wikipedia.org/wiki/International_Typographic_Style
 - Wolfgang Weingart — https://en.wikipedia.org/wiki/Wolfgang_Weingart
@@ -70,6 +146,17 @@ The expressive tradition that took the grid as a starting point and learned when
 
 ### Publications
 
+- *Swiss Graphic Design Histories*, ed. Bischler, Fornari, Kaufmann, Klein, Lzicar, Niedermann, Owens, Renner, Schneemann, Zeller (Scheidegger & Spiess, 2021, open access) — https://www.scheidegger-spiess.ch/produkt/swiss-graphic-design-histories/1011
+- Roland Früh, Ueli Kaufmann, Peter J. Schneemann, Sara Zeller, “Reading between the Lines of Swiss Graphic Design History” (2021) — https://doi.org/10.53788/SWBE0300
+- Sara Zeller, “Weltformat—Setting (Swiss) Display Aesthetics for Posters” (2021) — https://doi.org/10.53788/SWBE0316
+- Constance Delamadeleine, “Swiss Made” (2021) — https://doi.org/10.53788/SWBE0209
+- Constance Delamadeleine, “Typography” (2021) — https://doi.org/10.53788/SWBE0211
+- Sarah Klein, Sandra Bischler, “The Basel School—Deconstructing Labels of Swiss Graphic Design Education” (2021) — https://doi.org/10.53788/SWBE0313
+- Sara Zeller, “Die besten Plakate / Les meilleures affiches—The Early Years of the National Poster Award” (2021) — https://doi.org/10.53788/SWBE0302
+- Ueli Kaufmann, “Unfamiliar Writing Forms—Instances of Various Scripts in Swiss Graphic Designers’ Publications” (2021) — https://doi.org/10.53788/SWBE0314
+- Constance Delamadeleine, “Promoting Swiss Graphic Design and Typography Abroad: The Case of Paris in the 1960s,” *Design Issues* (2021) — https://doi.org/10.1162/desi_a_00623
+- Robin Kinross, “Emil Ruder’s Typography and ‘Swiss typography’,” *Information Design Journal* (1984) — https://doi.org/10.1075/idj.4.2.04kin
+- L. Mauderli, “The Graphic Collection of the Museum für Gestaltung Zürich,” *Journal of Design History* (2002) — https://doi.org/10.1093/jdh/15.1.47
 - *Grid Systems in Graphic Design* by Josef Muller-Brockmann (1961) — https://archive.org/details/gridsystemsingra0000muml
 - *Typographie: A Manual of Design* by Emil Ruder (Arthur Niggli, 1967; reprinted 2001, ISBN 3721200438)
 - *My Way to Typography* by Wolfgang Weingart (2000)

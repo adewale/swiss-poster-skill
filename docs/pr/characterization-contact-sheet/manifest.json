@@ -1,0 +1,329 @@
+[
+  {
+    "id": "cloudflare-london-user-group",
+    "title": "Cloudflare London User Group",
+    "baseline_ref": "origin/main:posters/cloudflare-london-user-group.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-london-user-group.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-user-group/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-user-group/poster.png",
+    "prompt_provenance": "Exact local Pi prompt exists for the source tweet-thread task; this one-page event poster brief is reconstructed from PR #1/body and committed poster content.",
+    "brief": "Swiss Poster composition for the inaugural Cloudflare London User Group meetup: 29 Apr 2026, Waterloo, Cloudflare orange as the single accent, IBM Plex Sans, mega-scale Cloudflare/London wordmark, event details, three talks, venue, RSVP.",
+    "canvas": {
+      "width": 840,
+      "height": 1856
+    },
+    "assets": [
+      {
+        "source": "posters/tweet-photo.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-user-group/assets/tweet-photo.jpg",
+        "alt": "Sunset view from Cloudflare County Hall across the Thames to Westminster / Big Ben."
+      }
+    ],
+    "source_material": [
+      "Tweet text: “This evening is the inaugural meeting of the Cloudflare London User Group. It's at our offices in Waterloo. See you there.”"
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "cloudflare-london-tweets",
+    "title": "Cloudflare London Tweets",
+    "baseline_ref": "origin/main:posters/cloudflare-london-tweets.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-london-tweets.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-tweets/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-tweets/poster.png",
+    "prompt_provenance": "Exact local Pi prompt exists: create a new poster from six x.com URLs and fully use/pass the skill criteria.",
+    "brief": "Poster based on six @ade_oshineye Cloudflare London User Group tweets: the County Hall view, Prada the pigeon, arriving at the venue, Security/Agents/Sandboxes talks, a live demo, and closing group photo. Make the thread feel like one public recap artifact.",
+    "canvas": {
+      "width": 840,
+      "height": 2200
+    },
+    "assets": [],
+    "source_material": [
+      "Tweet 01: This evening is the inaugural meeting of the Cloudflare London User Group. It's at our offices in Waterloo. See you there.",
+      "Tweet 02: If you're attending, say hi to Prada the pigeon.",
+      "Tweet 03: I'll also be doing demos of two links.",
+      "Tweet 04: Now Alpesh Doshi talking about agent orchestration.",
+      "Tweet 05: And now Yigit Erol is talking about safer agent workflows with sandboxes and zero-trust egress.",
+      "Tweet 06: Thanks to our organizers; looking for fun community demos; sessions roughly every month from now on."
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "cloudflare-london-recap",
+    "title": "Cloudflare London Recap",
+    "baseline_ref": "origin/main:posters/cloudflare-london-recap.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-london-recap.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-recap/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-recap/poster.png",
+    "prompt_provenance": "Reconstructed from committed recap poster content and Cloudflare tweet-thread PR history.",
+    "brief": "Create a full-thread recap poster for the inaugural Cloudflare London User Group: venue view, Prada the pigeon, talk sequence, arrivals, live demo, closing group photo, and a single clear public recap narrative.",
+    "canvas": {
+      "width": 840,
+      "height": 1796
+    },
+    "assets": [],
+    "source_material": [
+      "Source thread: x.com/@ade_oshineye, six tweets, 29 Apr 2026.",
+      "Core quote: “This evening is the inaugural meeting of the Cloudflare London User Group. It's at our offices in Waterloo.”",
+      "Thread beats: County Hall view, Prada the pigeon, demos, Alpesh on agents, Yigit on sandboxes/zero-trust egress, monthly community demos."
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "cloudflare-london-onepage",
+    "title": "Cloudflare London Onepage",
+    "baseline_ref": "origin/main:posters/cloudflare-london-onepage.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-london-onepage.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/poster.png",
+    "prompt_provenance": "Reconstructed from commit message 'Add one-page poster — entire recap in a single A2 frame' and committed poster content.",
+    "brief": "Create a one-page A2 Swiss-poster recap of the Cloudflare London User Group thread: one frame containing the meetup invitation, venue, talks, demo, community moment, and closing image/story.",
+    "canvas": {
+      "width": 840,
+      "height": 1188
+    },
+    "assets": [
+      {
+        "source": "posters/thread-media-2049452285139276131-1.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/assets/thread-media-2049452285139276131-1.jpg",
+        "alt": "Sunset over Big Ben from Cloudflare County Hall."
+      },
+      {
+        "source": "posters/thread-media-2049531960716914824-2.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/assets/thread-media-2049531960716914824-2.jpg",
+        "alt": "Prada the pigeon on the Cloudflare letters."
+      },
+      {
+        "source": "posters/thread-media-2049559654208856175-3.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/assets/thread-media-2049559654208856175-3.jpg",
+        "alt": "Alpesh Doshi presenting an Agentic System slide."
+      },
+      {
+        "source": "posters/thread-media-2049562905536795033-4.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/assets/thread-media-2049562905536795033-4.jpg",
+        "alt": "Yigit Erol presenting Sandboxes / Zero-Trust material."
+      },
+      {
+        "source": "posters/thread-media-2049575911872160076-5.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-onepage/assets/thread-media-2049575911872160076-5.jpg",
+        "alt": "Organizers chatting at post-talk drinks."
+      }
+    ],
+    "source_material": [
+      "Thread recap line: SWARMS HALLUCINATE IN CHORUS.",
+      "Source sequence: first → last tweet; 6 tweets; 8h 11m."
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "cloudflare-london-landscape",
+    "title": "Cloudflare London Landscape",
+    "baseline_ref": "origin/main:posters/cloudflare-london-landscape.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-london-landscape.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-landscape/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-landscape/poster.png",
+    "prompt_provenance": "Reconstructed from committed landscape poster variant and Cloudflare tweet-thread PR history.",
+    "brief": "Create a landscape Swiss-poster variant for the Cloudflare London User Group recap, using the same thread content but optimized for a wide frame with strong typographic hierarchy and Cloudflare orange.",
+    "canvas": {
+      "width": 1200,
+      "height": 800
+    },
+    "assets": [
+      {
+        "source": "posters/tweet-image-orange.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-landscape/assets/tweet-image-orange.jpg",
+        "alt": "Orange-duotone view from County Hall across the Thames to Westminster."
+      }
+    ],
+    "source_material": [
+      "Same thread content as the Cloudflare London User Group recap; use the venue view as the wide-image anchor."
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "cloudflare-london-poster",
+    "title": "Cloudflare London Poster",
+    "baseline_ref": "origin/main:posters/cloudflare-london-poster.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-london-poster.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-poster/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-london-poster/poster.png",
+    "prompt_provenance": "Reconstructed from committed single portrait poster variant and Cloudflare tweet-thread PR history.",
+    "brief": "Create a single portrait Swiss poster for the Cloudflare London User Group recap: Cloudflare London, Waterloo, 29 Apr 2026, three talks, venue photo/view, community detail, and RSVP/recap metadata.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [
+      "Quote: “Thanks to our organizers and we are looking for people from the community with fun and interesting demos. We will be having sessions roughly every month from now on.”",
+      "Talks: Edge platform lessons from production; MoQ and realtime media; Credential Broker pattern."
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "cloudflare-connect-london",
+    "title": "Cloudflare Connect London",
+    "baseline_ref": "origin/main:posters/cloudflare-connect-london.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/cloudflare-connect-london.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-connect-london/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-connect-london/poster.png",
+    "prompt_provenance": "Reconstructed from commit messages and committed poster content for the Connect London branch.",
+    "brief": "Cloudflare Connect London Developer Track poster: London event, UK-centred globe or map motif, real talk sequence, speaker/talk metadata, Cloudflare orange accent, strict Swiss poster checklist discipline.",
+    "canvas": {
+      "width": 1200,
+      "height": 800
+    },
+    "assets": [
+      {
+        "source": "posters/connect-venue-orange.jpg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-connect-london/assets/connect-venue-orange.jpg",
+        "alt": "Cloudflare Connect London venue treated in orange duotone."
+      },
+      {
+        "source": "posters/globe-uk.svg",
+        "local": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/cloudflare-connect-london/assets/globe-uk.svg",
+        "alt": "UK-centred globe/map line drawing."
+      }
+    ],
+    "source_material": [
+      "Developer Track: opening keynote; realtime media over MoQ; credential broker patterns; workers/demos/deployment."
+    ],
+    "audit_findings": []
+  },
+  {
+    "id": "breaking-the-35",
+    "title": "Breaking the 35",
+    "baseline_ref": "origin/main:posters/breaking-the-35.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/breaking-the-35.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/breaking-the-35/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/breaking-the-35/poster.png",
+    "prompt_provenance": "Reconstructed from PR #2 body; exact Claude prompt was not stored locally.",
+    "brief": "Poster telling the rebellion against the Adobe LaserWriter font menu from 1985–1995: the PostScript 35, ransom-note typography, Neville Brody and FontShop, Emigre, CalArts, Cranbrook, and the postmodern break from the default menu.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "fork-the-planet",
+    "title": "Fork the Planet",
+    "baseline_ref": "origin/main:posters/fork-the-planet.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/fork-the-planet.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/fork-the-planet/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/fork-the-planet/poster.png",
+    "prompt_provenance": "Reconstructed from committed poster filename/content and PR #2 branch history; exact prompt was not stored locally.",
+    "brief": "Typographic/software-culture poster titled Fork the Planet: branching, forking, remixing, crash override, cereal killer energy, and planetary-scale code culture. Treat the fork/branch as the subject, not as a decorative arrow.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "slop-to-hillclimbing",
+    "title": "Slop → Hillclimbing",
+    "baseline_ref": "origin/main:posters/slop-to-hillclimbing.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/slop-to-hillclimbing.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/slop-to-hillclimbing/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/slop-to-hillclimbing/poster.png",
+    "prompt_provenance": "Reconstructed from PR #4 body; exact Claude prompt was not stored locally.",
+    "brief": "Weltformat technical poster around the function definition refine(slop: Slop) -> Hillclimbing. Include function properties, preconditions, postconditions, iterative improvement, gradient/loss landscape notation, and the idea that slop is improved by deliberate hillclimbing.",
+    "canvas": {
+      "width": 1200,
+      "height": 840
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "durable-objects",
+    "title": "Durable Objects",
+    "baseline_ref": "origin/main:posters/durable-objects.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/durable-objects.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/durable-objects/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/durable-objects/poster.png",
+    "prompt_provenance": "Reconstructed from PR #3 body; exact Claude prompt was not stored locally.",
+    "brief": "Explainer poster for Cloudflare Durable Objects. Teach what a Durable Object is: a tiny long-lived server guaranteed unique for a specific ID. Arc: what it is, how it differs from stateless Workers, what it contains, how to think about it, and what follows for coordination.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "lean-into-your-weirdness",
+    "title": "Lean Into Your Weirdness",
+    "baseline_ref": "origin/main:posters/lean-into-your-weirdness.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/lean-into-your-weirdness.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/lean-into-your-weirdness/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/lean-into-your-weirdness/poster.png",
+    "prompt_provenance": "Reconstructed from PR #3 body; exact Claude prompt was not stored locally.",
+    "brief": "Manifesto poster titled Lean Into Your Weirdness. The word WEIRDNESS should physically demonstrate the claim through mixed weights/styles, with tradeoffs, diagnosis, patron saints, practices, and standing order. The form should feel intentionally strange but still readable.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "ten-principles-for-bad-design",
+    "title": "Ten Principles for Bad Design",
+    "baseline_ref": "origin/main:posters/ten-principles-for-bad-design.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/ten-principles-for-bad-design.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/ten-principles-for-bad-design/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/ten-principles-for-bad-design/poster.png",
+    "prompt_provenance": "Reconstructed from PR #3 body; exact Claude prompt was not stored locally.",
+    "brief": "Rams-style poster for eleven principles of bad design. The poster about bad design should demonstrate good design: quiet grid, disciplined title, two-column principle matrix, restraint, no decorative chrome, and a final eleventh principle given special placement.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "credential-broker",
+    "title": "Credential Broker",
+    "baseline_ref": "origin/main:posters/credential-broker.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/credential-broker.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/credential-broker/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/credential-broker/poster.png",
+    "prompt_provenance": "Reconstructed from PR #5 body; exact Claude prompt was not stored locally.",
+    "brief": "Poster explaining the Outbound Worker / Credential Broker / Intercepting Proxy pattern. Secrets, credentials, and capabilities stay outside the untrusted agent sandbox. A trusted broker holds them and spends them on the agent's behalf, on your terms. Avoid code snippets and API headers; make the trust boundary visual.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  },
+  {
+    "id": "moq",
+    "title": "Media over QUIC",
+    "baseline_ref": "origin/main:posters/moq.png",
+    "baseline_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/baseline/moq.png",
+    "current_html": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/moq/poster.html",
+    "current_png": "/Users/adewale/Documents/projects/code/swiss-poster-skill/docs/pr/characterization-contact-sheet/current/moq/poster.png",
+    "prompt_provenance": "Reconstructed from PR #7 body; exact Claude prompt was not stored locally.",
+    "brief": "Slop-free Swiss poster explaining Media over QUIC: flat fields, single Cloudflare orange accent, light ground, meaningful latency-vs-scale quadrant, sub-second target, CDN-style relay, broadcast delivery, and interoperability rather than vague hype.",
+    "canvas": {
+      "width": 840,
+      "height": 1200
+    },
+    "assets": [],
+    "source_material": [],
+    "audit_findings": []
+  }
+]

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=840, initial-scale=1">
+<title>Cloudflare London User Group</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:#57534e;
+    --soft:#e7e5e4;
+    --dark:#292524;
+    --accent:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans","Hanken Grotesk","Barlow","Host Grotesk","DM Sans",system-ui,sans-serif}
+  body{overflow-x:hidden}
+  .poster{
+    width:840px;
+    height:1856px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,1fr);
+  }
+  .photo{
+    position:absolute;
+    left:0;
+    top:0;
+    width:840px;
+    height:690px;
+    overflow:hidden;
+    background:var(--dark);
+    clip-path:polygon(0 0,100% 0,100% 78%,0 100%);
+    z-index:1;
+  }
+  .photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(1) contrast(1.35);
+    opacity:.82;
+    mix-blend-mode:screen;
+  }
+  .photo::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,rgba(243,128,32,.92) 0 28%,rgba(243,128,32,.22) 28% 47%,transparent 47%);
+    mix-blend-mode:multiply;
+  }
+  .grain{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.18;
+    z-index:20;
+    background-image:
+      repeating-linear-gradient(0deg,rgba(28,25,23,.12) 0 1px,transparent 1px 5px),
+      repeating-linear-gradient(90deg,rgba(28,25,23,.08) 0 1px,transparent 1px 7px);
+  }
+  .mega{
+    position:absolute;
+    left:-26px;
+    top:515px;
+    z-index:3;
+    font-size:184px;
+    line-height:.78;
+    letter-spacing:-.085em;
+    font-weight:800;
+    color:var(--ink);
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .mega span{display:block}
+  .mega .cloud{color:var(--accent);transform:translateX(-10px)}
+  .orange-slab{
+    position:absolute;
+    right:-96px;
+    top:760px;
+    width:412px;
+    height:1032px;
+    background:var(--accent);
+    z-index:0;
+  }
+  .route{
+    position:absolute;
+    left:82px;
+    top:650px;
+    width:930px;
+    height:930px;
+    border:22px solid var(--accent);
+    border-left-color:transparent;
+    border-bottom-color:transparent;
+    border-radius:50%;
+    transform:rotate(-18deg);
+    z-index:2;
+    pointer-events:none;
+  }
+  .route::before{
+    content:"";
+    position:absolute;
+    width:28px;
+    height:28px;
+    background:var(--ink);
+    left:126px;
+    top:49px;
+  }
+  .route::after{
+    content:"";
+    position:absolute;
+    width:28px;
+    height:28px;
+    background:var(--paper);
+    border:9px solid var(--ink);
+    right:111px;
+    top:133px;
+  }
+  .title{
+    grid-column:2 / 10;
+    grid-row:10 / 14;
+    position:relative;
+    z-index:10;
+    align-self:start;
+    background:var(--paper);
+    padding:30px 34px 28px 0;
+  }
+  h1{
+    margin:0;
+    font-size:72px;
+    line-height:.88;
+    letter-spacing:-.055em;
+    font-weight:700;
+  }
+  .subtitle{
+    margin:22px 0 0;
+    max-width:470px;
+    font-size:22px;
+    line-height:1.12;
+    font-weight:500;
+  }
+  .date-block{
+    grid-column:2 / 7;
+    grid-row:14 / 16;
+    position:relative;
+    z-index:10;
+    background:var(--ink);
+    color:var(--paper);
+    padding:26px 28px;
+    align-self:start;
+  }
+  .date-kicker,.label{
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .date-main{
+    margin-top:16px;
+    font-size:46px;
+    line-height:.9;
+    letter-spacing:-.045em;
+    font-weight:700;
+  }
+  .venue{
+    margin-top:12px;
+    color:rgba(250,250,249,.78);
+    font-size:17px;
+    line-height:1.2;
+  }
+  .details{
+    grid-column:2 / 11;
+    grid-row:17 / 21;
+    position:relative;
+    z-index:10;
+    display:grid;
+    grid-template-columns:repeat(9,1fr);
+    gap:20px;
+    align-self:start;
+  }
+  .talks{
+    grid-column:1 / 6;
+    background:var(--paper);
+    border-top:10px solid var(--ink);
+    padding:22px 0 0;
+  }
+  .talk{
+    display:grid;
+    grid-template-columns:62px 1fr;
+    border-bottom:1px solid rgba(28,25,23,.22);
+    padding:18px 0 16px;
+  }
+  .num{
+    font-size:14px;
+    font-weight:700;
+    color:var(--accent);
+  }
+  .talk strong{
+    display:block;
+    font-size:24px;
+    line-height:.98;
+    letter-spacing:-.025em;
+  }
+  .talk span{
+    display:block;
+    margin-top:7px;
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.25;
+  }
+  .meta{
+    grid-column:6 / 10;
+    background:var(--ink);
+    color:var(--paper);
+    padding:24px;
+    min-height:320px;
+  }
+  .meta p{
+    margin:18px 0 0;
+    font-size:19px;
+    line-height:1.18;
+  }
+  .meta .small{
+    margin-top:28px;
+    font-size:12px;
+    line-height:1.45;
+    color:rgba(250,250,249,.7);
+  }
+  .cta{
+    grid-column:2 / 8;
+    grid-row:22 / 23;
+    position:relative;
+    z-index:12;
+    align-self:center;
+    display:flex;
+    align-items:center;
+    min-height:74px;
+    background:var(--accent);
+    color:var(--ink);
+    padding:0 26px;
+    font-size:28px;
+    line-height:1;
+    letter-spacing:-.035em;
+    font-weight:800;
+  }
+  .micro-left{
+    position:absolute;
+    left:34px;
+    top:708px;
+    z-index:8;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .micro-top{
+    position:absolute;
+    right:34px;
+    top:34px;
+    z-index:8;
+    width:210px;
+    color:var(--paper);
+    font-size:11px;
+    line-height:1.35;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .caption{
+    position:absolute;
+    left:34px;
+    top:622px;
+    z-index:8;
+    color:var(--paper);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .bottom-code{
+    position:absolute;
+    right:34px;
+    bottom:34px;
+    z-index:10;
+    color:rgba(28,25,23,.55);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px;
+    line-height:1.35;
+    text-align:right;
+  }
+  .rules{
+    position:absolute;
+    left:0;
+    bottom:132px;
+    width:100%;
+    height:144px;
+    z-index:1;
+    background:
+      repeating-linear-gradient(90deg,rgba(28,25,23,.18) 0 1px,transparent 1px 70px);
+  }
+  .big-date{
+    position:absolute;
+    left:385px;
+    top:1148px;
+    z-index:1;
+    font-size:284px;
+    line-height:.8;
+    letter-spacing:-.08em;
+    font-weight:800;
+    color:rgba(250,250,249,.56);
+    transform:rotate(90deg);
+    transform-origin:left top;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="matter-photomontage" data-reference="place-image-with-controlled-type-rupture">
+  <div class="photo" aria-hidden="true" data-image-role="place">
+    <img src="assets/tweet-photo.jpg" alt="">
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="mega" aria-hidden="true">
+    <span class="cloud">Cloud</span>
+    <span>London</span>
+  </div>
+  <div class="orange-slab" aria-hidden="true"></div>
+  <div class="route" aria-hidden="true" data-encoding="Waterloo to Westminster sightline → circular transit arc"></div>
+  <div class="caption">Thames / Westminster / evening light</div>
+  <div class="micro-top">Inaugural gathering at the Waterloo office. Community, edge systems, developer exchange.</div>
+  <div class="micro-left">County Hall / Waterloo / London SE1</div>
+  <section class="title" data-critical="title">
+    <h1>Cloudflare<br>London<br>User Group</h1>
+    <p class="subtitle">First meeting for builders, operators, and curious people working near the edge.</p>
+  </section>
+  <section class="date-block" data-critical="date">
+    <div class="date-kicker">Wednesday evening</div>
+    <div class="date-main">29 Apr<br>2026</div>
+    <div class="venue">Cloudflare offices, Waterloo</div>
+  </section>
+  <section class="details" data-critical="body">
+    <div class="talks">
+      <div class="label">Three talks</div>
+      <div class="talk">
+        <div class="num">01</div>
+        <div><strong>Edge platform patterns</strong><span>What local teams are building and shipping.</span></div>
+      </div>
+      <div class="talk">
+        <div class="num">02</div>
+        <div><strong>Real-time web protocols</strong><span>Notes from modern media and application delivery.</span></div>
+      </div>
+      <div class="talk">
+        <div class="num">03</div>
+        <div><strong>Identity at the boundary</strong><span>Practical security conversations for developers.</span></div>
+      </div>
+    </div>
+    <aside class="meta">
+      <div class="label">Meetup format</div>
+      <p>Short sessions, hallway questions, local user stories, and time to meet the London Cloudflare community.</p>
+      <p class="small">Doors in the evening. Bring questions, demos, production scars, and one person who should be in the room.</p>
+    </aside>
+  </section>
+  <div class="big-date" aria-hidden="true">29</div>
+  <div class="rules" aria-hidden="true"></div>
+  <div class="cta" data-critical="cta">RSVP and meet us in Waterloo</div>
+  <div class="bottom-code">LON-UG-001<br>WATERLOO / COUNTY HALL<br>SEE YOU THERE</div>
+</main>
+</body>
+</html>

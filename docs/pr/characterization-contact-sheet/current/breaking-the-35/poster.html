@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breaking the 35</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:#57534e;
+    --soft:#e7e5e4;
+    --red:#C8102E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  body{display:grid;place-items:start center;min-height:100vh}
+  .poster{
+    position:relative;
+    width:840px;
+    height:1200px;
+    overflow:hidden;
+    background:var(--paper);
+    isolation:isolate;
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:16px;
+    padding:46px 48px;
+    z-index:10;
+  }
+  .red-slab{
+    position:absolute;
+    left:-70px;
+    top:0;
+    width:360px;
+    height:100%;
+    background:var(--red);
+    transform:skewX(-8deg);
+    transform-origin:top left;
+    z-index:1;
+  }
+  .black-field{
+    position:absolute;
+    right:0;
+    bottom:0;
+    width:480px;
+    height:470px;
+    background:var(--ink);
+    z-index:2;
+  }
+  .menu{
+    position:absolute;
+    top:84px;
+    left:245px;
+    width:455px;
+    z-index:3;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:18px;
+    line-height:1.05;
+    letter-spacing:-.03em;
+    color:rgba(28,25,23,.2);
+    transform:rotate(-7deg);
+    user-select:none;
+  }
+  .menu span{display:block;border-bottom:1px solid rgba(28,25,23,.08);padding:2px 0}
+  .ransom{
+    position:absolute;
+    left:36px;
+    top:512px;
+    z-index:4;
+    width:760px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    gap:8px 10px;
+    transform:rotate(-3deg);
+    user-select:none;
+  }
+  .ransom b{
+    display:inline-block;
+    background:var(--ink);
+    color:var(--paper);
+    padding:.01em .08em .04em;
+    font-weight:900;
+    line-height:.85;
+    letter-spacing:-.08em;
+  }
+  .ransom b:nth-child(2n){background:var(--paper);color:var(--ink);border:2px solid var(--ink);transform:translateY(-10px) rotate(2deg)}
+  .ransom b:nth-child(3n){background:var(--red);color:var(--paper);transform:translateY(8px) rotate(-2deg)}
+  .ransom .big{font-size:116px}
+  .ransom .mid{font-size:82px}
+  .ransom .small{font-size:64px}
+  .title{
+    grid-column:5 / 13;
+    align-self:start;
+    margin-top:242px;
+    position:relative;
+    z-index:30;
+    background:var(--paper);
+    padding:18px 0 22px 26px;
+  }
+  h1{
+    margin:0;
+    font-size:96px;
+    line-height:.86;
+    letter-spacing:-.085em;
+    font-weight:900;
+    max-width:560px;
+  }
+  .subtitle{
+    margin:18px 0 0;
+    max-width:455px;
+    font-size:22px;
+    line-height:1.08;
+    letter-spacing:-.03em;
+    font-weight:650;
+  }
+  .date{
+    grid-column:1 / 4;
+    grid-row:1;
+    z-index:30;
+    color:var(--paper);
+    margin-top:6px;
+  }
+  .kicker,.label{
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:750;
+  }
+  .date .years{
+    margin-top:14px;
+    font-size:50px;
+    line-height:.86;
+    letter-spacing:-.07em;
+    font-weight:900;
+  }
+  .facts{
+    grid-column:2 / 7;
+    align-self:end;
+    margin-bottom:52px;
+    z-index:35;
+    color:var(--paper);
+  }
+  .facts ol{margin:16px 0 0;padding:0;list-style:none;border-top:1px solid rgba(250,250,249,.45)}
+  .facts li{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:14px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(250,250,249,.35);
+    font-size:15px;
+    line-height:1.12;
+    letter-spacing:-.015em;
+  }
+  .facts em{font-style:normal;color:rgba(250,250,249,.62);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+  .right-meta{
+    grid-column:8 / 13;
+    align-self:end;
+    margin-bottom:58px;
+    z-index:35;
+    color:var(--paper);
+  }
+  .right-meta h2{
+    margin:0;
+    font-size:44px;
+    line-height:.9;
+    letter-spacing:-.07em;
+    font-weight:850;
+  }
+  .right-meta p{
+    margin:18px 0 0;
+    max-width:300px;
+    font-size:15px;
+    line-height:1.25;
+    color:rgba(250,250,249,.78);
+  }
+  .cta{
+    margin-top:34px;
+    display:inline-block;
+    color:var(--ink);
+    background:var(--paper);
+    padding:12px 14px 13px;
+    min-height:44px;
+    font-size:12px;
+    line-height:1;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:850;
+  }
+  .side{
+    position:absolute;
+    right:30px;
+    top:48px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    z-index:30;
+    font-size:11px;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:750;
+    color:rgba(28,25,23,.54);
+  }
+  .baseline{
+    position:absolute;
+    left:0;
+    right:0;
+    top:458px;
+    height:18px;
+    background:repeating-linear-gradient(90deg,rgba(28,25,23,.35) 0 1px,transparent 1px 12px);
+    z-index:2;
+  }
+  .ghost35{
+    position:absolute;
+    left:275px;
+    top:690px;
+    z-index:1;
+    font-size:390px;
+    line-height:.8;
+    letter-spacing:-.12em;
+    font-weight:900;
+    color:rgba(28,25,23,.055);
+    user-select:none;
+  }
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="weingart-controlled-disruption" data-reference="typographic-menu-rupture">
+  <div class="red-slab" aria-hidden="true"></div>
+  <div class="black-field" aria-hidden="true"></div>
+  <div class="baseline" aria-hidden="true"></div>
+  <div class="ghost35" aria-hidden="true">35</div>
+  <div class="menu" aria-hidden="true">
+    <span>Avant Garde</span><span>Bookman</span><span>Courier</span><span>Helvetica</span><span>Helvetica Narrow</span><span>New Century Schoolbook</span><span>Palatino</span><span>Symbol</span><span>Times</span><span>Zapf Chancery</span><span>Zapf Dingbats</span>
+  </div>
+  <div class="ransom" aria-hidden="true">
+    <b class="big">P</b><b class="mid">o</b><b class="big">s</b><b class="small">t</b><b class="mid">S</b><b class="big">c</b><b class="small">r</b><b class="mid">i</b><b class="big">p</b><b class="small">t</b>
+  </div>
+  <div class="side">font menu versus street alphabet</div>
+  <section class="grid">
+    <div class="date" data-critical="date">
+      <div class="kicker">desktop publishing break</div>
+      <div class="years">1985<br>1995</div>
+    </div>
+    <header class="title" data-critical="title">
+      <h1>Breaking<br>the 35</h1>
+      <p class="subtitle">A decade of type rebellion against the LaserWriter’s default menu.</p>
+    </header>
+    <section class="facts" data-critical="body">
+      <div class="label">fault lines</div>
+      <ol>
+        <li><em>01</em><span>PostScript 35 turns taste into a pull-down list.</span></li>
+        <li><em>02</em><span>Ransom-note pages reject clean corporate defaults.</span></li>
+        <li><em>03</em><span>Neville Brody makes magazines behave like noise.</span></li>
+        <li><em>04</em><span>FontShop sells independent faces into the new desktop.</span></li>
+        <li><em>05</em><span>Emigre, CalArts, Cranbrook push type past obedience.</span></li>
+      </ol>
+    </section>
+    <section class="right-meta">
+      <h2>Default<br>menu /<br>broken</h2>
+      <p>The alphabet stops pretending to be neutral: bitmap grit, cut-up headlines, found lettering, and postmodern systems enter the page.</p>
+      <span class="cta" data-critical="cta">choose outside the list</span>
+    </section>
+  </section>
+</main>
+</body>
+</html>

@@ -109,12 +109,22 @@ text-[#C8102E]/60 → Softer accent labels
 
 ### Font loading
 
+Load only the families the chosen lineage needs. This broad URL is a convenient prototype set, not a requirement for production:
+
 ```html
 <!-- In <head> -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
 ```
+
+| Lineage / role | Font category | Open proxy |
+| --- | --- | --- |
+| Zurich/Basel grid, public notice | neo-grotesk sans | IBM Plex Sans, Hanken Grotesk, Helvetica Neue/Arial/system-ui |
+| Object poster, travel labels, Geigy captions | condensed grotesk | Barlow Condensed, Barlow |
+| Lithographic/travel/historic placard | serif/display or custom lettering | IBM Plex Serif, Georgia, treated CSS lettering |
+| Scientific/code/source ledgers | mono/technical | IBM Plex Mono, ui-monospace |
+| New Wave/contemporary cultural | type-as-image/custom lettering | transformed/outlined/layered text, masks, fragments |
 
 ### Type scale
 
@@ -132,9 +142,9 @@ text-[#C8102E]/60 → Softer accent labels
 | Mono | 14px / `text-sm font-mono` | 400 normal | `leading-relaxed` | normal | `max-w-[60ch]` |
 | Label | 11px / `text-[11px]` | 500 medium | `leading-none` | `tracking-widest` | none |
 
-### Weight contrast (poster-specific)
+### Weight contrast (lineage-specific)
 
-Unlike the International Style (which avoids bold), poster style uses extreme weight contrast:
+When type is the image, poster style can use extreme weight contrast. Do not force this on object, travel, scientific, or restrained Basel/Ruder work where image, object, diagram, or spacing should carry the drama:
 
 ```html
 <!-- Thin mega type — delicate at massive scale -->

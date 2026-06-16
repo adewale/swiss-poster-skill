@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Durable Objects</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --quiet:rgba(28,25,23,.16);
+    --dark:#292524;
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+  body{display:grid;place-items:start center}
+  .poster{
+    width:840px;height:1200px;position:relative;overflow:hidden;background:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,50px);
+  }
+  .orange-slab{
+    position:absolute;left:350px;top:0;width:370px;height:1200px;background:var(--orange);z-index:1;
+  }
+  .dark-slab{
+    position:absolute;right:-92px;top:410px;width:360px;height:840px;background:var(--dark);z-index:2;
+    transform:skewY(-13deg);
+  }
+  .id-line{
+    position:absolute;left:0;top:458px;width:905px;height:2px;background:var(--ink);z-index:5;transform:rotate(-17deg);
+    transform-origin:left center;
+  }
+  .id-line.two{top:680px;height:14px;background:var(--orange);z-index:6;transform:rotate(-17deg)}
+  .node{
+    position:absolute;border:12px solid var(--ink);background:var(--paper);z-index:7;
+  }
+  .node.a{left:78px;top:392px;width:176px;height:176px}
+  .node.b{left:382px;top:298px;width:112px;height:112px;border-color:var(--paper);background:var(--dark)}
+  .node.c{left:600px;top:620px;width:245px;height:245px;border-color:var(--paper);background:var(--orange)}
+  .ghost{
+    position:absolute;left:-26px;bottom:-36px;font-size:300px;font-weight:800;line-height:.78;letter-spacing:-.095em;
+    color:rgba(28,25,23,.075);z-index:0;white-space:nowrap;
+  }
+  .title{
+    grid-column:1/9;grid-row:2/7;z-index:20;padding-left:54px;padding-top:18px;
+  }
+  h1{margin:0;font-size:104px;line-height:.86;letter-spacing:-.075em;font-weight:800}
+  .sub{
+    margin-top:22px;width:420px;font-size:25px;line-height:1.08;letter-spacing:-.03em;font-weight:500;
+  }
+  .meta{
+    grid-column:10/13;grid-row:2/5;z-index:25;padding-top:28px;padding-left:10px;color:var(--paper);
+    font-size:11px;line-height:1.35;text-transform:uppercase;letter-spacing:.14em;font-weight:700;
+  }
+  .panel{
+    grid-column:2/7;grid-row:10/18;z-index:30;background:var(--paper);padding:30px 28px 22px 30px;
+    border-top:10px solid var(--ink);
+  }
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;margin-bottom:16px}
+  .bigclaim{font-size:36px;line-height:.98;letter-spacing:-.045em;font-weight:750;margin-bottom:24px}
+  .body{font-size:17px;line-height:1.28;letter-spacing:-.015em;color:var(--ink)}
+  .facts{
+    grid-column:7/12;grid-row:15/22;z-index:35;color:var(--paper);padding:18px 0 0 16px;
+  }
+  .fact{display:grid;grid-template-columns:48px 1fr;gap:14px;margin-bottom:20px;align-items:start}
+  .num{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:rgba(250,250,249,.64)}
+  .txt{font-size:22px;line-height:1.03;letter-spacing:-.035em;font-weight:650;max-width:260px}
+  .compare{
+    position:absolute;left:54px;top:900px;width:390px;z-index:30;display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--ink);
+  }
+  .compare div{padding:12px 16px 0 0}
+  .compare h2{margin:0 0 8px 0;font-size:11px;text-transform:uppercase;letter-spacing:.16em}
+  .compare p{margin:0;font-size:18px;line-height:1.08;letter-spacing:-.025em}
+  .cta{
+    position:absolute;left:54px;bottom:50px;z-index:40;background:var(--ink);color:var(--paper);
+    padding:14px 18px 13px 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
+  }
+  .side{
+    position:absolute;left:18px;top:620px;z-index:30;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700;
+  }
+  .micro{
+    position:absolute;right:42px;bottom:40px;z-index:40;color:rgba(250,250,249,.72);width:210px;
+    font-size:10px;line-height:1.45;text-transform:uppercase;letter-spacing:.13em;font-weight:700;
+  }
+</style>
+</head>
+<body>
+<main class="poster" aria-label="Durable Objects explainer poster">
+  <div class="orange-slab" aria-hidden="true"></div>
+  <div class="dark-slab" aria-hidden="true"></div>
+  <div class="ghost" aria-hidden="true">ID</div>
+  <div class="id-line" aria-hidden="true"></div>
+  <div class="id-line two" aria-hidden="true"></div>
+  <div class="node a" aria-hidden="true"></div>
+  <div class="node b" aria-hidden="true"></div>
+  <div class="node c" aria-hidden="true"></div>
+
+  <section class="title">
+    <h1 data-critical="title">Durable<br>Objects</h1>
+    <div class="sub" data-critical="body">A tiny long‑lived server, guaranteed unique for one specific ID.</div>
+  </section>
+
+  <div class="meta" data-critical="date">
+    Cloudflare Workers<br>
+    Stateful coordination<br>
+    Per object identifier<br>
+    Global edge runtime
+  </div>
+
+  <section class="panel" data-critical="body">
+    <div class="kicker">What changes</div>
+    <div class="bigclaim">Stateless requests get a single place to meet.</div>
+    <div class="body">A Worker can spin up anywhere and vanish after handling traffic. A Durable Object is addressed by ID; all calls for that ID arrive at the same logical instance, where memory, storage, alarms, and WebSocket sessions can be coordinated.</div>
+  </section>
+
+  <section class="facts" data-critical="body">
+    <div class="fact"><div class="num">01</div><div class="txt">One object instance per chosen name or key.</div></div>
+    <div class="fact"><div class="num">02</div><div class="txt">Holds local state while it is active.</div></div>
+    <div class="fact"><div class="num">03</div><div class="txt">Persists durable storage beside the logic.</div></div>
+    <div class="fact"><div class="num">04</div><div class="txt">Serializes coordination for rooms, counters, queues, locks.</div></div>
+  </section>
+
+  <section class="compare">
+    <div>
+      <h2>Worker</h2>
+      <p>many places, short lived, no natural memory between requests</p>
+    </div>
+    <div>
+      <h2>Object</h2>
+      <p>one address, long lived, stateful authority for an ID</p>
+    </div>
+  </section>
+
+  <div class="side">identity creates locality</div>
+  <div class="cta" data-critical="cta">Choose the ID; route the coordination.</div>
+  <div class="micro">Think room, tenant, document, game, cart, counter, actor: the key names the meeting point.</div>
+</main>
+</body>
+</html>

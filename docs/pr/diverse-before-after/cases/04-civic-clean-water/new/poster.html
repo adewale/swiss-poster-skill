@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean Water Vote</title>
+<style>
+  :root{
+    --paper:#f4f1e9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.58);
+    --line:rgba(28,25,23,.22);
+    --blue:#0067a8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d3c8}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:Arial, Helvetica, system-ui, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    box-shadow:0 18px 60px rgba(0,0,0,.22);
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,1fr);
+    column-gap:0;
+    z-index:3;
+  }
+  .water{
+    position:absolute;
+    left:-78px;
+    top:112px;
+    width:570px;
+    height:760px;
+    background:var(--blue);
+    clip-path:ellipse(42% 50% at 53% 50%);
+    z-index:1;
+  }
+  .water:after{
+    content:"";
+    position:absolute;
+    inset:70px 64px 90px 112px;
+    border:22px solid rgba(244,241,233,.36);
+    border-left-color:transparent;
+    border-bottom-color:transparent;
+    border-radius:50%;
+    transform:rotate(-24deg);
+  }
+  .pipe{
+    position:absolute;
+    right:-42px;
+    top:214px;
+    width:505px;
+    height:126px;
+    border-top:24px solid var(--ink);
+    border-bottom:24px solid var(--ink);
+    z-index:2;
+  }
+  .pipe:before{
+    content:"";
+    position:absolute;
+    right:64px;
+    top:-24px;
+    width:24px;
+    height:126px;
+    background:var(--ink);
+  }
+  .pipe:after{
+    content:"";
+    position:absolute;
+    right:132px;
+    top:-24px;
+    width:24px;
+    height:126px;
+    background:var(--ink);
+  }
+  .rules{
+    position:absolute;
+    left:70px;
+    right:70px;
+    bottom:170px;
+    height:190px;
+    background:
+      repeating-linear-gradient(to bottom,
+        transparent 0 22px,
+        rgba(28,25,23,.18) 22px 24px);
+    z-index:1;
+  }
+  .topnote{
+    grid-column:2/7;
+    grid-row:2/3;
+    align-self:end;
+    font-size:11px;
+    line-height:1.15;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  h1{
+    grid-column:6/12;
+    grid-row:4/10;
+    margin:0;
+    align-self:start;
+    font-size:92px;
+    line-height:.88;
+    letter-spacing:-.065em;
+    font-weight:700;
+    z-index:5;
+  }
+  .date{
+    grid-column:6/11;
+    grid-row:11/14;
+    align-self:start;
+    background:var(--paper);
+    padding:18px 20px 20px 20px;
+    border-top:7px solid var(--ink);
+    z-index:6;
+  }
+  .date .day{
+    font-size:42px;
+    line-height:.95;
+    font-weight:700;
+    letter-spacing:-.035em;
+  }
+  .date .time{
+    margin-top:10px;
+    font-size:30px;
+    line-height:1;
+    font-weight:400;
+    letter-spacing:-.025em;
+  }
+  .places{
+    grid-column:2/8;
+    grid-row:16/21;
+    align-self:start;
+    z-index:6;
+    background:var(--paper);
+    padding:22px 24px 24px 0;
+  }
+  .label{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+  .place{
+    display:grid;
+    grid-template-columns:42px 1fr;
+    border-top:2px solid var(--ink);
+    min-height:54px;
+    align-items:center;
+    font-size:31px;
+    line-height:1;
+    letter-spacing:-.035em;
+  }
+  .place span:first-child{
+    font-size:12px;
+    letter-spacing:.14em;
+    color:var(--muted);
+  }
+  .cta{
+    grid-column:2/12;
+    grid-row:22/24;
+    align-self:start;
+    background:var(--ink);
+    color:var(--paper);
+    font-size:78px;
+    line-height:.9;
+    font-weight:700;
+    letter-spacing:-.055em;
+    padding:20px 28px 26px 28px;
+    z-index:8;
+  }
+  .side{
+    position:absolute;
+    right:24px;
+    bottom:382px;
+    transform:rotate(-90deg);
+    transform-origin:right top;
+    font-size:11px;
+    letter-spacing:.19em;
+    text-transform:uppercase;
+    color:var(--muted);
+    z-index:4;
+    white-space:nowrap;
+  }
+  .micro{
+    position:absolute;
+    left:70px;
+    top:910px;
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.48);
+    z-index:3;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" data-lineage="1950s-zurich-public-notice" data-reference="ruder-typographic-function">
+    <div class="water" aria-hidden="true"></div>
+    <div class="pipe" aria-hidden="true"></div>
+    <div class="rules" aria-hidden="true"></div>
+    <div class="side" aria-hidden="true">public infrastructure communication</div>
+    <div class="micro" aria-hidden="true">School Hall / Market Square / North Pier</div>
+    <section class="grid">
+      <div class="topnote">Civic notice<br>municipal ballot</div>
+      <h1 data-critical="title">Clean<br>Water<br>Vote</h1>
+      <div class="date" data-critical="date">
+        <div class="day">Sunday</div>
+        <div class="time">09:00–18:00</div>
+      </div>
+      <div class="places" data-critical="body">
+        <div class="label">voting places</div>
+        <div class="place"><span>01</span><span>School Hall</span></div>
+        <div class="place"><span>02</span><span>Market Square</span></div>
+        <div class="place"><span>03</span><span>North Pier</span></div>
+      </div>
+      <div class="cta" data-critical="cta">Vote Sunday</div>
+    </section>
+  </main>
+</body>
+</html>

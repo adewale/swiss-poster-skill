@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Onepage</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --quiet:rgba(28,25,23,.18);
+    --dark:#1c1917;
+    --light:#fafaf9;
+    --accent:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1;color:var(--ink);font-family:"IBM Plex Sans","Helvetica Neue",Arial,system-ui,sans-serif}
+  .sheet{
+    width:840px;height:1188px;margin:0 auto;position:relative;overflow:hidden;
+    background:var(--paper);display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,1fr);
+  }
+  .sheet:before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+    background-image:linear-gradient(90deg,rgba(28,25,23,.16) 1px,transparent 1px),linear-gradient(rgba(28,25,23,.08) 1px,transparent 1px);
+    background-size:70px 100%,100% 49.5px;
+  }
+  .orange-slab{position:absolute;left:0;top:0;width:246px;height:1188px;background:var(--accent);z-index:1}
+  .black-slab{position:absolute;right:0;top:0;width:210px;height:1188px;background:var(--dark);z-index:1}
+  .mega{
+    position:absolute;z-index:2;left:198px;top:-62px;font-weight:800;font-size:232px;line-height:.76;
+    letter-spacing:-.085em;color:rgba(28,25,23,.08);white-space:nowrap;pointer-events:none;
+  }
+  .title{
+    grid-column:2/11;grid-row:3/7;z-index:10;align-self:end;
+    font-size:78px;line-height:.88;font-weight:800;letter-spacing:-.065em;
+    background:var(--paper);padding:14px 18px 12px 0;
+  }
+  .subtitle{
+    grid-column:2/8;grid-row:7/8;z-index:10;font-size:21px;line-height:1.1;font-weight:600;
+    background:var(--paper);padding:8px 14px 10px 0;
+  }
+  .meta-top{
+    grid-column:9/12;grid-row:2/5;z-index:10;color:var(--light);font-size:11px;line-height:1.35;
+    letter-spacing:.13em;text-transform:uppercase;align-self:start;padding-top:18px;
+  }
+  .meta-top b{display:block;font-size:38px;line-height:.9;letter-spacing:-.04em;margin-bottom:8px;color:var(--accent)}
+  .place{
+    position:absolute;z-index:4;left:0;top:355px;width:512px;height:302px;overflow:hidden;background:var(--dark);
+    clip-path:polygon(0 0,100% 0,88% 100%,0 100%);
+  }
+  .place img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.35);mix-blend-mode:screen;opacity:.86}
+  .place:after{content:"";position:absolute;inset:0;background:var(--accent);mix-blend-mode:multiply;opacity:.78}
+  .pigeon{
+    position:absolute;z-index:8;right:118px;top:272px;width:214px;height:174px;overflow:hidden;background:var(--dark);
+  }
+  .pigeon img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.45);opacity:.92}
+  .talk-a,.talk-b,.drinks{
+    position:absolute;z-index:6;overflow:hidden;background:var(--dark);
+  }
+  .talk-a{left:70px;top:714px;width:236px;height:170px}
+  .talk-b{left:328px;top:646px;width:230px;height:284px}
+  .drinks{right:70px;top:756px;width:210px;height:166px}
+  .talk-a img,.talk-b img,.drinks img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.28);opacity:.9}
+  .talk-b:after{content:"";position:absolute;inset:0;background:var(--accent);mix-blend-mode:multiply;opacity:.42}
+  .caption{
+    position:absolute;z-index:12;font-size:11px;line-height:1.12;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+  }
+  .c1{left:70px;top:672px;width:310px}
+  .c2{left:328px;top:938px;width:240px}
+  .c3{right:70px;top:936px;width:210px;color:var(--light)}
+  .rail{
+    grid-column:2/5;grid-row:15/23;z-index:14;align-self:start;background:var(--paper);
+    padding:12px 12px 12px 0;font-size:13px;line-height:1.18;
+  }
+  .rail h2{margin:0 0 10px;font-size:14px;letter-spacing:.11em;text-transform:uppercase}
+  .rail p{margin:0 0 8px;color:var(--muted)}
+  .index{
+    grid-column:6/9;grid-row:18/23;z-index:14;background:var(--paper);padding:14px 10px;
+    font-size:11px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .index div{border-top:1px solid rgba(28,25,23,.3);padding:6px 0}
+  .chorus{
+    position:absolute;z-index:5;left:585px;top:478px;width:255px;color:var(--light);
+    font-size:48px;line-height:.88;font-weight:800;letter-spacing:-.045em;
+  }
+  .chorus small{display:block;margin-top:12px;color:rgba(250,250,249,.65);font-size:11px;line-height:1.2;letter-spacing:.13em;text-transform:uppercase;font-weight:700}
+  .route{
+    position:absolute;z-index:7;left:30px;top:538px;width:780px;height:12px;background:var(--accent);
+    transform:rotate(-10deg);transform-origin:left center;
+  }
+  .ticks{position:absolute;z-index:3;right:210px;bottom:-40px;width:420px;height:420px;border:22px solid rgba(243,128,32,.42);border-radius:50%}
+  .ticks:before,.ticks:after{content:"";position:absolute;border-radius:50%;inset:52px;border:2px solid rgba(28,25,23,.22)}
+  .ticks:after{inset:126px;border-width:14px;border-color:rgba(243,128,32,.24)}
+  .cta{
+    position:absolute;z-index:20;left:70px;bottom:56px;width:444px;background:var(--accent);color:var(--ink);
+    padding:16px 18px;font-size:24px;line-height:.95;font-weight:800;letter-spacing:-.035em;
+  }
+  .micro-left{
+    position:absolute;z-index:12;left:18px;bottom:52px;writing-mode:vertical-rl;transform:rotate(180deg);
+    color:rgba(28,25,23,.62);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  }
+  .micro-right{
+    position:absolute;z-index:12;right:28px;bottom:54px;color:var(--light);width:160px;
+    font-size:11px;line-height:1.28;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+  }
+</style>
+</head>
+<body>
+<main class="sheet" data-lineage="matter-photomontage" data-reference="hard-edged-photo-sequence" data-encoding="six-thread-beats to image-and-label sequence">
+  <div class="orange-slab" aria-hidden="true"></div>
+  <div class="black-slab" aria-hidden="true"></div>
+  <div class="mega" aria-hidden="true">LON</div>
+  <div class="route" aria-hidden="true" data-variable="first-to-last sequence"></div>
+  <div class="ticks" aria-hidden="true" data-variable="8h 11m elapsed time"></div>
+
+  <h1 class="title" data-critical="title">Cloudflare<br>London<br>Onepage</h1>
+  <div class="subtitle" data-critical="body">A single-frame recap from County Hall: invitation, talks, demo, street light, community.</div>
+  <div class="meta-top" data-critical="date"><b>6</b>notes<br>first to last<br>8h 11m<br>London User Group</div>
+
+  <figure class="place" data-image-role="place">
+    <img src="assets/thread-media-2049452285139276131-1.jpg" alt="Sunset over Big Ben from Cloudflare County Hall">
+  </figure>
+  <figure class="pigeon" data-image-role="closing-story">
+    <img src="assets/thread-media-2049531960716914824-2.jpg" alt="Prada the pigeon on Cloudflare letters">
+  </figure>
+  <figure class="talk-a" data-image-role="talk">
+    <img src="assets/thread-media-2049559654208856175-3.jpg" alt="Alpesh Doshi presenting an agentic system slide">
+  </figure>
+  <figure class="talk-b" data-image-role="demo">
+    <img src="assets/thread-media-2049562905536795033-4.jpg" alt="Yigit Erol presenting sandboxes and zero-trust material">
+  </figure>
+  <figure class="drinks" data-image-role="community">
+    <img src="assets/thread-media-2049575911872160076-5.jpg" alt="Organizers chatting at post-talk drinks">
+  </figure>
+
+  <div class="caption c1">01 / County Hall window<br>Westminster as opening frame</div>
+  <div class="caption c2">03–04 / Agentic systems<br>Sandboxes, zero trust, live demo</div>
+  <div class="caption c3">05 / After-talks<br>organizers, drinks, hallway signal</div>
+
+  <section class="rail" data-critical="body">
+    <h2>Thread beats</h2>
+    <p>Meetup invitation and venue marker.</p>
+    <p>Agentic systems talk: orchestration, risk, evaluation.</p>
+    <p>Sandboxes and credential boundaries for safer automation.</p>
+    <p>Closing image: Prada on the letters, London in orange light.</p>
+  </section>
+
+  <section class="index" data-beat="source-ledger">
+    <div>Invitation → room → talks</div>
+    <div>Demo → questions → drinks</div>
+    <div>County Hall / Westminster</div>
+    <div>Community memory in six frames</div>
+  </section>
+
+  <div class="chorus">
+    Agents do not get a choir without a conductor.
+    <small>systems need boundaries before they scale</small>
+  </div>
+
+  <div class="cta" data-critical="cta">Read the room. Keep the swarm accountable.</div>
+  <div class="micro-left">Cloudflare London User Group / County Hall / recap sheet</div>
+  <div class="micro-right">Alpesh Doshi<br>Yigit Erol<br>Prada the pigeon<br>Big Ben sunset</div>
+</main>
+</body>
+</html>

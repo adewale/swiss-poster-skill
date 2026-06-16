@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enzyme K-17</title>
+<style>
+  :root{
+    --paper:#f4f0e6;
+    --ink:#211f1a;
+    --muted:rgba(33,31,26,.62);
+    --hair:rgba(33,31,26,.28);
+    --field:#8b8a55;
+    --field-soft:rgba(139,138,85,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d8d1c3}
+  body{font-family:Helvetica, Arial, system-ui, sans-serif;color:var(--ink)}
+  .poster{
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+  }
+  .grid{
+    position:absolute;
+    inset:58px 56px 54px 56px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,1fr);
+    column-gap:14px;
+    row-gap:0;
+  }
+  .plate{
+    position:absolute;
+    left:56px;
+    top:112px;
+    width:728px;
+    height:728px;
+    border:1.5px solid var(--ink);
+    background:
+      linear-gradient(var(--hair) 1px, transparent 1px),
+      linear-gradient(90deg,var(--hair) 1px, transparent 1px);
+    background-size:52px 52px;
+  }
+  .plate:before{
+    content:"";
+    position:absolute;
+    inset:58px;
+    border:1px solid var(--hair);
+  }
+  .matrix{
+    position:absolute;
+    inset:0;
+  }
+  .cell{
+    position:absolute;
+    width:78px;height:78px;
+    border:1px solid rgba(33,31,26,.7);
+    background:rgba(244,240,230,.64);
+  }
+  .cell:nth-child(1){left:88px;top:92px}
+  .cell:nth-child(2){left:218px;top:92px;background:var(--field-soft)}
+  .cell:nth-child(3){left:348px;top:92px}
+  .cell:nth-child(4){left:478px;top:92px;background:var(--field-soft)}
+  .cell:nth-child(5){left:88px;top:222px;background:var(--field-soft)}
+  .cell:nth-child(6){left:218px;top:222px}
+  .cell:nth-child(7){left:348px;top:222px;background:var(--field-soft)}
+  .cell:nth-child(8){left:478px;top:222px}
+  .cell:nth-child(9){left:88px;top:352px}
+  .cell:nth-child(10){left:218px;top:352px;background:var(--field-soft)}
+  .cell:nth-child(11){left:348px;top:352px}
+  .cell:nth-child(12){left:478px;top:352px;background:var(--field-soft)}
+  .cell:nth-child(13){left:88px;top:482px;background:var(--field-soft)}
+  .cell:nth-child(14){left:218px;top:482px}
+  .cell:nth-child(15){left:348px;top:482px;background:var(--field-soft)}
+  .cell:nth-child(16){left:478px;top:482px}
+  .dot{
+    position:absolute;
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--field);
+    opacity:.82;
+    transform:translate(22px,22px);
+  }
+  .cell:nth-child(2) .dot,.cell:nth-child(7) .dot,.cell:nth-child(12) .dot{width:46px;height:46px;transform:translate(16px,16px);opacity:.94}
+  .cell:nth-child(5) .dot,.cell:nth-child(10) .dot,.cell:nth-child(15) .dot{width:24px;height:24px;transform:translate(27px,27px);opacity:.55}
+  .label{
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    line-height:1;
+  }
+  .xlab{position:absolute;top:21px}
+  .x1{left:94px}.x2{left:224px}.x3{left:354px}.x4{left:484px}
+  .ylab{position:absolute;left:20px}
+  .y1{top:116px}.y2{top:246px}.y3{top:376px}.y4{top:506px}
+  .specimen{
+    position:absolute;
+    right:-34px;
+    top:102px;
+    width:220px;
+    height:510px;
+    border-left:22px solid var(--field);
+    background:rgba(139,138,85,.10);
+  }
+  .specimen span{
+    position:absolute;
+    left:44px;
+    top:26px;
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+  .big-id{
+    position:absolute;
+    left:-18px;
+    top:782px;
+    font-size:218px;
+    line-height:.78;
+    letter-spacing:-.085em;
+    font-weight:700;
+    color:rgba(33,31,26,.09);
+    white-space:nowrap;
+  }
+  h1{
+    grid-column:1 / span 8;
+    grid-row:18 / span 3;
+    align-self:start;
+    margin:0;
+    font-size:86px;
+    line-height:.88;
+    letter-spacing:-.055em;
+    font-weight:700;
+    z-index:3;
+  }
+  .subtitle{
+    grid-column:1 / span 5;
+    grid-row:21 / span 1;
+    font-size:18px;
+    line-height:1.15;
+    letter-spacing:.01em;
+    z-index:3;
+  }
+  .method{
+    grid-column:7 / span 5;
+    grid-row:18 / span 3;
+    font-size:17px;
+    line-height:1.22;
+    z-index:3;
+  }
+  .method .kicker,.facts .kicker,.cta .kicker{
+    display:block;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  .facts{
+    grid-column:7 / span 5;
+    grid-row:21 / span 3;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-top:1.5px solid var(--ink);
+    z-index:3;
+  }
+  .fact{
+    min-height:68px;
+    padding:12px 12px 8px 0;
+    border-bottom:1px solid var(--hair);
+    font-size:34px;
+    line-height:.95;
+    letter-spacing:-.035em;
+    font-weight:700;
+  }
+  .fact small{
+    display:block;
+    margin-top:7px;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:400;
+  }
+  .cta{
+    grid-column:1 / span 5;
+    grid-row:24 / span 1;
+    align-self:end;
+    font-size:16px;
+    line-height:1.1;
+    z-index:3;
+  }
+  .side{
+    position:absolute;
+    left:23px;
+    top:132px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .bar{
+    position:absolute;
+    left:56px;
+    top:890px;
+    width:728px;
+    height:22px;
+    background:var(--field);
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Enzyme K-17 scientific poster">
+    <div class="side">analytical inhibition plate</div>
+    <section class="plate">
+      <div class="label xlab x1">A1 control</div>
+      <div class="label xlab x2">A2 dose</div>
+      <div class="label xlab x3">A3 dose</div>
+      <div class="label xlab x4">A4 blank</div>
+      <div class="label ylab y1">run 01</div>
+      <div class="label ylab y2">run 02</div>
+      <div class="label ylab y3">run 03</div>
+      <div class="label ylab y4">run 04</div>
+      <div class="matrix">
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+        <div class="cell"><i class="dot"></i></div><div class="cell"><i class="dot"></i></div>
+      </div>
+      <div class="specimen"><span>specimen matrix / K-17 inhibition</span></div>
+    </section>
+    <div class="big-id">K-17</div>
+    <div class="bar"></div>
+    <div class="grid">
+      <h1>Enzyme<br>K-17</h1>
+      <div class="subtitle">Swiss scientific poster plate for Enzyme K-17 inhibition study.</div>
+      <div class="method"><span class="kicker">method note</span>Buffered inhibition assay with matrix-normalized plate readings and analytical labels.</div>
+      <div class="facts" aria-label="measured facts">
+        <div class="fact">pH 7.2<small>buffer condition</small></div>
+        <div class="fact">18°C<small>incubation</small></div>
+        <div class="fact">IC50 4.8µM<small>inhibition</small></div>
+        <div class="fact">sample n=42<small>observations</small></div>
+      </div>
+      <div class="cta"><span class="kicker">CTA</span>Review the inhibition study.</div>
+    </div>
+  </main>
+</body>
+</html>

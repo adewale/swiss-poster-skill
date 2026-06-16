@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basel Market</title>
+<style>
+  :root{
+    --paper:#eee5d4;
+    --ink:#252018;
+    --soft:#d8c7aa;
+    --green:#2f5f43;
+    --red:#b33a2f;
+    --yellow:#d8a23a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#bdb39f}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 22% 18%, rgba(255,255,255,.25) 0 1px, transparent 1.5px) 0 0/9px 9px,
+      linear-gradient(90deg, rgba(37,32,24,.045) 0 1px, transparent 1px) 0 0/14px 100%,
+      var(--paper);
+    box-shadow:0 18px 50px rgba(0,0,0,.25);
+  }
+  .poster:before{
+    content:"";
+    position:absolute;
+    inset:-40px;
+    pointer-events:none;
+    background:
+      repeating-linear-gradient(-7deg, rgba(37,32,24,.035) 0 1px, transparent 1px 7px),
+      radial-gradient(circle at 70% 45%, rgba(179,58,47,.12), transparent 35%);
+    mix-blend-mode:multiply;
+  }
+  .grid{
+    position:absolute;
+    inset:54px 52px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(16,1fr);
+    gap:0 16px;
+    z-index:2;
+  }
+  .mast{
+    grid-column:1 / 9;
+    grid-row:1 / 5;
+    align-self:start;
+    position:relative;
+    z-index:30;
+  }
+  h1{
+    margin:0;
+    font-size:118px;
+    line-height:.82;
+    letter-spacing:-7px;
+    font-weight:900;
+    text-transform:none;
+  }
+  .place{
+    margin-top:22px;
+    font-size:34px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:-1px;
+  }
+  .date{
+    grid-column:8 / 13;
+    grid-row:1 / 4;
+    align-self:start;
+    justify-self:stretch;
+    background:var(--green);
+    color:var(--paper);
+    padding:24px 24px 28px;
+    position:relative;
+    z-index:35;
+    font-size:28px;
+    line-height:1.05;
+    font-weight:800;
+    letter-spacing:-.5px;
+  }
+  .date small{
+    display:block;
+    margin-bottom:12px;
+    font-size:12px;
+    line-height:1;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-weight:700;
+    opacity:.82;
+  }
+  .photo{
+    position:absolute;
+    left:322px;
+    top:236px;
+    width:590px;
+    height:520px;
+    transform:rotate(-5deg);
+    background:var(--ink);
+    overflow:hidden;
+    z-index:8;
+    clip-path:polygon(0 8%,100% 0,100% 88%,7% 100%);
+  }
+  .photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:saturate(.75) contrast(1.35) sepia(.18);
+    opacity:.82;
+    mix-blend-mode:screen;
+  }
+  .photo:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(90deg, rgba(238,229,212,.25) 0 2px, transparent 2px 6px),
+      linear-gradient(90deg, rgba(179,58,47,.62), rgba(47,95,67,.38));
+    mix-blend-mode:multiply;
+  }
+  .apple{
+    position:absolute;
+    width:248px;
+    height:248px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 30%, rgba(238,229,212,.38) 0 20px, transparent 21px),
+      var(--red);
+    left:-62px;
+    top:386px;
+    z-index:16;
+    box-shadow:18px 20px 0 rgba(37,32,24,.12);
+  }
+  .apple:before{
+    content:"";
+    position:absolute;
+    width:34px;
+    height:72px;
+    background:var(--ink);
+    left:132px;
+    top:-34px;
+    transform:rotate(18deg);
+  }
+  .apple:after{
+    content:"";
+    position:absolute;
+    width:104px;
+    height:54px;
+    border-radius:100% 0 100% 0;
+    background:var(--green);
+    left:156px;
+    top:-20px;
+    transform:rotate(-20deg);
+  }
+  .bread{
+    position:absolute;
+    left:48px;
+    top:650px;
+    width:410px;
+    height:170px;
+    background:var(--yellow);
+    border-radius:54% 46% 14% 12% / 82% 78% 18% 18%;
+    transform:rotate(4deg);
+    z-index:18;
+    box-shadow:14px 18px 0 rgba(37,32,24,.11);
+  }
+  .bread i{
+    position:absolute;
+    top:44px;
+    width:70px;
+    height:18px;
+    border-top:9px solid rgba(37,32,24,.32);
+    border-radius:50%;
+    transform:rotate(-18deg);
+  }
+  .bread i:nth-child(1){left:78px}
+  .bread i:nth-child(2){left:170px}
+  .bread i:nth-child(3){left:262px}
+  .cheese{
+    position:absolute;
+    right:-18px;
+    bottom:218px;
+    width:318px;
+    height:230px;
+    background:var(--yellow);
+    clip-path:polygon(0 18%,100% 0,82% 100%,8% 86%);
+    z-index:14;
+  }
+  .cheese:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 28% 40%, rgba(37,32,24,.23) 0 15px, transparent 16px),
+      radial-gradient(circle at 62% 55%, rgba(37,32,24,.18) 0 22px, transparent 23px),
+      radial-gradient(circle at 74% 25%, rgba(37,32,24,.16) 0 10px, transparent 11px);
+  }
+  .flowers{
+    position:absolute;
+    left:392px;
+    top:782px;
+    width:210px;
+    height:230px;
+    z-index:21;
+  }
+  .flowers span{
+    position:absolute;
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 0 18px rgba(179,58,47,.22);
+  }
+  .flowers span:nth-child(1){left:0;top:18px}
+  .flowers span:nth-child(2){left:84px;top:0;background:var(--green);box-shadow:0 0 0 18px rgba(47,95,67,.22)}
+  .flowers span:nth-child(3){left:56px;top:92px;background:var(--yellow);box-shadow:0 0 0 18px rgba(216,162,58,.25)}
+  .flowers:after{
+    content:"";
+    position:absolute;
+    left:92px;
+    top:58px;
+    width:9px;
+    height:190px;
+    background:var(--green);
+    transform:rotate(15deg);
+    box-shadow:-42px 18px 0 var(--green),46px 12px 0 var(--green);
+  }
+  .goods{
+    grid-column:1 / 6;
+    grid-row:12 / 14;
+    align-self:start;
+    position:relative;
+    z-index:40;
+    background:rgba(238,229,212,.92);
+    padding:18px 20px 16px 0;
+    font-size:30px;
+    line-height:1.08;
+    font-weight:800;
+    letter-spacing:-.7px;
+  }
+  .cta{
+    grid-column:1 / 8;
+    grid-row:15 / 17;
+    align-self:end;
+    position:relative;
+    z-index:40;
+    font-size:58px;
+    line-height:.92;
+    font-weight:900;
+    letter-spacing:-3px;
+    padding-bottom:2px;
+  }
+  .side{
+    position:absolute;
+    left:54px;
+    bottom:332px;
+    transform:rotate(-90deg);
+    transform-origin:left top;
+    z-index:25;
+    font-size:11px;
+    line-height:1;
+    letter-spacing:2.6px;
+    text-transform:uppercase;
+    font-weight:700;
+    color:rgba(37,32,24,.58);
+  }
+  .rule{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:158px;
+    height:28px;
+    background:var(--green);
+    z-index:10;
+    transform:skewY(-2deg);
+  }
+  .market-word{
+    position:absolute;
+    left:-30px;
+    bottom:16px;
+    font-size:178px;
+    line-height:.75;
+    letter-spacing:-12px;
+    font-weight:900;
+    color:rgba(37,32,24,.10);
+    z-index:1;
+    white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+  <main class="poster" data-lineage="travel-lithographic" data-print-process="flat-ink-overprint">
+    <div class="photo" aria-hidden="true" data-image-role="produce">
+      <img src="market-produce.jpg" alt="">
+    </div>
+    <div class="apple" aria-hidden="true"></div>
+    <div class="bread" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="cheese" aria-hidden="true"></div>
+    <div class="flowers" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="rule" aria-hidden="true"></div>
+    <div class="market-word" aria-hidden="true">Markt</div>
+    <div class="side">apples / bread / flowers / cheese</div>
+    <section class="grid">
+      <div class="mast">
+        <h1 data-critical="title">Basel<br>Market</h1>
+        <div class="place" data-critical="body">Marktplatz</div>
+      </div>
+      <div class="date" data-critical="date">
+        <small>Saturday</small>
+        06:00–13:00
+      </div>
+      <div class="goods" data-critical="body">apples,<br>bread,<br>flowers,<br>cheese</div>
+      <div class="cta" data-critical="cta">Bring a basket.</div>
+    </section>
+  </main>
+</body>
+</html>

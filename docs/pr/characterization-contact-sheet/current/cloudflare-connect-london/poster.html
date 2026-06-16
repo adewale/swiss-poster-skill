@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare Connect London</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:#57534e;
+    --soft:#e7e5e4;
+    --dark:#292524;
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans","Helvetica Neue",Arial,system-ui,sans-serif}
+  .poster{
+    width:1200px;height:800px;position:relative;overflow:hidden;background:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(8,1fr);
+  }
+  .orange-field{
+    position:absolute;right:-80px;top:0;width:510px;height:800px;background:var(--orange);z-index:1;
+  }
+  .photo{
+    position:absolute;left:0;bottom:0;width:745px;height:260px;overflow:hidden;z-index:2;background:var(--dark);
+  }
+  .photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.55);mix-blend-mode:multiply;opacity:.82}
+  .photo:after{content:"";position:absolute;inset:0;background:var(--orange);mix-blend-mode:screen;opacity:.52}
+  .globe{
+    position:absolute;right:62px;top:42px;width:505px;height:505px;z-index:3;opacity:.92;
+  }
+  .globe img{width:100%;height:100%;display:block;filter:brightness(.25)}
+  .route{
+    position:absolute;right:160px;top:120px;width:360px;height:360px;border:14px solid var(--paper);border-left-color:transparent;border-bottom-color:transparent;border-radius:50%;
+    transform:rotate(-18deg);z-index:4;opacity:.72;
+  }
+  .mega{
+    position:absolute;left:-18px;top:70px;z-index:5;font-size:132px;line-height:.82;font-weight:800;letter-spacing:-8px;
+    width:760px;
+  }
+  .mega span{display:block}
+  .subtitle{
+    position:absolute;left:70px;top:322px;z-index:7;width:510px;font-size:24px;line-height:1.05;font-weight:500;
+  }
+  .meta{
+    position:absolute;left:72px;top:42px;z-index:8;font-size:11px;line-height:1.35;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);
+  }
+  .track{
+    position:absolute;left:645px;top:555px;z-index:9;width:395px;background:var(--ink);color:var(--paper);padding:28px 32px 30px;
+  }
+  .track h2{margin:0 0 22px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--orange)}
+  .row{display:grid;grid-template-columns:48px 1fr;gap:18px;border-top:1px solid rgba(250,250,249,.28);padding:12px 0;font-size:18px;line-height:1.05}
+  .row b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(250,250,249,.62)}
+  .side-label{
+    position:absolute;right:33px;bottom:40px;z-index:10;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+  }
+  .cta{
+    position:absolute;left:72px;bottom:40px;z-index:10;background:var(--paper);color:var(--ink);padding:14px 18px;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;border-left:14px solid var(--orange);
+  }
+  .micro{
+    position:absolute;left:780px;top:42px;z-index:8;width:160px;font-size:10px;line-height:1.35;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,25,23,.72);
+  }
+  .bars{position:absolute;left:592px;top:0;width:90px;height:800px;z-index:6}
+  .bars i{position:absolute;display:block;width:18px;background:var(--ink)}
+  .bars i:nth-child(1){left:0;top:85px;height:430px}
+  .bars i:nth-child(2){left:28px;top:190px;height:545px;background:var(--orange)}
+  .bars i:nth-child(3){left:56px;top:35px;height:245px}
+  .ghost{
+    position:absolute;right:-24px;top:408px;z-index:2;font-size:188px;line-height:.8;font-weight:900;letter-spacing:-12px;color:rgba(250,250,249,.22);
+  }
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="matter-photomontage" data-encoding="talk sequence → stacked rows; network reach → globe arc">
+  <div class="orange-field" aria-hidden="true"></div>
+  <div class="photo" aria-hidden="true"><img src="assets/connect-venue-orange.jpg" alt=""></div>
+  <div class="globe" aria-hidden="true"><img src="assets/globe-uk.svg" alt=""></div>
+  <div class="route" aria-hidden="true"></div>
+  <div class="bars" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="ghost" aria-hidden="true">LDN</div>
+  <div class="meta" data-critical="date">Developer Track<br>London / United Kingdom<br>Opening keynote first</div>
+  <h1 class="mega" data-critical="title"><span>Cloudflare</span><span>Connect</span><span>London</span></h1>
+  <p class="subtitle" data-critical="body">A focused sequence for builders: realtime media, deployment patterns, identity flows, Workers demos, and the systems that make them move.</p>
+  <section class="track" data-critical="body">
+    <h2>Talk sequence</h2>
+    <div class="row"><b>01</b><span>Opening keynote</span></div>
+    <div class="row"><b>02</b><span>Realtime media over MoQ</span></div>
+    <div class="row"><b>03</b><span>Credential broker patterns</span></div>
+    <div class="row"><b>04</b><span>Workers demos & deployment</span></div>
+  </section>
+  <div class="micro">UK-centred network motif<br>venue signal in orange overprint<br>developer systems / live infrastructure</div>
+  <div class="side-label">Build at the edge</div>
+  <div class="cta" data-critical="cta">Join the developer track</div>
+</main>
+</body>
+</html>

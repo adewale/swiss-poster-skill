@@ -11,3 +11,8 @@ output/fonts/*.otf
 output/fonts/*.ttf
 
 eval-runs/
+docs/pr/characterization-contact-sheet/current/*/raw.txt
+__pycache__/
+*.pyc
+docs/pr/diverse-before-after/.old-skill-runtime/
+docs/pr/diverse-before-after/cases/*/*/raw.txt

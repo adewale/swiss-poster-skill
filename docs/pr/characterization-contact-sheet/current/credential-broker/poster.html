@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credential Broker</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --soft:rgba(28,25,23,.12);
+    --dark:#292524;
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1}
+  body{font-family:Arial,Helvetica,system-ui,sans-serif;color:var(--ink)}
+  .poster{
+    width:840px;height:1200px;margin:0 auto;position:relative;overflow:hidden;
+    background:var(--paper);display:grid;grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+  }
+  .grid{
+    position:absolute;inset:0;opacity:.22;pointer-events:none;
+    background-image:linear-gradient(90deg,rgba(28,25,23,.08) 1px,transparent 1px);
+    background-size:70px 100%;
+  }
+  .sandbox{
+    grid-column:1/8;grid-row:1/13;background:var(--dark);position:relative;overflow:hidden;
+  }
+  .broker{
+    grid-column:7/13;grid-row:3/11;background:var(--orange);position:relative;z-index:4;
+    clip-path:polygon(10% 0,100% 0,100% 100%,0 100%);
+  }
+  .boundary{
+    position:absolute;left:472px;top:-80px;width:28px;height:1360px;background:var(--paper);
+    transform:rotate(8deg);z-index:8;
+  }
+  .boundary:before,.boundary:after{
+    content:"";position:absolute;left:7px;top:0;width:4px;height:100%;
+    background:repeating-linear-gradient(to bottom,var(--ink) 0 16px,transparent 16px 32px);
+    opacity:.75;
+  }
+  .boundary:after{left:17px;opacity:.28}
+  .ghost{
+    position:absolute;left:-58px;bottom:42px;font-size:210px;line-height:.78;font-weight:900;
+    letter-spacing:-.09em;color:rgba(250,250,249,.08);text-transform:uppercase;
+    transform:rotate(-90deg);transform-origin:left bottom;white-space:nowrap;
+  }
+  .rings{
+    position:absolute;right:-210px;top:110px;width:620px;height:620px;border:32px solid rgba(28,25,23,.18);
+    border-radius:50%;z-index:5;
+  }
+  .rings:before,.rings:after{content:"";position:absolute;border-radius:50%;inset:82px;border:18px solid rgba(28,25,23,.18)}
+  .rings:after{inset:190px;border-width:10px;background:rgba(250,250,249,.18)}
+  .tokens{
+    position:absolute;left:44px;top:470px;width:330px;height:380px;z-index:6;
+  }
+  .token{
+    height:38px;background:var(--paper);margin:0 0 18px 0;position:relative;
+  }
+  .token:nth-child(2){width:78%;margin-left:52px}
+  .token:nth-child(3){width:112%;margin-left:-22px}
+  .token:nth-child(4){width:64%;margin-left:112px}
+  .token:after{
+    content:"";position:absolute;right:-74px;top:15px;width:74px;height:8px;background:var(--orange);
+  }
+  .cut{
+    position:absolute;left:410px;top:0;width:260px;height:1200px;background:var(--paper);
+    transform:skewX(-8deg);z-index:3;
+  }
+  header{
+    grid-column:1/13;grid-row:1/4;z-index:30;padding:52px 56px 0 56px;position:relative;
+  }
+  .kicker{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(250,250,249,.72);
+    margin-bottom:22px;font-weight:700;
+  }
+  h1{
+    margin:0;color:var(--paper);font-size:116px;line-height:.82;letter-spacing:-.075em;
+    font-weight:900;max-width:620px;
+  }
+  .title-break{display:block;color:var(--orange)}
+  .subtitle{
+    position:absolute;right:56px;top:64px;width:242px;color:var(--ink);
+    font-size:20px;line-height:1.12;font-weight:700;z-index:40;
+  }
+  .facts{
+    grid-column:8/13;grid-row:5/10;z-index:35;padding:38px 42px 0 18px;position:relative;
+  }
+  .fact{border-top:2px solid rgba(28,25,23,.55);padding:14px 0 17px 0}
+  .fact b{display:block;font-size:30px;line-height:.95;letter-spacing:-.04em}
+  .fact span{display:block;margin-top:7px;font-size:12px;line-height:1.25;letter-spacing:.08em;text-transform:uppercase}
+  .agent{
+    position:absolute;left:54px;bottom:126px;width:288px;z-index:20;color:var(--paper);
+  }
+  .agent .label,.meta .label{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;opacity:.68;
+  }
+  .agent p{
+    font-size:18px;line-height:1.22;margin:14px 0 0 0;color:rgba(250,250,249,.86);
+  }
+  .meta{
+    position:absolute;left:56px;bottom:50px;z-index:30;color:var(--paper);
+    display:grid;grid-template-columns:128px 128px 128px;gap:18px;
+  }
+  .meta div{font-size:12px;line-height:1.25;color:rgba(250,250,249,.7)}
+  .cta{
+    position:absolute;right:56px;bottom:54px;z-index:40;background:var(--ink);color:var(--paper);
+    width:304px;padding:20px 22px 22px 22px;font-size:24px;line-height:1.02;font-weight:900;
+    letter-spacing:-.03em;
+  }
+  .cta small{
+    display:block;margin-top:11px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+    color:rgba(250,250,249,.72);
+  }
+  .side{
+    position:absolute;right:20px;top:512px;z-index:50;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:rgba(28,25,23,.56);
+  }
+  .node{
+    position:absolute;width:22px;height:22px;background:var(--paper);border:5px solid var(--ink);z-index:11;
+  }
+  .n1{left:392px;top:492px}.n2{left:427px;top:690px}.n3{left:476px;top:870px;background:var(--orange)}
+  .rule{
+    position:absolute;height:4px;background:var(--ink);z-index:10;transform-origin:left center;
+  }
+  .r1{left:404px;top:502px;width:210px;transform:rotate(20deg)}
+  .r2{left:438px;top:702px;width:240px;transform:rotate(-15deg)}
+  .r3{left:486px;top:882px;width:184px;transform:rotate(-35deg)}
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="geigy-scientific" data-reference="ruder-typographic-function">
+  <div class="grid" aria-hidden="true"></div>
+  <section class="sandbox" aria-hidden="true">
+    <div class="ghost">sandbox</div>
+  </section>
+  <div class="cut" aria-hidden="true"></div>
+  <section class="broker" aria-hidden="true">
+    <div class="rings"></div>
+  </section>
+  <div class="boundary" aria-hidden="true" data-encoding="trust boundary → diagonal white cut"></div>
+  <header>
+    <div class="kicker">Outbound worker pattern</div>
+    <h1 data-critical="title">Credential<span class="title-break">Broker</span></h1>
+    <div class="subtitle" data-critical="body">A trusted spending layer between an untrusted agent and protected capability.</div>
+  </header>
+  <div class="tokens" aria-hidden="true" data-encoding="requested capabilities → broker-mediated bars">
+    <div class="token"></div><div class="token"></div><div class="token"></div><div class="token"></div>
+  </div>
+  <div class="node n1" aria-hidden="true"></div><div class="node n2" aria-hidden="true"></div><div class="node n3" aria-hidden="true"></div>
+  <div class="rule r1" aria-hidden="true"></div><div class="rule r2" aria-hidden="true"></div><div class="rule r3" aria-hidden="true"></div>
+  <section class="facts" data-critical="body">
+    <div class="fact"><b>Secrets stay out</b><span>No keys inside the agent workspace.</span></div>
+    <div class="fact"><b>Broker spends</b><span>Requests are fulfilled by a trusted service.</span></div>
+    <div class="fact"><b>Terms apply</b><span>Scope, rate, approval, expiry, and logging.</span></div>
+    <div class="fact"><b>Proxy intercepts</b><span>Capability crosses only through policy.</span></div>
+  </section>
+  <section class="agent" data-critical="body">
+    <div class="label">Untrusted side</div>
+    <p>The agent can ask. It cannot hold the credential. The boundary is architecture, not etiquette.</p>
+  </section>
+  <section class="meta" data-critical="date">
+    <div><span class="label">01</span><br>Agent sandbox</div>
+    <div><span class="label">02</span><br>Trusted broker</div>
+    <div><span class="label">03</span><br>External service</div>
+  </section>
+  <div class="side">trust boundary</div>
+  <div class="cta" data-critical="cta">Keep power outside the box.<small>Delegate access, not secrets</small></div>
+</main>
+</body>
+</html>

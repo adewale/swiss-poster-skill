@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean Water Vote</title>
+<style>
+  :root{
+    --stone-50:#fafaf9;
+    --stone-100:#f5f5f4;
+    --stone-200:#e7e5e4;
+    --stone-700:#44403c;
+    --stone-900:#1c1917;
+    --accent:#0f6b5f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--stone-200)}
+  body{
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    color:var(--stone-900);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    margin:0 auto;
+    position:relative;
+    overflow:hidden;
+    background:var(--stone-50);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(24,50px);
+  }
+  .wash{
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(15,107,95,.05) 0 1px, transparent 1px 70px),
+      linear-gradient(0deg, rgba(28,25,23,.035) 0 1px, transparent 1px 50px);
+    z-index:1;
+  }
+  .river{
+    position:absolute;
+    z-index:2;
+    left:-165px;
+    top:116px;
+    width:1050px;
+    height:520px;
+    transform:rotate(-14deg);
+    background:var(--accent);
+    opacity:.96;
+    clip-path:polygon(0 38%, 100% 0, 100% 50%, 0 88%);
+  }
+  .river:after{
+    content:"";
+    position:absolute;
+    left:70px;
+    top:164px;
+    width:960px;
+    height:42px;
+    background:var(--stone-50);
+    opacity:.82;
+  }
+  .pipe{
+    position:absolute;
+    z-index:3;
+    right:-92px;
+    top:214px;
+    width:360px;
+    height:360px;
+    border:54px solid var(--stone-900);
+    border-radius:50%;
+    opacity:.92;
+  }
+  .pipe:after{
+    content:"";
+    position:absolute;
+    inset:58px;
+    border:28px solid var(--stone-50);
+    border-radius:50%;
+  }
+  .label{
+    position:absolute;
+    z-index:8;
+    left:56px;
+    top:44px;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    line-height:1.25;
+    color:rgba(28,25,23,.68);
+  }
+  .mark{
+    position:absolute;
+    z-index:8;
+    right:58px;
+    top:42px;
+    width:92px;
+    height:92px;
+    border-left:18px solid var(--accent);
+    border-bottom:18px solid var(--accent);
+  }
+  h1{
+    position:absolute;
+    z-index:6;
+    left:52px;
+    top:552px;
+    margin:0;
+    font-size:136px;
+    line-height:.84;
+    letter-spacing:-.075em;
+    font-weight:800;
+  }
+  h1 span{display:block}
+  .meta{
+    position:absolute;
+    z-index:7;
+    left:420px;
+    top:692px;
+    width:340px;
+    font-size:30px;
+    line-height:1.05;
+    letter-spacing:-.025em;
+    font-weight:650;
+  }
+  .places{
+    position:absolute;
+    z-index:7;
+    left:56px;
+    top:860px;
+    width:520px;
+    display:grid;
+    grid-template-columns:120px 1fr;
+    column-gap:22px;
+    row-gap:12px;
+    font-size:24px;
+    line-height:1.08;
+  }
+  .places .small{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.62);
+    padding-top:6px;
+  }
+  .cta{
+    position:absolute;
+    z-index:8;
+    left:0;
+    bottom:0;
+    width:840px;
+    height:158px;
+    background:var(--stone-900);
+    color:var(--stone-50);
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    align-items:center;
+  }
+  .cta strong{
+    grid-column:2 / 10;
+    font-size:72px;
+    line-height:.9;
+    letter-spacing:-.055em;
+    font-weight:800;
+  }
+  .cta .block{
+    grid-column:11 / 13;
+    height:158px;
+    background:var(--accent);
+  }
+  .vertical{
+    position:absolute;
+    z-index:5;
+    right:22px;
+    top:640px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:rgba(28,25,23,.5);
+  }
+  .rule{
+    position:absolute;
+    z-index:4;
+    left:56px;
+    top:812px;
+    width:716px;
+    height:10px;
+    background:var(--accent);
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Clean Water Vote civic notice poster">
+    <div class="wash"></div>
+    <div class="river"></div>
+    <div class="pipe"></div>
+    <div class="label">Municipal notice<br>public water measure</div>
+    <div class="mark"></div>
+    <h1><span>Clean</span><span>Water</span><span>Vote</span></h1>
+    <div class="meta">Sunday<br>09:00–18:00</div>
+    <div class="rule"></div>
+    <section class="places" aria-label="Voting places">
+      <div class="small">Voting<br>places</div>
+      <div>School Hall<br>Market Square<br>North Pier</div>
+    </section>
+    <div class="vertical">water service ballot</div>
+    <section class="cta">
+      <strong>Vote Sunday.</strong>
+      <div class="block"></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+Reference for comparison: https://github.com/adewale/swiss-poster-skill/pull/13/changes#diff-84c88a00338db59b1e308d447205cde61e21b861146988a7967a1201d821f8ff
+
+This PR #13 reference added `posters/flue.html`. Its visible poster strategy differs from the failing generated poster in several important ways:
+
+- It treats Flue as a source-rich technical poster, not a website hero CTA.
+- It uses source facts as poster content: "The Agent Harness Framework", "not another SDK", "Agent = Model + Harness", "Flue is the harness", architecture layers, package names, and agent-loop primitives.
+- It keeps source/navigation facts as structured poster metadata and technical sections.
+- It does not turn the website action "View Documentation" into the poster's CTA.
+- It uses a larger print canvas and dense technical-plate layout where small copy is organized into deliberate sections.
+
+The new eval should distinguish this from the observed failure:
+
+- In the generated poster fixture, the phrase "Run locally via CLI..." is visible source/support copy, but the word "locally" immediately before "via CLI" is visually hard to read at image scale.
+- The generated poster also makes "View Documentation" a CTA, which is a web input/nav action leaking into a poster artifact.

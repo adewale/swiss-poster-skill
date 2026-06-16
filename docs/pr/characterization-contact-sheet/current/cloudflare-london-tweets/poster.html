@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare London Tweets</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --soft:rgba(28,25,23,.10);
+    --orange:#F38020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3d1;color:var(--ink);font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+  body{display:flex;justify-content:center}
+  .poster{
+    width:840px;height:2200px;position:relative;overflow:hidden;background:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(22,100px);
+  }
+  .gridline{position:absolute;inset:0;pointer-events:none;opacity:.34;background-image:
+    linear-gradient(90deg,rgba(28,25,23,.08) 1px,transparent 1px),
+    linear-gradient(180deg,rgba(28,25,23,.06) 1px,transparent 1px);
+    background-size:70px 100px;
+  }
+  .orange-field{position:absolute;left:490px;top:-70px;width:420px;height:1510px;background:var(--orange);z-index:1}
+  .black-field{position:absolute;left:0;top:1420px;width:840px;height:780px;background:var(--ink);z-index:1}
+  .mega{
+    position:absolute;z-index:2;left:-42px;top:120px;font-size:266px;line-height:.77;font-weight:800;letter-spacing:-.095em;
+    color:rgba(28,25,23,.08);writing-mode:vertical-rl;text-orientation:mixed;white-space:nowrap;
+  }
+  .route{position:absolute;inset:0;z-index:3;pointer-events:none}
+  .route svg{width:100%;height:100%;display:block}
+  .title{
+    grid-column:2/11;grid-row:2/6;z-index:10;align-self:end;
+    font-size:116px;line-height:.84;font-weight:800;letter-spacing:-.075em;
+    background:var(--paper);padding:22px 18px 14px 0;
+  }
+  .subtitle{
+    grid-column:2/7;grid-row:6/8;z-index:10;font-size:28px;line-height:1.05;font-weight:500;
+    padding-top:18px;max-width:420px;
+  }
+  .meta{
+    grid-column:8/12;grid-row:6/8;z-index:10;align-self:start;background:var(--ink);color:var(--paper);
+    padding:18px 20px;font-size:13px;line-height:1.35;text-transform:uppercase;letter-spacing:.08em;
+  }
+  .small{font-size:11px;line-height:1.25;letter-spacing:.13em;text-transform:uppercase;font-weight:700}
+  .place{
+    position:absolute;z-index:8;left:70px;top:760px;width:336px;border-top:8px solid var(--ink);
+    padding-top:14px;color:var(--ink);
+  }
+  .place h2{margin:0;font-size:52px;line-height:.9;letter-spacing:-.055em}
+  .place p{margin:12px 0 0;font-size:18px;line-height:1.2;color:var(--muted)}
+  .pigeon{
+    position:absolute;z-index:9;left:462px;top:610px;width:310px;height:430px;background:var(--paper);
+    clip-path:polygon(12% 18%,48% 6%,78% 25%,92% 54%,72% 92%,37% 86%,15% 62%);
+    border:0;
+  }
+  .pigeon:before{content:"";position:absolute;left:70px;top:122px;width:116px;height:92px;border-radius:50%;background:var(--ink);transform:rotate(-20deg)}
+  .pigeon:after{content:"";position:absolute;left:180px;top:111px;border-left:58px solid var(--orange);border-top:21px solid transparent;border-bottom:18px solid transparent}
+  .pigeon-label{
+    position:absolute;z-index:11;left:532px;top:1040px;width:210px;color:var(--ink);
+  }
+  .pigeon-label b{display:block;font-size:34px;line-height:.9;letter-spacing:-.04em}
+  .beats{
+    grid-column:2/12;grid-row:12/15;z-index:12;display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:3px solid var(--ink);
+    align-self:start;background:var(--paper);
+  }
+  .beat{min-height:210px;border-right:1px solid rgba(28,25,23,.22);padding:14px 12px 10px}
+  .beat:last-child{border-right:0}
+  .beat .n{font-size:50px;line-height:.8;font-weight:800;letter-spacing:-.06em;color:var(--orange)}
+  .beat h3{margin:18px 0 8px;font-size:16px;line-height:1.02;text-transform:uppercase;letter-spacing:-.01em}
+  .beat p{margin:0;font-size:12px;line-height:1.25;color:var(--muted)}
+  .talks{
+    position:absolute;z-index:13;left:70px;top:1510px;width:700px;color:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);gap:18px;
+  }
+  .talks .kicker{grid-column:1/4;color:rgba(250,250,249,.66)}
+  .talks h2{grid-column:4/13;margin:0;font-size:86px;line-height:.86;letter-spacing:-.07em;font-weight:800}
+  .talks .list{grid-column:4/12;margin-top:18px;display:grid;gap:16px}
+  .item{border-top:1px solid rgba(250,250,249,.24);padding-top:12px}
+  .item b{display:block;font-size:25px;line-height:1;letter-spacing:-.035em;color:var(--paper)}
+  .item span{display:block;margin-top:7px;font-size:14px;line-height:1.25;color:rgba(250,250,249,.68)}
+  .closing{
+    position:absolute;z-index:15;left:70px;bottom:86px;width:430px;background:var(--orange);color:var(--ink);padding:22px 24px 24px;
+  }
+  .closing h2{margin:0;font-size:42px;line-height:.88;letter-spacing:-.055em}
+  .closing p{margin:12px 0 0;font-size:16px;line-height:1.25;font-weight:600}
+  .foot{
+    position:absolute;z-index:15;right:70px;bottom:90px;width:205px;color:rgba(250,250,249,.62);
+    font-size:11px;line-height:1.35;text-transform:uppercase;letter-spacing:.12em;
+  }
+  .nodes{position:absolute;z-index:4;left:0;top:0;width:840px;height:2200px;pointer-events:none}
+  .node{position:absolute;width:22px;height:22px;background:var(--paper);border:5px solid var(--ink)}
+  .node.o{border-color:var(--orange)}
+  .node:nth-child(1){left:574px;top:190px}.node:nth-child(2){left:586px;top:478px}.node:nth-child(3){left:360px;top:820px}
+  .node:nth-child(4){left:686px;top:1160px}.node:nth-child(5){left:185px;top:1488px}.node:nth-child(6){left:565px;top:1930px}
+  .micro-a{position:absolute;z-index:11;left:70px;top:70px;color:var(--muted)}
+  .micro-b{position:absolute;z-index:11;right:72px;top:1320px;color:rgba(28,25,23,.68);text-align:right}
+  .micro-c{position:absolute;z-index:11;left:70px;top:1320px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="zurich-public-notice" data-reference="route-map-thread-sequence">
+  <div class="gridline" aria-hidden="true"></div>
+  <div class="orange-field" aria-hidden="true"></div>
+  <div class="black-field" aria-hidden="true"></div>
+  <div class="mega" aria-hidden="true">LONDON</div>
+  <div class="route" aria-hidden="true" data-encoding="six public updates → one continuous recap path">
+    <svg viewBox="0 0 840 2200" preserveAspectRatio="none">
+      <path d="M585 0 L585 280 C585 430 505 540 390 670 C295 780 250 900 378 1015 C510 1135 730 1180 690 1328 C650 1488 295 1408 195 1530 C95 1652 247 1785 404 1854 C510 1900 574 1976 574 2200" fill="none" stroke="#1c1917" stroke-width="18" stroke-linecap="square"/>
+      <path d="M612 0 L612 278 C612 447 535 571 420 700 C334 797 303 884 405 976 C545 1102 760 1158 722 1338 C686 1508 330 1452 226 1561 C128 1664 294 1760 430 1824 C553 1882 602 1980 602 2200" fill="none" stroke="#fafaf9" stroke-width="6" stroke-linecap="square"/>
+    </svg>
+  </div>
+  <section class="title" data-critical="title">
+    Cloudflare<br>London<br>Tweets
+  </section>
+  <section class="subtitle" data-critical="body">
+    Six public notes folded into one recap: Waterloo arrival, a pigeon mascot, agent talks, safer sandboxes, demos, and a closing community photograph.
+  </section>
+  <aside class="meta small" data-critical="date">
+    Cloudflare London User Group<br>
+    Inaugural evening<br>
+    Offices at Waterloo<br>
+    Community sessions to follow monthly
+  </aside>
+  <div class="micro-a small">County Hall view / Waterloo / evening</div>
+  <div class="micro-b small">Security · Agents · Sandboxes · Demos</div>
+  <div class="micro-c small">Thread sequence 01–06</div>
+  <section class="place" data-beat="venue">
+    <h2>County Hall<br>to the venue</h2>
+    <p>A London arrival note becomes the opening frame for a new user group.</p>
+  </section>
+  <div class="pigeon" aria-hidden="true"></div>
+  <section class="pigeon-label">
+    <b>Say hi to Prada.</b>
+    <p class="small">The pigeon turns the office welcome into a public landmark.</p>
+  </section>
+  <section class="beats" data-critical="body">
+    <article class="beat" data-beat="01"><div class="n">01</div><h3>Waterloo opens</h3><p>First gathering at the London office.</p></article>
+    <article class="beat" data-beat="02"><div class="n">02</div><h3>Prada appears</h3><p>A small mascot gives the thread a street-level signal.</p></article>
+    <article class="beat" data-beat="03"><div class="n">03</div><h3>Live links</h3><p>Two demos move the recap from arrival into action.</p></article>
+    <article class="beat" data-beat="04"><div class="n">04</div><h3>Orchestration</h3><p>Alpesh Doshi frames agent coordination.</p></article>
+    <article class="beat" data-beat="05"><div class="n">05</div><h3>Safer agents</h3><p>Yigit Erol covers sandboxes and zero-trust egress.</p></article>
+    <article class="beat" data-beat="06"><div class="n">06</div><h3>Group photo</h3><p>Thanks, organizers, demos wanted, monthly rhythm ahead.</p></article>
+  </section>
+  <section class="talks" data-critical="body">
+    <div class="kicker small">Evening programme</div>
+    <h2>Security talks with community edges.</h2>
+    <div class="list">
+      <div class="item"><b>Agent orchestration</b><span>How coordinated systems are shaped, sequenced, and shown in front of a local room.</span></div>
+      <div class="item"><b>Sandboxes + zero-trust egress</b><span>Safer workflows treated as public practice, not private architecture.</span></div>
+      <div class="item"><b>Fun demos wanted</b><span>The next meetings ask the room to bring examples, experiments, and useful surprises.</span></div>
+    </div>
+  </section>
+  <section class="closing" data-critical="cta">
+    <h2>Bring a demo next month.</h2>
+    <p>London’s first Cloudflare user group thread reads like an invitation to make the next one louder.</p>
+  </section>
+  <footer class="foot">
+    Public recap artifact from six posts by @ade_oshineye. Names retained where named; everything else compressed for street reading.
+  </footer>
+  <div class="nodes" aria-hidden="true">
+    <span class="node o"></span><span class="node"></span><span class="node"></span>
+    <span class="node o"></span><span class="node"></span><span class="node o"></span>
+  </div>
+</main>
+</body>
+</html>

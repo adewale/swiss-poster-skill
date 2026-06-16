@@ -1,0 +1,94 @@
+# After-image issues and historically grounded fixes
+
+Scope: current characterization-sheet reruns, especially the right-hand “current skill rerun” images in `docs/pr/characterization-contact-sheet/contact-sheet.png`.
+
+## Issue taxonomy
+
+| Issue | Affected examples | Historical lesson | Fix added |
+|---|---|---|---|
+| Evidence contamination | Contact-sheet prompt had begun telling outputs to use contrast-channel/data-critical language | PR evidence should show the skill, not a custom prompt crutch | Removed contrast-channel/data-critical instructions from the contact-sheet prompt; kept only generic rendering/content hygiene |
+| Template collapse / same portrait recipe | Most after images: white title slab + black/orange field + route/slash + microtype | Müller-Brockmann grid is a method, not a template; grid proportions should follow the artifact | Added “artifact fidelity before style” and “grid as method, not template” guidance |
+| Source-content loss / generic slogans | Cloudflare thread variants, Breaking the 35, MoQ | International Style public communication preserves facts, names, dates, sequence, hierarchy | Added private source-ledger rule and `data-source`/`data-beat` audit markers |
+| Images used as wallpaper | Cloudflare photo rows, Connect venue/globe, onepage collage | Herbert Matter photomontage makes image fragments carry place/action/evidence/metaphor | Added image-role rule: `data-image-role="place/person/evidence/sequence/metaphor"` |
+| Fake diagrams / decorative routes | MoQ quadrant, Credential Broker, Durable Objects, Cloudflare routes | Müller-Brockmann/Ruder systems thinking: marks encode rhythm/order/relation/measured variables | Added `data-encoding`/`data-variable` rule; remove nodes/axes/lines that do not encode facts |
+| Shallow historical grounding | Designer-name cues or generic Swiss surface | Hofmann/Matter/Ruder/Weingart/Troxler/Odermatt-Tissi are compositional moves, not visible labels | Added designer-to-move mapping and `data-reference` marker guidance |
+| Microtype as texture | Many afters use “fig/index/channel” decorative labels | Ruder: small type remains functional typography | Microtype must be source notes, captions, coordinates, schedule, credits, or indexes |
+| Prompt-shaped artifacts | Dimensions, hex values, “single accent”, “current skill”, “source material” style leakage | Posters are public artifacts, not implementation notes | Added visible-copy ban for dimensions, hex values, eval/provenance labels, prompt terms |
+| Clipping/content loss | Ten Principles side panel, Durable Objects right column, Cloudflare onepage/lscape, Lean Weirdness | Public poster reading path must preserve mandatory facts; crop support/graphic layers only | Added required ledger-inside-canvas/unobscured rule; existing protected reading-zone still applies |
+| Comparison not content-faithful | Baseline artifact type/order often not preserved | Swiss poster history edits information but does not erase the assignment | Added artifact format/aspect/sequence fidelity guidance |
+
+## New eval coverage
+
+Added `evals/oracles/artifact_integrity_oracle.py` and five round-10 cases:
+
+- `pos-source-ledger-thread-recap` — six source beats, real names, source markers, no generic collapse.
+- `pos-encoded-diagram-moq` — MoQ quadrant must encode latency/scale/fanout facts.
+- `pos-historical-rhythm-public-concert` — Müller-Brockmann/Musica Viva rhythm must be embodied, not visible name-dropping.
+- `pos-historical-figure-ground-theatre` — Hofmann figure/ground must be embodied with protected public reading.
+- `round10-audit-after-image-defects` — fixture-backed audit of template/card/prompt-leak/fake-diagram/name-dropping failures.
+
+Added ablations:
+
+- `no-artifact-fidelity`
+- `no-historical-grounding`
+
+## Ablation evidence
+
+Run: `eval-runs/current-round10-artifact-integrity-20260615/`
+
+Objective means over the five new round-10 cases:
+
+| Variant | Mean objective |
+|---|---:|
+| `with_skill` | `1.0` |
+| `without_skill` | `0.2` |
+| `ablation:no-artifact-fidelity` | `0.2` |
+| `ablation:no-historical-grounding` | `0.6` |
+
+Materialized copied-skill ablations:
+
+| Case | Materialized ablation | Result |
+|---|---|---:|
+| `pos-source-ledger-thread-recap` | removed artifact-fidelity/source-ledger section | `0.0` |
+| `pos-historical-rhythm-public-concert` | removed historical-grounding/designer-to-move section | `0.0` |
+
+Interpretation: output cases discriminate strongly. The audit fixture is intentionally saturated because its prompt names the defects; it is useful as regression coverage, not lift evidence.
+
+## Round-11 period/genre breadth coverage
+
+Added ten additional cases and paired ablations for the remaining after-image issues:
+
+| Issue | Case | Ablation |
+|---|---|---|
+| Accidental late-New-Wave time anchoring | `pos-period-lineage-travel-photomontage` | `no-period-lineage-selection` |
+| Black/white/red-or-orange palette narrowing | `pos-palette-lineage-lake-travel` | `no-palette-lineage-breadth` |
+| Typographic violence overuse | `pos-object-poster-typographic-restraint` | `no-object-poster-restraint` |
+| Web-grid / card scaffolding | `pos-print-proportion-no-web-grid` | `no-print-proportion-audit` |
+| Weak lithographic/material process | `pos-material-process-lithographic-market` | `no-material-process-surface` |
+| Systems diagram overuse | `pos-diagram-restraint-theatre-figure-ground` | `no-diagram-restraint` |
+| Visible citation instead of embodied reference | `pos-embodied-reference-no-visible-citation` | `no-embodied-reference-discipline` |
+| Weak photomontage authorship | `pos-photomontage-authorship-editorial` | `no-photomontage-authorship` |
+| Insufficient restraint | `pos-hofmann-restraint-two-contrasts` | `no-restraint-as-drama` |
+| Missing genre breadth / Geigy scientific lineage | `pos-genre-breadth-geigy-scientific` | `no-genre-breadth-selection` |
+
+## Typography breadth follow-up
+
+See `docs/pr/LESSONS_LEARNED.md`. Research confirmed that IBM Plex/Helvetica-like typography is only one Swiss poster lineage. The skill now treats IBM Plex Sans as an open neo-grotesk proxy rather than a universal default, and adds condensed, serif/display, mono/technical, and custom-lettering categories for object, travel/lithographic, Geigy/scientific, New Wave, and contemporary cultural posters.
+
+## Round-12 rendered-poster proof
+
+Added `evals/oracles/rendered_poster_oracle.py` and `pos-rendered-critical-text-civic-notice` to move beyond token-level checks. The oracle renders HTML in headless Chrome and verifies `[data-critical]` boxes are in-canvas, unobscured at the center point, large enough, sufficiently opaque, do not cause horizontal overflow, and do not sit transparently across high-variance/split-field backings. It also uses a normal-vs-hidden screenshot differential to estimate local text contrast.
+
+Targeted run: `eval-runs/current-round12-rendered-proof-20260615/`:
+
+| Variant | Objective |
+|---|---:|
+| `with_skill` | `1.0` |
+| `without_skill` | `0.0` |
+| `ablation:no-rendered-poster-proof` | `0.0` |
+
+This caught the exact “The Empty Chair” failure mode: black title/date text crossing a light/dark split where z-index was correct but local pixel readability failed.
+
+## Diverse before/after evidence
+
+Added `docs/pr/diverse-before-after/`: ten generated prompts compare old skill (`origin/main`) to the current skill across non-Cloudflare domains: tourism, theatre, object/product, civic, scientific, political, market/lithographic, editorial photomontage, typography specimen, and landscape travel. The contact sheet is deliberately high resolution and the index links full-size PNG/HTML outputs so body copy, hierarchy, clipping, source fidelity, and visual grammar can be inspected beyond thumbnail gestalt.

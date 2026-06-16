@@ -1,0 +1,68 @@
+{
+  "generated_at": 1781612898,
+  "manifest": "evals/shared-benchmark.json",
+  "skill_name": "swiss-poster-skill",
+  "summary": {
+    "skill_files": 1,
+    "skill_tokens": 6519,
+    "reference_files": 5,
+    "reference_tokens": 11843,
+    "modules": 8
+  },
+  "files": [
+    {
+      "path": "/Users/adewale/Documents/projects/code/swiss-poster-skill/swiss-poster/SKILL.md",
+      "tokens": 6519,
+      "bytes": 46842,
+      "modules": [
+        "Output contract for web/UI tasks",
+        "Dramatic poster recipe",
+        "Protected reading zone heuristic",
+        "Contrast-channel discipline",
+        "Artifact fidelity before style",
+        "Historical period and genre selection",
+        "Rendered poster proof, not metadata compliance",
+        "Avoid UI/product language unless the subject is UI"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "path": "/Users/adewale/Documents/projects/code/swiss-poster-skill/swiss-poster/references/components.md",
+      "tokens": 2313,
+      "bytes": 25260
+    },
+    {
+      "path": "/Users/adewale/Documents/projects/code/swiss-poster-skill/swiss-poster/references/design-system.md",
+      "tokens": 1679,
+      "bytes": 13596
+    },
+    {
+      "path": "/Users/adewale/Documents/projects/code/swiss-poster-skill/swiss-poster/references/prompting.md",
+      "tokens": 4524,
+      "bytes": 31682
+    },
+    {
+      "path": "/Users/adewale/Documents/projects/code/swiss-poster-skill/swiss-poster/references/research.md",
+      "tokens": 2760,
+      "bytes": 21363
+    },
+    {
+      "path": "/Users/adewale/Documents/projects/code/swiss-poster-skill/swiss-poster/references/tailwind-config.md",
+      "tokens": 567,
+      "bytes": 5333
+    }
+  ],
+  "findings": [
+    {
+      "kind": "skill-too-large",
+      "severity": "recommended",
+      "message": "SKILL.md token count 6519 exceeds 3000; consider moving rare details to conditional references."
+    },
+    {
+      "kind": "references-too-large",
+      "severity": "recommended",
+      "message": "Reference token count 11843 exceeds 5000; consider pruning or splitting by trigger."
+    }
+  ]
+}

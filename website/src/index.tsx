@@ -22,11 +22,11 @@ const HEAD = html`<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss Poster Design System</title>
-  <meta name="description" content="A Swiss Poster design system for AI agents. Huge type, grid-breaking layouts, overlapping elements, and bold color fields — all in Tailwind CSS.">
+  <meta name="description" content="A Swiss Poster design system for AI agents. Lineage-specific typography, grid-breaking layouts, overlapping elements, and bold color fields — all in Tailwind CSS.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a09'/%3E%3Ccircle cx='28' cy='28' r='18' fill='%23C8102E'/%3E%3Ccircle cx='28' cy='28' r='14' fill='none' stroke='%23C8102E' stroke-width='1' opacity='0.4'/%3E%3Cline x1='0' y1='10' x2='24' y2='0' stroke='%23fafaf9' stroke-width='1.5' opacity='0.3'/%3E%3Crect x='2' y='3' width='4' height='4' fill='%23003B8E' opacity='0.6'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,7 +34,9 @@ const HEAD = html`<!DOCTYPE html>
       theme: {
         extend: {
           fontFamily: {
-            sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
+            sans: ['IBM Plex Sans', 'Hanken Grotesk', 'system-ui', 'sans-serif'],
+            condensed: ['Barlow Condensed', 'Barlow', 'Arial Narrow', 'sans-serif'],
+            serif: ['IBM Plex Serif', 'Georgia', 'serif'],
             mono: ['IBM Plex Mono', 'monospace'],
           },
           lineHeight: {
@@ -837,7 +839,7 @@ const SectionType = () => html`
     <div class="grid grid-cols-12 gap-4 md:gap-8">
       <div class="col-span-12 md:col-span-8">
         <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50 mb-3">Font Specimen</h2>
-        <p class="text-base text-stone-900/70 dark:text-stone-50/70 mb-12 max-w-[52ch]">Grotesque typefaces in the Swiss tradition. The poster style uses the full weight range &#8212; 100 to 700 &#8212; for extreme contrast.</p>
+        <p class="text-base text-stone-900/70 dark:text-stone-50/70 mb-12 max-w-[52ch]">Swiss poster typography is broader than Helvetica-like grotesks. Choose neo-grotesk, condensed, serif/display, mono, or custom-lettered treatments by lineage.</p>
 
         <div class="overflow-x-auto">
           <table class="w-full text-sm min-w-[600px]">
@@ -852,18 +854,18 @@ const SectionType = () => html`
             </thead>
             <tbody>
               ${[
-                ['IBM Plex Sans',      'Mike Abbink / Bold Monday', '2017', 'Google Fonts', '96', true],
-                ['Hanken Grotesk',     'Hanken Design Co.',         '2021', 'Google Fonts', '92', false],
-                ['Barlow',             'Jeremy Tribby',             '2017', 'Google Fonts', '88', false],
-                ['Host Grotesk',       'Fraunhofer IAIS',           '2018', 'Google Fonts', '84', false],
-                ['DM Sans',            'Colophon Foundry',          '2019', 'Google Fonts', '79', false],
-                ['Neue Haas Grotesk',  'Miedinger & Hoffmann',      '1957', 'Linotype',     '100', false],
-                ['Univers',            'Adrian Frutiger',           '1957', 'Linotype',     '98', false],
+                ['IBM Plex Sans',      'Mike Abbink / Bold Monday', '2017', 'Neo-grotesk proxy', '90', true],
+                ['Hanken Grotesk',     'Hanken Design Co.',         '2021', 'Grotesk proxy',     '88', false],
+                ['Barlow Condensed',   'Jeremy Tribby',             '2017', 'Condensed proxy',   '84', false],
+                ['IBM Plex Serif',     'Mike Abbink / Bold Monday', '2017', 'Serif/display proxy','72', false],
+                ['IBM Plex Mono',      'Mike Abbink / Bold Monday', '2017', 'Technical labels',  '76', false],
+                ['Neue Haas Grotesk',  'Miedinger & Hoffmann',      '1957', 'Historical ref.',   '100', false],
+                ['Univers',            'Adrian Frutiger',           '1957', 'Historical ref.',   '98', false],
               ].map(([name, designer, year, source, score, featured]) => html`
               <tr class="border-b border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors ${featured ? 'bg-[#C8102E]/5' : ''}">
                 <td class="py-4 pr-6 pl-4">
                   <span class="text-stone-900 dark:text-stone-50 font-normal">${name}</span>
-                  ${featured ? html`<span class="ml-2 text-[11px] tracking-widest uppercase bg-[#C8102E]/10 text-[#C8102E] px-1.5 py-0.5">Primary</span>` : ''}
+                  ${featured ? html`<span class="ml-2 text-[11px] tracking-widest uppercase bg-[#C8102E]/10 text-[#C8102E] px-1.5 py-0.5">Default proxy</span>` : ''}
                 </td>
                 <td class="py-4 pr-6 text-stone-900/60 dark:text-stone-50/60">${designer}</td>
                 <td class="py-4 pr-6 text-stone-900/60 dark:text-stone-50/60 font-mono text-sm">${year}</td>

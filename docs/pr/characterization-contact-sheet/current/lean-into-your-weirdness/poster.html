@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lean Into Your Weirdness</title>
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --ghost:rgba(28,25,23,.08);
+    --red:#C8102E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:#d6d3d1}
+  body{font-family:"IBM Plex Sans","Hanken Grotesk","Barlow","Host Grotesk","DM Sans",system-ui,sans-serif;color:var(--ink)}
+  .poster{
+    width:840px;height:1200px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);
+    display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(24,50px);
+  }
+  .gridline{
+    position:absolute;inset:0;pointer-events:none;opacity:.42;
+    background-image:linear-gradient(90deg,rgba(28,25,23,.065) 1px,transparent 1px),linear-gradient(0deg,rgba(28,25,23,.04) 1px,transparent 1px);
+    background-size:70px 50px;
+  }
+  .red-slab{position:absolute;left:-86px;top:388px;width:1010px;height:178px;background:var(--red);transform:rotate(-7deg);z-index:2}
+  .black-slab{position:absolute;right:-130px;bottom:0;width:438px;height:540px;background:var(--ink);z-index:1}
+  .ghost-word{
+    position:absolute;left:-38px;top:628px;font-size:212px;line-height:.78;font-weight:900;letter-spacing:-.09em;
+    color:var(--ghost);white-space:nowrap;z-index:0;transform:scaleX(1.08);
+  }
+  .top-meta{
+    grid-column:2/8;grid-row:2/3;z-index:5;font-size:11px;line-height:1.2;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    display:grid;grid-template-columns:1fr 1fr;gap:28px;
+  }
+  .serial{grid-column:10/12;grid-row:2/4;z-index:5;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:right}
+  .title{
+    grid-column:2/11;grid-row:4/9;z-index:6;align-self:end;
+  }
+  .title .lean{display:block;font-size:92px;line-height:.86;font-weight:300;letter-spacing:-.07em}
+  .title .into{display:block;margin-left:210px;font-size:88px;line-height:.82;font-weight:800;letter-spacing:-.075em}
+  .weird{
+    position:absolute;left:28px;top:396px;z-index:7;color:var(--paper);font-size:135px;line-height:.78;letter-spacing:-.095em;white-space:nowrap;
+    font-kerning:none;
+  }
+  .weird span{display:inline-block}
+  .w1{font-weight:900;transform:translateY(3px) rotate(-2deg)}
+  .w2{font-weight:100;font-style:italic;transform:translateY(-11px) scaleY(1.22)}
+  .w3{font-weight:700;transform:translateY(14px) scaleX(.82)}
+  .w4{font-weight:300;font-style:italic;transform:translateY(-2px) rotate(4deg)}
+  .w5{font-weight:950;transform:translateY(20px) scaleY(.76)}
+  .w6{font-weight:200;transform:translateY(-16px) scaleX(1.28)}
+  .w7{font-weight:800;font-style:italic;transform:translateY(8px) rotate(-5deg)}
+  .w8{font-weight:500;transform:translateY(-7px) scaleY(1.1)}
+  .w9{font-weight:900;transform:translateY(17px) scaleX(.9)}
+  .subtitle{
+    grid-column:2/7;grid-row:12/14;z-index:5;font-size:27px;line-height:1.03;font-weight:450;letter-spacing:-.035em;
+  }
+  .diagnosis{
+    grid-column:8/12;grid-row:12/17;z-index:5;background:var(--paper);padding:20px 0 0 24px;border-left:8px solid var(--ink);
+  }
+  .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .diagnosis p{margin:0 0 13px;font-size:21px;line-height:1.05;letter-spacing:-.03em}
+  .tradeoffs{
+    grid-column:2/7;grid-row:16/21;z-index:5;display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;align-content:start;
+  }
+  .item{border-top:2px solid var(--ink);padding-top:9px}
+  .item b{display:block;font-size:13px;line-height:1;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+  .item span{display:block;font-size:18px;line-height:1.06;letter-spacing:-.025em;color:rgba(28,25,23,.78)}
+  .saints{
+    grid-column:8/12;grid-row:18/22;z-index:5;color:var(--paper);padding:0 0 0 24px;
+  }
+  .saints .kicker{color:rgba(250,250,249,.62)}
+  .saints ul{list-style:none;margin:0;padding:0}
+  .saints li{font-size:24px;line-height:.98;letter-spacing:-.04em;margin-bottom:10px}
+  .order{
+    grid-column:2/9;grid-row:22/24;z-index:8;background:var(--red);color:var(--paper);padding:18px 22px;
+    display:grid;grid-template-columns:160px 1fr;gap:20px;align-items:center;
+  }
+  .order b{font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .order span{font-size:31px;line-height:.93;font-weight:800;letter-spacing:-.055em}
+  .edge-note{
+    position:absolute;left:18px;bottom:28px;z-index:8;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(28,25,23,.55)
+  }
+  .ticks{position:absolute;right:392px;top:590px;bottom:70px;width:1px;background:rgba(28,25,23,.35);z-index:4}
+  .ticks i{position:absolute;left:-16px;width:32px;height:2px;background:var(--ink)}
+  .ticks i:nth-child(1){top:0}.ticks i:nth-child(2){top:18%}.ticks i:nth-child(3){top:37%}.ticks i:nth-child(4){top:61%}.ticks i:nth-child(5){top:100%}
+</style>
+</head>
+<body>
+<main class="poster" data-lineage="weingart-controlled-disruption" data-reference="typographic-rupture">
+  <div class="gridline" aria-hidden="true"></div>
+  <div class="red-slab" aria-hidden="true"></div>
+  <div class="black-slab" aria-hidden="true"></div>
+  <div class="ghost-word" aria-hidden="true">NORMAL</div>
+  <div class="ticks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <section class="top-meta" data-critical="date">
+    <div>Manifesto sheet<br>for difficult signals</div>
+    <div>Field notes<br>against polite erasure</div>
+  </section>
+  <div class="serial">No. 07<br>stand apart</div>
+
+  <h1 class="title" data-critical="title">
+    <span class="lean">Lean</span>
+    <span class="into">Into Your</span>
+  </h1>
+
+  <div class="weird" aria-label="Weirdness" data-critical="title">
+    <span class="w1">W</span><span class="w2">E</span><span class="w3">I</span><span class="w4">R</span><span class="w5">D</span><span class="w6">N</span><span class="w7">E</span><span class="w8">S</span><span class="w9">S</span>
+  </div>
+
+  <p class="subtitle" data-critical="body">
+    Your odd angle is not noise. It is the instrument that finds the hidden door.
+  </p>
+
+  <section class="diagnosis" data-critical="body">
+    <div class="kicker">Diagnosis</div>
+    <p>If the room goes quiet, ask what pattern you just touched.</p>
+    <p>If the draft looks too clean, put the dangerous sentence back.</p>
+    <p>If everyone agrees too fast, widen the frame.</p>
+  </section>
+
+  <section class="tradeoffs">
+    <div class="item"><b>Tradeoff</b><span>Legibility over belonging when the truth needs a shape.</span></div>
+    <div class="item"><b>Practice</b><span>Name the constraint before you decorate the escape.</span></div>
+    <div class="item"><b>Practice</b><span>Protect one strange habit long enough to measure it.</span></div>
+    <div class="item"><b>Cost</b><span>Some rooms will call precision eccentric.</span></div>
+    <div class="item"><b>Use</b><span>Turn awkwardness into a repeatable method.</span></div>
+    <div class="item"><b>Rule</b><span>Never sand off the edge that does the work.</span></div>
+  </section>
+
+  <section class="saints">
+    <div class="kicker">Patron saints</div>
+    <ul>
+      <li>the misfit diagram</li>
+      <li>the crooked question</li>
+      <li>the beautiful refusal</li>
+      <li>the note nobody filed</li>
+    </ul>
+  </section>
+
+  <div class="order" data-critical="cta">
+    <b>Standing order</b>
+    <span>Keep the signal weird. Make the result undeniable.</span>
+  </div>
+
+  <div class="edge-note">readable / strange / useful</div>
+</main>
+</body>
+</html>

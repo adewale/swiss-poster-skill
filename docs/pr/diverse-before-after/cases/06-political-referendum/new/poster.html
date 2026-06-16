@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Housing Yes / Speculation No</title>
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --ink:#1c1917;
+    --muted:rgba(28,25,23,.62);
+    --faint:rgba(28,25,23,.14);
+    --accent:#b91c1c;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d0c4}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+    box-shadow:0 20px 60px rgba(0,0,0,.22);
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:repeat(12,1fr);
+    column-gap:0;
+  }
+  .papergrain{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.28;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(28,25,23,.05) 0 1px, transparent 1.2px),
+      radial-gradient(circle at 72% 66%, rgba(28,25,23,.045) 0 1px, transparent 1.3px);
+    background-size:12px 14px,17px 19px;
+    mix-blend-mode:multiply;
+  }
+  .rent-field{
+    position:absolute;
+    left:-48px;
+    top:258px;
+    width:936px;
+    height:482px;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 43px, rgba(28,25,23,.08) 43px 46px),
+      linear-gradient(var(--paper),var(--paper));
+    border-top:18px solid var(--ink);
+    border-bottom:18px solid var(--ink);
+    transform:skewY(-5deg);
+    transform-origin:left center;
+  }
+  .cooperative-block{
+    position:absolute;
+    left:92px;
+    top:372px;
+    width:468px;
+    height:330px;
+    background:var(--ink);
+    clip-path:polygon(0 31%, 50% 0, 100% 31%, 100% 100%, 0 100%);
+  }
+  .cooperative-block:before{
+    content:"";
+    position:absolute;
+    inset:92px 54px 48px;
+    background:
+      linear-gradient(90deg, var(--paper) 0 21%, transparent 21% 28%, var(--paper) 28% 49%, transparent 49% 56%, var(--paper) 56% 77%, transparent 77% 84%, var(--paper) 84% 100%),
+      linear-gradient(var(--paper),var(--paper));
+    opacity:.96;
+    clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
+  }
+  .cooperative-block:after{
+    content:"";
+    position:absolute;
+    left:176px;
+    bottom:48px;
+    width:116px;
+    height:112px;
+    background:var(--paper);
+  }
+  .spec-wedge{
+    position:absolute;
+    right:-165px;
+    top:204px;
+    width:426px;
+    height:748px;
+    background:var(--accent);
+    transform:rotate(14deg);
+    transform-origin:center;
+  }
+  .spec-wedge:after{
+    content:"";
+    position:absolute;
+    left:72px;
+    top:-30px;
+    width:26px;
+    height:820px;
+    background:var(--paper);
+    opacity:.78;
+  }
+  .small-house{
+    position:absolute;
+    left:620px;
+    top:708px;
+    width:122px;
+    height:98px;
+    background:var(--paper);
+    border:14px solid var(--ink);
+    z-index:5;
+  }
+  .small-house:before{
+    content:"";
+    position:absolute;
+    left:-16px;
+    top:-68px;
+    width:126px;
+    height:126px;
+    border-left:14px solid var(--ink);
+    border-top:14px solid var(--ink);
+    transform:rotate(45deg);
+    background:var(--paper);
+  }
+  .slash{
+    position:absolute;
+    left:516px;
+    top:138px;
+    width:34px;
+    height:940px;
+    background:var(--ink);
+    transform:rotate(14deg);
+    z-index:6;
+  }
+  .title{
+    position:absolute;
+    left:58px;
+    top:60px;
+    width:705px;
+    z-index:20;
+    font-size:88px;
+    line-height:.9;
+    letter-spacing:-5px;
+    font-weight:800;
+  }
+  .title span{
+    display:block;
+    background:var(--paper);
+    width:max-content;
+    max-width:100%;
+    padding:0 8px 8px 0;
+  }
+  .meta{
+    position:absolute;
+    left:62px;
+    top:220px;
+    z-index:22;
+    display:grid;
+    grid-template-columns:178px 178px;
+    gap:18px;
+    font-size:13px;
+    line-height:1.18;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .meta div{
+    background:var(--paper);
+    padding:9px 10px 10px 0;
+  }
+  .facts{
+    position:absolute;
+    left:62px;
+    bottom:218px;
+    z-index:22;
+    width:390px;
+    font-size:35px;
+    line-height:1.02;
+    letter-spacing:-1.3px;
+    font-weight:700;
+  }
+  .facts p{
+    margin:0 0 10px;
+    background:var(--paper);
+    display:inline;
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+    padding:3px 7px 5px 0;
+  }
+  .cta{
+    position:absolute;
+    left:62px;
+    bottom:58px;
+    z-index:25;
+    width:405px;
+    background:var(--accent);
+    color:var(--paper);
+    padding:24px 28px 28px;
+    font-size:77px;
+    line-height:.86;
+    letter-spacing:-4px;
+    font-weight:900;
+    text-transform:none;
+  }
+  .no{
+    position:absolute;
+    right:-28px;
+    bottom:48px;
+    z-index:7;
+    color:var(--ink);
+    font-size:214px;
+    line-height:.75;
+    letter-spacing:-14px;
+    font-weight:900;
+    opacity:.96;
+  }
+  .yes-ghost{
+    position:absolute;
+    left:-22px;
+    top:742px;
+    z-index:1;
+    color:var(--faint);
+    font-size:238px;
+    line-height:.8;
+    letter-spacing:-14px;
+    font-weight:900;
+  }
+  .micro{
+    position:absolute;
+    z-index:30;
+    font-size:11px;
+    line-height:1.15;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .m1{left:62px;top:1130px}
+  .m2{right:56px;top:62px;text-align:right}
+  .m3{right:58px;top:1004px;text-align:right;color:rgba(245,241,232,.68)}
+  .rule-v{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:560px;
+    width:1px;
+    background:rgba(28,25,23,.22);
+  }
+  .rule-h{
+    position:absolute;
+    left:0;
+    right:0;
+    top:930px;
+    height:1px;
+    background:rgba(28,25,23,.2);
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="Housing Yes / Speculation No civic poster" data-lineage="1950s-zurich-civic" data-reference="hofmann-figure-ground" data-print-process="flat-ink">
+    <div class="grid" aria-hidden="true"></div>
+    <div class="rent-field" aria-hidden="true"></div>
+    <div class="spec-wedge" aria-hidden="true"></div>
+    <div class="cooperative-block" aria-hidden="true"></div>
+    <div class="small-house" aria-hidden="true"></div>
+    <div class="slash" aria-hidden="true"></div>
+    <div class="rule-v" aria-hidden="true"></div>
+    <div class="rule-h" aria-hidden="true"></div>
+    <div class="yes-ghost" aria-hidden="true">YES</div>
+    <div class="no" aria-hidden="true">NO</div>
+
+    <h1 class="title" data-critical="title">
+      <span>Housing Yes /</span>
+      <span>Speculation No</span>
+    </h1>
+
+    <section class="meta" data-critical="date">
+      <div>Municipal vote<br>3 March</div>
+      <div>Public housing<br>for the city</div>
+    </section>
+
+    <section class="facts" data-critical="body">
+      <p>Protect rent.</p><br>
+      <p>Build cooperatives.</p>
+    </section>
+
+    <div class="cta" data-critical="cta">Vote yes</div>
+
+    <div class="micro m1">Tenants • families • neighbourhoods</div>
+    <div class="micro m2">Civic decision<br>common ground</div>
+    <div class="micro m3">Against land speculation<br>for homes people can afford</div>
+    <div class="papergrain" aria-hidden="true"></div>
+  </main>
+</body>
+</html>

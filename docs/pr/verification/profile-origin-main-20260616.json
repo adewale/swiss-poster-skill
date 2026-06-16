@@ -1,0 +1,63 @@
+{
+  "generated_at": 1781598417,
+  "manifest": "evals/shared-benchmark.json",
+  "skill_name": "swiss-poster-skill",
+  "summary": {
+    "skill_files": 1,
+    "skill_tokens": 2473,
+    "reference_files": 5,
+    "reference_tokens": 7441,
+    "modules": 8
+  },
+  "files": [
+    {
+      "path": "/tmp/swiss-poster-origin-main-profile/swiss-poster/SKILL.md",
+      "tokens": 2473,
+      "bytes": 17523,
+      "modules": [
+        "Output contract for web/UI tasks",
+        "Six Principles",
+        "Anti-Slop",
+        "Typography",
+        "Color System",
+        "Stone palette (light mode → dark mode)",
+        "Opacity hierarchy",
+        "Accent color"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "path": "/tmp/swiss-poster-origin-main-profile/swiss-poster/references/components.md",
+      "tokens": 1578,
+      "bytes": 17351
+    },
+    {
+      "path": "/tmp/swiss-poster-origin-main-profile/swiss-poster/references/design-system.md",
+      "tokens": 1546,
+      "bytes": 12580
+    },
+    {
+      "path": "/tmp/swiss-poster-origin-main-profile/swiss-poster/references/prompting.md",
+      "tokens": 2670,
+      "bytes": 18183
+    },
+    {
+      "path": "/tmp/swiss-poster-origin-main-profile/swiss-poster/references/research.md",
+      "tokens": 1155,
+      "bytes": 8559
+    },
+    {
+      "path": "/tmp/swiss-poster-origin-main-profile/swiss-poster/references/tailwind-config.md",
+      "tokens": 492,
+      "bytes": 4374
+    }
+  ],
+  "findings": [
+    {
+      "kind": "references-too-large",
+      "severity": "recommended",
+      "message": "Reference token count 7441 exceeds 5000; consider pruning or splitting by trigger."
+    }
+  ]
+}

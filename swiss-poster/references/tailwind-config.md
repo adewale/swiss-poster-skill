@@ -19,6 +19,17 @@ module.exports = {
           'system-ui',
           'sans-serif',
         ],
+        condensed: [
+          'Barlow Condensed',
+          'Barlow',
+          'Arial Narrow',
+          'sans-serif',
+        ],
+        serif: [
+          'IBM Plex Serif',
+          'Georgia',
+          'serif',
+        ],
         mono: [
           'IBM Plex Mono',
           'Fira Code',
@@ -58,7 +69,9 @@ Add to your main CSS file:
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'IBM Plex Sans', 'Hanken Grotesk', 'Barlow', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', 'Hanken Grotesk', 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-condensed: 'Barlow Condensed', 'Barlow', 'Arial Narrow', sans-serif;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
   --font-mono: 'IBM Plex Mono', 'Fira Code', ui-monospace, monospace;
 
   --max-width-prose: 60ch;
@@ -82,10 +95,10 @@ Add to your main CSS file:
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
 ```
 
-Note: The poster style loads weight 100 (thin) and 700 (bold) in addition to the International Style's 300/400/500/600. These extreme weights are essential for poster-scale type contrast.
+Note: This broad link is for prototypes. Production outputs should load only the lineage families they use. Extreme weights support type-as-image posters, but condensed/serif/mono/custom lettering proxies are often more historically plausible for object, travel, Geigy/scientific, or contemporary cultural posters.
 
 ---
 
@@ -101,7 +114,9 @@ For prototypes and demos:
     theme: {
       extend: {
         fontFamily: {
-          sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
+          sans: ['IBM Plex Sans', 'Hanken Grotesk', 'system-ui', 'sans-serif'],
+          condensed: ['Barlow Condensed', 'Barlow', 'Arial Narrow', 'sans-serif'],
+          serif: ['IBM Plex Serif', 'Georgia', 'serif'],
           mono: ['IBM Plex Mono', 'monospace'],
         },
         lineHeight: {
@@ -122,7 +137,9 @@ Paste after your Tailwind imports:
 ```css
 /* Swiss Poster Design System — global tokens */
 :root {
-  --font-sans: 'IBM Plex Sans', 'Hanken Grotesk', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', 'Hanken Grotesk', 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-condensed: 'Barlow Condensed', 'Barlow', 'Arial Narrow', sans-serif;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
   /* Accent — override this per project */

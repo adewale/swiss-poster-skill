@@ -190,9 +190,9 @@
           "type": "contains_all",
           "values": [
             "320",
-            "44px",
-            "no horizontal"
-          ]
+            "44px"
+          ],
+          "description": "Core mobile contract; scroll phrasing is covered by mobile-scroll-guard and qualitative review."
         },
         {
           "name": "mobile-scroll-guard",
@@ -200,7 +200,10 @@
           "values": [
             "overflow-hidden",
             "overflow-x-hidden",
-            "overflow-clip"
+            "overflow-clip",
+            "No X-scroll",
+            "x-scroll",
+            "sideways scroll"
           ]
         },
         {
@@ -247,9 +250,20 @@
           "values": [
             "grid-cols-12",
             "text-[clamp(",
-            "leading-[0.85]",
             "#C8102E"
           ]
+        },
+        {
+          "name": "tight-leading-contract",
+          "type": "contains_any",
+          "values": [
+            "leading-[0.85]",
+            "leading-[0.8]",
+            "leading-[0.78]",
+            "leading-[0.75]",
+            "leading-none"
+          ],
+          "description": "Display type must use tight poster leading; allow more dramatic values than the docs default."
         },
         {
           "name": "poster-scroll-guard",
@@ -485,7 +499,10 @@
           "type": "contains_any",
           "values": [
             "limited rotation",
-            "discipline"
+            "discipline",
+            "seasoning",
+            "one or two rotated",
+            "not the meal"
           ]
         },
         {
@@ -520,7 +537,10 @@
           "values": [
             "no horizontal scroll",
             "no sideways scroll",
-            "must not cause horizontal scroll"
+            "must not cause horizontal scroll",
+            "without creating horizontal page scroll",
+            "Mobile sideways scroll, no",
+            "won\u2019t allow mobile sideways scroll"
           ]
         },
         {
@@ -743,6 +763,1481 @@
       "trigger_type": "negative-near-miss"
     },
     {
+      "id": "pos-dramatic-event-poster",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML dramatic poster-style event landing hero for a cultural festival. It should feel closer to the inspiration gallery than to a normal SaaS page: one dominant poster-scale event, edge crop, tiny data labels, hard figure/ground field, graphic rhythm/geometry, one Swiss red accent, a twelve-column layout foundation, phone-safe without sideways scrolling, and an accessible CTA.",
+      "expected_behavior": [
+        "Produce implementable HTML/Tailwind with an obvious dominant poster event, microtype, edge pressure, graphic system, one accent, and mobile/overflow safety."
+      ],
+      "assertions": [
+        {
+          "name": "drama-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/drama_oracle.py",
+            "{output_dir}",
+            "pos-dramatic-event-poster"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Deterministic carrier checks for dramatic Swiss poster output."
+        },
+        {
+          "name": "tailwind-grid-contract",
+          "type": "contains_all",
+          "values": [
+            "grid",
+            "grid-cols-12"
+          ]
+        },
+        {
+          "name": "microtype-contract",
+          "type": "contains_any",
+          "values": [
+            "text-[11px]",
+            "tracking-widest uppercase",
+            "uppercase tracking-widest"
+          ]
+        },
+        {
+          "name": "not-svg-only",
+          "type": "not_regex",
+          "pattern": "(?is)(```\\s*svg|save as [^\\n]*\\.svg|svg-only)"
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Dominant poster-scale event rather than tidy web hero",
+            "Edge pressure/cropping with no 320px horizontal scroll",
+            "Microtype and hard figure-ground field make the composition intentional"
+          ]
+        }
+      ],
+      "tags": [
+        "round-6",
+        "dramatic-poster",
+        "inspiration-gap"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-masked-photo-poster",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a portfolio page with one supplied photo. Treat the photo as graphic poster material, not a rounded content tile: severe crop/mask, high contrast, two-tone treatment or ink-like printing over the image, huge cropped type, tiny metadata, one red accent, explicit twelve-column layout, and phone-safe without sideways scrolling.",
+      "expected_behavior": [
+        "Use the photo as a cropped/masked high-contrast graphic element with overprinted type/fields; avoid rounded cards, shadows, and generic portfolio layout."
+      ],
+      "assertions": [
+        {
+          "name": "drama-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/drama_oracle.py",
+            "{output_dir}",
+            "pos-masked-photo-poster"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Deterministic carrier checks including photo-as-graphic patterns."
+        },
+        {
+          "name": "photo-treatment",
+          "type": "contains_any",
+          "values": [
+            "grayscale",
+            "contrast-150",
+            "mix-blend",
+            "object-cover",
+            "clip-path",
+            "duotone",
+            "overprint"
+          ]
+        },
+        {
+          "name": "reject-rounded-photo-card",
+          "type": "not_regex",
+          "pattern": "(?is)(class=[\"'][^\"']*(?:rounded-(?:lg|xl|2xl|3xl)|shadow-(?:lg|xl|2xl))[^\"']*[\"'])|(<[^>]+class=[\"'][^\"']*card[^\"']*[\"'])",
+          "description": "Forbid actual rounded/shadow/card classes; do not fail explanatory text like \"not a card\"."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Photo is transformed into graphic material, not shown as a rounded card",
+            "Poster scale/crop/microtype are present",
+            "Responsive and single-accent discipline"
+          ]
+        }
+      ],
+      "tags": [
+        "round-6",
+        "dramatic-poster",
+        "image-treatment"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-semantic-legible-jazz",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML dramatic Swiss-poster hero for a jazz festival. No actual event date is available, so do not invent a giant date or arbitrary numeral. The dominant visual should communicate music/rhythm, keep the main title and CTA readable at a glance, use one Swiss red accent, a twelve-column foundation, edge pressure, microtype, and phone-safe overflow behavior.",
+      "expected_behavior": [
+        "Produce dramatic poster HTML where the large anchor is semantically tied to jazz/music/rhythm, not an arbitrary date, and preserve clear title/CTA legibility."
+      ],
+      "assertions": [
+        {
+          "name": "semantic-legibility-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/semantic_drama_oracle.py",
+            "{output_dir}",
+            "pos-semantic-legible-jazz"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Requires semantic music/rhythm anchor and readable primary path; rejects giant arbitrary dates."
+        },
+        {
+          "name": "drama-carrier-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/drama_oracle.py",
+            "{output_dir}",
+            "pos-semantic-legible-jazz"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Keeps the existing dramatic carrier checks."
+        },
+        {
+          "name": "no-arbitrary-large-date",
+          "type": "not_regex",
+          "pattern": "(?is)text-\\[clamp\\([^>]{0,240}>\\s*(?:19\\d\\d|20\\d\\d|62|0?[1-9])\\s*<"
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Dominant anchor communicates jazz/music/rhythm, not arbitrary decoration",
+            "Title and CTA are readable at a glance",
+            "Poster drama comes from meaningful scale/figure-ground/edge pressure without noise"
+          ]
+        }
+      ],
+      "tags": [
+        "round-6",
+        "semantic-drama",
+        "legibility"
+      ],
+      "domain": "poster-design",
+      "difficulty": "core",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "round6-audit-unreadable-drama",
+      "split": "tune",
+      "kind": "style-output",
+      "files": [
+        "fixtures/round6-unreadable-drama/current.html"
+      ],
+      "prompt": "Audit the attached Swiss-poster hero draft. It is trying to be dramatic, but the main title is hard to read and the giant number is not meaningful. Propose the corrected Tailwind direction: keep poster energy, but make the dominant anchor semantic to jazz/music/rhythm, keep the primary reading path clear, preserve a 12-column foundation, one red accent, and 320px/no-horizontal-scroll safety.",
+      "expected_behavior": [
+        "Identify illegible overlap and arbitrary/non-semantic giant date as failures; propose a semantic rhythm/music anchor with clear title/CTA and implementation constraints."
+      ],
+      "assertions": [
+        {
+          "name": "semantic-audit-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/semantic_drama_oracle.py",
+            "{output_dir}",
+            "round6-audit-unreadable-drama"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Deterministically checks for legibility + semantic-anchor critique and corrected direction."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Correctly rejects illegible drama",
+            "Rejects arbitrary giant numeral/date",
+            "Provides implementable semantic replacement preserving Swiss poster energy"
+          ]
+        }
+      ],
+      "tags": [
+        "round-6",
+        "fixture-backed",
+        "semantic-drama",
+        "legibility"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-object-poster-archetype",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a ceramic espresso cup product page. Use the same skill constraints, but do not use the recurring defaults: no right-side dark split, no concentric/pulse rings, no decorative line field, and no invented giant date. Choose an object-poster direction where the cup/product itself becomes the large semantic visual anchor. Keep title, CTA, and product facts readable, one Swiss red accent, 12-column foundation, and mobile-safe overflow.",
+      "expected_behavior": [
+        "Select an object-poster archetype: isolated product/object/cutout/silhouette as the dominant meaningful anchor, not default rings/split/line-field/date."
+      ],
+      "assertions": [
+        {
+          "name": "motif-archetype-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/motif_diversity_oracle.py",
+            "{output_dir}",
+            "pos-object-poster-archetype"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Object/product is the semantic anchor",
+            "Avoids default right-dark/ring/line-field/date recipe",
+            "Readable primary path and mobile-safe Swiss poster implementation"
+          ]
+        }
+      ],
+      "tags": [
+        "round-7",
+        "motif-diversity",
+        "object-poster"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-route-map-archetype",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a night bus route called N8. Avoid the current defaults: no right-side dark split, no concentric rings, no decorative repeating line field, no arbitrary giant date. Choose a route/map/network archetype where paths, stations, transfer nodes, coordinates, or direction become the dominant semantic visual. Keep title/CTA readable, one Swiss red accent, 12-column foundation, and 320px-safe overflow.",
+      "expected_behavior": [
+        "Select a route/map archetype with route lines/nodes/stations as the visual grammar, not generic poster decoration."
+      ],
+      "assertions": [
+        {
+          "name": "motif-archetype-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/motif_diversity_oracle.py",
+            "{output_dir}",
+            "pos-route-map-archetype"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Route/map/network form carries the bus-route subject",
+            "Avoids default right-dark/ring/line-field/date recipe",
+            "Readable primary path and mobile-safe implementation"
+          ]
+        }
+      ],
+      "tags": [
+        "round-7",
+        "motif-diversity",
+        "route-map"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-data-diagram-archetype",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster intro for an infrastructure reliability report. Avoid the current defaults: no right-side dark split, no concentric rings, no decorative repeating line field. Choose a data/diagram archetype where axes, matrix, bars, table structure, ticks, or measured labels carry the subject. A meaningful report index is allowed, but no arbitrary giant date. Keep title/CTA readable, one Swiss red accent, 12-column foundation, and mobile-safe overflow.",
+      "expected_behavior": [
+        "Select a data/diagram archetype with real diagram/table/chart semantics and readable report hierarchy."
+      ],
+      "assertions": [
+        {
+          "name": "motif-archetype-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/motif_diversity_oracle.py",
+            "{output_dir}",
+            "pos-data-diagram-archetype"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Diagram/data structure carries the reliability-report subject",
+            "Avoids default ring/split/line-field recipe",
+            "Readable primary path and mobile-safe implementation"
+          ]
+        }
+      ],
+      "tags": [
+        "round-7",
+        "motif-diversity",
+        "data-diagram"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-typographic-specimen-archetype",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a type foundry announcing a grotesque type specimen. Avoid the current defaults: no right-side dark split, no concentric rings, no decorative repeating line field, no arbitrary giant date. Choose a typographic-specimen archetype where glyphs, baselines, x-height, letterform crops, weights, tracking, and type scale become the dominant semantic visual. Keep title/CTA readable, one Swiss red accent, 12-column foundation, and mobile-safe overflow.",
+      "expected_behavior": [
+        "Select a typographic specimen archetype; typography is the subject and visual grammar, not just a generic cropped word."
+      ],
+      "assertions": [
+        {
+          "name": "motif-archetype-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/motif_diversity_oracle.py",
+            "{output_dir}",
+            "pos-typographic-specimen-archetype"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Specimen/type-system form carries the foundry subject",
+            "Avoids default right-dark/ring/line-field/date recipe",
+            "Readable primary path and mobile-safe implementation"
+          ]
+        }
+      ],
+      "tags": [
+        "round-7",
+        "motif-diversity",
+        "typographic-specimen"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-photomontage-archetype",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a travel/editorial story using three supplied image paths: /img/mountain.jpg, /img/train.jpg, and /img/ticket.jpg. Avoid the current defaults: no right-side dark split, no concentric rings, no decorative repeating line field, no arbitrary giant date. Choose a photomontage archetype with multiple cropped image fragments, overprint, scale juxtaposition, and flat print logic. Keep title/CTA readable, one Swiss red accent, 12-column foundation, and mobile-safe overflow.",
+      "expected_behavior": [
+        "Select photomontage: multiple image fragments and overprint/scale juxtaposition, not a single rounded card or generic rings."
+      ],
+      "assertions": [
+        {
+          "name": "motif-archetype-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/motif_diversity_oracle.py",
+            "{output_dir}",
+            "pos-photomontage-archetype"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Multiple image fragments/photomontage carry the travel/editorial subject",
+            "Avoids default right-dark/ring/line-field/date recipe",
+            "Readable primary path and mobile-safe implementation"
+          ]
+        }
+      ],
+      "tags": [
+        "round-7",
+        "motif-diversity",
+        "photomontage"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-civic-safety-archetype",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a civic bicycle-safety campaign: protect children near tram tracks. Avoid the current defaults: no right-side dark split, no concentric rhythm rings, no decorative repeating line field, no arbitrary giant date. Choose a civic/safety scale-juxtaposition archetype where an oversized hazard and a small vulnerable figure make the warning clear. Keep title/CTA readable, one Swiss red accent, 12-column foundation, and mobile-safe overflow.",
+      "expected_behavior": [
+        "Select civic/safety scale juxtaposition with a clear warning: oversized hazard versus small vulnerable figure."
+      ],
+      "assertions": [
+        {
+          "name": "motif-archetype-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/motif_diversity_oracle.py",
+            "{output_dir}",
+            "pos-civic-safety-archetype"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Safety warning is clear through hazard/vulnerable scale juxtaposition",
+            "Avoids default right-dark/rhythm-ring/line-field/date recipe",
+            "Readable primary path and mobile-safe implementation"
+          ]
+        }
+      ],
+      "tags": [
+        "round-7",
+        "motif-diversity",
+        "civic-safety"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "pos-protected-reading-zone-credential",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a Credential Broker / outbound worker pattern. The dominant visual should be a trust-boundary or broker diagram, but the title, core claim, explanatory body, and CTA must remain readable at a glance. Avoid the failure where a giant boundary bar, route line, or mega word crosses the title/body. Preserve poster drama, one Cloudflare orange accent, a twelve-column foundation, microtype, and 320px-safe overflow.",
+      "expected_behavior": [
+        "Produce dramatic Swiss-poster HTML with a subject-matched trust-boundary graphic while preserving a protected reading zone for critical copy."
+      ],
+      "assertions": [
+        {
+          "name": "protected-reading-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/readability_oracle.py",
+            "{output_dir}",
+            "pos-protected-reading-zone-credential"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Checks for protected reading-zone carriers: quiet field, critical-copy layer, separated graphic layer, contrast, and overflow safety."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Critical title/body/CTA are readable at a glance",
+            "Graphic trust-boundary anchor communicates the subject without covering primary copy",
+            "Dramatic poster energy remains without accidental text collision"
+          ]
+        }
+      ],
+      "tags": [
+        "round-8",
+        "readability",
+        "protected-reading-zone",
+        "credential-broker"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "round8-audit-overlapped-critical-text",
+      "split": "tune",
+      "kind": "style-audit",
+      "prompt": "Audit the attached Swiss-poster hero draft. It has strong graphic energy, but the trust-boundary bar, horizontal route line, and title/body layers make the primary reading path hard to read. Propose the corrected Tailwind direction: preserve the dramatic credential-broker/trust-boundary concept, but create a protected reading zone for title/body/CTA, separate critical copy from graphic layers, preserve contrast, keep a 12-column foundation, one Cloudflare orange accent, and 320px/no-horizontal-scroll safety.",
+      "files": [
+        "fixtures/round8-overlapped-critical-text/current.html"
+      ],
+      "expected_behavior": [
+        "Identify the illegible collision failure and propose a corrected protected-reading-zone implementation while preserving Swiss poster energy."
+      ],
+      "assertions": [
+        {
+          "name": "protected-reading-audit-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/readability_oracle.py",
+            "{output_dir}",
+            "round8-audit-overlapped-critical-text"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Checks that the audit names the overlap failure and proposes quiet-field/layer/contrast fixes."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Correctly identifies the critical text collision/readability failure",
+            "Fix keeps poster energy while protecting title/body/CTA",
+            "Implementation direction is concrete enough for Tailwind/HTML"
+          ]
+        }
+      ],
+      "tags": [
+        "round-8",
+        "readability",
+        "fixture",
+        "protected-reading-zone"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "diagnosis",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-contrast-channel-night-closure",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for an emergency transit night closure. Keep it severe and high-contrast: a black/stone split field, one Swiss red route slash or severed line, a huge 23:40 time signal, the title Night Closure, the body copy \u201cLast trains reroute via Platform 4\u201d, and a CTA \u201cCheck route changes\u201d. Optimise readability without turning it into a polite accessibility handout; the title, route fact, and CTA must be readable before the geometry is admired. Make it 320px-safe with no horizontal scroll.",
+      "expected_behavior": [
+        "Produce a brutal high-contrast Swiss poster that allocates contrast channels so critical text is readable while dramatic geometry remains strong."
+      ],
+      "assertions": [
+        {
+          "name": "contrast-channel-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/readability_oracle.py",
+            "{output_dir}",
+            "pos-contrast-channel-night-closure"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10,
+          "description": "Checks for contrast-channel discipline: critical annotations, separated dramatic channel, hard fields, demoted texture, z-index ordering, and overflow safety."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "The poster preserves high-contrast Swiss drama rather than becoming a calm accessibility layout",
+            "Critical title/fact/CTA have uncontested local contrast",
+            "Dramatic route/time geometry is subject-relevant and does not cross body/CTA glyphs"
+          ]
+        }
+      ],
+      "tags": [
+        "round-9",
+        "readability",
+        "contrast-channel",
+        "transit",
+        "protected-reading-zone"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-source-ledger-thread-recap",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster one-page recap for a six-note London developer thread. Source notes: 01 County Hall / Waterloo venue view opens the evening; 02 Prada the pigeon marks the entrance; 03 demos from the room; 04 Alpesh Doshi explains agent orchestration; 05 Yigit Erol explains safer agent workflows with sandboxes and zero-trust egress; 06 organizers ask for fun community demos and say sessions continue roughly every month. Make it dramatic and historically Swiss, but preserve all six beats and real names without inventing extra talks. Keep title/date/CTA readable, one Cloudflare orange accent, 12-column foundation, and no horizontal scroll.",
+      "expected_behavior": [
+        "Produce a source-faithful one-page recap with all six thread beats, real entities, auditable source markers, semantic image/source handling, and protected reading zones."
+      ],
+      "assertions": [
+        {
+          "name": "artifact-integrity-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-source-ledger-thread-recap"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "All six source notes are preserved without invented specifics",
+            "Poster style does not collapse source content into generic slogans",
+            "Critical title/body/CTA remain readable while drama remains strong"
+          ]
+        }
+      ],
+      "tags": [
+        "round-10",
+        "source-ledger",
+        "thread",
+        "artifact-fidelity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-encoded-diagram-moq",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster explainer for Media over QUIC. It must include a meaningful latency-vs-scale quadrant: low latency small rooms, low latency large audience, slow origin limited reach, bulk delivery not live. Show the desired MoQ target as sub-second broadcast delivery at CDN relay scale. Mention QUIC streams, relay/CDN, interoperability, and many viewers. Keep it severe, flat, one Cloudflare orange accent, 12-column foundation, and readable title/body/CTA.",
+      "expected_behavior": [
+        "Produce a diagrammatic poster where axes, target, routes, and labels encode the MoQ facts rather than acting as fake decoration."
+      ],
+      "assertions": [
+        {
+          "name": "artifact-integrity-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-encoded-diagram-moq"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Diagram marks encode latency/scale and MoQ target facts",
+            "No fake chart garnish or prompt-shaped metadata",
+            "Title/body/CTA remain readable with strong poster drama"
+          ]
+        }
+      ],
+      "tags": [
+        "round-10",
+        "diagram",
+        "source-encoding",
+        "moq"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-historical-rhythm-public-concert",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a public concert notice: Signal Quartet, Tonhalle, 12 Oct / 20:00, CTA \u201cReserve seats\u201d. Ground it in M\u00fcller-Brockmann / Musica Viva rhythm: arcs, repetition, pulse, or score-like structure should make music visible. Do not decorate the visible poster with designer names. Keep title/date/CTA readable at a glance, one Swiss red accent, a 12-column foundation, microtype, protected reading zone, and 320px/no-horizontal-scroll safety.",
+      "expected_behavior": [
+        "Embodies a historically grounded rhythm/arcs grammar instead of name-dropping while keeping public concert facts readable."
+      ],
+      "assertions": [
+        {
+          "name": "historical-grounding-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-historical-rhythm-public-concert"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "M\u00fcller-Brockmann/Musica Viva influence is embodied as rhythm/arcs/repetition, not visible designer-name garnish",
+            "Title/date/CTA remain public-poster readable",
+            "Implementation retains Swiss poster carriers and mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-10",
+        "historical-grounding",
+        "public-reading",
+        "music"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-historical-figure-ground-theatre",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a theatre piece titled \u201cBlack Square / White Room\u201d. Ground it in Armin Hofmann-style figure/ground drama: severe black/stone fields, one geometric or photographic abstraction as the subject, and strong spatial tension. Do not make a polite card layout. Keep title, date \u201cFri 21:00\u201d, and CTA \u201cBook seats\u201d readable, one Swiss red accent, 12-column foundation, microtype, contrast-channel discipline, and 320px/no-horizontal-scroll safety.",
+      "expected_behavior": [
+        "Embodies Hofmann-like figure/ground abstraction with readable theatre information and allocated contrast."
+      ],
+      "assertions": [
+        {
+          "name": "historical-grounding-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-historical-figure-ground-theatre"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Hofmann-style figure/ground logic is visible in the composition",
+            "Critical title/date/CTA have uncontested local contrast",
+            "The result is severe and historical, not a generic web hero"
+          ]
+        }
+      ],
+      "tags": [
+        "round-10",
+        "historical-grounding",
+        "figure-ground",
+        "protected-reading-zone"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "round10-audit-after-image-defects",
+      "split": "tune",
+      "kind": "style-audit",
+      "files": [
+        "fixtures/round10-after-image-defects/current.html"
+      ],
+      "prompt": "Audit the attached \u201chistorical Swiss poster\u201d draft. It name-drops Weingart, Troxler, Hofmann, and Matter, leaks prompt-shaped metadata, uses card layout, arbitrary date decoration, fake diagram nodes, image placeholder wallpaper, and decorative microtype. Propose the corrected Tailwind direction: identify all defect classes, choose a historically grounded visual move that fits the subject, preserve a source ledger, assign image roles, encode diagrams only when marks map to facts, preserve a protected reading zone, keep one Swiss red accent, 12-column foundation, microtype, and 320px/no-horizontal-scroll safety.",
+      "expected_behavior": [
+        "Reject historical name-dropping/template/card/prompt-leak failures and propose concrete historically grounded correction carriers."
+      ],
+      "assertions": [
+        {
+          "name": "historical-audit-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "round10-audit-after-image-defects"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Identifies template collapse, prompt-shaped leakage, fake diagrams, decorative microtype, and designer-name garnish",
+            "Replaces defects with source-ledger, image-role, diagram-encoding, and embodied historical moves",
+            "Keeps protected reading zone, one accent, grid, and mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-10",
+        "historical-grounding",
+        "artifact-fidelity",
+        "fixture",
+        "style-audit"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "diagnosis",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-period-lineage-travel-photomontage",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss travel poster for an Alpine night railway: \u201cMontreux Night Rail\u201d, lake route, moonlit platform, 22:10 departure, CTA \u201cBook the lake route\u201d. Do not make it late-New-Wave black/red typographic disruption. Use a 1930s\u20131950s travel/photomontage/lithographic lineage: place/image as anchor, saturated but disciplined travel color, overprint or duotone, source-like public information, one accent, 12-column construction, readable title/date/CTA, and 320px/no-horizontal-scroll safety.",
+      "expected_behavior": [
+        "Selects a travel/photomontage lineage rather than defaulting to late-modern typographic disruption."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-period-lineage-travel-photomontage"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "time-period",
+        "travel",
+        "photomontage"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-palette-lineage-lake-travel",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for \u201cLake Sound Ferry\u201d, a summer route between Lausanne and Vevey. Use one non-red, non-orange accent chosen from a lake/alpine travel palette, such as deep lake blue or alpine green; keep the palette disciplined but avoid the default black-white-red/orange look. Preserve Swiss poster drama through place, proportion, and image/field contrast, not red bars. Include title, route, 18:30, CTA \u201cSee departures\u201d, 12-column construction, and mobile safety.",
+      "expected_behavior": [
+        "Uses a historically plausible non-red/orange one-accent palette appropriate to travel."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-palette-lineage-lake-travel"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "palette-breadth",
+        "travel"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-object-poster-typographic-restraint",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss object poster for a single mechanical stopwatch called \u201cMinerva 55\u201d. The object/silhouette should be the anchor in Sachplakat/object-poster spirit; typography should be direct and restrained, not giant chaotic type. Include three product facts, price/date metadata, one accent, 12-column construction, readable title/CTA, and 320px safety.",
+      "expected_behavior": [
+        "Uses object-poster/Sachplakat clarity with restrained typography rather than default cropped mega-type violence."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-object-poster-typographic-restraint"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "object-poster",
+        "typographic-restraint"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-print-proportion-no-web-grid",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss exhibition poster for \u201cConcrete Forms / Kunsthaus\u201d, opening 14 May. It must feel like a proportioned print artifact, not a web dashboard: no rounded cards, no feature tiles, no soft shadows, no visible browser UI scaffolding. Use 12-column construction as hidden proportion, asymmetric margins, public-notice hierarchy, one accent, readable title/date/CTA, and 320px safety.",
+      "expected_behavior": [
+        "Uses grid as print proportion rather than visible web/card/dashboard scaffolding."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-print-proportion-no-web-grid"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "print-proportion",
+        "no-web-grid"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-material-process-lithographic-market",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for \u201cBasel Market / Saturday\u201d. It should have a clear print-process surface: lithographic overprint, halftone, paper tone, slight misregistration, screenprint slab, or ink/grain texture. Keep texture subordinate to a readable title/date/CTA, use one accent chosen for the subject, 12-column construction, and mobile safety.",
+      "expected_behavior": [
+        "Adds historically grounded material/print-process texture without obscuring critical copy."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-material-process-lithographic-market"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "material-process",
+        "lithographic"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-diagram-restraint-theatre-figure-ground",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss theatre poster for \u201cThe Empty Chair\u201d, Fri 21:00, CTA \u201cBook seats\u201d. Do not use routes, network nodes, quadrants, axes, flow diagrams, or fake system marks. Use Basel/Hofmann figure-ground drama: severe fields, negative space, point-line-plane tension, one accent, 12-column construction, and readable public information.",
+      "expected_behavior": [
+        "Avoids default systems-diagram language for a theatre subject and uses figure-ground instead."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-diagram-restraint-theatre-figure-ground"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "diagram-restraint",
+        "theatre",
+        "figure-ground"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-embodied-reference-no-visible-citation",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for a Basel design lecture titled \u201cPoint / Line / Plane\u201d, Thu 19:00, CTA \u201cReserve a seat\u201d. Ground it in Hofmann/Basel figure-ground logic, but do not show designer names as visible poster copy. The historical reference may be non-visible in markup. The visible composition must embody the move through contrast, spatial tension, and abstraction. Use one accent, 12 columns, protected reading, and mobile safety.",
+      "expected_behavior": [
+        "Embodies a historical move without visible designer-name citation."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-embodied-reference-no-visible-citation"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "embodied-reference",
+        "no-name-dropping"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-photomontage-authorship-editorial",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss editorial photomontage poster for \u201cArchive Room 4\u201d: two image fragments, one archival document crop, and one portrait crop should feel authored through scale, crop, angle, duotone/overprint, and captions. If actual images are unavailable, code explicit image slots with semantic roles and crop/overprint treatment. Do not use photos as wallpaper or rounded cards. Include title, date, CTA, one accent, 12-column construction, and mobile safety.",
+      "expected_behavior": [
+        "Uses authored Matter-like photomontage with semantic image roles rather than wallpaper."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-photomontage-authorship-editorial"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "photomontage-authorship",
+        "image-roles"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-hofmann-restraint-two-contrasts",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for \u201cSilence Study\u201d, a small chamber performance. Use Hofmann/Ruder restraint as drama: choose only two or three contrast axes (for example light/dark, large/small, static/dynamic), suppress unrelated effects, preserve negative space, one accent max, 12-column construction, readable title/date/CTA, and 320px safety.",
+      "expected_behavior": [
+        "Uses restraint and a limited contrast set instead of adding every poster effect."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-hofmann-restraint-two-contrasts"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "restraint",
+        "hofmann",
+        "contrast-axes"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-genre-breadth-geigy-scientific",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss scientific poster plate for \u201cEnzyme K-17 / Inhibition Study\u201d. Use a Geigy/scientific lineage: specimen or matrix layout, measured labels, formula/molecule/taxonomy, restrained analytical color, and real data-to-form mapping. Do not turn it into an event poster, tech meetup hero, route map, or black-red typographic disruption. Include title, method note, four measured facts, one accent, 12-column construction, and readable labels.",
+      "expected_behavior": [
+        "Expands genre breadth with a scientific/Geigy-style plate instead of the tech-event/poster default."
+      ],
+      "assertions": [
+        {
+          "name": "period-genre-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/artifact_integrity_oracle.py",
+            "{output_dir}",
+            "pos-genre-breadth-geigy-scientific"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 10
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Historically grounded lineage/genre choice is visible in the layout, not just named",
+            "The output avoids the specific after-image failure targeted by this case",
+            "Critical text remains readable and implementation remains Tailwind/HTML with mobile safety"
+          ]
+        }
+      ],
+      "tags": [
+        "round-11",
+        "period-genre",
+        "genre-breadth",
+        "geigy",
+        "scientific"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-rendered-critical-text-civic-notice",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "Create an implementable Tailwind/HTML Swiss civic notice poster for \u201cClean Water Vote\u201d, public vote Sunday 09:00\u201318:00, locations: School Hall / Market Square / North Pier, CTA \u201cVote Sunday\u201d. Use historically plausible civic/public-notice poster design, not web UI. The rendered poster must mark critical title/date/body/CTA with data-critical and keep them inside the canvas, readable, and unobscured. Use 12-column construction, disciplined print palette, strong poster composition, and no horizontal scroll.",
+      "expected_behavior": [
+        "Produces HTML whose rendered critical text can be validated for viewport bounds, obstruction, font size, and horizontal overflow."
+      ],
+      "assertions": [
+        {
+          "name": "rendered-critical-text-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/rendered_poster_oracle.py",
+            "{output_dir}",
+            "840",
+            "1200"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 45,
+          "description": "Renders HTML in headless Chrome and validates critical text boxes are in-canvas, unobscured, readable-sized, and no horizontal overflow."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Rendered poster reads as civic print artifact rather than web UI",
+            "Critical title/date/body/CTA are visually readable and unobscured",
+            "Design uses historically plausible Swiss public-notice grammar"
+          ]
+        }
+      ],
+      "tags": [
+        "round-12",
+        "rendered-validation",
+        "pixel",
+        "civic",
+        "public-notice"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "pos-flue-framework-poster",
+      "split": "tune",
+      "kind": "style-output",
+      "prompt": "I want to create a poster for the Flue Framework:\nhttps://flueframework.com/\nhttps://github.com/withastro/flue\n\nUse the attached source excerpts for reproducibility. Create implementable Tailwind/HTML or self-contained HTML in Swiss poster style. Preserve the source facts, choose a subject-matched technical/framework poster grammar, keep all source-bearing support text readable at image scale, and do not turn website navigation/buttons such as \"View Documentation\" into the poster CTA.",
+      "files": [
+        "fixtures/round13-flue-framework/source-excerpts.md"
+      ],
+      "expected_behavior": [
+        "Builds a source-faithful Flue poster that treats framework facts as poster material rather than copying website CTA/navigation language.",
+        "Rendered critical text and source-bearing support phrases such as any 'via CLI' line remain readable; if used, they sit on a quiet field or otherwise pass local contrast checks."
+      ],
+      "assertions": [
+        {
+          "name": "flue-framework-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/flue_framework_oracle.py",
+            "{output_dir}",
+            "pos-flue-framework-poster"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 60,
+          "description": "Checks Flue source fidelity, rejects web CTA leakage such as 'View Documentation', renders the poster, and pixel-audits any source-support text containing 'via CLI'."
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Poster uses Flue/framework source facts as a print artifact, not as a web landing page",
+            "No inappropriate website CTA/nav label such as 'View Documentation' is promoted into poster CTA copy",
+            "Source-bearing support text is visually readable at rendered image scale, including any CLI/deploy line",
+            "The historical Swiss grammar is visible and subject-matched, not a generic SaaS card layout"
+          ]
+        }
+      ],
+      "tags": [
+        "round-13",
+        "flue",
+        "rendered-validation",
+        "cta-leakage",
+        "source-readability"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "round13-audit-flue-readability-cta",
+      "split": "tune",
+      "kind": "style-audit",
+      "prompt": "Audit the attached Flue Framework poster output against the Swiss poster skill. Compare and contrast it with the PR #13 reference notes. Identify whether the phrase around 'via CLI' is readable and whether 'View Documentation' is an appropriate poster CTA or leaked website CTA. Recommend concrete fixes without rewriting the whole poster.",
+      "files": [
+        "fixtures/round13-flue-framework/current.html",
+        "fixtures/round13-flue-framework/pr13-reference-visible.txt"
+      ],
+      "expected_behavior": [
+        "Calls out the unreadable word immediately before 'via CLI' as a rendered/source-support readability problem, even though it is not marked data-critical.",
+        "Rejects 'View Documentation' as website CTA/navigation leakage into a print poster.",
+        "Contrasts the failure with the PR #13 reference, which treats Flue source facts as poster content rather than web CTA copy."
+      ],
+      "assertions": [
+        {
+          "name": "flue-audit-oracle",
+          "type": "script",
+          "command": [
+            "python3",
+            "oracles/flue_framework_oracle.py",
+            "{output_dir}",
+            "round13-audit-flue-readability-cta"
+          ],
+          "pass_exit_code": 0,
+          "timeout_s": 20
+        },
+        {
+          "name": "qualitative-review",
+          "type": "judge",
+          "rubric": [
+            "Specifically identifies the unreadable 'locally' / word-before-via-CLI failure",
+            "Specifically identifies 'View Documentation' as inappropriate web CTA leakage",
+            "Compares the failure to the PR #13 reference rather than giving generic readability advice",
+            "Proposes concrete poster-level fixes: quiet field/local contrast, source-support readability, and poster-appropriate CTA handling"
+          ]
+        }
+      ],
+      "tags": [
+        "round-13",
+        "flue",
+        "audit",
+        "readability",
+        "cta-leakage",
+        "source-fidelity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "accessibility"
+      ]
+    },
+    {
       "id": "holdout-rendered-tailwind-01",
       "split": "holdout",
       "kind": "style-output",
@@ -762,6 +2257,210 @@
         }
       ],
       "tags": [],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout-subject-inference-01",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Private subject-inference case. Prompt text and answer key are hidden so the model must infer the appropriate Swiss-poster archetype from the subject, not from public case names or eval wording.",
+      "prompt_ref": "holdout/subject-inference-01.txt",
+      "answer_ref": "holdout/answers/subject-inference-01.json",
+      "expected_behavior": [
+        "Private holdout scoring: choose a subject-matched semantic visual grammar, avoid the known default template, preserve legibility/mobile constraints."
+      ],
+      "assertions": [
+        {
+          "name": "private-subject-inference-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private prompt and answer key; do not rely on public manifest wording.",
+            "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
+            "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
+            "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
+          ]
+        }
+      ],
+      "tags": [
+        "holdout-private",
+        "subject-inference",
+        "motif-diversity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout-subject-inference-02",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Private subject-inference case. Prompt text and answer key are hidden so the model must infer the appropriate Swiss-poster archetype from the subject, not from public case names or eval wording.",
+      "prompt_ref": "holdout/subject-inference-02.txt",
+      "answer_ref": "holdout/answers/subject-inference-02.json",
+      "expected_behavior": [
+        "Private holdout scoring: choose a subject-matched semantic visual grammar, avoid the known default template, preserve legibility/mobile constraints."
+      ],
+      "assertions": [
+        {
+          "name": "private-subject-inference-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private prompt and answer key; do not rely on public manifest wording.",
+            "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
+            "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
+            "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
+          ]
+        }
+      ],
+      "tags": [
+        "holdout-private",
+        "subject-inference",
+        "motif-diversity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout-subject-inference-03",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Private subject-inference case. Prompt text and answer key are hidden so the model must infer the appropriate Swiss-poster archetype from the subject, not from public case names or eval wording.",
+      "prompt_ref": "holdout/subject-inference-03.txt",
+      "answer_ref": "holdout/answers/subject-inference-03.json",
+      "expected_behavior": [
+        "Private holdout scoring: choose a subject-matched semantic visual grammar, avoid the known default template, preserve legibility/mobile constraints."
+      ],
+      "assertions": [
+        {
+          "name": "private-subject-inference-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private prompt and answer key; do not rely on public manifest wording.",
+            "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
+            "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
+            "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
+          ]
+        }
+      ],
+      "tags": [
+        "holdout-private",
+        "subject-inference",
+        "motif-diversity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout-subject-inference-04",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Private subject-inference case. Prompt text and answer key are hidden so the model must infer the appropriate Swiss-poster archetype from the subject, not from public case names or eval wording.",
+      "prompt_ref": "holdout/subject-inference-04.txt",
+      "answer_ref": "holdout/answers/subject-inference-04.json",
+      "expected_behavior": [
+        "Private holdout scoring: choose a subject-matched semantic visual grammar, avoid the known default template, preserve legibility/mobile constraints."
+      ],
+      "assertions": [
+        {
+          "name": "private-subject-inference-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private prompt and answer key; do not rely on public manifest wording.",
+            "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
+            "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
+            "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
+          ]
+        }
+      ],
+      "tags": [
+        "holdout-private",
+        "subject-inference",
+        "motif-diversity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout-subject-inference-05",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Private subject-inference case. Prompt text and answer key are hidden so the model must infer the appropriate Swiss-poster archetype from the subject, not from public case names or eval wording.",
+      "prompt_ref": "holdout/subject-inference-05.txt",
+      "answer_ref": "holdout/answers/subject-inference-05.json",
+      "expected_behavior": [
+        "Private holdout scoring: choose a subject-matched semantic visual grammar, avoid the known default template, preserve legibility/mobile constraints."
+      ],
+      "assertions": [
+        {
+          "name": "private-subject-inference-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private prompt and answer key; do not rely on public manifest wording.",
+            "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
+            "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
+            "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
+          ]
+        }
+      ],
+      "tags": [
+        "holdout-private",
+        "subject-inference",
+        "motif-diversity"
+      ],
+      "domain": "poster-design",
+      "difficulty": "extended",
+      "success_goals": [
+        "outcome",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout-subject-inference-06",
+      "split": "holdout",
+      "kind": "style-output",
+      "scenario": "Private subject-inference case. Prompt text and answer key are hidden so the model must infer the appropriate Swiss-poster archetype from the subject, not from public case names or eval wording.",
+      "prompt_ref": "holdout/subject-inference-06.txt",
+      "answer_ref": "holdout/answers/subject-inference-06.json",
+      "expected_behavior": [
+        "Private holdout scoring: choose a subject-matched semantic visual grammar, avoid the known default template, preserve legibility/mobile constraints."
+      ],
+      "assertions": [
+        {
+          "name": "private-subject-inference-review",
+          "type": "judge",
+          "rubric": [
+            "Use the private prompt and answer key; do not rely on public manifest wording.",
+            "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
+            "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
+            "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
+          ]
+        }
+      ],
+      "tags": [
+        "holdout-private",
+        "subject-inference",
+        "motif-diversity"
+      ],
       "domain": "poster-design",
       "difficulty": "extended",
       "success_goals": [
@@ -968,7 +2667,264 @@
       "expected_regressions": [
         "Style becomes generic SaaS or Swiss-minimal only."
       ],
-      "applies_to_cases": []
+      "applies_to_cases": [
+        "pos-dramatic-event-poster",
+        "pos-historical-figure-ground-theatre",
+        "pos-historical-rhythm-public-concert",
+        "pos-masked-photo-poster",
+        "pos-semantic-legible-jazz",
+        "round10-audit-after-image-defects"
+      ]
+    },
+    {
+      "id": "no-output-contract",
+      "removed_component": "Output contract for web/UI tasks",
+      "expected_regressions": [
+        "Returns SVG-only or prose instead of implementable Tailwind/HTML; misses 320px/no-scroll/accessibility gates."
+      ],
+      "applies_to_cases": [
+        "pos-poster-composition",
+        "pos-tailwind-poster-responsive-proof",
+        "pos-dramatic-event-poster"
+      ]
+    },
+    {
+      "id": "no-dramatic-recipe",
+      "removed_component": "Dramatic poster recipe",
+      "expected_regressions": [
+        "Output becomes tidy Swiss minimalism: centered hero, small accent line, weak edge pressure, no dominant anchor or microtype."
+      ],
+      "applies_to_cases": [
+        "pos-dramatic-event-poster",
+        "pos-masked-photo-poster"
+      ]
+    },
+    {
+      "id": "no-anti-slop",
+      "removed_component": "Anti-Slop",
+      "expected_regressions": [
+        "Allows gradient text, purple/cyan palette drift, rounded card grids, soft shadows, and generic SaaS chrome."
+      ],
+      "applies_to_cases": [
+        "neg-multi-accent-gradient",
+        "pos-dramatic-event-poster",
+        "pos-masked-photo-poster"
+      ]
+    },
+    {
+      "id": "no-communication-before-spectacle",
+      "removed_component": "Communication before spectacle / No illegible drama",
+      "expected_regressions": [
+        "Allows unreadable overlaps, arbitrary giant dates/numerals, and decorative anchors that do not communicate the subject."
+      ],
+      "applies_to_cases": [
+        "pos-historical-figure-ground-theatre",
+        "pos-historical-rhythm-public-concert",
+        "pos-semantic-legible-jazz",
+        "pos-source-ledger-thread-recap",
+        "round6-audit-unreadable-drama"
+      ]
+    },
+    {
+      "id": "no-subject-archetype-selection",
+      "removed_component": "Choose by subject, not by default",
+      "expected_regressions": [
+        "Model reuses the same dark-right-field/red-bar/cropped-word/ring-line recipe instead of selecting object, route-map, data-diagram, typographic-specimen, photomontage, or civic-safety archetypes by subject."
+      ],
+      "applies_to_cases": [
+        "pos-civic-safety-archetype",
+        "pos-data-diagram-archetype",
+        "pos-encoded-diagram-moq",
+        "pos-object-poster-archetype",
+        "pos-photomontage-archetype",
+        "pos-route-map-archetype",
+        "pos-typographic-specimen-archetype",
+        "round10-audit-after-image-defects"
+      ]
+    },
+    {
+      "id": "no-protected-reading-zone",
+      "removed_component": "Protected reading zone heuristic",
+      "expected_regressions": [
+        "Allows dramatic anchors, route lines, trust-boundary bars, diagrams, or giant type to overlap critical title/body/CTA text, producing unreadable poster drama."
+      ],
+      "applies_to_cases": [
+        "pos-historical-figure-ground-theatre",
+        "pos-historical-rhythm-public-concert",
+        "pos-protected-reading-zone-credential",
+        "pos-semantic-legible-jazz",
+        "pos-source-ledger-thread-recap",
+        "round6-audit-unreadable-drama",
+        "round8-audit-overlapped-critical-text",
+        "pos-flue-framework-poster"
+      ]
+    },
+    {
+      "id": "no-contrast-channel-discipline",
+      "removed_component": "Contrast-channel discipline",
+      "expected_regressions": [
+        "Model either reduces poster drama into a polite readable layout or lets high-contrast dramatic anchors compete with title/body/CTA in the same reading zone."
+      ],
+      "applies_to_cases": [
+        "pos-contrast-channel-night-closure",
+        "pos-encoded-diagram-moq",
+        "pos-historical-figure-ground-theatre",
+        "pos-protected-reading-zone-credential",
+        "round8-audit-overlapped-critical-text",
+        "pos-flue-framework-poster"
+      ]
+    },
+    {
+      "id": "no-artifact-fidelity",
+      "removed_component": "Artifact fidelity / source ledger / image-role / diagram-encoding rules",
+      "expected_regressions": [
+        "Model collapses source material into generic slogans, uses images as wallpaper, prints prompt metadata, or draws diagrams whose marks do not encode source facts."
+      ],
+      "applies_to_cases": [
+        "pos-source-ledger-thread-recap",
+        "pos-encoded-diagram-moq",
+        "round10-audit-after-image-defects",
+        "pos-flue-framework-poster",
+        "round13-audit-flue-readability-cta"
+      ]
+    },
+    {
+      "id": "no-historical-grounding",
+      "removed_component": "Historical grounding / designer-to-move mapping",
+      "expected_regressions": [
+        "Model name-drops Swiss designers or repeats generic default motifs instead of translating historical references into subject-matched visual carriers."
+      ],
+      "applies_to_cases": [
+        "pos-historical-rhythm-public-concert",
+        "pos-historical-figure-ground-theatre",
+        "round10-audit-after-image-defects",
+        "pos-semantic-legible-jazz",
+        "pos-photomontage-archetype"
+      ]
+    },
+    {
+      "id": "no-period-lineage-selection",
+      "removed_component": "Historical period/lineage selection",
+      "expected_regressions": [
+        "Outputs default to late-1960s/1980s black-white-red typographic disruption regardless of subject."
+      ],
+      "applies_to_cases": [
+        "pos-period-lineage-travel-photomontage"
+      ]
+    },
+    {
+      "id": "no-palette-lineage-breadth",
+      "removed_component": "Palette breadth by lineage",
+      "expected_regressions": [
+        "Outputs default to black/white/red or Cloudflare-orange even when another Swiss lineage calls for lake, alpine, lithographic, or analytical color."
+      ],
+      "applies_to_cases": [
+        "pos-palette-lineage-lake-travel"
+      ]
+    },
+    {
+      "id": "no-object-poster-restraint",
+      "removed_component": "Object-poster / Sachplakat restraint",
+      "expected_regressions": [
+        "Product/object posters become giant-type collision posters instead of object-led direct communication."
+      ],
+      "applies_to_cases": [
+        "pos-object-poster-typographic-restraint"
+      ]
+    },
+    {
+      "id": "no-print-proportion-audit",
+      "removed_component": "Print proportion instead of web grid",
+      "expected_regressions": [
+        "Outputs expose web/card/dashboard scaffolding instead of using grid as invisible print proportion."
+      ],
+      "applies_to_cases": [
+        "pos-print-proportion-no-web-grid",
+        "pos-flue-framework-poster"
+      ]
+    },
+    {
+      "id": "no-material-process-surface",
+      "removed_component": "Material print-process surface",
+      "expected_regressions": [
+        "Outputs remain flat digital CSS slabs with no lithographic, halftone, overprint, paper, or screenprint surface where relevant."
+      ],
+      "applies_to_cases": [
+        "pos-material-process-lithographic-market"
+      ]
+    },
+    {
+      "id": "no-diagram-restraint",
+      "removed_component": "Diagram restraint by genre",
+      "expected_regressions": [
+        "Routes, nodes, axes, quadrants, and diagrams appear on subjects that need figure-ground, object, image, or typographic solutions."
+      ],
+      "applies_to_cases": [
+        "pos-diagram-restraint-theatre-figure-ground"
+      ]
+    },
+    {
+      "id": "no-embodied-reference-discipline",
+      "removed_component": "Embodied reference instead of visible citation",
+      "expected_regressions": [
+        "Outputs name-drop designers visibly instead of embodying the historical move through layout carriers."
+      ],
+      "applies_to_cases": [
+        "pos-embodied-reference-no-visible-citation"
+      ]
+    },
+    {
+      "id": "no-photomontage-authorship",
+      "removed_component": "Photomontage authorship and image roles",
+      "expected_regressions": [
+        "Images become wallpaper, cards, or decorative strips instead of authored crops with place/person/evidence/sequence roles."
+      ],
+      "applies_to_cases": [
+        "pos-photomontage-authorship-editorial"
+      ]
+    },
+    {
+      "id": "no-restraint-as-drama",
+      "removed_component": "Hofmann/Ruder restraint as drama",
+      "expected_regressions": [
+        "Outputs add too many effects and miss the drama of limited contrast axes and negative space."
+      ],
+      "applies_to_cases": [
+        "pos-hofmann-restraint-two-contrasts"
+      ]
+    },
+    {
+      "id": "no-genre-breadth-selection",
+      "removed_component": "Swiss poster genre breadth",
+      "expected_regressions": [
+        "Scientific/object/travel/public-notice prompts collapse into the same tech-event or typographic disruption poster genre."
+      ],
+      "applies_to_cases": [
+        "pos-genre-breadth-geigy-scientific"
+      ]
+    },
+    {
+      "id": "no-rendered-poster-proof",
+      "removed_component": "Rendered poster proof / image-level critical text validation",
+      "expected_regressions": [
+        "Model satisfies HTML/token rules but critical text is clipped, covered, too small, outside the canvas, or creates horizontal overflow in the rendered poster."
+      ],
+      "applies_to_cases": [
+        "pos-rendered-critical-text-civic-notice",
+        "pos-flue-framework-poster",
+        "round13-audit-flue-readability-cta"
+      ]
+    },
+    {
+      "id": "no-web-cta-filter",
+      "removed_component": "Poster-source CTA filtering / website navigation-to-poster-copy discipline",
+      "expected_regressions": [
+        "Website navigation or button labels such as 'View Documentation', 'Get Started', or 'Read the docs' are copied into poster CTAs even when the subject calls for a print artifact rather than web UI."
+      ],
+      "applies_to_cases": [
+        "pos-flue-framework-poster",
+        "round13-audit-flue-readability-cta"
+      ]
     }
   ]
 }

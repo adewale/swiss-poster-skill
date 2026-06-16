@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Empty Chair</title>
+<style>
+  :root{
+    --paper:#f4f1ea;
+    --ink:#1c1917;
+    --muted:#78716c;
+    --stage:#24201d;
+    --accent:#8f2f23;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#d6d3cd}
+  body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+  }
+  .poster{
+    width:840px;
+    height:1200px;
+    position:relative;
+    overflow:hidden;
+    background:var(--paper);
+  }
+  .grid{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:0;
+    pointer-events:none;
+  }
+  .rule{
+    position:absolute;
+    width:1px;
+    height:1200px;
+    background:rgba(28,25,23,.055);
+    top:0;
+  }
+  .r1{left:70px}.r2{left:140px}.r3{left:210px}.r4{left:280px}.r5{left:350px}.r6{left:420px}
+  .r7{left:490px}.r8{left:560px}.r9{left:630px}.r10{left:700px}.r11{left:770px}
+  .title-field{
+    position:absolute;
+    left:70px;
+    top:72px;
+    width:700px;
+    height:272px;
+    background:var(--paper);
+    z-index:20;
+  }
+  h1{
+    margin:0;
+    position:absolute;
+    left:70px;
+    top:82px;
+    width:640px;
+    z-index:30;
+    font-size:96px;
+    line-height:.88;
+    letter-spacing:-5px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .meta{
+    position:absolute;
+    left:70px;
+    top:386px;
+    z-index:24;
+    font-size:23px;
+    line-height:1.18;
+    letter-spacing:-.3px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .meta span{
+    display:block;
+    font-weight:400;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  .stage{
+    position:absolute;
+    left:210px;
+    top:430px;
+    width:700px;
+    height:690px;
+    background:var(--stage);
+    z-index:3;
+  }
+  .stage:before{
+    content:"";
+    position:absolute;
+    left:-210px;
+    bottom:0;
+    width:210px;
+    height:342px;
+    background:var(--stage);
+  }
+  .void{
+    position:absolute;
+    left:350px;
+    top:510px;
+    width:280px;
+    height:420px;
+    background:var(--paper);
+    z-index:6;
+  }
+  .void:after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-128px;
+    width:280px;
+    height:128px;
+    background:var(--paper);
+  }
+  .chair{
+    position:absolute;
+    left:452px;
+    top:724px;
+    width:128px;
+    height:196px;
+    z-index:10;
+  }
+  .chair .back{
+    position:absolute;
+    left:24px;
+    top:0;
+    width:78px;
+    height:86px;
+    border:14px solid var(--stage);
+    border-bottom:0;
+  }
+  .chair .seat{
+    position:absolute;
+    left:7px;
+    top:88px;
+    width:112px;
+    height:18px;
+    background:var(--stage);
+  }
+  .chair .leg1,.chair .leg2{
+    position:absolute;
+    top:104px;
+    width:13px;
+    height:92px;
+    background:var(--stage);
+  }
+  .chair .leg1{left:22px;transform:skewX(-8deg)}
+  .chair .leg2{right:22px;transform:skewX(8deg)}
+  .chair .rail{
+    position:absolute;
+    left:24px;
+    top:148px;
+    width:80px;
+    height:10px;
+    background:var(--stage);
+  }
+  .accent{
+    position:absolute;
+    left:-92px;
+    top:950px;
+    width:500px;
+    height:34px;
+    background:var(--accent);
+    transform:rotate(-18deg);
+    z-index:12;
+  }
+  .small{
+    position:absolute;
+    left:70px;
+    bottom:74px;
+    width:290px;
+    z-index:25;
+    font-size:11px;
+    line-height:1.25;
+    letter-spacing:1.7px;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .cta{
+    position:absolute;
+    right:70px;
+    bottom:70px;
+    z-index:25;
+    width:210px;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    padding-left:22px;
+    background:var(--ink);
+    color:var(--paper);
+    font-size:24px;
+    line-height:1;
+    letter-spacing:-.7px;
+    font-weight:700;
+  }
+  .index{
+    position:absolute;
+    right:66px;
+    top:388px;
+    z-index:24;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+  <main class="poster" aria-label="The Empty Chair theatre poster">
+    <div class="grid" aria-hidden="true">
+      <i class="rule r1"></i><i class="rule r2"></i><i class="rule r3"></i><i class="rule r4"></i><i class="rule r5"></i><i class="rule r6"></i><i class="rule r7"></i><i class="rule r8"></i><i class="rule r9"></i><i class="rule r10"></i><i class="rule r11"></i>
+    </div>
+    <section class="title-field" aria-hidden="true"></section>
+    <h1>The Empty<br>Chair</h1>
+    <div class="meta">Fri 21:00<span>Schauspielhaus Basel</span></div>
+    <div class="index">Basel Bühne</div>
+    <div class="stage" aria-hidden="true"></div>
+    <div class="void" aria-hidden="true"></div>
+    <div class="chair" aria-hidden="true">
+      <div class="back"></div>
+      <div class="seat"></div>
+      <div class="leg1"></div>
+      <div class="leg2"></div>
+      <div class="rail"></div>
+    </div>
+    <div class="accent" aria-hidden="true"></div>
+    <div class="small">absence / stage space / one chair</div>
+    <div class="cta">Book seats</div>
+  </main>
+</body>
+</html>
