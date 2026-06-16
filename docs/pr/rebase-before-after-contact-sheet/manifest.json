@@ -1,0 +1,162 @@
+[
+  {
+    "id": "01-tourism-lake-ferry",
+    "title": "Lake Sound Ferry",
+    "domain": "tourism / travel placard",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/01-tourism-lake-ferry/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/01-tourism-lake-ferry.png",
+      "rebase": "docs/pr/diverse-before-after/cases/01-tourism-lake-ferry/new/poster.png"
+    },
+    "sha256": {
+      "before": "91f306b05027b267c6c109530202c9006fcd3459140ffec29db1536cb5ffa1ed",
+      "after": "20cc5a642a0f5f3f08ae9e495fb8e9fe19a6abc0d32bb88e9d19aa30fc329874",
+      "rebase": "20cc5a642a0f5f3f08ae9e495fb8e9fe19a6abc0d32bb88e9d19aa30fc329874"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "02-theatre-figure-ground",
+    "title": "The Empty Chair",
+    "domain": "theatre / Basel figure-ground",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/02-theatre-figure-ground/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/02-theatre-figure-ground.png",
+      "rebase": "docs/pr/diverse-before-after/cases/02-theatre-figure-ground/new/poster.png"
+    },
+    "sha256": {
+      "before": "89670a761a4f50f894210799db9e228a1c8725fa1507e989f590960ac53f9bf9",
+      "after": "130c218c449958a65f4c1cab4518174c5e50b721f615cc609c932d53bd19051f",
+      "rebase": "130c218c449958a65f4c1cab4518174c5e50b721f615cc609c932d53bd19051f"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "03-object-stopwatch",
+    "title": "Minerva 55",
+    "domain": "object poster / product",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/03-object-stopwatch/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/03-object-stopwatch.png",
+      "rebase": "docs/pr/diverse-before-after/cases/03-object-stopwatch/new/poster.png"
+    },
+    "sha256": {
+      "before": "c2769e901417df9455ad4d3ad46fda0ea9c5b3ba356e1e6bbfcde8a16e46da12",
+      "after": "c52211472117293aa4b64111f6af57b9edbbf7f4763704752ab0fd2daab70916",
+      "rebase": "c52211472117293aa4b64111f6af57b9edbbf7f4763704752ab0fd2daab70916"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "04-civic-clean-water",
+    "title": "Clean Water Vote",
+    "domain": "civic/public notice",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/04-civic-clean-water/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/04-civic-clean-water.png",
+      "rebase": "docs/pr/diverse-before-after/cases/04-civic-clean-water/new/poster.png"
+    },
+    "sha256": {
+      "before": "295b3c479f5e9d94ac06fcbe56cc69e497a792408bc2f5d6621cccd951f8078c",
+      "after": "bebcf8b2986341b0297e334a1b731d7b12d22be85f1354b8c2a9c9230180c5ee",
+      "rebase": "bebcf8b2986341b0297e334a1b731d7b12d22be85f1354b8c2a9c9230180c5ee"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "05-geigy-enzyme",
+    "title": "Enzyme K-17",
+    "domain": "scientific / Geigy-style plate",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/05-geigy-enzyme/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/05-geigy-enzyme.png",
+      "rebase": "docs/pr/diverse-before-after/cases/05-geigy-enzyme/new/poster.png"
+    },
+    "sha256": {
+      "before": "f8bb136039d1785c99eaaa79a71e4124d300b87e106ef1cc0b5114eb78dde265",
+      "after": "c3dba918fe795dcb50da2cf05de46110ae1c9887298b0127cdc5134b950d6487",
+      "rebase": "c3dba918fe795dcb50da2cf05de46110ae1c9887298b0127cdc5134b950d6487"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "06-political-referendum",
+    "title": "Housing Yes / Speculation No",
+    "domain": "political/civic poster",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/06-political-referendum/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/06-political-referendum.png",
+      "rebase": "docs/pr/diverse-before-after/cases/06-political-referendum/new/poster.png"
+    },
+    "sha256": {
+      "before": "7e378fa18155225694124b10df06cb6687aa0fcebed86440533ad8e21529be95",
+      "after": "8da107cdffb4150f0ed7995b1a4c9ffbd5476d9265dfb66c482ac22df1bc493a",
+      "rebase": "8da107cdffb4150f0ed7995b1a4c9ffbd5476d9265dfb66c482ac22df1bc493a"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "07-market-lithograph",
+    "title": "Basel Market",
+    "domain": "market / lithographic placard",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/07-market-lithograph/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/07-market-lithograph.png",
+      "rebase": "docs/pr/diverse-before-after/cases/07-market-lithograph/new/poster.png"
+    },
+    "sha256": {
+      "before": "49c418912dda18ced48a34ece6361d4ae881aa69653d340ca7f731f0c81856e7",
+      "after": "ff8cdc3617a35855ff078277bec389e7e83b029b5ebe98b87f0c5bd1d996926a",
+      "rebase": "ff8cdc3617a35855ff078277bec389e7e83b029b5ebe98b87f0c5bd1d996926a"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "08-archive-photomontage",
+    "title": "Archive Room 4",
+    "domain": "editorial photomontage",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/08-archive-photomontage/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/08-archive-photomontage.png",
+      "rebase": "docs/pr/diverse-before-after/cases/08-archive-photomontage/new/poster.png"
+    },
+    "sha256": {
+      "before": "d0be59c6e3c13700599e7be540ffd22a8e3b88e7c871a096133d7a2222004442",
+      "after": "2b94316e3525759714fe03435e5fab18a18396bc762e624e01625d7edaab147f",
+      "rebase": "2b94316e3525759714fe03435e5fab18a18396bc762e624e01625d7edaab147f"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "09-type-specimen",
+    "title": "Neue Haas / Narrow Study",
+    "domain": "typographic specimen",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/09-type-specimen/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/09-type-specimen.png",
+      "rebase": "docs/pr/diverse-before-after/cases/09-type-specimen/new/poster.png"
+    },
+    "sha256": {
+      "before": "e8016e1926444631e2da349d825505705c9b1cfd84ace16e5494b38b2a419bc3",
+      "after": "9eec025a08533069f12281f7f054c5d2820d355f24a26152ca4911bb5f939920",
+      "rebase": "9eec025a08533069f12281f7f054c5d2820d355f24a26152ca4911bb5f939920"
+    },
+    "after_matches_rebase": true
+  },
+  {
+    "id": "10-landscape-ski-rail",
+    "title": "Snow Line Express",
+    "domain": "landscape travel poster",
+    "paths": {
+      "before": "docs/pr/diverse-before-after/cases/10-landscape-ski-rail/old/poster.png",
+      "after": "docs/pr/rebase-before-after-contact-sheet/pre-rebase-after/10-landscape-ski-rail.png",
+      "rebase": "docs/pr/diverse-before-after/cases/10-landscape-ski-rail/new/poster.png"
+    },
+    "sha256": {
+      "before": "7b7c16219e0375ce306a0309e0f5fba097eb796a5d314d2e290cae56adc3897d",
+      "after": "e636e862866fa8cb22408d4b037489b23555c82d942a7e0a199dd9381e5215be",
+      "rebase": "e636e862866fa8cb22408d4b037489b23555c82d942a7e0a199dd9381e5215be"
+    },
+    "after_matches_rebase": true
+  }
+]

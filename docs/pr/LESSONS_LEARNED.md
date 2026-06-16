@@ -1,5 +1,24 @@
 # Lessons learned
 
+## 2026-06-16 — Rebasing should preserve evidence, not just compile
+
+### Answer
+
+The rebase onto `origin/main` was not just a Git hygiene step. It needed evidence that the branch still produced the same public-facing poster artifacts and the same eval conclusions after absorbing upstream changes.
+
+### What happened
+
+- The rebase had expected conflicts in shared docs/eval/skill files because `origin/main` had advanced substantially.
+- The resolved state kept upstream agent-compatibility/install-boundary context and the branch’s expanded eval, readability, artifact-fidelity, typography-breadth, and verification evidence.
+- The post-rebase public tune benchmark stayed stable: `with_skill` mean objective `0.922`, `without_skill` mean objective `0.370`.
+- The three-column contact sheet showed `before`, `after`, and `after rebase`; all ten pre-rebase after images were byte-identical to the after-rebase images in this evidence set.
+
+### Concrete correction
+
+- Added an after-rebase verification report and benchmark artifacts.
+- Added `docs/pr/rebase-before-after-contact-sheet/` to make preservation visually auditable.
+- Keep this pattern for future large rebases: conflict resolution + static checks + eval grading + visual artifact comparison.
+
 ## 2026-06-16 — Verification showed the skill is stronger but materially more expensive
 
 ### Answer
