@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Anatomy of an Agent · Five Parts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 26px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── HERO — the dominant graphic event ──────────────────────────── */
+  .hero {
+    position: relative;
+    z-index: 4;
+    margin-bottom: 12px;
+  }
+  .hero .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .hero .kicker .mark { width: 26px; height: 26px; }
+  .hero .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 300px;
+    line-height: 0.78;
+    letter-spacing: -0.06em;
+    color: var(--stone-900);
+    white-space: nowrap;
+    margin-left: -0.05em;          /* edge pressure: bleed left */
+    margin-right: -120px;          /* crop right */
+  }
+  .hero .sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 52px;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 8px;
+  }
+  .hero .sub .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+  }
+  .hero .sub .big b { font-weight: 700; }
+  .hero .sub .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* ── EQUATION strip — full bleed blue ───────────────────────────── */
+  .equation {
+    background: var(--blue);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 16px 64px 18px 64px;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 3;
+  }
+  .equation .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.85);
+    margin-bottom: 8px;
+  }
+  .equation .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 41px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--stone-50);
+  }
+  .equation .eq .op { color: rgba(250,250,249,0.55); font-weight: 300; }
+
+  /* ── SPECIMEN PLATE — five parts, the graphic system ────────────── */
+  .plate { position: relative; z-index: 4; }
+  .row {
+    display: grid;
+    grid-template-columns: 150px 1fr 318px;
+    align-items: stretch;
+    border-top: 1.5px solid var(--stone-900);
+  }
+  .row:last-child { border-bottom: 1.5px solid var(--stone-900); }
+
+  .row .idx {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 118px;
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+    color: var(--stone-300);
+    padding: 12px 0 10px 0;
+    user-select: none;
+  }
+  .row .mid { padding: 16px 26px 16px 4px; }
+  .row .mid .name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+  }
+  .row .mid .role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-top: 8px;
+  }
+  .row .mid .desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16.5px;
+    line-height: 1.36;
+    color: var(--stone-700);
+    margin-top: 7px;
+    max-width: 58ch;
+  }
+  .row .mid .desc b { color: var(--stone-900); font-weight: 600; }
+
+  .row .carrier {
+    border-left: 1.5px solid var(--stone-200);
+    padding: 16px 0 16px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .row .carrier .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--blue-2);
+    font-weight: 600;
+  }
+  .row .carrier .v {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--stone-900);
+    letter-spacing: -0.01em;
+    margin-top: 5px;
+  }
+  .row .carrier .note {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--stone-500);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+
+  /* Emphasis row — the reasoning core, hard figure/ground */
+  .row.lead { background: var(--blue); }
+  .row.lead .idx { color: rgba(250,250,249,0.32); }
+  .row.lead .mid .name { color: var(--stone-50); }
+  .row.lead .mid .role { color: rgba(250,250,249,0.92); }
+  .row.lead .mid .desc { color: rgba(250,250,249,0.92); }
+  .row.lead .mid .desc b { color: var(--stone-50); }
+  .row.lead .carrier { border-left-color: rgba(250,250,249,0.35); }
+  .row.lead .carrier .k { color: rgba(250,250,249,0.85); }
+  .row.lead .carrier .v { color: var(--stone-50); }
+  .row.lead .carrier .note { color: rgba(250,250,249,0.8); }
+
+  /* ── SYNTHESIS line ─────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 92px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.36;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · Anatomy of an Agent</div>
+      <div class="meta">the sandbox agent framework</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field guide</div>
+      <div class="meta">what an agent is made of</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="kicker">
+      <span class="mark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <span>The five parts of a Flue agent</span>
+    </div>
+    <h1 class="word">Agent</h1>
+    <div class="sub">
+      <div class="big">A <b>model</b>, equipped, sandboxed, and <b>directed.</b></div>
+      <div class="count">Specimen<br>01 — 05</div>
+    </div>
+  </section>
+
+  <!-- EQUATION -->
+  <section class="equation">
+    <div class="lab">The whole, as one line</div>
+    <div class="eq">Model <span class="op">+</span> Tools <span class="op">+</span> Skills <span class="op">+</span> Sandbox <span class="op">+</span> Instructions</div>
+  </section>
+
+  <!-- SPECIMEN PLATE -->
+  <section class="plate">
+
+    <div class="row lead">
+      <div class="idx">01</div>
+      <div class="mid">
+        <div class="name">Model</div>
+        <div class="role">the reasoning core</div>
+        <div class="desc">The LLM that thinks over the task and <b>picks the next action.</b> Swap any model; the rest of the agent stays the same.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">model:</div>
+        <div class="v">claude-sonnet-4-6</div>
+        <div class="note">swappable · provider-agnostic</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="idx">02</div>
+      <div class="mid">
+        <div class="name">Tools</div>
+        <div class="role">typed actions</div>
+        <div class="desc">Functions the agent can call to reach your APIs and make <b>controlled, safe changes</b> to the systems around it.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">tools:</div>
+        <div class="v">[...github]</div>
+        <div class="note">your APIs, typed</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="idx">03</div>
+      <div class="mid">
+        <div class="name">Skills</div>
+        <div class="role">loadable expertise</div>
+        <div class="desc">Reusable packages of know-how the agent <b>loads on demand</b> for specialized, task-specific guidance.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">skills:</div>
+        <div class="v">SKILL.md</div>
+        <div class="note">expertise, packaged</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="idx">04</div>
+      <div class="mid">
+        <div class="name">Sandbox</div>
+        <div class="role">secure execution</div>
+        <div class="desc">An isolated environment where the agent does <b>real work</b>: it runs code and edits files, without touching your machine.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">sandbox:</div>
+        <div class="v">local()</div>
+        <div class="note">isolated · safe</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="idx">05</div>
+      <div class="mid">
+        <div class="name">Instructions</div>
+        <div class="role">context &amp; autonomy</div>
+        <div class="desc">The task and the context, in plain words. You give it <b>a goal, not a script,</b> and trust it to finish.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">instructions:</div>
+        <div class="v">a goal, stated</div>
+        <div class="note">describe the outcome</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    A <b>model</b>, equipped with <b>tools</b> and <b>skills</b>, running inside a <b>sandbox</b>,
+    directed by <b>instructions</b>. <em>Then left to run the loop on its own.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Five parts · one autonomous agent</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
