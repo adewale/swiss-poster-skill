@@ -77,53 +77,68 @@
   }
   .mark i { background: var(--stone-50); display: block; }
 
-  /* ── HERO — the dominant graphic event ──────────────────────────── */
-  .hero {
+  /* ── TITLE — same heading lockup as the original Flue poster ─────── */
+  .title {
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 18px;
     z-index: 4;
-    margin-bottom: 12px;
   }
-  .hero .kicker {
+  .title .mark { width: 122px; height: 122px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 178px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+  }
+  .title .tag .big {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.26em;
     text-transform: uppercase;
     font-weight: 600;
-    color: var(--blue-2);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
-  }
-  .hero .kicker .mark { width: 26px; height: 26px; }
-  .hero .word {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 700;
-    font-size: 300px;
-    line-height: 0.78;
-    letter-spacing: -0.06em;
     color: var(--stone-900);
-    white-space: nowrap;
-    margin-left: -0.05em;          /* edge pressure: bleed left */
-    margin-right: -120px;          /* crop right */
   }
-  .hero .sub {
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+  .deck {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-top: 52px;
     border-top: 4px solid var(--stone-900);
-    padding-top: 8px;
+    padding-top: 11px;
+    margin-bottom: 22px;
   }
-  .hero .sub .big {
+  .deck .deck-big {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 300;
     font-size: 30px;
     letter-spacing: -0.02em;
     color: var(--stone-900);
   }
-  .hero .sub .big b { font-weight: 700; }
-  .hero .sub .count {
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-count {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     letter-spacing: 0.22em;
@@ -131,6 +146,8 @@
     color: var(--stone-500);
     font-weight: 600;
     text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
   }
 
   /* ── EQUATION strip — full bleed blue ───────────────────────────── */
@@ -388,23 +405,24 @@
     </div>
   </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="kicker">
-      <span class="mark">
-        <i style="grid-column:4;grid-row:2"></i>
-        <i style="grid-column:3;grid-row:3"></i>
-        <i style="grid-column:4;grid-row:4"></i>
-        <i style="grid-column:3;grid-row:5"></i>
-      </span>
-      <span>The five parts of a Flue agent</span>
-    </div>
-    <h1 class="word">Agent</h1>
-    <div class="sub">
-      <div class="big">A <b>model</b>, equipped, sandboxed, and <b>directed.</b></div>
-      <div class="count">Specimen<br>01 — 05</div>
-    </div>
-  </section>
+  <!-- TITLE — same heading as the original poster -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+  <div class="deck">
+    <div class="deck-big">An agent is a <b>model</b>, equipped, sandboxed, and <b>directed</b> — here are its five parts.</div>
+    <div class="deck-count">Specimen<br>01 — 05</div>
+  </div>
 
   <!-- EQUATION -->
   <section class="equation">
