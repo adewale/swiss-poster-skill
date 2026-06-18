@@ -254,6 +254,83 @@
   .row.lead .carrier .v { color: var(--stone-50); }
   .row.lead .carrier .note { color: rgba(250,250,249,0.8); }
 
+  /* ── TRIGGERS panel — how the agent is started ──────────────────── */
+  .triggers { position: relative; z-index: 4; margin-top: 26px; }
+  .trig-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--blue);
+    padding-top: 9px;
+    margin-bottom: 0;
+  }
+  .trig-head .t {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+  }
+  .trig-head .t b { color: var(--blue-2); }
+  .trig-head .d {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+  }
+  .trig-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 14px;
+  }
+  .trig-cell {
+    border-top: 1.5px solid var(--stone-900);
+    border-right: 1px solid var(--stone-200);
+    padding: 13px 20px 14px 0;
+  }
+  .trig-cell:last-child { border-right: 0; }
+  .trig-cell .ck {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--blue-2);
+    letter-spacing: -0.01em;
+    margin-bottom: 9px;
+  }
+  .trig-cell .cn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 23px;
+    letter-spacing: -0.025em;
+    color: var(--stone-900);
+    margin-bottom: 6px;
+  }
+  .trig-cell .cd {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.36;
+    color: var(--stone-500);
+  }
+  .trig-cell .cd b { color: var(--stone-700); font-weight: 600; }
+  .trig-foot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    margin-top: 13px;
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .trig-foot b { color: var(--stone-900); font-weight: 700; }
+  .trig-foot .blue { color: var(--blue-2); }
+
   /* ── SYNTHESIS line ─────────────────────────────────────────────── */
   .synth {
     position: absolute;
@@ -408,6 +485,40 @@
       </div>
     </div>
 
+  </section>
+
+  <!-- TRIGGERS -->
+  <section class="triggers">
+    <div class="trig-head">
+      <div class="t">How it's <b>triggered</b></div>
+      <div class="d">one definition · many entry points</div>
+    </div>
+    <div class="trig-grid">
+      <div class="trig-cell">
+        <div class="ck">$ flue run</div>
+        <div class="cn">CLI</div>
+        <div class="cd">Run it <b>locally, on demand</b> through the @flue/cli package.</div>
+      </div>
+      <div class="trig-cell">
+        <div class="ck">route: AgentRouteHandler</div>
+        <div class="cn">HTTP</div>
+        <div class="cd">Exposed and <b>protected over HTTP</b> for other services to call.</div>
+      </div>
+      <div class="trig-cell">
+        <div class="ck">verified events</div>
+        <div class="cn">Channels</div>
+        <div class="cd">Reacts to <b>Slack, Teams, Discord, GitHub</b> messages.</div>
+      </div>
+      <div class="trig-cell">
+        <div class="ck">on a timer</div>
+        <div class="cn">Schedule</div>
+        <div class="cd">Kicked off on a <b>schedule</b>, not only on demand.</div>
+      </div>
+    </div>
+    <div class="trig-foot">
+      <span>Deploy: <b>Node.js</b> · <b>Cloudflare&nbsp;Workers</b> · <b>GitHub&nbsp;Actions</b> · <b>GitLab&nbsp;CI/CD</b></span>
+      <span class="blue">the runtime supplies the trigger</span>
+    </div>
   </section>
 
   <!-- SYNTHESIS -->
