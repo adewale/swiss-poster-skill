@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Fold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --gold:   #E8A317;   /* single accent — warning / the cliff signal */
+    --gold-d: #9a6c08;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 22px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE row */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 16px; }
+  .head .word { font-weight: 700; font-size: 96px; line-height: 0.82; letter-spacing: -0.04em; }
+  .head .word .pron { display:block; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; color:var(--stone-500); font-weight:500; margin-top:10px; }
+  .head .thesis { text-align: right; max-width: 430px; padding-bottom: 8px; }
+  .head .thesis .big { font-size: 23px; font-weight: 500; line-height: 1.22; letter-spacing: -0.01em; color: var(--stone-900); }
+  .head .thesis .big b { color: var(--gold-d); font-weight: 700; }
+  .head .thesis .sub { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); margin-top: 9px; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 14px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* FIGURE — Hofmann figure/ground */
+  .figure {
+    position: relative; height: 1150px; border: 2.5px solid var(--stone-900);
+    background: var(--stone-50); overflow: hidden;
+  }
+  /* unordered = black left half */
+  .unordered {
+    position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+    background: var(--stone-950);
+  }
+  /* horizon split */
+  .horizon { position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; background: var(--stone-400); z-index: 3; }
+  .horizon.dark { left:0; width:50%; background: rgba(250,250,249,0.28); }
+  .vert { position: absolute; top: 0; bottom: 0; left: 50%; width: 1.5px; background: var(--stone-900); z-index: 3; }
+
+  /* quadrant labels */
+  .q { position: absolute; z-index: 4; }
+  .q .qn { font-weight: 700; font-size: 48px; line-height: 0.9; letter-spacing: -0.03em; }
+  .q .qv { font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 10px; font-weight: 500; }
+  .q .qx { font-size: 13.5px; line-height: 1.35; margin-top: 8px; max-width: 30ch; }
+
+  /* top-left COMPLEX (on black) */
+  .q.complex { top: 40px; left: 40px; color: var(--stone-50); }
+  .q.complex .qv { color: rgba(250,250,249,0.7); }
+  .q.complex .qx { color: rgba(250,250,249,0.7); }
+  /* top-right COMPLICATED (on light) */
+  .q.complicated { top: 40px; right: 40px; text-align: right; color: var(--stone-900); }
+  .q.complicated .qv { color: var(--stone-500); }
+  .q.complicated .qx { color: var(--stone-700); margin-left: auto; }
+  /* bottom-left CHAOTIC (on black) */
+  .q.chaotic { bottom: 150px; left: 40px; color: var(--stone-50); }
+  .q.chaotic .qv { color: var(--gold); }
+  .q.chaotic .qx { color: rgba(250,250,249,0.7); }
+  /* bottom-right CLEAR (on light) — perched above the cliff */
+  .q.clear { bottom: 286px; right: 40px; text-align: right; color: var(--stone-900); }
+  .q.clear .qv { color: var(--stone-500); }
+  .q.clear .qx { color: var(--stone-700); margin-left: auto; }
+
+  /* side rails ordered/unordered */
+  .rail {
+    position: absolute; z-index: 5; font-family:'IBM Plex Mono',monospace;
+    font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; font-weight: 600;
+    writing-mode: vertical-rl;
+  }
+  .rail.un { top: 50%; left: 12px; transform: translateY(-50%); color: rgba(250,250,249,0.85); }
+  .rail.or { top: 50%; right: 12px; transform: translateY(-50%) rotate(180deg); color: var(--stone-500); }
+
+  /* THE FOLD — black wedge rising into lower-right (Clear) */
+  .fold-wedge {
+    position: absolute; right: 0; bottom: 0; width: 50%; height: 300px; z-index: 2;
+    background: var(--stone-950);
+    clip-path: polygon(0 100%, 100% 100%, 100% 38%);
+  }
+  .fold-edge {
+    position: absolute; right: 0; bottom: 0; width: 50%; height: 300px; z-index: 6; pointer-events: none;
+  }
+  .fold-edge svg { position:absolute; inset:0; width:100%; height:100%; overflow: visible; }
+  .fold-note {
+    position: absolute; z-index: 7; right: 46px; bottom: 50px; text-align: right;
+  }
+  .fold-note .ft { font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  .fold-note .fx { font-size: 14px; line-height: 1.32; color: var(--stone-50); margin-top: 6px; max-width: 30ch; }
+  .fold-note .fx b { color: var(--gold); font-weight: 600; }
+
+  /* Disorder disc — inverse figure/ground at the crossing */
+  .disc {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 132px; height: 132px; border-radius: 50%; z-index: 7;
+    background: linear-gradient(90deg, var(--stone-50) 0 50%, var(--stone-950) 50% 100%);
+    border: 1.5px solid var(--stone-500);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .disc span {
+    font-family:'IBM Plex Mono',monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    color: #fff; mix-blend-mode: difference;
+  }
+  .disc-cap {
+    position: absolute; left: 50%; top: calc(50% + 80px); transform: translateX(-50%); z-index: 7;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--stone-500); white-space: nowrap; background: var(--stone-50); padding: 3px 9px;
+  }
+
+  /* FOOTER */
+  .foot {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 16px; align-items: start;
+  }
+  .foot .c { font-size: 15px; line-height: 1.42; color: var(--stone-700); }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--gold-d); font-weight: 600; }
+  .foot .c.r { border-left: 2px solid var(--gold); padding-left: 16px; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="basel-hofmann"
+     data-genre="figure-ground"
+     data-reference="hofmann-figure-ground"
+     data-contrast="black-white-mass">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · The Deep Structure</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>Ordered · Unordered · The Fold</div>
+      <div class="meta">figure / ground</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="word" data-critical="title">Cynefin<span class="pron" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</span></div>
+    <div class="thesis" data-critical="body">
+      <div class="big">Every framework draws boxes.<br>This one draws a <b>cliff.</b></div>
+      <div class="sub">the boundary that is not a wall</div>
+    </div>
+  </div>
+
+  <div class="seclabel"><span>The map beneath the map</span><span class="sp"></span><span>4 domains · 1 center</span></div>
+
+  <!-- FIGURE -->
+  <div class="figure" data-encoding="ordered/unordered → right/left light/dark · fold → cliff geometry">
+    <div class="unordered" aria-hidden="true"></div>
+    <div class="fold-wedge" aria-hidden="true"></div>
+    <div class="vert" aria-hidden="true"></div>
+    <div class="horizon" aria-hidden="true"></div>
+    <div class="horizon dark" aria-hidden="true"></div>
+
+    <div class="rail un" aria-hidden="true">Unordered</div>
+    <div class="rail or" aria-hidden="true">Ordered</div>
+
+    <!-- COMPLEX -->
+    <div class="q complex" data-source="domain-complex">
+      <div class="qn" data-critical="title">Complex</div>
+      <div class="qv">probe → sense → respond</div>
+      <div class="qx">Patterns emerge only in hindsight. Experiment safely.</div>
+    </div>
+    <!-- COMPLICATED -->
+    <div class="q complicated" data-source="domain-complicated">
+      <div class="qn" data-critical="title">Complicated</div>
+      <div class="qv">sense → analyze → respond</div>
+      <div class="qx">A knowable answer. Call in the experts.</div>
+    </div>
+    <!-- CHAOTIC -->
+    <div class="q chaotic" data-source="domain-chaotic">
+      <div class="qn" data-critical="title">Chaotic</div>
+      <div class="qv">act → sense → respond</div>
+      <div class="qx">No cause and effect. Act first to make order.</div>
+    </div>
+    <!-- CLEAR -->
+    <div class="q clear" data-source="domain-clear">
+      <div class="qn" data-critical="title">Clear</div>
+      <div class="qv">sense → categorize → respond</div>
+      <div class="qx">Obvious cause and effect. Apply the rule.</div>
+    </div>
+
+    <!-- THE FOLD -->
+    <div class="fold-edge" aria-hidden="true">
+      <svg viewBox="0 0 630 300" preserveAspectRatio="none">
+        <line x1="630" y1="114" x2="0" y2="300" stroke="#E8A317" stroke-width="3"/>
+        <circle cx="630" cy="114" r="7" fill="#E8A317"/>
+      </svg>
+    </div>
+    <div class="fold-note" data-source="fold">
+      <div class="ft" data-critical="title">↯ The cliff</div>
+      <div class="fx" data-critical="body">Grow complacent in <b>Clear</b> and you don't drift — you <b>fall</b> straight into Chaos.</div>
+    </div>
+
+    <!-- DISORDER -->
+    <div class="disc" data-source="domain-disorder"><span>Disorder</span></div>
+    <div class="disc-cap" data-critical="body">the center · which domain am I in?</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      The right half is <b>ordered</b> — cause and effect hold, so you can analyze your way forward. The left is
+      <b>unordered</b> — the link appears only after the fact, or never. Cynefin's first question is simply:
+      <span class="g">which side of the line are you on?</span>
+    </div>
+    <div class="c r" data-critical="body">
+      The fold between <b>Clear</b> and <b>Chaotic</b> is the only boundary you can cross without noticing — until
+      you've already crossed it. <b>Cross every other boundary on purpose.</b>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · after Armin Hofmann · figure &amp; ground</div>
+    <div><b>Cynefin</b> · order, disorder, and the edge between</div>
+  </div>
+
+</div>
+</body>
+</html>

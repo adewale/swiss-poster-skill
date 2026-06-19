@@ -12,6 +12,10 @@ const POSTERS = [
   { html: 'lean-into-your-weirdness.html',        png: 'lean-into-your-weirdness.png' },
   { html: 'ten-principles-for-bad-design.html',   png: 'ten-principles-for-bad-design.png' },
   { html: 'flue.html',                            png: 'flue.png' },
+  { html: 'cynefin-map.html',                     png: 'cynefin-map.png' },
+  { html: 'cynefin-word.html',                    png: 'cynefin-word.png' },
+  { html: 'cynefin-fold.html',                    png: 'cynefin-fold.png' },
+  { html: 'cynefin-rhythm.html',                  png: 'cynefin-rhythm.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name
