@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Sense-Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --red:   #C8102E;   /* single accent — Swiss red */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 18px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE */
+  .head { position: relative; z-index: 4; margin-bottom: 22px; }
+  .head .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); font-weight: 600; margin-bottom: 12px;
+  }
+  .head .word { font-weight: 700; font-size: 150px; line-height: 0.82; letter-spacing: -0.045em; color: var(--stone-950); }
+  .head .sub {
+    display: flex; align-items: baseline; gap: 16px; margin-top: 20px; max-width: 980px;
+  }
+  .head .sub .big { font-size: 24px; font-weight: 400; line-height: 1.28; color: var(--stone-700); letter-spacing: -0.01em; }
+  .head .sub .big b { color: var(--stone-900); font-weight: 600; }
+  .head .sub .big .r { color: var(--red); font-weight: 600; }
+
+  /* SCORE — fixed geometry so the red line can be drawn to exact cell centres.
+     Content box: x 60 → 1200 (width 1140). who-col 0..318, beats start at 330. */
+  .score { position: absolute; left: 60px; right: 60px; top: 470px; bottom: 150px; z-index: 4; }
+
+  .score-h {
+    position: absolute; left: 0; right: 0; top: 0; height: 40px;
+    border-bottom: 2.5px solid var(--stone-900);
+  }
+  .score-h .hl { position:absolute; left: 0; bottom: 11px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone-500); font-weight: 600; }
+  .score-h .beat { position:absolute; bottom: 9px; text-align: center; }
+  .score-h .beat .bn { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-400); }
+  .score-h .beat .bt { font-family:'IBM Plex Mono',monospace; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone-700); margin-top: 3px; }
+
+  /* rows live in an absolutely-positioned band below the header */
+  .rows { position: absolute; left: 0; right: 0; top: 40px; bottom: 0; }
+  .rowline { position: absolute; left: 0; right: 0; height: 1px; background: var(--stone-200); }
+
+  .who { position: absolute; }
+  .who .dn { font-weight: 700; font-size: 50px; line-height: 0.9; letter-spacing: -0.03em; color: var(--stone-900); }
+  .who .meta { display:flex; gap: 10px; align-items: baseline; margin-top: 9px; }
+  .who .tag { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-500); }
+  .who .tag b { color: var(--stone-700); font-weight: 600; }
+  .who .tag .side { color: var(--red); font-weight: 600; }
+
+  /* beat cells — absolutely placed; geometry mirrors the SVG node coords */
+  .cell {
+    position: absolute; height: 64px; display:flex; align-items:center; justify-content:center;
+    border: 1.5px solid var(--stone-300); background: var(--stone-50);
+    font-family:'IBM Plex Mono',monospace; font-weight: 600; letter-spacing: 0.03em;
+    text-transform: uppercase; color: var(--stone-400); font-size: 19px;
+  }
+  .cell.move { color: var(--stone-900); border-color: var(--stone-700); border-width: 2px; }
+  .cell.respond { color: var(--stone-400); border-style: dashed; }
+  /* the SENSE cell: solid red node carrier; word stays crisp on white */
+  .cell.sense {
+    color: var(--red); border: 3px solid var(--red); background: var(--stone-50);
+    font-weight: 700; z-index: 3;
+  }
+
+  /* the red melody line lives on its own SVG above the cells but the words sit higher.
+     It spans the .rows band exactly so viewBox units == px and nodes hit cell centres. */
+  .melody { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; overflow: visible; }
+
+  /* the jog callout, sitting in the gutter at the step */
+  .jog {
+    position: absolute; z-index: 6; max-width: 250px;
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; line-height: 1.32; letter-spacing: 0.02em;
+    text-transform: uppercase; color: var(--red); font-weight: 600;
+  }
+  .jog .ar { font-size: 15px; }
+
+  /* FOOTER takeaway band */
+  .footer {
+    position: absolute; left: 60px; right: 60px; bottom: 70px; z-index: 4;
+    border-top: 3px solid var(--red); padding-top: 16px;
+    display: grid; grid-template-columns: 132px 1fr; gap: 26px; align-items: start;
+  }
+  .footer .lab { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); font-weight: 600; line-height: 1.4; }
+  .footer .b { font-size: 22px; line-height: 1.36; color: var(--stone-700); letter-spacing: -0.01em; }
+  .footer .b b { color: var(--stone-900); font-weight: 600; }
+  .footer .b .r { color: var(--red); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="muller-brockmann-rhythm"
+     data-genre="rhythm-score"
+     data-reference="muller-brockmann-rhythm"
+     data-encoding="position of SENSE → red melody line"
+     data-contrast="ordered-unordered-step">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the sense-line</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>four domains, one moving beat</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="kicker">sense → respond · where does the looking go?</div>
+    <div class="word" data-critical="title">When do you<br>get to look?</div>
+    <div class="sub">
+      <div class="big" data-critical="body">Every protocol senses and responds. What changes is where <span class="r">'sense' falls</span>: first, so you <b>decide on facts</b>; second, so you <b>act before you understand.</b></div>
+    </div>
+  </div>
+
+  <!-- SCORE -->
+  <div class="score" data-encoding="three beats × four domains; SENSE node position → red line">
+
+    <!-- header row -->
+    <div class="score-h">
+      <div class="hl">Domain · what you can know</div>
+      <div class="beat" style="left:330px; width:228px;"><div class="bn">beat 1</div><div class="bt">first move</div></div>
+      <div class="beat" style="left:588px; width:228px;"><div class="bn">beat 2</div><div class="bt">second move</div></div>
+      <div class="beat" style="left:846px; width:294px;"><div class="bn">beat 3</div><div class="bt">close</div></div>
+    </div>
+
+    <!-- rows band -->
+    <div class="rows">
+      <!-- THE RED MELODY LINE (graphic carrier). viewBox spans the .rows band 1:1 in px. -->
+      <svg class="melody" viewBox="0 0 1140 1140" preserveAspectRatio="none" aria-hidden="true">
+        <!-- column centres: c1=444 c2=702 ; row centres: r1=130 r2=390 r3=650 r4=910 ; divide y=520 -->
+        <!-- one continuous phrase: it enters above CLEAR, threads every SENSE, leaves below CHAOTIC -->
+        <g fill="none" stroke="#C8102E" stroke-width="11" stroke-linejoin="miter">
+          <!-- enters the score from the top into Clear's SENSE -->
+          <path d="M444,40 L444,130"/>
+          <!-- vertical run through col1 SENSE (Clear → Complicated) -->
+          <path d="M444,130 L444,390"/>
+          <!-- the JOG: down to the divide, hard step right, down into col2 -->
+          <path d="M444,390 L444,520 L702,520 L702,650"/>
+          <!-- vertical run through col2 SENSE (Complex → Chaotic) -->
+          <path d="M702,650 L702,910"/>
+          <!-- leaves the score at the bottom -->
+          <path d="M702,910 L702,1010"/>
+        </g>
+        <!-- nodes at each SENSE beat: solid red, sitting over the cell centres (rendered above cells via .melody-top) -->
+        <!-- corner studs on the jog so the STEP reads as two deliberate turns -->
+        <circle cx="444" cy="520" r="9" fill="#C8102E"/>
+        <circle cx="702" cy="520" r="9" fill="#C8102E"/>
+      </svg>
+
+      <!-- horizontal row separators -->
+      <div class="rowline" style="top:260px;"></div>
+      <div class="rowline" style="top:520px;"></div>
+      <div class="rowline" style="top:780px;"></div>
+
+      <!-- ROW 1 · CLEAR (sense = col1) -->
+      <div class="who" data-source="domain-clear" style="top:98px;">
+        <div class="dn" data-critical="title">Clear</div>
+        <div class="meta"><span class="tag"><span class="side">ordered</span> · <b>best practice</b></span></div>
+      </div>
+      <div class="cell sense"   data-critical="body" style="top:98px; left:330px; width:228px;">Sense</div>
+      <div class="cell move"    data-critical="body" style="top:98px; left:588px; width:228px;">Categorize</div>
+      <div class="cell respond" data-critical="body" style="top:98px; left:846px; width:294px;">Respond</div>
+
+      <!-- ROW 2 · COMPLICATED (sense = col1) -->
+      <div class="who" data-source="domain-complicated" style="top:358px;">
+        <div class="dn" data-critical="title">Complicated</div>
+        <div class="meta"><span class="tag"><span class="side">ordered</span> · <b>good practice</b></span></div>
+      </div>
+      <div class="cell sense"   data-critical="body" style="top:358px; left:330px; width:228px;">Sense</div>
+      <div class="cell move"    data-critical="body" style="top:358px; left:588px; width:228px;">Analyze</div>
+      <div class="cell respond" data-critical="body" style="top:358px; left:846px; width:294px;">Respond</div>
+
+      <!-- JOG CALLOUT at the step (between row 2 and row 3) -->
+      <div class="jog" data-critical="body" style="top:474px; left:60px;">
+        <span class="ar">↘</span> the sense-beat drops back — past here you act before you can look
+      </div>
+
+      <!-- ROW 3 · COMPLEX (sense = col2) -->
+      <div class="who" data-source="domain-complex" style="top:618px;">
+        <div class="dn" data-critical="title">Complex</div>
+        <div class="meta"><span class="tag"><span class="side">unordered</span> · <b>emergent practice</b></span></div>
+      </div>
+      <div class="cell move"    data-critical="body" style="top:618px; left:330px; width:228px;">Probe</div>
+      <div class="cell sense"   data-critical="body" style="top:618px; left:588px; width:228px;">Sense</div>
+      <div class="cell respond" data-critical="body" style="top:618px; left:846px; width:294px;">Respond</div>
+
+      <!-- ROW 4 · CHAOTIC (sense = col2) -->
+      <div class="who" data-source="domain-chaotic" style="top:878px;">
+        <div class="dn" data-critical="title">Chaotic</div>
+        <div class="meta"><span class="tag"><span class="side">unordered</span> · <b>novel practice</b></span></div>
+      </div>
+      <div class="cell move"    data-critical="body" style="top:878px; left:330px; width:228px;">Act</div>
+      <div class="cell sense"   data-critical="body" style="top:878px; left:588px; width:228px;">Sense</div>
+      <div class="cell respond" data-critical="body" style="top:878px; left:846px; width:294px;">Respond</div>
+    </div>
+  </div>
+
+  <!-- FOOTER takeaway -->
+  <div class="footer" data-source="insight">
+    <div class="lab">follow the<br>red line</div>
+    <div class="b" data-critical="body">Follow the red line. <b>High up it comes first,</b> so you decide on facts. <b>Lower down it comes second,</b> so your first move is <span class="r">a bet you place to find them.</span></div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · rhythm after Josef Müller-Brockmann</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/ · sense → respond</div>
+  </div>
+
+</div>
+</body>
+</html>

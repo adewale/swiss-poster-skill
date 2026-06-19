@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Wrong Move</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --red:   #C8102E;   /* single accent — Swiss red, marks the failure */
+    --red-d: #9c0c24;
+    --red-l: #f3d3d8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 22px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE */
+  .head { position: relative; z-index: 4; margin-bottom: 30px; }
+  .head .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red-d); font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .head .kicker .sq { width: 11px; height: 11px; background: var(--red); display: inline-block; }
+  .head .title { font-weight: 700; font-size: 92px; line-height: 0.9; letter-spacing: -0.035em; max-width: 17ch; color: var(--stone-900); }
+  .head .title .x { color: var(--red); }
+
+  /* TABLE / SCORE */
+  .table { position: relative; z-index: 4; margin-top: 4px; }
+
+  .thead {
+    display: grid; grid-template-columns: 326px 300px 1fr; column-gap: 0;
+    border-bottom: 2.5px solid var(--stone-900); align-items: end;
+  }
+  .thead .col { padding: 0 22px 11px 22px; }
+  .thead .col:first-child { padding-left: 0; }
+  .thead .h { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); font-weight: 600; line-height: 1.4; }
+  .thead .col.breaks { border-bottom: 2.5px solid var(--red); margin-bottom: -2.5px; }
+  .thead .col.breaks .h { color: var(--red-d); }
+
+  .row {
+    display: grid; grid-template-columns: 326px 300px 1fr; column-gap: 0;
+    border-bottom: 1px solid var(--stone-300); min-height: 250px; align-items: stretch;
+  }
+  .row .cell { padding: 30px 22px 30px 22px; display: flex; flex-direction: column; justify-content: center; }
+  .row .cell:first-child { padding-left: 0; }
+
+  /* col 1 — domain */
+  .row .domain .dn { font-weight: 700; font-size: 43px; line-height: 0.92; letter-spacing: -0.03em; color: var(--stone-900); white-space: nowrap; }
+  .row .domain .ord { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-500); margin-top: 14px; }
+  .row .domain .ord b { color: var(--stone-900); font-weight: 600; }
+  .row .domain .num { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; color: var(--stone-400); margin-bottom: 12px; }
+
+  /* col 2 — the move that fits */
+  .row .fits { border-left: 1px solid var(--stone-200); }
+  .row .fits .lab { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 13px; }
+  .row .fits .move { font-size: 24px; font-weight: 600; line-height: 1.2; color: var(--stone-700); letter-spacing: -0.01em; }
+  .row .fits .proto { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--stone-500); margin-top: 14px; }
+
+  /* col 3 — what breaks (the dramatic one) */
+  .row .breaks { border-left: 2px solid var(--red); background: var(--stone-100); position: relative; }
+  .row .breaks .lab { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red-d); margin-bottom: 13px; display:flex; align-items:center; gap: 9px; }
+  .row .breaks .lab .tick { width: 8px; height: 8px; background: var(--red); display: inline-block; }
+  .row .breaks .txt { font-size: 22px; line-height: 1.34; color: var(--stone-900); font-weight: 400; letter-spacing: -0.006em; max-width: 32ch; }
+  .row .breaks .txt b { color: var(--red); font-weight: 600; }
+
+  /* FOOTER takeaway */
+  .foot {
+    margin-top: 44px; position: relative; z-index: 4;
+    border-top: 3px solid var(--stone-900); padding-top: 20px;
+    display: grid; grid-template-columns: 326px 1fr; column-gap: 36px; align-items: start;
+  }
+  .foot .h { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red-d); font-weight: 600; line-height: 1.5; }
+  .foot .b { font-size: 23px; line-height: 1.4; color: var(--stone-700); letter-spacing: -0.008em; max-width: 60ch; }
+  .foot .b b { color: var(--stone-900); font-weight: 600; }
+  .foot .b .x { color: var(--red-d); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="muller-brockmann-rhythm"
+     data-genre="data-table"
+     data-reference="ruder-typographic-function"
+     data-encoding="wrong protocol → named failure"
+     data-contrast="scale">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the wrong move</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>right protocol, wrong world</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="kicker"><span class="sq"></span>what breaks when the method outlives its domain</div>
+    <div class="title" data-critical="title">The right method in the<br>wrong domain still <span class="x">fails.</span></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table" data-encoding="domain → fitting move vs. forced wrong move → named failure">
+    <div class="thead">
+      <div class="col"><div class="h">domain</div></div>
+      <div class="col"><div class="h">the move that fits</div></div>
+      <div class="col breaks"><div class="h">what breaks when you force<br>the wrong one</div></div>
+    </div>
+
+    <!-- CLEAR -->
+    <div class="row" data-source="domain-clear">
+      <div class="cell domain">
+        <div class="num">01 · ordered</div>
+        <div class="dn" data-critical="title">Clear</div>
+        <div class="ord">cause &amp; effect <b>obvious</b></div>
+      </div>
+      <div class="cell fits">
+        <div class="lab">the move that fits</div>
+        <div class="move" data-critical="body">apply the rule</div>
+        <div class="proto">sense → categorize → respond</div>
+      </div>
+      <div class="cell breaks">
+        <div class="lab"><span class="tick"></span>what breaks</div>
+        <div class="txt" data-critical="body">the rules quietly changed and nobody looked; best practice walks you off the cliff into <b>Chaos</b></div>
+      </div>
+    </div>
+
+    <!-- COMPLICATED -->
+    <div class="row" data-source="domain-complicated">
+      <div class="cell domain">
+        <div class="num">02 · ordered</div>
+        <div class="dn" data-critical="title">Complicated</div>
+        <div class="ord">knowable by <b>expertise</b></div>
+      </div>
+      <div class="cell fits">
+        <div class="lab">the move that fits</div>
+        <div class="move" data-critical="body">let experts analyze</div>
+        <div class="proto">sense → analyze → respond</div>
+      </div>
+      <div class="cell breaks">
+        <div class="lab"><span class="tick"></span>what breaks</div>
+        <div class="txt" data-critical="body">experts rule out the unfamiliar and call it <b>Clear</b>; you ship a confident wrong answer</div>
+      </div>
+    </div>
+
+    <!-- COMPLEX -->
+    <div class="row" data-source="domain-complex">
+      <div class="cell domain">
+        <div class="num">03 · unordered</div>
+        <div class="dn" data-critical="title">Complex</div>
+        <div class="ord">clear only in <b>hindsight</b></div>
+      </div>
+      <div class="cell fits">
+        <div class="lab">the move that fits</div>
+        <div class="move" data-critical="body">probe, sense, respond</div>
+        <div class="proto">probe → sense → respond</div>
+      </div>
+      <div class="cell breaks">
+        <div class="lab"><span class="tick"></span>what breaks</div>
+        <div class="txt" data-critical="body">you demand a business case up front and manage it like <b>Complicated</b>; the experiment you needed never runs</div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC -->
+    <div class="row" data-source="domain-chaotic" style="border-bottom:0">
+      <div class="cell domain">
+        <div class="num">04 · unordered</div>
+        <div class="dn" data-critical="title">Chaotic</div>
+        <div class="ord">no stable cause to <b>read</b></div>
+      </div>
+      <div class="cell fits">
+        <div class="lab">the move that fits</div>
+        <div class="move" data-critical="body">act, then sense</div>
+        <div class="proto">act → sense → respond</div>
+      </div>
+      <div class="cell breaks">
+        <div class="lab"><span class="tick"></span>what breaks</div>
+        <div class="txt" data-critical="body">you stop to gather data while it burns; by the time the analysis lands there is nothing left to save</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot" data-source="insight">
+    <div class="h">name the domain<br>before you move</div>
+    <div class="b" data-critical="body">Every domain has a tempting wrong move: treat the unknown as merely <b>complicated</b>, or the changed world as still <b>clear</b>. <span class="x">Name the domain first</span> — you pay for the wrong protocol in the domain you actually live in.</div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · sense-making, not categorizing</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>

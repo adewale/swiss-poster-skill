@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Four Columns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --green:   #1F6B45;   /* single accent — forest */
+    --green-d: #14502f;
+    --green-l: #d7e7de;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 22px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE */
+  .head { position: relative; z-index: 4; margin-bottom: 30px; }
+  .head .title { font-weight: 700; font-size: 96px; line-height: 0.86; letter-spacing: -0.04em; color: var(--stone-900); max-width: 17ch; }
+  .head .sub {
+    margin-top: 22px; max-width: 940px;
+    font-size: 24px; font-weight: 400; line-height: 1.28; color: var(--stone-700); letter-spacing: -0.01em;
+  }
+  .head .sub b { color: var(--stone-900); font-weight: 600; }
+  .head .sub .g { color: var(--green-d); font-weight: 600; }
+
+  /* COLUMNS GRID */
+  .cols {
+    position: relative; z-index: 4;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
+    margin-top: 8px;
+  }
+  .col { display: flex; flex-direction: column; }
+
+  /* column header */
+  .col .chead { border-top: 2.5px solid var(--stone-900); padding-top: 12px; margin-bottom: 14px; min-height: 92px; }
+  .col .chead .dn { font-weight: 700; font-size: 33px; line-height: 0.92; letter-spacing: -0.025em; color: var(--stone-900); }
+  .col .chead .mt {
+    margin-top: 9px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--stone-500); line-height: 1.5;
+  }
+  .col .chead .mt b { color: var(--green-d); font-weight: 600; }
+
+  /* the three stacked beat slots */
+  .stack { display: grid; grid-template-rows: repeat(3, 1fr); gap: 16px; }
+  .beat {
+    position: relative; border: 1.5px solid var(--stone-300);
+    background: var(--stone-50); height: 252px;
+    display: flex; flex-direction: column; justify-content: center; padding: 0 18px;
+  }
+  .beat .bn {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-400); margin-bottom: 8px;
+  }
+  .beat .bw { font-weight: 600; font-size: 30px; letter-spacing: -0.01em; line-height: 0.95; color: var(--stone-700); }
+  .beat .br {
+    margin-top: 8px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--stone-400); line-height: 1.35;
+  }
+
+  /* the move types */
+  .beat.first { border-color: var(--stone-900); border-width: 2px; }
+  .beat.first .bw { color: var(--stone-900); }
+  .beat.last { border-style: dashed; }
+
+  /* the SENSE block — forest, white text — the hero step */
+  .beat.sense { background: var(--green); border-color: var(--green); border-width: 1.5px; }
+  .beat.sense .bn { color: rgba(250,250,249,0.72); }
+  .beat.sense .bw { color: var(--stone-50); font-weight: 700; }
+  .beat.sense .br { color: rgba(250,250,249,0.82); }
+
+  /* column base tag */
+  .col .cbase {
+    margin-top: 16px; border-top: 1px solid var(--stone-300); padding-top: 11px;
+  }
+  .col .cbase .lab {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--stone-400); margin-bottom: 4px;
+  }
+  .col .cbase .val { font-family:'IBM Plex Mono',monospace; font-size: 15px; font-weight: 600; letter-spacing: 0.02em; color: var(--stone-700); }
+
+  /* the fold marker — between ordered (1–2) and unordered (3–4) columns */
+  .fold {
+    position: absolute; z-index: 6; top: 122px; bottom: 96px;
+    left: calc(50% - 1px); width: 2px;
+    border-left: 2px dashed var(--green); pointer-events: none;
+  }
+  .fold .tag {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg); transform-origin: center;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--green-d); font-weight: 600; white-space: nowrap; background: var(--stone-50); padding: 7px 12px;
+  }
+
+  /* FOOTER takeaway band */
+  .foot {
+    position: absolute; left: 0; right: 0; bottom: 64px; z-index: 4;
+    background: var(--green); color: var(--stone-50);
+    padding: 26px 60px 28px 60px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 30px;
+  }
+  .foot .big { font-size: 23px; font-weight: 500; line-height: 1.34; letter-spacing: -0.01em; max-width: 78ch; }
+  .foot .big b { font-weight: 700; color: var(--stone-50); }
+  .foot .lab {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(250,250,249,0.82); font-weight: 600; text-align: right; white-space: nowrap; align-self: flex-end; padding-bottom: 3px;
+  }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="muller-brockmann-rhythm"
+     data-genre="rhythm-score"
+     data-reference="muller-brockmann-rhythm"
+     data-encoding="protocol step → vertical position; SENSE → green block descending across columns">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · four columns</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>the sense-step descends</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="title" data-critical="title">Four worlds, four first moves.</div>
+    <div class="sub" data-critical="body">Read each column top to bottom. The <span class="g">green step</span> is the moment you sense, and it slides down a stair as the world gets harder to read.</div>
+  </div>
+
+  <!-- COLUMNS -->
+  <div class="cols" data-encoding="four domains left→right by knowability; SENSE slot descends top→top→middle→middle">
+
+    <!-- CLEAR -->
+    <div class="col" data-source="domain-clear">
+      <div class="chead">
+        <div class="dn" data-critical="title">Clear</div>
+        <div class="mt">ordered<br><b>best practice</b></div>
+      </div>
+      <div class="stack">
+        <div class="beat sense" data-critical="body"><div class="bn">Beat 1</div><div class="bw">Sense</div><div class="br">read what's there</div></div>
+        <div class="beat" data-critical="body"><div class="bn">Beat 2</div><div class="bw">Categorize</div><div class="br">match the rule</div></div>
+        <div class="beat last" data-critical="body"><div class="bn">Beat 3</div><div class="bw">Respond</div><div class="br">apply it</div></div>
+      </div>
+      <div class="cbase">
+        <div class="lab">you face</div>
+        <div class="val">known knowns</div>
+      </div>
+    </div>
+
+    <!-- COMPLICATED -->
+    <div class="col" data-source="domain-complicated">
+      <div class="chead">
+        <div class="dn" data-critical="title">Complicated</div>
+        <div class="mt">ordered<br><b>good practice</b></div>
+      </div>
+      <div class="stack">
+        <div class="beat sense" data-critical="body"><div class="bn">Beat 1</div><div class="bw">Sense</div><div class="br">gather the facts</div></div>
+        <div class="beat" data-critical="body"><div class="bn">Beat 2</div><div class="bw">Analyze</div><div class="br">call the expert</div></div>
+        <div class="beat last" data-critical="body"><div class="bn">Beat 3</div><div class="bw">Respond</div><div class="br">apply the answer</div></div>
+      </div>
+      <div class="cbase">
+        <div class="lab">you face</div>
+        <div class="val">known unknowns</div>
+      </div>
+    </div>
+
+    <!-- COMPLEX -->
+    <div class="col" data-source="domain-complex">
+      <div class="chead">
+        <div class="dn" data-critical="title">Complex</div>
+        <div class="mt">unordered<br><b>emergent practice</b></div>
+      </div>
+      <div class="stack">
+        <div class="beat first" data-critical="body"><div class="bn">Beat 1</div><div class="bw">Probe</div><div class="br">try a safe test</div></div>
+        <div class="beat sense" data-critical="body"><div class="bn">Beat 2</div><div class="bw">Sense</div><div class="br">watch what shifts</div></div>
+        <div class="beat last" data-critical="body"><div class="bn">Beat 3</div><div class="bw">Respond</div><div class="br">amplify or damp</div></div>
+      </div>
+      <div class="cbase">
+        <div class="lab">you face</div>
+        <div class="val">unknown unknowns</div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC -->
+    <div class="col" data-source="domain-chaotic">
+      <div class="chead">
+        <div class="dn" data-critical="title">Chaotic</div>
+        <div class="mt">unordered<br><b>novel practice</b></div>
+      </div>
+      <div class="stack">
+        <div class="beat first" data-critical="body"><div class="bn">Beat 1</div><div class="bw">Act</div><div class="br">do something now</div></div>
+        <div class="beat sense" data-critical="body"><div class="bn">Beat 2</div><div class="bw">Sense</div><div class="br">see if it held</div></div>
+        <div class="beat last" data-critical="body"><div class="bn">Beat 3</div><div class="bw">Respond</div><div class="br">steer toward order</div></div>
+      </div>
+      <div class="cbase">
+        <div class="lab">you face</div>
+        <div class="val">no knowns</div>
+      </div>
+    </div>
+
+    <!-- FOLD between ordered (cols 1–2) and unordered (cols 3–4) -->
+    <div class="fold" aria-hidden="true">
+      <span class="tag">the gap · sensing now waits</span>
+    </div>
+  </div>
+
+  <!-- FOOTER takeaway -->
+  <div class="foot" data-source="insight">
+    <div class="big" data-critical="body">Left of the gap, sensing leads: <b>gather facts, then choose.</b> Right of it, sensing waits: <b>commit a probe or an act first,</b> then learn from what it does.</div>
+    <div class="lab">sense → respond</div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · rhythm after Josef Müller-Brockmann</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/ · sense → respond</div>
+  </div>
+
+</div>
+</body>
+</html>

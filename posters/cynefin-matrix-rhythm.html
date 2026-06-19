@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Working Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — cobalt */
+    --cobalt-d: #0e2c66;
+    --cobalt-l: #dbe3f2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 20px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* HERO */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 34px; margin-bottom: 18px; }
+  .head .l { }
+  .head .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--cobalt-d); font-weight: 600; margin-bottom: 13px;
+  }
+  .head .word { font-weight: 700; font-size: 78px; line-height: 0.86; letter-spacing: -0.035em; max-width: 16ch; }
+  .head .word .c { color: var(--cobalt); }
+  .head .r { text-align: right; padding-bottom: 7px; max-width: 290px; }
+  .head .r .big { font-size: 15.5px; line-height: 1.4; color: var(--stone-700); }
+  .head .r .big b { color: var(--stone-900); font-weight: 600; }
+  .head .r .sub { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); margin-top: 8px; }
+
+  /* COLUMN HEADER ROW (above grid) */
+  .colhead {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 2.5px solid var(--stone-900); margin-bottom: 0;
+  }
+  .colhead .ch { padding: 9px 4px 9px 0; display:flex; flex-direction: column; }
+  .colhead .ch.right { text-align: right; padding-right: 0; padding-left: 4px; align-items: flex-end; }
+  .colhead .ch .ct { font-family:'IBM Plex Mono',monospace; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; color: var(--stone-900); }
+  .colhead .ch .cs { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .colhead .ch.right .ct .c { color: var(--cobalt); }
+
+  /* THE GRID */
+  .grid {
+    position: relative; height: 1206px; border: 2.5px solid var(--stone-900);
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; overflow: hidden;
+  }
+  .cell { position: relative; padding: 40px 44px; display: flex; flex-direction: column; overflow: hidden; }
+  .cell.tl { border-right: 1.5px solid var(--stone-900); border-bottom: 1.5px solid var(--stone-900); }
+  .cell.tr { border-bottom: 1.5px solid var(--stone-900); }
+  .cell.bl { border-right: 1.5px solid var(--stone-900); }
+  .cell.br { }
+  /* unordered column tint (very light cobalt wash to read left=unordered) */
+  .cell.tl, .cell.bl { background: var(--stone-100); }
+
+  /* anchor content toward the OUTER corner so the center medallion stays clear;
+     pull top row DOWN and bottom row UP so the four blocks frame the medallion
+     instead of leaving a dead vertical band in each cell */
+  .cell.tl { align-items: flex-start; justify-content: flex-end;   text-align: left;  padding-bottom: 150px; }
+  .cell.tr { align-items: flex-end;   justify-content: flex-end;   text-align: right; padding-bottom: 150px; }
+  .cell.bl { align-items: flex-start; justify-content: flex-start; text-align: left;  padding-top: 150px; }
+  .cell.br { align-items: flex-end;   justify-content: flex-start; text-align: right; padding-top: 150px; }
+
+  /* corner index marker */
+  .cell .idx {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--stone-400); font-weight: 600; margin-bottom: 10px;
+  }
+  .cell .dn { font-weight: 700; font-size: 62px; line-height: 0.86; letter-spacing: -0.035em; color: var(--stone-900); }
+  .cell .ptype { font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt-d); font-weight: 600; margin-top: 12px; }
+  .cell .ptype b { color: var(--cobalt); }
+
+  /* 3-beat mini protocol bar */
+  .beats { display: flex; gap: 0; margin-top: 16px; border: 1.5px solid var(--stone-300); width: max-content; max-width: 100%; }
+  .beats.r { margin-left: auto; }
+  .beat {
+    font-family:'IBM Plex Mono',monospace; font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+    text-transform: uppercase; color: var(--stone-500); padding: 11px 16px; background: var(--stone-50);
+    border-right: 1.5px solid var(--stone-300); white-space: nowrap;
+  }
+  .beat:last-child { border-right: 0; }
+  .beat.sense { color: var(--stone-50); background: var(--cobalt); border-color: var(--cobalt); }
+  .beat.respond { color: var(--stone-400); }
+
+  .cell .tag { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-500); margin-top: 14px; }
+  .cell .tag b { color: var(--stone-900); font-weight: 600; }
+
+  /* DISORDER medallion at the crossing */
+  .medallion {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 208px; height: 208px; border-radius: 50%; z-index: 8;
+    background: var(--cobalt); border: 2px solid var(--stone-900);
+    display:flex; flex-direction: column; align-items:center; justify-content:center; text-align:center; padding: 20px;
+  }
+  .medallion .mt { font-weight: 700; font-size: 23px; letter-spacing: -0.02em; color: var(--stone-50); line-height: 0.9; }
+  .medallion .mx { font-family:'IBM Plex Mono',monospace; font-size: 11px; line-height: 1.34; letter-spacing: 0.03em; color: rgba(250,250,249,0.86); margin-top: 10px; text-transform: uppercase; }
+
+  /* FOLD note — at the bottom edge between Chaotic (bl) and Clear (br) */
+  .fold {
+    position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); z-index: 8;
+    display: flex; align-items: center; gap: 11px; white-space: nowrap;
+    background: var(--stone-900); padding: 8px 16px;
+  }
+  .fold .fm { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-50); font-weight: 500; }
+  .fold .fm b { color: #6f93d6; font-weight: 600; }
+  .fold .mark { color: #6f93d6; font-size: 13px; font-weight: 700; }
+
+  /* FOOTER takeaway */
+  .foot {
+    margin-top: 18px; display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: start;
+    border-top: 3px solid var(--cobalt); padding-top: 14px;
+  }
+  .foot .h { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); font-weight: 600; white-space: nowrap; padding-top: 3px; }
+  .foot .b { font-size: 18px; line-height: 1.42; color: var(--stone-700); max-width: 96ch; }
+  .foot .b b { color: var(--stone-900); font-weight: 600; }
+  .foot .b .c { color: var(--cobalt-d); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-reference="muller-brockmann-rhythm"
+     data-genre="matrix"
+     data-encoding="ordered/unordered → right/left; SENSE position → highlighted beat">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the working map</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>four domains, four protocols</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="head">
+    <div class="l">
+      <div class="kicker">a sense-making map · not a sorting box</div>
+      <div class="word" data-critical="title">Name the world, then run its <span class="c">protocol.</span></div>
+    </div>
+    <div class="r">
+      <div class="big" data-critical="body">Find your box, read its three beats, and start on <b>beat one.</b></div>
+      <div class="sub">probe · act · sense · respond</div>
+    </div>
+  </div>
+
+  <!-- COLUMN LABELS -->
+  <div class="colhead">
+    <div class="ch left" data-source="column-unordered">
+      <div class="ct">Unordered</div>
+      <div class="cs">cause and effect only in hindsight</div>
+    </div>
+    <div class="ch right" data-source="column-ordered">
+      <div class="ct">Ordered</div>
+      <div class="cs">cause and effect hold</div>
+    </div>
+  </div>
+
+  <!-- THE 2×2 GRID -->
+  <div class="grid" data-encoding="left/right → unordered/ordered; SENSE beat → cobalt cell">
+
+    <!-- COMPLEX — top-left -->
+    <div class="cell tl" data-source="domain-complex">
+      <div class="idx">unordered · upper</div>
+      <div class="dn" data-critical="body">Complex</div>
+      <div class="beats" data-critical="body">
+        <span class="beat act">Probe</span>
+        <span class="beat sense">Sense</span>
+        <span class="beat respond">Respond</span>
+      </div>
+      <div class="ptype">emergent practice</div>
+      <div class="tag">unknown <b>unknowns</b></div>
+    </div>
+
+    <!-- COMPLICATED — top-right -->
+    <div class="cell tr" data-source="domain-complicated">
+      <div class="idx">ordered · upper</div>
+      <div class="dn" data-critical="body">Complicated</div>
+      <div class="beats r" data-critical="body">
+        <span class="beat sense">Sense</span>
+        <span class="beat">Analyze</span>
+        <span class="beat respond">Respond</span>
+      </div>
+      <div class="ptype">good practice</div>
+      <div class="tag">known <b>unknowns</b></div>
+    </div>
+
+    <!-- CHAOTIC — bottom-left -->
+    <div class="cell bl" data-source="domain-chaotic">
+      <div class="idx">unordered · lower</div>
+      <div class="dn" data-critical="body">Chaotic</div>
+      <div class="beats" data-critical="body">
+        <span class="beat act">Act</span>
+        <span class="beat sense">Sense</span>
+        <span class="beat respond">Respond</span>
+      </div>
+      <div class="ptype">novel practice</div>
+      <div class="tag">no <b>knowns</b></div>
+    </div>
+
+    <!-- CLEAR — bottom-right -->
+    <div class="cell br" data-source="domain-clear">
+      <div class="idx">ordered · lower</div>
+      <div class="dn" data-critical="body">Clear</div>
+      <div class="beats r" data-critical="body">
+        <span class="beat sense">Sense</span>
+        <span class="beat">Categorize</span>
+        <span class="beat respond">Respond</span>
+      </div>
+      <div class="ptype">best practice</div>
+      <div class="tag">known <b>knowns</b></div>
+    </div>
+
+    <!-- DISORDER medallion -->
+    <div class="medallion" data-source="domain-disorder">
+      <div class="mt" data-critical="body">Disorder</div>
+      <div class="mx" data-critical="body">you don't yet know which box you're in</div>
+    </div>
+
+    <!-- FOLD note at Chaotic↔Clear bottom edge -->
+    <div class="fold" data-source="fold">
+      <span class="mark">↯</span>
+      <span class="fm" data-critical="body"><b>Clear → Chaotic:</b> the one border with no step between</span>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot" data-source="takeaway">
+    <div class="h">the move<br>each box rewards</div>
+    <div class="b" data-critical="body">The grid is half the tool. The other half is the move each box rewards: <span class="c">sense first</span> where cause and effect hold, <span class="c">move first</span> where they don't.</div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · the sense-making map</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/ · habitat</div>
+  </div>
+
+</div>
+</body>
+</html>

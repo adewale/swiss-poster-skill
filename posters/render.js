@@ -12,10 +12,21 @@ const POSTERS = [
   { html: 'lean-into-your-weirdness.html',        png: 'lean-into-your-weirdness.png' },
   { html: 'ten-principles-for-bad-design.html',   png: 'ten-principles-for-bad-design.png' },
   { html: 'flue.html',                            png: 'flue.png' },
-  { html: 'cynefin-map.html',                     png: 'cynefin-map.png' },
-  { html: 'cynefin-word.html',                    png: 'cynefin-word.png' },
   { html: 'cynefin-fold.html',                    png: 'cynefin-fold.png' },
   { html: 'cynefin-rhythm.html',                  png: 'cynefin-rhythm.png' },
+  // iteration set — Fold family + Protocols family
+  { html: 'cynefin-cliff.html',                   png: 'cynefin-cliff.png' },
+  { html: 'cynefin-masses.html',                  png: 'cynefin-masses.png' },
+  { html: 'cynefin-horizon.html',                 png: 'cynefin-horizon.png' },
+  { html: 'cynefin-catastrophe.html',             png: 'cynefin-catastrophe.png' },
+  { html: 'cynefin-void.html',                    png: 'cynefin-void.png' },
+  { html: 'cynefin-melody.html',                  png: 'cynefin-melody.png' },
+  { html: 'cynefin-columns.html',                 png: 'cynefin-columns.png' },
+  { html: 'cynefin-firstmove.html',               png: 'cynefin-firstmove.png' },
+  { html: 'cynefin-wrongmove.html',               png: 'cynefin-wrongmove.png' },
+  { html: 'cynefin-radial.html',                  png: 'cynefin-radial.png' },
+  { html: 'cynefin-matrix-rhythm.html',           png: 'cynefin-matrix-rhythm.png' },
+  { html: 'cynefin-mismatch.html',                png: 'cynefin-mismatch.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name

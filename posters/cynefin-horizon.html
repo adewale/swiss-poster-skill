@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Above and Below the Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — the fold marker */
+    --cobalt-l: #5B82D6;   /* cobalt lightened for use on dark water */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 20; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 20px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* FIGURE — the waterline. Above = ordered high ground, below = unordered deep water */
+  .figure {
+    position: relative; height: 1480px; border: 2.5px solid var(--stone-900);
+    background: var(--stone-50); overflow: hidden;
+  }
+  /* deep water — fills the lower portion, top edge is the waterline (flat, then a sharp tear-drop on the right) */
+  .water {
+    position: absolute; left: 0; right: 0; bottom: 0; top: 0; z-index: 1;
+    background: var(--stone-950);
+    /* high ground holds flat at ~46%, runs right to ~80%, then the edge breaks off in a
+       jagged tear and the deep water climbs to a higher shelf (~33%) across the far right —
+       walk straight on in 'best practice' and the floor that held yesterday drops you under. */
+    clip-path: polygon(
+      0% 46.0%,
+      80.0% 46.0%,
+      81.3% 42.6%,
+      82.2% 47.2%,
+      83.4% 40.8%,
+      84.7% 33.0%,
+      100% 33.0%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  /* the waterline stroke — drawn over the seam so the flat run and the tear read as one torn edge */
+  .waterline { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+  .waterline svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  /* vertical divider between the two domains on each band */
+  .vsplit { position: absolute; top: 0; bottom: 0; left: 50%; width: 1.5px; z-index: 4; }
+  .vsplit.up   { top: 0; bottom: 53%; background: var(--stone-300); }
+  .vsplit.down { top: 47%; bottom: 0; background: rgba(250,250,249,0.22); }
+
+  /* side rails: ordered (above) / unordered (below) */
+  .rail {
+    position: absolute; z-index: 7; font-family:'IBM Plex Mono',monospace;
+    font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; font-weight: 600;
+    writing-mode: vertical-rl;
+  }
+  .rail.or { top: 24%; right: 14px; transform: translateY(-50%) rotate(180deg); color: var(--stone-500); }
+  .rail.un { top: 78%; left: 14px; transform: translateY(-50%); color: rgba(250,250,249,0.85); }
+
+  /* band labels */
+  .band {
+    position: absolute; z-index: 8; font-family:'IBM Plex Mono',monospace;
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; line-height: 1.5;
+    max-width: 560px;
+  }
+  .band.above { top: 36px; left: 40px; color: var(--stone-700); }
+  .band.below { bottom: 230px; left: 40px; color: var(--stone-50); }
+  .band b { color: var(--stone-900); }
+  .band.below b { color: var(--stone-50); }
+
+  /* domain blocks */
+  .q { position: absolute; z-index: 8; max-width: 30ch; }
+  .q .qn { font-weight: 700; font-size: 52px; line-height: 0.88; letter-spacing: -0.03em; }
+  .q .qv { font-family:'IBM Plex Mono',monospace; font-size: 12.5px; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 12px; font-weight: 500; }
+  .q .qp { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 7px; font-weight: 500; }
+
+  /* CLEAR — above-left, sitting on the high ground */
+  .q.clear { top: 250px; left: 40px; color: var(--stone-900); }
+  .q.clear .qv { color: var(--stone-500); }
+  .q.clear .qp { color: var(--stone-500); }
+  /* COMPLICATED — above-right */
+  .q.complicated { top: 250px; right: 40px; text-align: right; color: var(--stone-900); }
+  .q.complicated .qv { color: var(--stone-500); }
+  .q.complicated .qp { color: var(--stone-500); }
+  /* CHAOTIC — below-left (on water) */
+  .q.chaotic { bottom: 360px; left: 40px; color: var(--stone-50); }
+  .q.chaotic .qv { color: rgba(250,250,249,0.72); }
+  .q.chaotic .qp { color: rgba(250,250,249,0.72); }
+  /* COMPLEX — below-right (on water) */
+  .q.complex { bottom: 360px; right: 40px; text-align: right; color: var(--stone-50); }
+  .q.complex .qv { color: rgba(250,250,249,0.72); }
+  .q.complex .qp { color: rgba(250,250,249,0.72); }
+
+  /* THE HERO HEADLINE — crosses the waterline on a solid stone-50 plate */
+  .hero {
+    position: absolute; z-index: 12; left: 50%; top: 46%; transform: translate(-50%,-50%);
+    background: var(--stone-50); border: 2.5px solid var(--stone-900);
+    padding: 28px 46px 30px; text-align: center; width: 520px;
+  }
+  .hero .t { font-weight: 700; font-size: 56px; line-height: 0.92; letter-spacing: -0.035em; color: var(--stone-900); }
+
+  /* the tear marker — cobalt, sitting on the lip where the high ground breaks off (~80%, 46%) */
+  .tear {
+    position: absolute; z-index: 14; left: 80%; top: 46%;
+  }
+  .tear .dot { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--cobalt); }
+  /* a cobalt leader drops from the lip into the deep, ending at the label */
+  .tear .lead { position: absolute; left: -1px; top: 7px; width: 2px; height: 192px; background: var(--cobalt); }
+  /* label sits on the deep water below the lip, text flowing left so it clears the hero */
+  .tear .lbl {
+    position: absolute; left: -7px; top: 196px; transform: translateX(-100%); white-space: nowrap; text-align: right;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--cobalt-l); font-weight: 600; padding: 4px 12px 4px 0;
+  }
+
+  /* DISORDER marker — a disc straddling the flat waterline (46%), left of the hero:
+     half on high ground, half in the deep — you can't tell which side you're on. */
+  .disorder {
+    position: absolute; z-index: 13; left: 20%; top: 46%; transform: translate(-50%,-50%);
+  }
+  .disorder .disc {
+    width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--stone-700);
+    background: linear-gradient(180deg, var(--stone-50) 0 50%, var(--stone-950) 50% 100%);
+    margin: 0 auto;
+  }
+  .disorder .cap {
+    position: absolute; left: 50%; top: calc(100% + 11px); transform: translateX(-50%);
+    white-space: nowrap; text-align: center;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(250,250,249,0.92); font-weight: 500;
+  }
+
+  /* FOOTER */
+  .foot {
+    margin-top: 14px;
+  }
+  .foot .c { font-size: 16px; line-height: 1.42; color: var(--stone-700); max-width: 108ch; border-left: 2px solid var(--cobalt); padding-left: 16px; }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="basel-hofmann"
+     data-reference="hofmann-figure-ground"
+     data-genre="figure-ground"
+     data-encoding="ordered/unordered → above/below the waterline">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · above and below the line</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>ordered over unordered</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- FIGURE -->
+  <div class="figure">
+    <div class="water" aria-hidden="true"></div>
+
+    <div class="vsplit up" aria-hidden="true"></div>
+    <div class="vsplit down" aria-hidden="true"></div>
+
+    <div class="rail or" aria-hidden="true">Ordered</div>
+    <div class="rail un" aria-hidden="true">Unordered</div>
+
+    <!-- ABOVE band label -->
+    <div class="band above" data-critical="body">ABOVE — cause and effect are visible.<br>Sense the facts, then choose.</div>
+
+    <!-- CLEAR -->
+    <div class="q clear" data-source="domain-clear">
+      <div class="qn" data-critical="title">Clear</div>
+      <div class="qv">sense · categorize · respond</div>
+      <div class="qp">best practice</div>
+    </div>
+    <!-- COMPLICATED -->
+    <div class="q complicated" data-source="domain-complicated">
+      <div class="qn" data-critical="title">Complicated</div>
+      <div class="qv">sense · analyze · respond</div>
+      <div class="qp">good practice</div>
+    </div>
+
+    <!-- BELOW band label -->
+    <div class="band below" data-critical="body">BELOW — cause and effect are hidden.<br>Make a move, then read what surfaces.</div>
+
+    <!-- CHAOTIC -->
+    <div class="q chaotic" data-source="domain-chaotic">
+      <div class="qn" data-critical="title">Chaotic</div>
+      <div class="qv">act · sense · respond</div>
+      <div class="qp">novel practice</div>
+    </div>
+    <!-- COMPLEX -->
+    <div class="q complex" data-source="domain-complex">
+      <div class="qn" data-critical="title">Complex</div>
+      <div class="qv">probe · sense · respond</div>
+      <div class="qp">emergent practice</div>
+    </div>
+
+    <!-- WATERLINE stroke + tear. Flat calm run, then a jagged tear where the deep climbs to a higher shelf. -->
+    <div class="waterline" aria-hidden="true">
+      <svg viewBox="0 0 1255 1475" preserveAspectRatio="none">
+        <!-- calm run on the high-ground side -->
+        <polyline points="0,678.5 1004,678.5"
+                  fill="none" stroke="var(--cobalt)" stroke-width="2.5" />
+        <!-- the jagged tear + the higher shelf, brightened so it stays visible over dark water -->
+        <polyline points="1004,678.5 1020,628 1032,696 1047,602 1063,487 1255,487"
+                  fill="none" stroke="var(--cobalt-l)" stroke-width="2.5" stroke-linejoin="miter" />
+      </svg>
+    </div>
+
+    <!-- TEAR marker -->
+    <div class="tear" data-source="fold">
+      <span class="dot"></span>
+      <span class="lead"></span>
+      <span class="lbl" data-critical="body">the fold — best practice walks off the edge</span>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero" data-critical="title">
+      <div class="t">Know the line<br>before you<br>cross it.</div>
+    </div>
+
+    <!-- DISORDER -->
+    <div class="disorder" data-source="domain-disorder">
+      <div class="disc"></div>
+      <div class="cap" data-critical="body">Disorder — which side am I on?</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      <b>Best practice holds the high ground only while the rules hold.</b> Stop watching, miss the moment the rules change, and the move that worked yesterday drops you under.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · the catastrophic fold</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>
