@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Loop · Reason · Act · Observe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 5;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ─────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 5;
+  }
+  .title .mark { width: 60px; height: 60px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 132px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 5;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    max-width: 60ch;
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    white-space: nowrap;
+  }
+
+  /* ── STAGE — the giant ring ─────────────────────────────────────── */
+  .stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 320px;
+    height: 1080px;
+    z-index: 2;
+  }
+  .stage svg { display: block; width: 1260px; height: 1080px; }
+
+  /* docked caps labels around the ring */
+  .dock {
+    position: absolute;
+    z-index: 4;
+    max-width: 230px;
+  }
+  .dock .dk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--stone-900);
+  }
+  .dock .dk .b { color: var(--blue-2); }
+  .dock .dv {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--stone-500);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+  .dock.l { text-align: right; }
+  .dock.l .dk, .dock.l .dv { text-align: right; }
+
+  /* key line band */
+  .keyline {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 118px;
+    z-index: 5;
+    background: var(--blue);
+    color: var(--stone-50);
+    padding: 18px 26px 20px 26px;
+  }
+  .keyline .kl-lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.85);
+    margin-bottom: 8px;
+  }
+  .keyline .kl {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 26px;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    color: var(--stone-50);
+  }
+  .keyline .kl b { font-weight: 700; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 6;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+  .colophon .cmark {
+    display: inline-grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    width: 18px; height: 18px;
+    background: var(--blue);
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  .colophon .cmark i { background: var(--stone-50); display: block; }
+  .colophon .lft { display: flex; align-items: center; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the loop the harness runs, turn after turn</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field guide</div>
+      <div class="meta">reason · act · observe</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">The&nbsp;Loop</span>
+    <span class="tag">
+      <span class="big">Reason · Act · Observe</span>
+      <span class="small">one cycle, run until done</span>
+    </span>
+  </div>
+  <div class="deck">
+    <div class="deck-big">An agent is a <b>model</b> running inside a harness. You give it <b>a task, not a script</b> — <em>then it runs the loop on its own.</em></div>
+    <div class="deck-count">The core<br>cycle</div>
+  </div>
+
+  <!-- STAGE: the giant ring -->
+  <div class="stage" aria-hidden="true">
+    <svg viewBox="0 0 1260 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 12 12" refX="6" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+          <path d="M1 1 L11 6 L1 11 Z" fill="#007AFF"/>
+        </marker>
+        <marker id="arrowDk" viewBox="0 0 12 12" refX="6" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+          <path d="M1 1 L11 6 L1 11 Z" fill="#0057D8"/>
+        </marker>
+      </defs>
+
+      <!-- concentric rhythm rings (Troxler / Müller-Brockmann) -->
+      <circle cx="630" cy="540" r="500" stroke="#007AFF" stroke-opacity="0.10" stroke-width="1.5"/>
+      <circle cx="630" cy="540" r="430" stroke="#007AFF" stroke-opacity="0.16" stroke-width="1.5"/>
+      <circle cx="630" cy="540" r="356" stroke="#007AFF" stroke-opacity="0.22" stroke-width="1.5"/>
+
+      <!-- THE HERO RING: three arcs, one per phase, clockwise, with directional arrowheads -->
+      <!-- ring radius 430, center 630,540. Boundaries at top / lower-right / lower-left; 8deg gaps. -->
+      <!-- ARC 1: REASON — top, sweeping clockwise to lower-right -->
+      <path d="M 660 111.05
+               A 430 430 0 0 1 1016.48 728.5"
+            stroke="#007AFF" stroke-width="26" stroke-linecap="butt" marker-end="url(#arrow)"/>
+      <!-- ARC 2: ACT — lower-right, sweeping clockwise across the bottom to lower-left -->
+      <path d="M 986.49 780.45
+               A 430 430 0 0 1 273.51 780.45"
+            stroke="#007AFF" stroke-width="26" stroke-linecap="butt" marker-end="url(#arrow)"/>
+      <!-- ARC 3: OBSERVE — lower-left, sweeping clockwise up to the top -->
+      <path d="M 243.52 728.5
+               A 430 430 0 0 1 600 111.05"
+            stroke="#007AFF" stroke-width="26" stroke-linecap="butt" marker-end="url(#arrow)"/>
+
+      <!-- center core disk: the model -->
+      <circle cx="630" cy="540" r="178" fill="#0c0a09"/>
+      <circle cx="630" cy="540" r="178" fill="none" stroke="#4DA3FF" stroke-opacity="0.5" stroke-width="1.5"/>
+
+      <!-- small spokes from core to ring (rhythm) -->
+      <line x1="630" y1="362" x2="630" y2="135" stroke="#007AFF" stroke-opacity="0.3" stroke-width="1.5"/>
+      <line x1="784.2" y1="629" x2="921.7" y2="708.4" stroke="#007AFF" stroke-opacity="0.3" stroke-width="1.5"/>
+      <line x1="475.8" y1="629" x2="338.3" y2="708.4" stroke="#007AFF" stroke-opacity="0.3" stroke-width="1.5"/>
+    </svg>
+
+    <!-- phase labels positioned over the arcs -->
+    <!-- REASON: top right -->
+    <div style="position:absolute; left:842px; top:248px; z-index:4; text-align:left;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; font-weight:600; color:var(--blue-2);">phase 01</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-weight:700; font-size:46px; letter-spacing:-0.03em; color:var(--stone-900); line-height:0.95;">Reason</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-size:15px; color:var(--stone-500); max-width:200px; line-height:1.3; margin-top:4px;">think over the task; pick the next action</div>
+    </div>
+    <!-- ACT: bottom -->
+    <div style="position:absolute; left:528px; top:990px; z-index:4; text-align:center; transform:translateX(-50%); width:340px;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; font-weight:600; color:var(--blue-2);">phase 02</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-weight:700; font-size:46px; letter-spacing:-0.03em; color:var(--stone-900); line-height:0.95;">Act</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-size:15px; color:var(--stone-500); max-width:300px; line-height:1.3; margin-top:4px; margin-left:auto; margin-right:auto;">call a tool, run code, edit a file</div>
+    </div>
+    <!-- OBSERVE: top left -->
+    <div style="position:absolute; left:118px; top:248px; z-index:4; text-align:right; width:240px;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; font-weight:600; color:var(--blue-2);">phase 03</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-weight:700; font-size:46px; letter-spacing:-0.03em; color:var(--stone-900); line-height:0.95;">Observe</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-size:15px; color:var(--stone-500); max-width:240px; line-height:1.3; margin-top:4px; margin-left:auto;">read the result; feed it back in</div>
+    </div>
+
+    <!-- CENTER CORE: the model -->
+    <div style="position:absolute; left:630px; top:540px; transform:translate(-50%,-50%); z-index:5; text-align:center; width:300px;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.26em; text-transform:uppercase; font-weight:600; color:var(--blue-lt);">the reasoning core</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-weight:700; font-size:42px; letter-spacing:-0.04em; color:var(--stone-50); line-height:0.92; margin-top:8px;">Model</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600; letter-spacing:-0.01em; color:var(--stone-50); margin-top:10px;">claude-sonnet-4-6</div>
+      <div style="font-family:'IBM Plex Sans',sans-serif; font-size:12px; font-style:italic; color:rgba(250,250,249,0.7); margin-top:6px;">the thing doing the reasoning</div>
+    </div>
+  </div>
+
+  <!-- DOCKED CAPS: what each turn touches, outside the ring -->
+  <!-- right side -->
+  <div class="dock" style="right:64px; top:782px;">
+    <div class="dk"><span class="b">▸</span> Tools</div>
+    <div class="dv">typed actions — the calls the agent makes to do work</div>
+  </div>
+  <div class="dock" style="right:64px; top:868px;">
+    <div class="dk"><span class="b">▸</span> Skills</div>
+    <div class="dv">SKILL.md expertise, loaded on demand</div>
+  </div>
+  <div class="dock" style="right:64px; top:954px;">
+    <div class="dk"><span class="b">▸</span> MCP Servers</div>
+    <div class="dv">external tools, connected over the protocol</div>
+  </div>
+  <!-- left side -->
+  <div class="dock l" style="left:64px; top:782px;">
+    <div class="dk">Sandbox <span class="b">◂</span></div>
+    <div class="dv">an isolated filesystem + shell to run in</div>
+  </div>
+  <div class="dock l" style="left:64px; top:868px;">
+    <div class="dk">Sessions <span class="b">◂</span></div>
+    <div class="dv">named conversation state, with context compaction</div>
+  </div>
+  <div class="dock l" style="left:64px; top:954px;">
+    <div class="dk">Durability <span class="b">◂</span></div>
+    <div class="dv">the harness recovers and resumes the loop</div>
+  </div>
+
+  <!-- KEY LINE -->
+  <div class="keyline">
+    <div class="kl-lab">how it runs</div>
+    <div class="kl">The agent is given a <b>task — not a pre-defined series of steps</b> — and runs the loop, turn after turn, <b>until the work is done.</b></div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div class="lft"><span class="cmark"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Reason · Act · Observe — the agent's core loop</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Channel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 12;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 10;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE LOCKUP ─────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 14px;
+    z-index: 10;
+  }
+  .title .mark { width: 92px; height: 92px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── DECK ──────────────────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 10;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 27px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    max-width: 56ch;
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+  }
+
+  /* ── THE DUCT — dominant graphic event ─────────────────────────── */
+  .stage {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    top: 470px;
+    bottom: 120px;
+    z-index: 2;
+  }
+  .stage svg { display: block; width: 100%; height: 100%; }
+
+  /* Entry / exit reading labels (HTML overlay, protected) */
+  .endcap {
+    position: absolute;
+    z-index: 9;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .endcap .lab {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .endcap .val {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .endcap .sub {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    margin-top: 5px;
+    color: var(--stone-500);
+    font-weight: 400;
+  }
+
+  .entry { top: 472px; left: 64px; }
+  .entry .lab { color: var(--blue-2); }
+  .entry .val { font-size: 34px; color: var(--stone-900); margin-top: 7px; }
+
+  .exit { bottom: 120px; right: 64px; text-align: right; }
+  .exit .lab { color: var(--stone-50); }
+  .exit .val { font-size: 34px; color: var(--stone-50); margin-top: 7px; }
+  .exit .sub { color: rgba(250,250,249,0.75); }
+
+  /* Port labels along the channel */
+  .port {
+    position: absolute;
+    z-index: 9;
+    width: 300px;
+  }
+  .port .pk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 5px;
+  }
+  .port .pn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+  }
+  .port .pd {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.32;
+    color: var(--stone-700);
+    margin-top: 6px;
+  }
+  .port .pd b { color: var(--stone-900); font-weight: 600; }
+  .port.right { text-align: right; left: auto; }
+
+  /* Synthesis line */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 64px;
+    z-index: 10;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.34;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 13px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 11;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+  .colophon .cmark { width: 16px; height: 16px; vertical-align: -3px; margin-right: 8px; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the channel between model and world</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">a task in · a result out</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Channel</span>
+      <span class="small">the harness between your model &amp; the world</span>
+    </span>
+  </div>
+  <div class="deck">
+    <div class="deck-big">The model <b>reasons</b>; the harness gives it reach. A task enters one end, the reasoning <em>flows the channel</em>, a finished result exits the other.</div>
+    <div class="deck-count">Object plate<br>The duct</div>
+  </div>
+
+  <!-- ── THE DUCT — dominant industrial channel ───────────────────── -->
+  <div class="stage">
+    <svg viewBox="0 0 1132 1210" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <!-- arrowhead for the flow -->
+        <marker id="flowhead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#007AFF"></path>
+        </marker>
+      </defs>
+
+      <!-- ============ DUCT BODY: top-left -> diagonal -> bottom-right ============ -->
+      <!-- Segment A: vertical intake at top-left -->
+      <rect x="40" y="0" width="300" height="372" fill="#f5f5f4" stroke="#1c1917" stroke-width="3"></rect>
+      <!-- inner channel lines (intake) -->
+      <line x1="105" y1="0" x2="105" y2="372" stroke="#d6d3d1" stroke-width="2"></line>
+      <line x1="275" y1="0" x2="275" y2="372" stroke="#d6d3d1" stroke-width="2"></line>
+
+      <!-- Flange ring at the very top (entry mouth) -->
+      <rect x="18" y="0" width="344" height="34" fill="#e7e5e4" stroke="#1c1917" stroke-width="3"></rect>
+      <line x1="80" y1="0" x2="80" y2="34" stroke="#1c1917" stroke-width="2"></line>
+      <line x1="160" y1="0" x2="160" y2="34" stroke="#1c1917" stroke-width="2"></line>
+      <line x1="240" y1="0" x2="240" y2="34" stroke="#1c1917" stroke-width="2"></line>
+      <line x1="300" y1="0" x2="300" y2="34" stroke="#1c1917" stroke-width="2"></line>
+
+      <!-- Elbow knuckle (top-left where vertical meets diagonal) -->
+      <path d="M40,300 L340,300 L340,372 L40,520 Z" fill="#e7e5e4" stroke="#1c1917" stroke-width="3"></path>
+
+      <!-- Segment B: the long DIAGONAL channel running down the poster -->
+      <path d="M40,372 L340,372 L1092,1010 L1092,1190 L792,1190 Z"
+            fill="#1c1917" stroke="#1c1917" stroke-width="3"></path>
+      <!-- diagonal inner channel guide lines (on dark) -->
+      <line x1="170" y1="372" x2="922" y2="1010" stroke="#44403c" stroke-width="2"></line>
+      <line x1="300" y1="430" x2="1052" y2="1068" stroke="#44403c" stroke-width="2"></line>
+
+      <!-- Exit flange / mouth at bottom-right -->
+      <rect x="792" y="1156" width="300" height="34" fill="#0c0a09" stroke="#1c1917" stroke-width="3"></rect>
+      <line x1="852" y1="1156" x2="852" y2="1190" stroke="#44403c" stroke-width="2"></line>
+      <line x1="922" y1="1156" x2="922" y2="1190" stroke="#44403c" stroke-width="2"></line>
+      <line x1="992" y1="1156" x2="992" y2="1190" stroke="#44403c" stroke-width="2"></line>
+      <line x1="1052" y1="1156" x2="1052" y2="1190" stroke="#44403c" stroke-width="2"></line>
+
+      <!-- ============ THE FLOW: blue current through the channel ============ -->
+      <!-- enters top, runs vertical, turns, runs diagonal to exit -->
+      <path d="M190,40 L190,396 L955,1045"
+            fill="none" stroke="#007AFF" stroke-width="13"
+            stroke-linejoin="miter" marker-end="url(#flowhead)"></path>
+      <!-- secondary thinner stream -->
+      <path d="M232,40 L232,386 L905,1058"
+            fill="none" stroke="#007AFF" stroke-width="5" opacity="0.45"></path>
+
+      <!-- ============ PORTS / VALVES / FITTINGS = flanged collars ============ -->
+      <!-- Each is a flange band crossing the duct where a label attaches -->
+
+      <!-- PORT 1 — Tools (on vertical intake) -->
+      <rect x="20" y="150" width="340" height="40" fill="#fafaf9" stroke="#1c1917" stroke-width="3"></rect>
+      <circle cx="190" cy="170" r="11" fill="#fafaf9" stroke="#007AFF" stroke-width="4"></circle>
+      <line x1="60" y1="150" x2="60" y2="190" stroke="#1c1917" stroke-width="2"></line>
+      <line x1="320" y1="150" x2="320" y2="190" stroke="#1c1917" stroke-width="2"></line>
+
+      <!-- PORT 2 — Skills (collar across the diagonal, upper) -->
+      <g transform="translate(420,591) rotate(40.3)">
+        <rect x="-22" y="-160" width="44" height="320" fill="#fafaf9" stroke="#1c1917" stroke-width="3"></rect>
+        <circle cx="0" cy="0" r="11" fill="#fafaf9" stroke="#007AFF" stroke-width="4"></circle>
+      </g>
+
+      <!-- PORT 3 — Sandbox (collar across the diagonal, mid) -->
+      <g transform="translate(542,695) rotate(40.3)">
+        <rect x="-22" y="-160" width="44" height="320" fill="#fafaf9" stroke="#1c1917" stroke-width="3"></rect>
+        <circle cx="0" cy="0" r="11" fill="#fafaf9" stroke="#007AFF" stroke-width="4"></circle>
+      </g>
+
+      <!-- PORT 4 — Sessions (collar across the diagonal, lower-mid) -->
+      <g transform="translate(664,798) rotate(40.3)">
+        <rect x="-22" y="-160" width="44" height="320" fill="#fafaf9" stroke="#1c1917" stroke-width="3"></rect>
+        <circle cx="0" cy="0" r="11" fill="#fafaf9" stroke="#007AFF" stroke-width="4"></circle>
+      </g>
+
+      <!-- PORT 5 — MCP servers (collar across the diagonal, lower) -->
+      <g transform="translate(787,902) rotate(40.3)">
+        <rect x="-22" y="-160" width="44" height="320" fill="#fafaf9" stroke="#1c1917" stroke-width="3"></rect>
+        <circle cx="0" cy="0" r="11" fill="#fafaf9" stroke="#007AFF" stroke-width="4"></circle>
+      </g>
+
+      <!-- Side branch fitting (MCP = external tools tapping in) -->
+      <path d="M787,902 L1010,902 L1085,830 L1085,890 L1010,962 L833,962 Z" fill="#f5f5f4" stroke="#1c1917" stroke-width="3"></path>
+      <rect x="1052" y="800" width="40" height="64" fill="#e7e5e4" stroke="#1c1917" stroke-width="3"></rect>
+      <line x1="1052" y1="820" x2="1092" y2="820" stroke="#1c1917" stroke-width="2"></line>
+      <line x1="1052" y1="844" x2="1092" y2="844" stroke="#1c1917" stroke-width="2"></line>
+
+      <!-- bolt dots on the entry flange for industrial feel -->
+      <circle cx="40" cy="17" r="3.5" fill="#1c1917"></circle>
+      <circle cx="120" cy="17" r="3.5" fill="#1c1917"></circle>
+      <circle cx="200" cy="17" r="3.5" fill="#1c1917"></circle>
+      <circle cx="280" cy="17" r="3.5" fill="#1c1917"></circle>
+      <circle cx="340" cy="17" r="3.5" fill="#1c1917"></circle>
+    </svg>
+
+    <!-- DURABLE EXECUTION — the casing the whole channel sits in -->
+    <div style="position:absolute; left:0; top:-2px; bottom:-2px; right:0; border:2px dashed var(--stone-300); pointer-events:none; z-index:1;"></div>
+  </div>
+
+  <!-- ENTRY label (protected, quiet field top-left) -->
+  <div class="endcap entry">
+    <div class="lab">Task in ▸</div>
+    <div class="val">A goal, stated</div>
+    <div class="sub">plain words · not a script</div>
+  </div>
+
+  <!-- EXIT label (on the dark mouth, bottom-right) -->
+  <div class="endcap exit">
+    <div class="lab">◂ Result out</div>
+    <div class="val">A finished result</div>
+    <div class="sub">work done · failures survived</div>
+  </div>
+
+  <!-- PORT LABELS along the channel — each on a quiet field beside its collar -->
+
+  <!-- Port 01 Tools — on the vertical intake (collar screen ~y 640); label to its right -->
+  <div class="port right" style="top:610px; right:64px; width:430px;">
+    <div class="pk">Port 01 · Tools</div>
+    <div class="pn">Tools</div>
+    <div class="pd"><b>Typed actions.</b> Functions the model can call to make controlled, safe changes to the systems around it.</div>
+  </div>
+
+  <!-- Port 02 Skills — collar screen ~(484,1061); label upper-right quiet field -->
+  <div class="port right" style="top:790px; right:64px; width:420px;">
+    <div class="pk">Port 02 · Skills</div>
+    <div class="pn">Skills</div>
+    <div class="pd"><b>SKILL.md.</b> Packaged expertise the agent loads on demand for task-specific guidance.</div>
+  </div>
+
+  <!-- Port 05 MCP — side branch fitting, screen ~(900,1280); upper-right -->
+  <div class="port right" style="top:970px; right:64px; width:300px;">
+    <div class="pk">Port 05 · MCP servers</div>
+    <div class="pn">MCP servers</div>
+    <div class="pd"><b>External tools.</b> A side fitting that taps outside services into the channel.</div>
+  </div>
+
+  <!-- Port 03 Sandbox — collar screen ~(606,1165); lower-left quiet field -->
+  <div class="port" style="top:1085px; left:64px; width:330px;">
+    <div class="pk">Port 03 · Sandbox</div>
+    <div class="pn">Sandbox</div>
+    <div class="pd"><b>fs + shell.</b> An isolated place to run code and edit files without touching your machine.</div>
+  </div>
+
+  <!-- Port 04 Sessions — collar screen ~(728,1268); lower-left quiet field -->
+  <div class="port" style="top:1265px; left:64px; width:330px;">
+    <div class="pk">Port 04 · Sessions</div>
+    <div class="pn">Sessions</div>
+    <div class="pd"><b>State + compaction.</b> Memory of the run, carried across turns and kept in budget.</div>
+  </div>
+
+  <!-- Casing label — the dashed casing around the whole channel -->
+  <div class="port right" style="top:1450px; right:64px; width:360px;">
+    <div class="pk">Casing · Durable execution</div>
+    <div class="pn">Durable execution</div>
+    <div class="pd"><b>The casing around the run.</b> The whole channel survives failures and restarts.</div>
+  </div>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    The model is the source of reasoning. <b>Flue is the channel</b> it flows through — tools, skills, sandbox,
+    sessions and MCP servers as fittings along the way. <em>You feed it a task; a finished result comes out.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>
+      <span class="mark cmark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>The channel between your model and the world
+    </div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
