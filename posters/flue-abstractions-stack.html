@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Stack · From Intent to Runtime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE LOCKUP ──────────────────────────────────────────────── */
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 4;
+  }
+  .head .left { display: flex; align-items: center; gap: 22px; }
+  .head .mark { width: 64px; height: 64px; }
+  .head .kick {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+  }
+  .head .kick .sub {
+    display: block;
+    color: var(--stone-500);
+    font-weight: 400;
+    margin-top: 5px;
+    letter-spacing: 0.2em;
+  }
+  .head .axis {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    line-height: 1.7;
+  }
+  .head .axis b { color: var(--stone-900); font-weight: 700; }
+
+  .title {
+    position: relative;
+    z-index: 4;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 6px;
+    margin-bottom: 4px;
+  }
+  .title h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 156px;
+    line-height: 0.78;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .title h1 em { font-style: normal; color: var(--blue); }
+  .subdeck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 10px;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 4;
+  }
+  .subdeck .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    letter-spacing: -0.018em;
+    color: var(--stone-900);
+    max-width: 70ch;
+  }
+  .subdeck .big b { font-weight: 700; }
+  .subdeck .big em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .subdeck .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── THE STACK — full-bleed stratified bands ──────────────────── */
+  .stack {
+    position: relative;
+    z-index: 3;
+    margin-left: -64px;
+    margin-right: -64px;
+    border-top: 1.5px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+  }
+  .band {
+    position: relative;
+    display: grid;
+    grid-template-columns: 232px 1fr;
+    border-bottom: 1.5px solid var(--stone-900);
+    min-height: 0;
+  }
+  .band:last-child { border-bottom: 0; }
+
+  /* Left gutter: stratum label + depth index */
+  .band .gutter {
+    padding: 16px 22px 16px 64px;
+    border-right: 1.5px solid var(--stone-900);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .band .depth {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: var(--blue-2);
+  }
+  .band .layer {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 33px;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+    margin-top: 8px;
+  }
+  .band .strata {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    margin-top: 9px;
+  }
+
+  /* Right field: member abstractions */
+  .band .members {
+    padding: 16px 64px 16px 28px;
+    display: grid;
+    gap: 22px;
+    align-content: center;
+  }
+  .band .members.c3 { grid-template-columns: repeat(3, 1fr); }
+  .band .members.c2 { grid-template-columns: repeat(2, 1fr); }
+  .band .members.c4 { grid-template-columns: repeat(4, 1fr); }
+
+  .mem .mn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--stone-900);
+  }
+  .mem .md {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.32;
+    color: var(--stone-700);
+    margin-top: 6px;
+  }
+  .mem .md b { color: var(--stone-900); font-weight: 600; }
+  .mem .tick {
+    width: 18px; height: 3px;
+    background: var(--blue);
+    margin-bottom: 8px;
+  }
+
+  /* blue solid stratum — figure/ground */
+  .band.solid { background: var(--blue); }
+  .band.solid .gutter { border-right-color: rgba(250,250,249,0.4); }
+  .band.solid .depth { color: rgba(250,250,249,0.85); }
+  .band.solid .layer { color: var(--stone-50); }
+  .band.solid .strata { color: rgba(250,250,249,0.8); }
+  .band.solid .mem .mn { color: var(--stone-50); }
+  .band.solid .mem .md { color: rgba(250,250,249,0.92); }
+  .band.solid .mem .md b { color: var(--stone-50); }
+  .band.solid .mem .tick { background: var(--stone-50); }
+
+  /* dark base stratum — the metal */
+  .band.base { background: var(--stone-950); }
+  .band.base .gutter { border-right-color: rgba(250,250,249,0.22); }
+  .band.base .depth { color: var(--blue-lt); }
+  .band.base .layer { color: var(--stone-50); }
+  .band.base .strata { color: var(--stone-400); }
+  .band.base .mem .mn { color: var(--stone-50); }
+  .band.base .mem .md { color: rgba(250,250,249,0.78); }
+  .band.base .mem .md b { color: var(--blue-lt); }
+  .band.base .mem .tick { background: var(--blue-lt); }
+
+  /* depends-on axis arrow column, sits in the gutter strip */
+  .axisbar {
+    position: absolute;
+    left: 30px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: var(--blue);
+    z-index: 4;
+    pointer-events: none;
+  }
+  .axisbar::after {
+    content: "";
+    position: absolute;
+    left: -5px; bottom: -1px;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 9px solid var(--blue);
+  }
+  .axislab {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: rotate(-90deg) translateX(50%);
+    transform-origin: left center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    white-space: nowrap;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  /* ── FOOTER SYNTHESIS ─────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 86px;
+    z-index: 4;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 13px;
+    gap: 30px;
+  }
+  .synth .line {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.34;
+    letter-spacing: -0.013em;
+    color: var(--stone-900);
+    max-width: 64ch;
+  }
+  .synth .line b { font-weight: 700; }
+  .synth .line em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .synth .reads {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    text-align: right;
+    flex: 0 0 auto;
+    line-height: 1.8;
+  }
+  .synth .reads b { color: var(--blue-2); font-weight: 700; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">a layered cross-section</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · the stack</div>
+      <div class="meta">from intent down to the metal</div>
+    </div>
+  </div>
+
+  <!-- HEAD -->
+  <div class="head">
+    <div class="left">
+      <span class="mark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <div class="kick">
+        Field section · six strata
+        <span class="sub">read top → bottom</span>
+      </div>
+    </div>
+    <div class="axis">
+      <div><b>↑ intent</b> &nbsp;closer to the goal</div>
+      <div><b>↓ runtime</b> &nbsp;closer to the metal</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <h1>The <em>Stack</em></h1>
+  </div>
+  <div class="subdeck">
+    <div class="big">An agent is one column of layers — from <b>intent</b> at the surface down to the <b>runtime</b> at the base. <em>Each stratum depends on the one beneath it.</em></div>
+    <div class="count">From intent<br>to runtime</div>
+  </div>
+
+  <!-- THE STACK -->
+  <section class="stack">
+    <div class="axisbar"></div>
+    <div class="axislab">depends on · runs on</div>
+
+    <!-- 1 · INTENT -->
+    <div class="band">
+      <div class="gutter">
+        <div class="depth">01 · surface</div>
+        <div class="layer">Instructions<br>&amp; Model</div>
+        <div class="strata">the brain · the goal</div>
+      </div>
+      <div class="members c3">
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Instructions</div>
+          <div class="md">The <b>goal in plain words</b> — a desired outcome, not a script to follow.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Model</div>
+          <div class="md">The LLM that reasons and picks the next action. <b>anthropic/claude-sonnet-4-6</b>.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Reasoning Level</div>
+          <div class="md">How hard it thinks, set <b>per profile</b> for the task at hand.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 · CAPABILITIES (blue solid figure/ground) -->
+    <div class="band solid">
+      <div class="gutter">
+        <div class="depth">02 · capabilities</div>
+        <div class="layer">Tools · Skills<br>Subagents</div>
+        <div class="strata">what it can reach</div>
+      </div>
+      <div class="members c4">
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Tool</div>
+          <div class="md">A <b>typed, model-callable</b> action into your own systems.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Skill</div>
+          <div class="md">Packaged know-how in a <b>SKILL.md</b>, loaded on demand.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Subagent</div>
+          <div class="md">A <b>delegated specialist</b> spun up for a focused task.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">MCP Server</div>
+          <div class="md">External tools over the <b>Model Context Protocol</b>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · MEMORY & STATE -->
+    <div class="band">
+      <div class="gutter">
+        <div class="depth">03 · state</div>
+        <div class="layer">Sessions ·<br>Context</div>
+        <div class="strata">memory · compaction</div>
+      </div>
+      <div class="members c3">
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Session</div>
+          <div class="md">Named conversation state — <b>one op at a time</b>, resumable.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Context / Memory</div>
+          <div class="md">The working window the agent <b>reasons over</b> across turns.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Compaction</div>
+          <div class="md">Folds history to hold <b>token reserves</b> as work runs long.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 · EXECUTION BOUNDARY -->
+    <div class="band">
+      <div class="gutter">
+        <div class="depth">04 · boundary</div>
+        <div class="layer">Sandbox<br>Tiers</div>
+        <div class="strata">the execution wall</div>
+      </div>
+      <div class="members c3">
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Virtual</div>
+          <div class="md">Default — <b>in-memory, just-bash</b>. No host access at all.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Local</div>
+          <div class="md"><b>local()</b> — the host filesystem and shell, directly.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Remote</div>
+          <div class="md">Provider containers — <b>Daytona, Cloudflare Sandbox</b>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 · RELIABILITY -->
+    <div class="band">
+      <div class="gutter">
+        <div class="depth">05 · reliability</div>
+        <div class="layer">Durable ·<br>Observable</div>
+        <div class="strata">survive · see inside</div>
+      </div>
+      <div class="members c2">
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Durable Execution</div>
+          <div class="md">Runs that <b>survive failures and restarts</b> and pick up where they left off.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Observability</div>
+          <div class="md">Every step traced through <b>OpenTelemetry, Sentry, Braintrust</b>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 · RUNTIME / BASE (dark) -->
+    <div class="band base">
+      <div class="gutter">
+        <div class="depth">06 · base</div>
+        <div class="layer">Runtime</div>
+        <div class="strata">powered by Pi</div>
+      </div>
+      <div class="members c3">
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Runtime</div>
+          <div class="md">The execution environment everything above <b>runs on</b>.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Powered by Pi</div>
+          <div class="md">The engine that <b>drives the agent loop</b> beneath the harness.</div>
+        </div>
+        <div class="mem">
+          <div class="tick"></div>
+          <div class="mn">Triggers</div>
+          <div class="md">CLI · HTTP route · channels · <b>schedule</b> — how a run begins.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    <div class="line">
+      Read the column top to bottom and you read an agent whole: a <b>model</b> given <b>instructions</b>,
+      <b>equipped</b>, holding <b>state</b>, walled by a <b>sandbox</b>, kept <b>durable</b> —
+      <em>all of it standing on the runtime.</em>
+    </div>
+    <div class="reads">
+      Higher = intent<br>
+      Lower = the metal<br>
+      <b>Every layer rests on Pi</b>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Six strata · one agent, in cross-section</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

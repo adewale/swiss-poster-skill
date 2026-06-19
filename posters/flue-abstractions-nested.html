@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Model, Contained · Nested Abstractions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ───────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 4;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 116px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .word em { font-style: normal; color: var(--blue); }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 18px;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    max-width: 74ch;
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── STAGE: the nested-containment diagram ───────────────────────── */
+  .stage {
+    position: relative;
+    height: 1150px;
+    z-index: 2;
+  }
+
+  /* concentric frames — each a real container, drawn as a hard rect */
+  .frame {
+    position: absolute;
+    border: 2px solid var(--stone-900);
+    background: transparent;
+  }
+  /* layer tab — the tracked-caps name of the boundary, top-left inset */
+  .frame > .ftab {
+    position: absolute;
+    top: 0; left: 0;
+    transform: translateY(-50%);
+    background: var(--stone-50);
+    padding: 0 12px 0 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--stone-900);
+    white-space: nowrap;
+  }
+  .frame > .ftab .n {
+    color: var(--blue-2);
+    margin-right: 9px;
+  }
+  .frame > .fnote {
+    position: absolute;
+    bottom: 8px; left: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    white-space: nowrap;
+  }
+
+  /* outermost — RUNTIME */
+  .f-runtime { inset: 0; }
+  /* SANDBOX */
+  .f-sandbox { top: 96px; left: 88px; right: 88px; bottom: 96px; }
+  /* HARNESS — solid blue field, the figure */
+  .f-harness {
+    top: 244px; left: 218px; right: 218px; bottom: 244px;
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .f-harness > .ftab { background: var(--blue); color: var(--stone-50); }
+  .f-harness > .ftab .n { color: rgba(250,250,249,0.78); }
+  .f-harness > .fnote { color: rgba(250,250,249,0.85); }
+
+  /* innermost — MODEL, the brain */
+  .f-model {
+    top: 392px; left: 372px; right: 372px; bottom: 392px;
+    background: var(--stone-900);
+    border-color: var(--stone-900);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+  }
+  .f-model .mlab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-lt);
+  }
+  .f-model .mname {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--stone-50);
+    margin: 12px 0 12px 0;
+  }
+  .f-model .mid {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    color: var(--blue-lt);
+  }
+  .f-model .mdef {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.4;
+    color: rgba(250,250,249,0.82);
+    margin-top: 14px;
+    max-width: 32ch;
+  }
+
+  /* center scale label inside harness, above the model box */
+  .core-eq {
+    position: absolute;
+    top: 300px; left: 0; right: 0;
+    text-align: center;
+    z-index: 3;
+  }
+  .core-eq .ce {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: var(--stone-50);
+  }
+  .core-eq .ce .op { color: rgba(250,250,249,0.6); font-weight: 300; }
+
+  /* ── DOCKED CHIPS — items pinned to the boundary they cross ──────── */
+  .dock {
+    position: absolute;
+    z-index: 5;
+    width: 244px;
+    background: var(--stone-50);
+    border: 1.5px solid var(--stone-900);
+    padding: 8px 11px 9px 11px;
+  }
+  .dock .dk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--stone-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .dock .dk .on {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: var(--blue-2);
+    flex: 0 0 auto;
+  }
+  .dock .dv {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.32;
+    color: var(--stone-700);
+    margin-top: 5px;
+  }
+  .dock .dv b { color: var(--stone-900); font-weight: 600; }
+  /* a connector tick from the chip toward its boundary */
+  .dock::after {
+    content: "";
+    position: absolute;
+    background: var(--stone-900);
+  }
+  .dock.tick-r::after { right: -16px; top: 50%; width: 16px; height: 2px; transform: translateY(-50%); }
+  .dock.tick-l::after { left: -16px; top: 50%; width: 16px; height: 2px; transform: translateY(-50%); }
+  .dock.tick-d::after { bottom: -16px; left: 28px; width: 2px; height: 16px; }
+  .dock.tick-u::after { top: -16px; left: 28px; width: 2px; height: 16px; }
+
+  /* chip docked on the blue harness boundary — invert tone */
+  .dock.on-blue { border-color: var(--blue-2); }
+  .dock.on-blue .dk { color: var(--blue-2); }
+
+  /* ── LEGEND STRIP under the diagram ──────────────────────────────── */
+  .legend {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 96px;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 4px solid var(--blue);
+    padding-top: 11px;
+  }
+  .legend .lc { padding-right: 22px; border-right: 1px solid var(--stone-200); }
+  .legend .lc:last-child { border-right: 0; padding-right: 0; }
+  .legend .lk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--blue-2);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend .lk .sw {
+    width: 13px; height: 13px; flex: 0 0 auto;
+    border: 1.5px solid var(--stone-900);
+  }
+  .legend .lk .sw.s1 { background: var(--stone-50); }
+  .legend .lk .sw.s2 { background: var(--stone-50); border-style: dashed; }
+  .legend .lk .sw.s3 { background: var(--blue); border-color: var(--blue); }
+  .legend .lk .sw.s4 { background: var(--stone-900); border-color: var(--stone-900); }
+  .legend .ld {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.34;
+    color: var(--stone-700);
+  }
+  .legend .ld b { color: var(--stone-900); font-weight: 600; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">an llm running inside a harness</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">nested containment · figure &amp; ground</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">The Model,<br><em>Contained</em></span>
+    <span class="tag">
+      <span class="big">Inside the Harness</span>
+      <span class="small">model · harness · sandbox · runtime</span>
+    </span>
+  </div>
+  <div class="deck">
+    <div class="deck-big">An agent is a <b>model</b> running inside a <b>harness</b> — wrapped in a sandbox, carried by a runtime. <em>Read it from the center out.</em></div>
+    <div class="deck-count">Containment<br>core → edge</div>
+  </div>
+
+  <!-- STAGE — the dominant graphic event: four nested frames -->
+  <section class="stage" aria-label="Nested containment diagram">
+
+    <!-- RUNTIME (outermost) -->
+    <div class="frame f-runtime">
+      <span class="ftab"><span class="n">04</span>Runtime</span>
+      <span class="fnote">execution environment · powered by Pi · supplies the trigger</span>
+    </div>
+
+    <!-- SANDBOX -->
+    <div class="frame f-sandbox">
+      <span class="ftab"><span class="n">03</span>Sandbox</span>
+      <span class="fnote">virtual · local() · remote — choose the narrowest that fits</span>
+    </div>
+
+    <!-- HARNESS (blue field — the figure) -->
+    <div class="frame f-harness">
+      <span class="ftab"><span class="n">02</span>Harness</span>
+      <span class="fnote">the initialized environment around the model</span>
+    </div>
+
+    <!-- core scale label -->
+    <div class="core-eq">
+      <div class="ce">Model <span class="op">+</span> Instructions <span class="op">→</span> the loop</div>
+    </div>
+
+    <!-- MODEL (innermost, the brain) -->
+    <div class="frame f-model">
+      <span class="ftab" style="background:var(--stone-900);color:var(--stone-50);"><span class="n" style="color:var(--blue-lt);">01</span>Model</span>
+      <div class="mlab">the reasoning core</div>
+      <div class="mname">claude-<br>sonnet-4-6</div>
+      <div class="mid">anthropic/claude-sonnet-4-6</div>
+      <div class="mdef">The LLM that thinks over the task and picks the next action — swappable, the rest stays the same.</div>
+    </div>
+
+    <!-- ── DOCKED CHIPS, pinned to the boundary each one crosses ── -->
+
+    <!-- ON THE HARNESS EDGE -->
+    <!-- Instructions: the goal entering the harness, top-left -->
+    <div class="dock on-blue tick-d" style="top:166px; left:96px;">
+      <div class="dk"><span>Instructions</span><span class="on">→ harness</span></div>
+      <div class="dv">The <b>goal</b>, in plain words. You state an outcome, not a script.</div>
+    </div>
+
+    <!-- Tools: typed action crossing into the model -->
+    <div class="dock tick-d" style="top:166px; right:96px;">
+      <div class="dk"><span>Tools</span><span class="on">→ harness</span></div>
+      <div class="dv">Typed, <b>model-callable actions</b> the agent invokes to do work.</div>
+    </div>
+
+    <!-- Skills: loadable expertise -->
+    <div class="dock on-blue tick-u" style="bottom:166px; left:96px;">
+      <div class="dk"><span>Skills</span><span class="on">→ harness</span></div>
+      <div class="dv"><b>SKILL.md</b> expertise the model loads on demand.</div>
+    </div>
+
+    <!-- Subagents: delegated specialists -->
+    <div class="dock tick-u" style="bottom:166px; right:96px;">
+      <div class="dk"><span>Subagents</span><span class="on">→ harness</span></div>
+      <div class="dv">Delegated <b>specialists</b> the agent spawns for focused work.</div>
+    </div>
+
+    <!-- Sessions: docked left-center on the harness boundary -->
+    <div class="dock tick-r" style="top:520px; left:-16px;">
+      <div class="dk"><span>Sessions</span><span class="on">↺ state</span></div>
+      <div class="dv">Named, <b>resumable</b> state — one op at a time. Context held by compaction &amp; token reserves.</div>
+    </div>
+
+    <!-- Channels: docked right-center -->
+    <div class="dock tick-l" style="top:520px; right:-16px;">
+      <div class="dk"><span>Channels</span><span class="on">⇄ in/out</span></div>
+      <div class="dv"><b>Slack · Teams · Discord · GitHub</b> — verified events the agent answers.</div>
+    </div>
+
+    <!-- MCP servers: on the sandbox boundary, lower-left -->
+    <div class="dock tick-r" style="top:744px; left:-16px;">
+      <div class="dk"><span>MCP Servers</span><span class="on">→ sandbox</span></div>
+      <div class="dv">External, <b>authenticated tools</b> via the Model Context Protocol.</div>
+    </div>
+
+    <!-- Durable execution: on the runtime boundary, lower-right -->
+    <div class="dock tick-l" style="top:744px; right:-16px;">
+      <div class="dk"><span>Durable Exec.</span><span class="on">→ runtime</span></div>
+      <div class="dv">Long runs that <b>survive failures &amp; restarts</b> without losing progress.</div>
+    </div>
+
+  </section>
+
+  <!-- LEGEND — what each frame means, with swatches matching the diagram -->
+  <section class="legend" aria-label="Containment legend">
+    <div class="lc">
+      <div class="lk"><span class="sw s4"></span>01 · Model</div>
+      <div class="ld">The brain. <b>Reasons</b> over the task and chooses the next action.</div>
+    </div>
+    <div class="lc">
+      <div class="lk"><span class="sw s3"></span>02 · Harness</div>
+      <div class="ld">The environment <b>initialized around</b> the model — its tools, skills, memory.</div>
+    </div>
+    <div class="lc">
+      <div class="lk"><span class="sw s2"></span>03 · Sandbox</div>
+      <div class="ld">The <b>filesystem &amp; shell boundary</b> where real work safely happens.</div>
+    </div>
+    <div class="lc">
+      <div class="lk"><span class="sw s1"></span>04 · Runtime</div>
+      <div class="ld">The <b>execution env</b>, powered by Pi — observable end to end.</div>
+    </div>
+  </section>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Observability: OpenTelemetry · Sentry · Braintrust — visible at every layer</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

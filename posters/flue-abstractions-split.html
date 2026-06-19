@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Two Modes · Autonomy ⟷ Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — accent on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accent on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+    background: var(--stone-50);
+  }
+
+  /* ── THE SPLIT — dark left field, light right field ──────────────── */
+  .field-dark {
+    position: absolute;
+    top: 0; left: 0;
+    width: 630px; height: 1800px;
+    background: var(--stone-950);
+    z-index: 0;
+  }
+  .field-light {
+    position: absolute;
+    top: 0; right: 0;
+    width: 630px; height: 1800px;
+    background: var(--stone-50);
+    z-index: 0;
+  }
+  /* hairline seam */
+  .seam {
+    position: absolute;
+    top: 0; left: 630px;
+    width: 1px; height: 1800px;
+    background: var(--blue);
+    z-index: 1;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    z-index: 9;
+  }
+  /* left two corners sit on the dark field → light brackets */
+  .corner.tl { top: 22px; left: 22px; border: 2px solid var(--stone-50); border-right: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border: 2px solid var(--stone-50); border-right: 0; border-top: 0; }
+  /* right two corners on the light field → dark brackets */
+  .corner.tr { top: 22px; right: 22px; border: 2px solid var(--stone-900); border-left: 0; border-bottom: 0; }
+  .corner.br { bottom: 22px; right: 22px; border: 2px solid var(--stone-900); border-left: 0; border-top: 0; }
+
+  /* ── TOPBAR — split colored across the seam ─────────────────────── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 6;
+  }
+  .topbar .left { color: var(--stone-50); }
+  .topbar .left .meta { color: var(--stone-400); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; color: var(--stone-900); }
+  .topbar .right .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+
+  /* Flue glyph mark, rebuilt from favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { display: block; }
+  /* on dark field the inner squares are the dark stone; on light they're light */
+  .mark.on-dark i { background: var(--stone-950); }
+  .mark.on-light i { background: var(--stone-50); }
+
+  /* ── TITLE LOCKUP ──────────────────────────────────────────────── */
+  .titlewrap { position: relative; z-index: 6; }
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 14px;
+  }
+  .kicker .mark { width: 64px; height: 64px; }
+  .kicker .ktext {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue);
+  }
+  .kicker .ktext span { display:block; color: var(--stone-500); font-weight: 400; margin-top: 4px; letter-spacing: 0.2em; }
+
+  /* HERO — the big crossover word using mix-blend-difference.
+     White text on difference inverts over both fields and stays fully legible. */
+  .hero {
+    position: relative;
+    z-index: 7;
+    margin: 4px 0 0 0;
+  }
+  .hero .line {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 166px;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    color: #ffffff;
+    mix-blend-mode: difference;
+    white-space: nowrap;
+  }
+  .hero .line.two { margin-left: -2px; }
+  /* the arrows row, also crossing the seam */
+  .hero .modes {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    mix-blend-mode: difference;
+    margin-top: 16px;
+    white-space: nowrap;
+  }
+  .hero .modes b { font-weight: 700; }
+  .hero .modes .op { font-weight: 300; }
+
+  /* ── TWO-COLUMN BODY ───────────────────────────────────────────── */
+  .columns {
+    position: absolute;
+    top: 470px;
+    left: 0; right: 0;
+    height: 1000px;
+    z-index: 6;
+    display: grid;
+    grid-template-columns: 630px 630px;
+  }
+  .col { padding: 0 56px; }
+  .col.dark { color: var(--stone-50); }
+  .col.light { color: var(--stone-900); }
+
+  .colhead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 4px solid var(--blue);
+    padding-top: 10px;
+  }
+  .colhead .ch-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .col.dark .colhead .ch-num { color: var(--blue-lt); }
+  .col.light .colhead .ch-num { color: var(--blue-2); }
+  .colhead .ch-mode {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .col.dark .colhead .ch-mode { color: var(--stone-400); }
+  .col.light .colhead .ch-mode { color: var(--stone-500); }
+
+  .col .bigname {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 78px;
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+    margin-top: 12px;
+  }
+  .col .tagline {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    margin-top: 16px;
+    max-width: 30ch;
+  }
+  .col.dark .tagline { color: var(--stone-300); }
+  .col.light .tagline { color: var(--stone-700); }
+  .col .tagline b { font-weight: 700; }
+  .col.dark .tagline b { color: var(--stone-50); }
+  .col.light .tagline b { color: var(--stone-900); }
+
+  /* the trait list */
+  .traits { margin-top: 26px; }
+  .trait {
+    border-top: 1.5px solid;
+    padding: 13px 0 13px 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .col.dark .trait { border-color: rgba(250,250,249,0.18); }
+  .col.light .trait { border-color: var(--stone-200); }
+  .trait:last-child { border-bottom: 1.5px solid; }
+  .col.dark .trait:last-child { border-bottom-color: rgba(250,250,249,0.18); }
+  .col.light .trait:last-child { border-bottom-color: var(--stone-200); }
+
+  .trait .t-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .trait .t-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    font-size: 13.5px;
+    line-height: 1.32;
+    margin-top: 5px;
+  }
+  .col.dark .trait .t-desc { color: var(--stone-400); }
+  .col.light .trait .t-desc { color: var(--stone-500); }
+  .trait .t-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .col.dark .trait .t-code { color: var(--blue-lt); }
+  .col.light .trait .t-code { color: var(--blue-2); }
+
+  /* shared-with line at base of each column */
+  .col .shared-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 18px;
+    line-height: 1.5;
+  }
+  .col.dark .shared-note { color: var(--stone-500); }
+  .col.light .shared-note { color: var(--stone-500); }
+  .col .shared-note b { color: var(--blue); font-weight: 700; }
+
+  /* ── SHARED SEAM — primitives straddling the boundary ──────────── */
+  .seamband {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 240px;
+    z-index: 8;
+  }
+  .seamband .sb-label {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 100%;
+    margin-bottom: 14px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #ffffff;
+    mix-blend-mode: difference;
+  }
+  .sb-strip {
+    background: var(--blue);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 64px 20px 64px;
+  }
+  .sb-strip .sb-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .sb-strip .sb-title .sb-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.85);
+  }
+  .sb-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .sb-cell {
+    border-left: 1px solid rgba(250,250,249,0.3);
+    padding: 0 14px 0 14px;
+  }
+  .sb-cell:first-child { border-left: 0; padding-left: 0; }
+  .sb-cell .sc-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    color: var(--stone-50);
+    margin-bottom: 7px;
+    line-height: 1;
+  }
+  .sb-cell .sc-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.28;
+    color: rgba(250,250,249,0.9);
+  }
+
+  /* ── COMMON GROUND strip (durable / observability / channels) ──── */
+  .common {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 92px;
+    z-index: 6;
+    border-top: 1px dotted var(--stone-400);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .common .cg-lead {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    max-width: 60ch;
+  }
+  .common .cg-lead b { font-weight: 700; }
+  .common .cg-lead em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* ── COLOPHON ──────────────────────────────────────────────────── */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 6;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- THE SPLIT FIELDS -->
+  <div class="field-dark" aria-hidden="true"></div>
+  <div class="field-light" aria-hidden="true"></div>
+  <div class="seam" aria-hidden="true"></div>
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="left">
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">autonomous · self-directed</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · two modes</div>
+      <div class="meta">code-guided · deterministic</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="titlewrap">
+    <div class="kicker">
+      <span class="mark on-dark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <span class="ktext">One framework, two ways to run a model
+        <span>organized by which execution mode they serve</span>
+      </span>
+    </div>
+
+    <!-- HERO crossover word — mix-blend-difference over both fields -->
+    <div class="hero">
+      <div class="line one">Two&nbsp;Modes</div>
+      <div class="modes"><b>Autonomy</b> <span class="op">⟷</span> <b>Control</b></div>
+    </div>
+  </div>
+
+  <!-- TWO COLUMNS -->
+  <div class="columns">
+
+    <!-- LEFT: AGENT (dark) -->
+    <div class="col dark">
+      <div class="colhead">
+        <span class="ch-num">Mode 01</span>
+        <span class="ch-mode">you give a goal, not a script</span>
+      </div>
+      <div class="bigname">Agent</div>
+      <div class="tagline">An LLM running inside a harness. <b>Autonomous, programmable, headless</b> — it runs the loop on its own.</div>
+
+      <div class="traits">
+        <div class="trait">
+          <div>
+            <div class="t-name">The agent loop</div>
+            <div class="t-desc">Free reason → act → observe, repeated until the task is done.</div>
+          </div>
+          <div class="t-code">reason→act→observe</div>
+        </div>
+        <div class="trait">
+          <div>
+            <div class="t-name">Instructions</div>
+            <div class="t-desc">The task and context in plain words; the agent decides the steps.</div>
+          </div>
+          <div class="t-code">instructions:</div>
+        </div>
+        <div class="trait">
+          <div>
+            <div class="t-name">Reasoning level</div>
+            <div class="t-desc">How hard it thinks before each action — tuned to the work.</div>
+          </div>
+          <div class="t-code">reasoning</div>
+        </div>
+        <div class="trait">
+          <div>
+            <div class="t-name">Subagents</div>
+            <div class="t-desc">Spawn helpers to fan out and own sub-tasks in parallel.</div>
+          </div>
+          <div class="t-code">spawn()</div>
+        </div>
+      </div>
+
+      <div class="shared-note">Built on the <b>shared</b> primitives below ↓</div>
+    </div>
+
+    <!-- RIGHT: WORKFLOW (light) -->
+    <div class="col light">
+      <div class="colhead">
+        <span class="ch-num">Mode 02</span>
+        <span class="ch-mode">your code guides the reasoning</span>
+      </div>
+      <div class="bigname">Workflow</div>
+      <div class="tagline">Structured automation where <b>your code drives reasoning</b> from a clear input to a finished result.</div>
+
+      <div class="traits">
+        <div class="trait">
+          <div>
+            <div class="t-name">FlueContext</div>
+            <div class="t-desc">ctx carries id, payload, env, request, and logger into the run.</div>
+          </div>
+          <div class="t-code">ctx</div>
+        </div>
+        <div class="trait">
+          <div>
+            <div class="t-name">Harness init</div>
+            <div class="t-desc">Open a harness, then drive prompts step by step from code.</div>
+          </div>
+          <div class="t-code">ctx.init()</div>
+        </div>
+        <div class="trait">
+          <div>
+            <div class="t-name">Deterministic path</div>
+            <div class="t-desc">A clear input flows through code you control to one outcome.</div>
+          </div>
+          <div class="t-code">input → result</div>
+        </div>
+        <div class="trait">
+          <div>
+            <div class="t-name">Structured result</div>
+            <div class="t-desc">Returns a typed response your systems can rely on downstream.</div>
+          </div>
+          <div class="t-code">PromptResultResponse</div>
+        </div>
+      </div>
+
+      <div class="shared-note">Built on the <b>shared</b> primitives below ↓</div>
+    </div>
+
+  </div>
+
+  <!-- SHARED SEAM BAND -->
+  <div class="seamband">
+    <div class="sb-label">Shared by both modes — straddling the boundary</div>
+    <div class="sb-strip">
+      <div class="sb-title">
+        <span>The primitives in common</span>
+        <span class="sb-sub">equip either mode the same way</span>
+      </div>
+      <div class="sb-grid">
+        <div class="sb-cell">
+          <div class="sc-name">Model</div>
+          <div class="sc-desc">The reasoning core; swappable, e.g. claude-sonnet-4-6.</div>
+        </div>
+        <div class="sb-cell">
+          <div class="sc-name">Tools</div>
+          <div class="sc-desc">Typed, model-callable actions into your APIs.</div>
+        </div>
+        <div class="sb-cell">
+          <div class="sc-name">Skills</div>
+          <div class="sc-desc">Loadable expertise, packaged as SKILL.md.</div>
+        </div>
+        <div class="sb-cell">
+          <div class="sc-name">Sandbox</div>
+          <div class="sc-desc">fs + shell boundary; Virtual, Local, or Remote.</div>
+        </div>
+        <div class="sb-cell">
+          <div class="sc-name">Sessions</div>
+          <div class="sc-desc">Named state: prompt, skill, task, shell, compact.</div>
+        </div>
+        <div class="sb-cell">
+          <div class="sc-name">MCP server</div>
+          <div class="sc-desc">External tools via Model Context Protocol.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMON GROUND -->
+  <div class="common">
+    <div class="cg-lead">
+      Both modes inherit <b>durable execution</b> that survives failures and restarts,
+      <b>observability</b> through OpenTelemetry &amp; Sentry, and the same
+      <b>channels &amp; triggers</b> — CLI, HTTP route, verified events, schedule.
+      <em>Same primitives, two ways to run them.</em>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Autonomy ⟷ Control · one harness, two modes</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

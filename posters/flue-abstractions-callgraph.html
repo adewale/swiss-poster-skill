@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — How an Agent Runs · The Call Graph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 12;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ─────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 4;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 118px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .word b { color: var(--blue); }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 10px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 4;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── DIAGRAM STAGE ─────────────────────────────────────────────── */
+  .stage {
+    position: relative;
+    width: 1132px;
+    height: 1356px;
+    z-index: 4;
+  }
+  .stage svg.wires {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* Nodes — hard-edged rectangles */
+  .node {
+    position: absolute;
+    z-index: 3;
+    background: var(--stone-50);
+    border: 1.5px solid var(--stone-900);
+    padding: 9px 13px 10px 13px;
+  }
+  .node .nlab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 4px;
+  }
+  .node .nname {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+  }
+  .node .nname small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--stone-500);
+  }
+  .node .ndesc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.28;
+    color: var(--stone-700);
+    margin-top: 5px;
+  }
+  .node .ndesc b { color: var(--stone-900); font-weight: 600; }
+
+  /* Active spine nodes — blue fill */
+  .node.spine {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .node.spine .nlab { color: rgba(250,250,249,0.82); }
+  .node.spine .nname { color: var(--stone-50); }
+  .node.spine .nname small { color: rgba(250,250,249,0.78); }
+  .node.spine .ndesc { color: rgba(250,250,249,0.92); }
+  .node.spine .ndesc b { color: var(--stone-50); }
+
+  /* Entry/trigger nodes — quiet */
+  .node.entry { border-color: var(--stone-900); border-width: 1.5px; }
+  .node.entry .nname { font-size: 19px; }
+
+  /* Leaf / reachable resource nodes */
+  .node.leaf { border-color: var(--stone-400); }
+  .node.leaf .nname { font-size: 18px; }
+  .node.leaf .nlab { color: var(--stone-500); }
+
+  /* Result nodes — blue outline */
+  .node.result { border-color: var(--blue); border-width: 2px; }
+  .node.result .nname { font-size: 18px; color: var(--blue-2); }
+
+  /* Section band labels along the spine */
+  .band {
+    position: absolute;
+    z-index: 2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-400);
+  }
+
+  /* the operations cluster header chip */
+  .opschip {
+    position: absolute;
+    z-index: 3;
+    background: var(--stone-900);
+    color: var(--stone-50);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 6px 11px;
+  }
+  .opschip b { color: var(--blue-lt); }
+
+  /* operation tiles inside the session */
+  .op {
+    position: absolute;
+    z-index: 3;
+    border: 1.5px solid var(--stone-900);
+    background: var(--stone-50);
+    padding: 8px 11px 9px 11px;
+  }
+  .op .ok {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+  }
+  .op .od {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11px;
+    line-height: 1.22;
+    color: var(--stone-500);
+    margin-top: 3px;
+  }
+  .op.hot { border-color: var(--blue); }
+  .op.hot .ok { color: var(--blue-2); }
+
+  /* mono path tags floating near wires */
+  .wtag {
+    position: absolute;
+    z-index: 4;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+    color: var(--blue-2);
+    background: var(--stone-50);
+    padding: 1px 5px;
+  }
+  .wtag.dim { color: var(--stone-500); font-weight: 500; }
+
+  /* legend strip */
+  .legend {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 64px;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--stone-500);
+  }
+  .legend .li { display: flex; align-items: center; gap: 8px; }
+  .legend .sw { width: 22px; height: 12px; flex: 0 0 auto; }
+  .legend .sw.spine { background: var(--blue); }
+  .legend .sw.reach { border: 1.5px solid var(--stone-400); }
+  .legend .sw.res { border: 2px solid var(--blue); }
+  .legend b { color: var(--stone-900); font-weight: 700; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 5;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">how an agent executes at runtime</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · systems diagram</div>
+      <div class="meta">nodes are api surfaces · edges are real calls</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">How an<br>Agent <b>Runs</b></span>
+    <span class="tag">
+      <span class="big">The Call Graph</span>
+      <span class="small">entry → harness → session → result</span>
+    </span>
+  </div>
+
+  <div class="deck">
+    <div class="deck-big">A trigger wakes the agent; the harness opens a session; the session runs <b>one operation at a time</b> — <em>follow the blue spine.</em></div>
+    <div class="deck-count">Runtime map<br>A → Z</div>
+  </div>
+
+  <!-- ── DIAGRAM STAGE ─────────────────────────────────────────── -->
+  <div class="stage">
+
+    <!-- WIRES: every line encodes a true call/relationship -->
+    <svg class="wires" viewBox="0 0 1132 1356" preserveAspectRatio="none">
+      <defs>
+        <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.2" orient="auto" markerUnits="userSpaceOnUse">
+          <path d="M0,0 L8.5,4.2 L0,8.4 Z" fill="#007AFF"></path>
+        </marker>
+        <marker id="ahd" markerWidth="8" markerHeight="8" refX="6" refY="3.8" orient="auto" markerUnits="userSpaceOnUse">
+          <path d="M0,0 L7.5,3.8 L0,7.6 Z" fill="#a8a29e"></path>
+        </marker>
+      </defs>
+
+      <!-- ENTRY (4 triggers) → dispatch() bus -->
+      <path d="M150,118 L150,150 L408,150 L408,178" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+      <path d="M408,118 L408,178" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+      <path d="M672,118 L672,150 L444,150 L444,178" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+      <path d="M930,118 L930,150 L480,150 L480,178" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+
+      <!-- dispatch() → createAgent() (the spine begins) -->
+      <path d="M444,230 L444,266" fill="none" stroke="#007AFF" stroke-width="3" marker-end="url(#ah)"></path>
+
+      <!-- createAgent() → ctx.init() -->
+      <path d="M444,338 L444,376" fill="none" stroke="#007AFF" stroke-width="3" marker-end="url(#ah)"></path>
+      <!-- ctx.init() → FlueHarness -->
+      <path d="M444,448 L444,486" fill="none" stroke="#007AFF" stroke-width="3" marker-end="url(#ah)"></path>
+      <!-- FlueHarness → harness.session() → FlueSession -->
+      <path d="M444,590 L444,628" fill="none" stroke="#007AFF" stroke-width="3" marker-end="url(#ah)"></path>
+
+      <!-- FlueSession → operations cluster (one active op at a time) -->
+      <path d="M444,742 L444,772" fill="none" stroke="#007AFF" stroke-width="3" marker-end="url(#ah)"></path>
+
+      <!-- session/harness → reachable resources (right column) -->
+      <path d="M708,538 L905,538" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+      <path d="M708,538 L860,538 L860,628 L905,628" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+      <path d="M708,538 L860,538 L860,718 L905,718" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+      <path d="M708,538 L860,538 L860,808 L905,808" fill="none" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#ahd)"></path>
+
+      <!-- prompt() → Model → Results -->
+      <path d="M708,690 L905,538" fill="none" stroke="#007AFF" stroke-width="2" marker-end="url(#ah)"></path>
+
+      <!-- task() → detached child session (subagent loop back into a new FlueSession) -->
+      <path d="M250,838 L196,838 L196,672 L348,672" fill="none" stroke="#007AFF" stroke-width="2" stroke-dasharray="2,5" marker-end="url(#ah)"></path>
+
+      <!-- operations → Results (bottom) -->
+      <path d="M444,1010 L444,1048" fill="none" stroke="#007AFF" stroke-width="3" marker-end="url(#ah)"></path>
+
+      <!-- dispatch feeds a continuing instance (return loop up the left edge) -->
+      <path d="M905,1100 L1040,1100 L1040,204 L508,204" fill="none" stroke="#007AFF" stroke-width="1.5" stroke-dasharray="3,5" marker-end="url(#ah)"></path>
+    </svg>
+
+    <!-- band labels along the spine -->
+    <div class="band" style="left:0; top:196px;">A · Entry</div>
+    <div class="band" style="left:0; top:296px;">B · Init</div>
+    <div class="band" style="left:0; top:520px;">C · Run</div>
+    <div class="band" style="left:0; top:800px;">D · Operate</div>
+    <div class="band" style="left:0; top:1066px;">E · Return</div>
+
+    <!-- ── ENTRY ROW (4 triggers) ─────────────────────────────── -->
+    <div class="node entry" style="left:60px; top:42px; width:190px;">
+      <div class="nlab">trigger · on demand</div>
+      <div class="nname">CLI</div>
+      <div class="ndesc">Run it locally via <b>flue run</b>.</div>
+    </div>
+    <div class="node entry" style="left:318px; top:42px; width:190px;">
+      <div class="nlab">trigger · http</div>
+      <div class="nname">Route Handler</div>
+      <div class="ndesc"><b>Exposed &amp; protected</b> over HTTP.</div>
+    </div>
+    <div class="node entry" style="left:582px; top:42px; width:190px;">
+      <div class="nlab">trigger · events</div>
+      <div class="nname">Channels</div>
+      <div class="ndesc"><b>Verified events</b> — Slack, GitHub.</div>
+    </div>
+    <div class="node entry" style="left:840px; top:42px; width:190px;">
+      <div class="nlab">trigger · timer</div>
+      <div class="nname">Schedule</div>
+      <div class="ndesc">Kicked off on a <b>timer</b>.</div>
+    </div>
+
+    <!-- dispatch() bus -->
+    <div class="node" style="left:318px; top:178px; width:252px; border-width:2px; border-color:var(--stone-900);">
+      <div class="nlab">async delivery</div>
+      <div class="nname">dispatch()&nbsp;<small>→ instance</small></div>
+      <div class="ndesc">Delivers input asynchronously to a <b>continuing agent instance</b>.</div>
+    </div>
+
+    <!-- ── SPINE ───────────────────────────────────────────────── -->
+    <div class="node spine" style="left:318px; top:266px; width:252px;">
+      <div class="nlab">function · default export</div>
+      <div class="nname">createAgent()</div>
+      <div class="ndesc">Creates an agent initializer from <b>agents/&lt;name&gt;.ts</b>.</div>
+    </div>
+
+    <div class="node spine" style="left:318px; top:376px; width:252px;">
+      <div class="nlab">FlueContext · ctx</div>
+      <div class="nname">ctx.init()</div>
+      <div class="ndesc">Resolves id, payload, env, request, logger — returns the harness.</div>
+    </div>
+
+    <div class="node spine" style="left:318px; top:486px; width:390px;">
+      <div class="nlab">initialized environment</div>
+      <div class="nname">FlueHarness</div>
+      <div class="ndesc">Holds <b>sessions</b>, <b>shell</b>, and the <b>filesystem</b>. Calls harness.session() to open conversation state.</div>
+    </div>
+
+    <div class="node spine" style="left:318px; top:628px; width:390px;">
+      <div class="nlab">named conversation state</div>
+      <div class="nname">FlueSession</div>
+      <div class="ndesc">A named state inside the harness that runs <b>one active operation at a time</b>.</div>
+    </div>
+
+    <!-- ── OPERATIONS CLUSTER (the session runs ONE of these) ──── -->
+    <div class="opschip" style="left:318px; top:772px;">FlueSession runs <b>ONE</b> active operation</div>
+    <!-- operations frame -->
+    <div class="node" style="left:318px; top:802px; width:390px; height:208px; padding:0; border-width:1.5px; background:var(--stone-100);"></div>
+
+    <div class="op hot" style="left:330px; top:838px; width:120px;">
+      <div class="ok">prompt()</div>
+      <div class="od">Model op → text + usage.</div>
+    </div>
+    <div class="op" style="left:462px; top:838px; width:114px;">
+      <div class="ok">skill()</div>
+      <div class="od">Run a registered skill.</div>
+    </div>
+    <div class="op" style="left:588px; top:838px; width:108px;">
+      <div class="ok">shell()</div>
+      <div class="od">Run + record a cmd.</div>
+    </div>
+    <div class="op hot" style="left:330px; top:908px; width:120px;">
+      <div class="ok">task()</div>
+      <div class="od">Detached child = subagent.</div>
+    </div>
+    <div class="op" style="left:462px; top:908px; width:114px;">
+      <div class="ok">compact()</div>
+      <div class="od">Compress history.</div>
+    </div>
+    <div class="op" style="left:588px; top:908px; width:108px;">
+      <div class="ok">delete()</div>
+      <div class="od">Drop the session.</div>
+    </div>
+
+    <!-- subagent target marker (where task() spawns) -->
+    <div class="node leaf" style="left:80px; top:642px; width:160px; border-style:dashed; border-color:var(--blue-lt);">
+      <div class="nlab" style="color:var(--blue-2);">task() spawns</div>
+      <div class="nname">Child Session</div>
+      <div class="ndesc">Detached <b>subagent</b> with its own state.</div>
+    </div>
+
+    <!-- ── REACHABLE RESOURCES (right column) ──────────────────── -->
+    <div class="node leaf" style="left:905px; top:506px; width:172px;">
+      <div class="nlab">defineTool()</div>
+      <div class="nname">Tools</div>
+      <div class="ndesc">Typed actions &amp; ToolDefinitions.</div>
+    </div>
+    <div class="node leaf" style="left:905px; top:600px; width:172px;">
+      <div class="nlab">connectMcpServer()</div>
+      <div class="nname">MCP Servers</div>
+      <div class="ndesc">Remote tools adapted to Flue.</div>
+    </div>
+    <div class="node leaf" style="left:905px; top:694px; width:172px;">
+      <div class="nlab">Virtual · Local · Remote</div>
+      <div class="nname">Sandbox</div>
+      <div class="ndesc">+ FlueFs filesystem.</div>
+    </div>
+    <div class="node leaf" style="left:905px; top:788px; width:172px;">
+      <div class="nlab">anthropic</div>
+      <div class="nname">Model</div>
+      <div class="ndesc">claude-sonnet-4-6.</div>
+    </div>
+
+    <!-- ── RESULTS (bottom) ────────────────────────────────────── -->
+    <div class="node result" style="left:318px; top:1048px; width:188px;">
+      <div class="nlab">returned</div>
+      <div class="nname">PromptResponse</div>
+      <div class="ndesc" style="color:var(--stone-700);">Text + token usage + model.</div>
+    </div>
+    <div class="node result" style="left:520px; top:1048px; width:188px;">
+      <div class="nlab">returned · typed</div>
+      <div class="nname">PromptResultResponse&lt;T&gt;</div>
+      <div class="ndesc" style="color:var(--stone-700);">Validated structured data.</div>
+    </div>
+
+    <!-- wire tags (true call labels) -->
+    <div class="wtag dim" style="left:300px; top:142px;">→ dispatch()</div>
+    <div class="wtag" style="left:452px; top:240px;">ctx.init()</div>
+    <div class="wtag" style="left:452px; top:600px;">harness.session()</div>
+    <div class="wtag dim" style="left:730px; top:524px;">reachable from harness / session</div>
+    <div class="wtag" style="left:200px; top:660px;">task() ⇢ detach</div>
+    <div class="wtag" style="left:452px; top:1020px;">prompt() resolves</div>
+    <div class="wtag dim" style="left:1046px; top:640px; writing-mode:vertical-rl;">continuing instance ↺ dispatch()</div>
+
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="li"><span class="sw spine"></span><span>Active <b>spine</b> — the running thread</span></div>
+    <div class="li"><span class="sw reach"></span><span>Reachable resource</span></div>
+    <div class="li"><span class="sw res"></span><span>Returned result</span></div>
+    <div class="li"><span>Solid = call&nbsp;&nbsp;·&nbsp;&nbsp;Dashed = detach / loop&nbsp;&nbsp;·&nbsp;&nbsp;Arrow = direction</span></div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The call graph · one trigger, one harness, one session at a time</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

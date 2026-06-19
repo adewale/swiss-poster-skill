@@ -13,6 +13,11 @@ const POSTERS = [
   { html: 'ten-principles-for-bad-design.html',   png: 'ten-principles-for-bad-design.png' },
   { html: 'flue.html',                            png: 'flue.png' },
   { html: 'flue-agent-components.html',           png: 'flue-agent-components.png' },
+  { html: 'flue-abstractions-nested.html',        png: 'flue-abstractions-nested.png' },
+  { html: 'flue-abstractions-stack.html',         png: 'flue-abstractions-stack.png' },
+  { html: 'flue-abstractions-split.html',         png: 'flue-abstractions-split.png' },
+  { html: 'flue-abstractions-matrix.html',        png: 'flue-abstractions-matrix.png' },
+  { html: 'flue-abstractions-callgraph.html',     png: 'flue-abstractions-callgraph.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name
