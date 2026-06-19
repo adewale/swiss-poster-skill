@@ -197,9 +197,10 @@
   .entry .lab { color: var(--blue-2); }
   .entry .val { font-size: 34px; color: var(--stone-900); margin-top: 7px; }
 
-  .exit { bottom: 120px; right: 64px; text-align: right; }
-  .exit .lab { color: var(--stone-50); }
-  .exit .val { font-size: 34px; color: var(--stone-50); margin-top: 7px; }
+  .exit { bottom: 150px; left: 800px; right: auto; width: 396px; text-align: left;
+          background: var(--stone-950); padding: 13px 18px 14px; z-index: 12; box-sizing: border-box; }
+  .exit .lab { color: var(--blue-lt); }
+  .exit .val { font-size: 30px; color: var(--stone-50); margin-top: 6px; }
   .exit .sub { color: rgba(250,250,249,0.75); }
 
   /* Port labels along the channel */
@@ -424,7 +425,7 @@
   <!-- EXIT label (on the dark mouth, bottom-right) -->
   <div class="endcap exit">
     <div class="lab">◂ Result out</div>
-    <div class="val">A finished result</div>
+    <div class="val">Finished result</div>
     <div class="sub">work done · failures survived</div>
   </div>
 
@@ -466,7 +467,7 @@
   </div>
 
   <!-- Casing label — the dashed casing around the whole channel -->
-  <div class="port right" style="top:1450px; right:64px; width:360px;">
+  <div class="port" style="top:1486px; left:64px; width:360px;">
     <div class="pk">Casing · Durable execution</div>
     <div class="pn">Durable execution</div>
     <div class="pd"><b>The casing around the run.</b> The whole channel survives failures and restarts.</div>
