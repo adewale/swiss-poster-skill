@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Mismatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --gold:   #E8A317;   /* single accent — warning / the cliff signal */
+    --gold-d: #9a6c08;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 26px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* HERO HEADLINE */
+  .hero { margin-bottom: 20px; }
+  .hero .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.26em;
+    text-transform: uppercase; font-weight: 600; color: var(--stone-500); margin-bottom: 12px;
+    display:flex; align-items:center; gap: 13px;
+  }
+  .hero .kicker .sp { flex:1; height:2px; background: var(--stone-900); }
+  .hero h1 {
+    font-weight: 700; font-size: 68px; line-height: 0.9; letter-spacing: -0.035em;
+    color: var(--stone-900); max-width: 1060px;
+  }
+  .hero h1 b { color: var(--gold-d); font-weight: 700; }
+
+  /* SECTION LABEL above strip */
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 0;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+  .seclabel .amber { color: var(--gold-d); }
+
+  /* ====== FILMSTRIP ======
+     Each frame is one vertical panel. Internal Y-geometry is shared across all four:
+       - WORLD BAND   : top region, holds the rising horizon + world dot
+       - PROTOCOL LINE: a single solid stone rule at a FIXED y in every frame
+       - GAP BRACKET  : vertical span from world dot down to the protocol line
+     The protocol line never moves; the world dot climbs -> the bracket grows. */
+  .strip {
+    position: relative;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 2.5px solid var(--stone-900);
+    height: 1012px; overflow: hidden; background: var(--stone-50);
+  }
+  .frame { position: relative; overflow: hidden; }
+  .frame + .frame { border-left: 1.5px solid var(--stone-900); }
+  .frame.drop { background: var(--stone-950); }
+
+  /* frame header */
+  .fhdr { position: absolute; top: 16px; left: 18px; right: 18px; z-index: 6; }
+  .fnum {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone-500);
+  }
+  .fstate {
+    font-weight: 700; font-size: 31px; line-height: 0.92; letter-spacing: -0.02em;
+    margin-top: 6px; color: var(--stone-900);
+  }
+  .fstate .sm {
+    display:block; font-family:'IBM Plex Mono',monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-500); margin-top: 7px;
+  }
+  .frame.drop .fnum { color: var(--gold); }
+  .frame.drop .fstate { color: var(--stone-50); }
+  .frame.drop .fstate .sm { color: var(--gold); }
+
+  /* the moving world graphic — fixed zone in every frame: panel-y 138..608.
+     The protocol line lives near the BOTTOM of this zone at the same y in all four. */
+  .world { position: absolute; left: 0; right: 0; top: 138px; height: 470px; z-index: 2; }
+  .world svg { position:absolute; inset:0; width:100%; height:100%; overflow: visible; }
+
+  /* "world" tag that floats just above the climbing dot */
+  .wtag {
+    position: absolute; z-index: 5; left: 18px; right: 18px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .frame.drop .wtag { color: var(--gold); }
+
+  /* gap measurement tag, sits centred inside the widening wedge (left-aligned, off the bracket) */
+  .gaptag {
+    position: absolute; z-index: 5; left: 18px; right: 18px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 600; color: var(--stone-500);
+  }
+  .gaptag b { display:block; font-size: 14px; color: var(--stone-900); letter-spacing:0.02em; margin-top:3px; }
+  .frame.drop .gaptag { color: var(--gold-d); }
+  .frame.drop .gaptag b { color: var(--gold); }
+
+  /* the fixed PROTOCOL LINE label, pinned just below the line in every frame */
+  .plinetag {
+    position:absolute; z-index:5; left: 18px; right: 18px; top: 596px; text-align:left;
+    font-family:'IBM Plex Mono',monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--stone-400); font-weight: 600;
+  }
+  .frame.drop .plinetag { color: rgba(232,163,23,0.75); }
+
+  /* BODY text per frame — its own clear band below the graphic, above the track */
+  .fbody {
+    position: absolute; left: 18px; right: 18px; top: 642px; z-index: 6;
+    font-size: 15px; line-height: 1.34; color: var(--stone-700);
+  }
+  .fbody b { color: var(--stone-900); font-weight: 600; }
+  .frame.drop .fbody { color: rgba(250,250,249,0.86); }
+  .frame.drop .fbody b { color: var(--gold); }
+
+  /* ====== ONE CONTINUOUS PROTOCOL TRACK — overlays the strip, spans all frames ====== */
+  .track {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 130px; z-index: 7;
+    border-top: 2px solid var(--stone-900);
+    background: var(--stone-100);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .track .tlabel {
+    position:absolute; top: 10px; left: 22px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 600;
+  }
+  .track .tlabel .un { color: var(--gold-d); }
+  /* the repeating sense->categorize->respond pattern, marching unchanged across the whole width */
+  .march {
+    position:absolute; left:0; right:0; bottom: 26px;
+    display:flex; align-items:center; justify-content:space-around;
+    padding: 0 14px;
+  }
+  .seq {
+    display:flex; align-items:center; gap: 11px;
+    font-family:'IBM Plex Mono',monospace; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.02em; color: var(--stone-700);
+  }
+  .seq .arr { color: var(--stone-400); font-weight: 500; }
+  .seq .dot { width:7px; height:7px; border-radius:50%; background: var(--stone-700); }
+  /* tick marks under the sequence baseline showing it's a fixed, ruled track */
+  .track .baseline { position:absolute; left:0; right:0; bottom: 16px; height: 1.5px; background: var(--stone-400); }
+
+  /* ====== FOOTER TAKEAWAY ====== */
+  .foot { display: grid; grid-template-columns: 1fr; margin-top: 22px; }
+  .foot .take {
+    font-size: 21px; line-height: 1.34; color: var(--stone-900); font-weight: 500; letter-spacing:-0.01em;
+    border-left: 3px solid var(--gold); padding-left: 22px;
+  }
+  .foot .take b { color: var(--gold-d); font-weight: 700; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-reference="matter-photomontage"
+     data-genre="sequence"
+     data-encoding="world state vs unchanging protocol → divergence over frames">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the mismatch</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>how Clear falls into Chaos</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- HERO HEADLINE -->
+  <div class="hero">
+    <div class="kicker"><span>read left → right</span><span class="sp"></span><span>four frames</span></div>
+    <h1 data-critical="title">The cliff is a protocol that<br>stopped <b>matching its world.</b></h1>
+  </div>
+
+  <div class="seclabel"><span>the world climbs away · the rule holds still</span><span class="sp"></span><span class="amber">frame 4 · the fold</span></div>
+
+  <!-- ====== FILMSTRIP ====== -->
+  <div class="strip" data-encoding="world dot rises Clear→Complex; protocol line fixed at same y in every frame; bracket between them widens; frame 4 the dot falls below the line into the dark">
+
+    <!-- ============ FRAME 1 — Clear: world sits ON the protocol line ============ -->
+    <div class="frame" data-source="frame-1">
+      <div class="fhdr">
+        <div class="fnum">01 · the world</div>
+        <div class="fstate">Clear<span class="sm">ordered · cause &amp; effect hold</span></div>
+      </div>
+      <div class="world" aria-hidden="true">
+        <svg viewBox="0 0 300 470" preserveAspectRatio="none">
+          <!-- the GAP wedge: area between world horizon and the fixed protocol line. ~0 here. -->
+          <rect x="0" y="386" width="300" height="14" fill="#e7e5e4"/>
+          <!-- world horizon: right at the protocol line -> gap ~0 -->
+          <line x1="0" y1="386" x2="300" y2="386" stroke="#78716c" stroke-width="3"/>
+          <!-- world marker on the horizon -->
+          <circle cx="150" cy="386" r="16" fill="#1c1917"/>
+          <circle cx="150" cy="386" r="5" fill="#fafaf9"/>
+          <!-- FIXED protocol line at y=400 (identical in all frames) -->
+          <line x1="0" y1="400" x2="300" y2="400" stroke="#1c1917" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="wtag" style="top:330px;">the world sits<br>on the rule ↓</div>
+      <div class="gaptag" style="top:474px; left:auto; right:18px; text-align:right;">mismatch<b>≈ none</b></div>
+      <div class="plinetag">the protocol line</div>
+      <div class="fbody" data-critical="body">The world is <b>Clear</b>. Cause and effect hold. Sense, categorize, respond works.</div>
+    </div>
+
+    <!-- ============ FRAME 2 — world begins to climb above the line ============ -->
+    <div class="frame" data-source="frame-2">
+      <div class="fhdr">
+        <div class="fnum">02 · the world</div>
+        <div class="fstate">Drifting<span class="sm">links loosen · toward complex</span></div>
+      </div>
+      <div class="world" aria-hidden="true">
+        <!-- gap arrow uses the wedge band; left side keeps the measure off the centre bracket -->
+        <svg viewBox="0 0 300 470" preserveAspectRatio="none">
+          <!-- the GAP wedge grows: world horizon at y=262 down to protocol line y=400 -->
+          <rect x="0" y="262" width="300" height="138" fill="#e7e5e4"/>
+          <!-- horizon climbs to y=262 -->
+          <line x1="0" y1="262" x2="300" y2="262" stroke="#78716c" stroke-width="3"/>
+          <circle cx="150" cy="262" r="16" fill="#1c1917"/>
+          <circle cx="150" cy="262" r="5" fill="#fafaf9"/>
+          <!-- gap bracket spanning the wedge -->
+          <line x1="150" y1="280" x2="150" y2="384" stroke="#78716c" stroke-width="2" stroke-dasharray="6 6"/>
+          <polyline points="142,284 150,272 158,284" fill="none" stroke="#78716c" stroke-width="2"/>
+          <polyline points="142,380 150,392 158,380" fill="none" stroke="#78716c" stroke-width="2"/>
+          <!-- FIXED protocol line -->
+          <line x1="0" y1="400" x2="300" y2="400" stroke="#1c1917" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="wtag" style="top:212px;">the world lifts ↑</div>
+      <div class="gaptag" style="top:474px;">mismatch<b>opening</b></div>
+      <div class="plinetag">the line, unchanged</div>
+      <div class="fbody" data-critical="body">The world drifts <b>Complex</b>. Cause and effect loosen. Nobody re-checks the domain.</div>
+    </div>
+
+    <!-- ============ FRAME 3 — wide gap; rule fires on the wrong world ============ -->
+    <div class="frame" data-source="frame-3">
+      <div class="fhdr">
+        <div class="fnum">03 · the world</div>
+        <div class="fstate">Complex<span class="sm">unordered · clear only in hindsight</span></div>
+      </div>
+      <div class="world" aria-hidden="true">
+        <svg viewBox="0 0 300 470" preserveAspectRatio="none">
+          <!-- the GAP wedge now huge: world horizon at y=104 down to protocol line y=400 -->
+          <rect x="0" y="104" width="300" height="296" fill="#e7e5e4"/>
+          <!-- horizon high at y=104 -->
+          <line x1="0" y1="104" x2="300" y2="104" stroke="#78716c" stroke-width="3"/>
+          <circle cx="150" cy="104" r="16" fill="#1c1917"/>
+          <circle cx="150" cy="104" r="5" fill="#fafaf9"/>
+          <!-- tall gap bracket -->
+          <line x1="150" y1="122" x2="150" y2="384" stroke="#78716c" stroke-width="2" stroke-dasharray="6 6"/>
+          <polyline points="142,126 150,114 158,126" fill="none" stroke="#78716c" stroke-width="2"/>
+          <polyline points="142,380 150,392 158,380" fill="none" stroke="#78716c" stroke-width="2"/>
+          <!-- FIXED protocol line -->
+          <line x1="0" y1="400" x2="300" y2="400" stroke="#1c1917" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="wtag" style="top:108px;">the world, far above ↑</div>
+      <div class="gaptag" style="top:300px;">mismatch<b>wide — rule fires blind</b></div>
+      <div class="plinetag">the line, still unchanged</div>
+      <div class="fbody" data-critical="body">You keep categorizing. The rule fires on a world that no longer obeys it.</div>
+    </div>
+
+    <!-- ============ FRAME 4 — THE DROP: world falls below the line into the dark ============ -->
+    <div class="frame drop" data-source="frame-4">
+      <div class="fhdr">
+        <div class="fnum">04 · the fold</div>
+        <div class="fstate">Chaotic<span class="sm">no slope — a fall, not a drift</span></div>
+      </div>
+      <div class="world" aria-hidden="true">
+        <svg viewBox="0 0 300 470" preserveAspectRatio="none">
+          <!-- the world arrives at the SAME height as frame 3 (y=104), then the ground ends -->
+          <line x1="0" y1="104" x2="150" y2="104" stroke="#E8A317" stroke-width="3.5"/>
+          <circle cx="150" cy="104" r="9" fill="none" stroke="#E8A317" stroke-width="3.5"/>
+          <!-- the protocol line still runs (amber dashed) — the world drops THROUGH it -->
+          <line x1="0" y1="400" x2="300" y2="400" stroke="#E8A317" stroke-width="2.5" stroke-dasharray="3 8"/>
+          <!-- the fall: straight down, through the protocol line, into the dark -->
+          <line x1="150" y1="104" x2="150" y2="446" stroke="#E8A317" stroke-width="4.5"/>
+          <circle cx="150" cy="446" r="16" fill="#E8A317"/>
+          <!-- plunge chevrons accelerating downward -->
+          <polyline points="132,196 150,224 168,196" fill="none" stroke="#E8A317" stroke-width="3.5"/>
+          <polyline points="132,300 150,328 168,300" fill="none" stroke="#E8A317" stroke-width="3.5"/>
+        </svg>
+      </div>
+      <div class="wtag" style="top:108px; color:var(--gold);">the ground ends ↓</div>
+      <div class="plinetag" style="color:var(--gold); top:494px; right:auto; width:108px; line-height:1.25;">the rule, abandoned ↓</div>
+      <div class="fbody" data-critical="body">The fold. No slope, no warning — Clear drops to Chaotic. Now you must <b>act, then sense.</b></div>
+    </div>
+
+    <!-- ====== ONE CONTINUOUS PROTOCOL TRACK (spans all four frames) ====== -->
+    <div class="track" data-source="protocol" data-encoding="identical across every frame — the operator never re-checks the domain">
+      <div class="tlabel" data-critical="body"><span class="un">the operator's protocol, never re-checked:</span></div>
+      <div class="baseline" aria-hidden="true"></div>
+      <div class="march" data-critical="body">
+        <div class="seq"><span class="dot"></span><span>sense</span><span class="arr">→</span><span>categorize</span><span class="arr">→</span><span>respond</span></div>
+        <div class="seq"><span class="dot"></span><span>sense</span><span class="arr">→</span><span>categorize</span><span class="arr">→</span><span>respond</span></div>
+        <div class="seq"><span class="dot"></span><span>sense</span><span class="arr">→</span><span>categorize</span><span class="arr">→</span><span>respond</span></div>
+        <div class="seq"><span class="dot"></span><span>sense</span><span class="arr">→</span><span>categorize</span><span class="arr">→</span><span>respond</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ====== FOOTER TAKEAWAY ====== -->
+  <div class="foot">
+    <div class="take" data-critical="body">
+      The fall isn't bad luck; it is a stale protocol. <b>Re-sense the domain on a schedule</b> and the cliff becomes a step you choose, not one you take blind.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · the catastrophic fold</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>

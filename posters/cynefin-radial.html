@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Radial Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --green:   #1F6B45;   /* single accent — forest */
+    --green-d: #14502f;
+    --green-l: #d7e7de;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 20px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* ===== THE RADIAL SCORE — concentric arcs ARE the structure ===== */
+  .field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .field svg { width: 1260px; height: 1800px; display: block; }
+
+  /* HERO HEADLINE */
+  .hero { position: absolute; top: 116px; left: 60px; z-index: 4; }
+  .hero .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--green-d); font-weight: 600; margin-bottom: 16px;
+  }
+  .hero .word { font-weight: 700; font-size: 100px; line-height: 0.83; letter-spacing: -0.04em; color: var(--stone-900); }
+
+  /* Ring label cards — straight, right-aligned, leader-tied to each arc */
+  .rlab { position: absolute; z-index: 4; text-align: right; }
+  .rlab .n  { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-400); font-weight: 600; }
+  .rlab .dn { font-weight: 700; font-size: 34px; line-height: 0.9; letter-spacing: -0.02em; color: var(--stone-900); margin: 6px 0 4px; }
+  .rlab .vb { font-family:'IBM Plex Mono',monospace; font-size: 13px; letter-spacing: 0.03em; color: var(--green-d); font-weight: 600; }
+  .rlab .pr { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--stone-500); margin-top: 4px; }
+
+  /* SENSE beat tag riding each arc */
+  .sbeat {
+    position: absolute; z-index: 4; font-family:'IBM Plex Mono',monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+    color: var(--green-d); white-space: nowrap;
+  }
+  .sbeat .em { color: var(--stone-500); font-weight: 500; }
+
+  /* origin label — floats up-right of the origin dot, clear of the colophon */
+  .origin { position: absolute; z-index: 4; left: 92px; bottom: 96px; }
+  .origin .dn { font-weight: 700; font-size: 23px; letter-spacing: -0.01em; color: var(--stone-900); line-height: 0.95; }
+  .origin .n  { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-400); font-weight: 600; margin-bottom: 5px; }
+  .origin .pr { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.04em; color: var(--stone-500); margin-top: 5px; }
+
+  /* divider label — rides just inside the dashed boundary arc */
+  .divlab {
+    position: absolute; z-index: 4; left: 92px; top: 760px; max-width: 264px;
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.05em;
+    line-height: 1.4; color: var(--green-d); font-weight: 600;
+    background: var(--stone-50); padding: 4px 12px 8px 0;
+  }
+  .divlab .tag { display:block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 7px; }
+
+  /* footer takeaway — bottom band, right of the Disorder corner, solid backing */
+  .foot { position: absolute; z-index: 4; left: 470px; right: 60px; bottom: 84px; background: var(--stone-50); padding: 8px 0 6px 16px; }
+  .foot .tag { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-d); font-weight: 600; }
+  .foot .b { font-size: 17px; line-height: 1.42; color: var(--stone-700); margin-top: 9px; letter-spacing: -0.005em; }
+  .foot .b b { color: var(--stone-900); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="muller-brockmann-rhythm"
+     data-genre="radial-score"
+     data-reference="muller-brockmann-rhythm"
+     data-encoding="distance from knowing → ring radius; SENSE position → arc marker">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <!-- ===== THE FIELD: concentric arcs from a bottom-left origin (60,1740) ===== -->
+  <div class="field" aria-hidden="true">
+    <svg viewBox="0 0 1260 1800">
+      <defs><clipPath id="frame"><rect x="0" y="0" width="1260" height="1800"/></clipPath></defs>
+      <g clip-path="url(#frame)">
+
+        <!-- the four domain rings, inner=Clear ... outer=Chaotic. Weight grows outward. -->
+        <g fill="none" stroke="#1F6B45">
+          <circle cx="60" cy="1740" r="360"  stroke-opacity="0.85" stroke-width="2"/>
+          <circle cx="60" cy="1740" r="720"  stroke-opacity="0.70" stroke-width="2.5"/>
+          <circle cx="60" cy="1740" r="1080" stroke-opacity="0.55" stroke-width="3.5"/>
+          <circle cx="60" cy="1740" r="1440" stroke-opacity="0.42" stroke-width="5"/>
+        </g>
+
+        <!-- ordered | unordered boundary: heavy dashed arc at r=900, between ring 2 and ring 3.
+             inside this arc you can analyze; outside you must move first. -->
+        <circle cx="60" cy="1740" r="900" fill="none" stroke="#14502f"
+                stroke-width="2.5" stroke-dasharray="10 7" stroke-opacity="0.95"/>
+
+        <!-- the clean spoke: a single solid radial, the axis the score is read along -->
+        <line x1="60" y1="1740" x2="884" y2="1095" stroke="#44403c" stroke-width="1.5" stroke-opacity="0.55"/>
+
+        <!-- leader lines tying each right-side label to its arc -->
+        <g stroke="#a8a29e" stroke-width="1" stroke-opacity="0.85">
+          <!-- Clear: arc point (300,1472) -> label edge -->
+          <line x1="300" y1="1472" x2="1010" y2="1472"/>
+          <!-- Complicated: arc point (560,1222) -->
+          <line x1="560" y1="1222" x2="1010" y2="1222"/>
+          <!-- Complex: arc point (820,973) -->
+          <line x1="820" y1="973"  x2="1010" y2="973"/>
+          <!-- Chaotic: arc point (980,632) -->
+          <line x1="980" y1="632"  x2="1010" y2="632"/>
+        </g>
+
+        <!-- ticks where each leader meets its arc + ring number -->
+        <g fill="#44403c" font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="600">
+          <circle cx="300" cy="1472" r="3.5"/><text x="278" y="1466">1</text>
+          <circle cx="560" cy="1222" r="3.5"/><text x="538" y="1216">2</text>
+          <circle cx="820" cy="973"  r="3.5"/><text x="798" y="967">3</text>
+          <circle cx="980" cy="632"  r="3.5"/><text x="958" y="626">4</text>
+        </g>
+
+        <!-- SENSE beat nodes on each arc.
+             inner two (Clear, Complicated): SENSE EARLY → low on the arc (near +x / bottom).
+             outer two (Complex, Chaotic): SENSE LATE → high on the arc (near top). -->
+        <g fill="#1F6B45" stroke="#fafaf9" stroke-width="2.5">
+          <circle cx="409" cy="1653" r="10"/>  <!-- Clear  ang 14 -->
+          <circle cx="745" cy="1518" r="10"/>  <!-- Complicated ang 18 -->
+          <circle cx="600" cy="805"  r="10"/>  <!-- Complex ang 60 -->
+          <circle cx="646" cy="424"  r="10"/>  <!-- Chaotic ang 66 -->
+        </g>
+
+        <!-- origin dot = Disorder -->
+        <circle cx="60" cy="1740" r="9" fill="#1c1917"/>
+        <circle cx="60" cy="1740" r="17" fill="none" stroke="#1c1917" stroke-width="1.5" stroke-opacity="0.5"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the radial score</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>rings of what you can know</div>
+      <div class="meta">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kicker" data-source="pronunciation">distance from knowing → ring by ring</div>
+    <div class="word" data-critical="title">How far are<br>you from<br>knowing?</div>
+  </div>
+
+  <!-- SENSE beat tags -->
+  <div class="sbeat" style="left: 270px; top: 1607px;">sense <span class="em">· 1st move</span></div>
+  <div class="sbeat" style="left: 761px; top: 1505px;">sense <span class="em">· 1st move</span></div>
+  <div class="sbeat" style="left: 616px; top: 792px;">sense <span class="em">· 2nd move</span></div>
+  <div class="sbeat" style="left: 662px; top: 411px;">sense <span class="em">· 2nd move</span></div>
+
+  <!-- RING LABELS (inner ring 1 lowest → outer ring 4 highest) -->
+  <div class="rlab" style="right: 70px; top: 1392px;">
+    <div class="n" data-critical="body">ring 1 · closest to knowing</div>
+    <div class="dn" data-critical="body">Clear</div>
+    <div class="vb" data-critical="body">sense · categorize · respond</div>
+    <div class="pr" data-critical="body">best practice</div>
+  </div>
+
+  <div class="rlab" style="right: 70px; top: 1142px;">
+    <div class="n" data-critical="body">ring 2</div>
+    <div class="dn" data-critical="body">Complicated</div>
+    <div class="vb" data-critical="body">sense · analyze · respond</div>
+    <div class="pr" data-critical="body">good practice</div>
+  </div>
+
+  <div class="rlab" style="right: 70px; top: 893px;">
+    <div class="n" data-critical="body">ring 3</div>
+    <div class="dn" data-critical="body">Complex</div>
+    <div class="vb" data-critical="body">probe · sense · respond</div>
+    <div class="pr" data-critical="body">emergent practice</div>
+  </div>
+
+  <div class="rlab" style="right: 70px; top: 552px;">
+    <div class="n" data-critical="body">ring 4 · furthest</div>
+    <div class="dn" data-critical="body">Chaotic</div>
+    <div class="vb" data-critical="body">act · sense · respond</div>
+    <div class="pr" data-critical="body">novel practice</div>
+  </div>
+
+  <!-- ORIGIN -->
+  <div class="origin">
+    <div class="n" data-critical="body">origin · ✕</div>
+    <div class="dn" data-critical="body">Disorder</div>
+    <div class="pr" data-critical="body">no ring chosen yet</div>
+  </div>
+
+  <!-- DIVIDER LABEL -->
+  <div class="divlab" data-critical="body">
+    <span class="tag">the ordered / unordered line</span>
+    inside the line you can analyze · outside you must move first
+  </div>
+
+  <!-- FOOTER takeaway -->
+  <div class="foot">
+    <div class="tag" data-critical="body">the reading</div>
+    <div class="b" data-critical="body">Each ring out, cause and effect get harder to see, and ‘sense’ slips from your first move to your second. <b>Pick your ring before you pick your method.</b></div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · rhythm after Josef Müller-Brockmann</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/ · sense → respond</div>
+  </div>
+
+</div>
+</body>
+</html>
