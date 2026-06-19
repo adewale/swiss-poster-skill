@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Catastrophe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — the route ink */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 22px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE row */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 18px; }
+  .head .thesis { max-width: 760px; }
+  .head .thesis .big { font-size: 47px; font-weight: 700; line-height: 0.94; letter-spacing: -0.025em; color: var(--stone-900); }
+  .head .thesis .big b { color: var(--cobalt); font-weight: 700; }
+  .head .fignum {
+    text-align: right; padding-bottom: 5px; white-space: nowrap;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); line-height: 1.7;
+  }
+  .head .fignum b { color: var(--stone-900); font-weight: 600; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 14px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* FIGURE — the folded surface, scientific-diagram register */
+  .figure {
+    position: relative; height: 1118px; border: 2.5px solid var(--stone-900);
+    background: var(--stone-50); overflow: hidden;
+  }
+  .figure svg { position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+  /* axis rails */
+  .axis {
+    position: absolute; z-index: 5; font-family:'IBM Plex Mono',monospace;
+    font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; font-weight: 600;
+    color: var(--stone-500);
+  }
+  .axis.x { bottom: 16px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+  .axis.y { top: 50%; left: 14px; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl; }
+
+  /* domain plates sitting on the surface */
+  .dom { position: absolute; z-index: 6; }
+  .dom .dn { font-weight: 700; letter-spacing: -0.02em; line-height: 0.9; }
+  .dom .dv { font-family:'IBM Plex Mono',monospace; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; margin-top: 6px; }
+
+  /* CLEAR — top plateau, right end (above the surface) */
+  .dom.clear { top: 116px; right: 74px; text-align: right; color: var(--stone-900); }
+  .dom.clear .dn { font-size: 44px; }
+  .dom.clear .dv { font-size: 12px; color: var(--stone-500); }
+  /* COMPLICATED — top plateau, mid (above the surface) */
+  .dom.complicated { top: 124px; left: 566px; color: var(--stone-900); }
+  .dom.complicated .dn { font-size: 35px; }
+  .dom.complicated .dv { font-size: 11.5px; color: var(--stone-500); }
+  /* COMPLEX — beside the folded-down part (the slope), lower left */
+  .dom.complex { top: 812px; left: 44px; color: var(--stone-900); }
+  .dom.complex .dn { font-size: 33px; }
+  .dom.complex .dv { font-size: 11.5px; color: var(--stone-500); }
+  /* CHAOTIC — lower branch, right end (below the surface) */
+  .dom.chaotic { bottom: 150px; right: 74px; text-align: right; color: var(--stone-900); }
+  .dom.chaotic .dn { font-size: 44px; }
+  .dom.chaotic .dv { font-size: 12px; color: var(--stone-500); }
+
+  /* DISORDER — in the white pocket left of the pleat bulge (points at the fold) */
+  .disorder {
+    position: absolute; z-index: 7; left: 30px; top: 690px; max-width: 150px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; line-height: 1.36;
+    letter-spacing: 0.03em; color: var(--stone-700); text-align: right;
+  }
+  .disorder b { display:block; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-900); font-weight: 600; margin-bottom: 3px; }
+
+  /* route legends — sit on calm field, each with a colour key */
+  .legend { position: absolute; z-index: 8; }
+  .legend .lt {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; font-weight: 600; color: var(--cobalt);
+    display:flex; align-items:center; gap: 9px;
+  }
+  /* legend keys: plain styled spans (no SVG, no gradients) */
+  .legend .key { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+  .legend .key .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cobalt); display: inline-block; }
+  .legend .key .bar { width: 6px; height: 19px; background: var(--cobalt); display: inline-block; }
+  .legend .lx { font-family:'IBM Plex Sans',sans-serif; font-size: 14px; line-height: 1.3; color: var(--stone-700); margin-top: 7px; max-width: 33ch; }
+  /* smooth legend — mid-right, in the open field over the overhang */
+  .legend.smooth { top: 366px; right: 74px; text-align: right; }
+  .legend.smooth .lt { justify-content: flex-end; }
+  .legend.smooth .lx { margin-left: auto; }
+  /* jump legend — right of the vertical drop, in the open air under the overhang */
+  .legend.jump { top: 612px; left: 540px; }
+
+  /* FOOTER */
+  .foot {
+    display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 16px; align-items: start;
+  }
+  .foot .c { font-size: 16px; line-height: 1.42; color: var(--stone-700); max-width: 116ch; }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--cobalt); font-weight: 600; }
+  .foot .c.r { border-left: 2.5px solid var(--cobalt); padding-left: 18px; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-reference="hofmann-figure-ground"
+     data-genre="catastrophe-diagram"
+     data-encoding="smooth path vs discontinuous jump → line geometry">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the catastrophe</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>the smooth path and the jump</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="thesis" data-critical="title">
+      <div class="big">Some boundaries you cross gradually.<br>One you cross <b>all at once.</b></div>
+    </div>
+    <div class="fignum" data-source="register">
+      <div><b>Fig.</b> the cusp fold</div>
+      <div>after R. Thom</div>
+    </div>
+  </div>
+
+  <div class="seclabel"><span>A folded surface, seen from the side</span><span class="sp"></span><span>upper branch · the fold · lower branch</span></div>
+
+  <!-- FIGURE: side-profile of a folded sheet -->
+  <div class="figure" data-encoding="surface profile · smooth route follows the sheet · jump is a vertical drop at the fold">
+    <svg viewBox="0 0 1130 1118" preserveAspectRatio="none" aria-hidden="true">
+      <!--
+        Folded-sheet profile, Z-fold opening LEFT (viewBox 1130 x 1118).
+        UPPER BRANCH (ordered plateau): top band y~230, Clear at right (~x1078),
+          runs left as a plateau, rounds the FOLD LIP at left (~x150,y430).
+        FOLD WEB: the surface tucks back under and descends.
+        LOWER BRANCH (Chaotic): bottom band y~920, running right UNDER the overhang.
+        The upper plateau OVERHANGS the lower branch across x~330..1078, so a
+        vertical drop in that zone passes through open air between two surfaces.
+        Marker rides the top from Clear; at the fold it either eases around the
+        bend (smooth -> Complex) or drops straight off (the jump -> Chaotic).
+      -->
+
+      <!-- ====================== THE FOLDED SHEET BODY ====================== -->
+      <!-- upper band (plateau) fill: Clear right end -> left, rounding the lip. -->
+      <path d="M 1120 230
+               L 300 230
+               C 170 230, 150 320, 150 430
+               C 150 520, 196 568, 320 568
+               L 1120 568 Z"
+            fill="#f5f5f4" stroke="none"/>
+
+      <!-- the returning fold web (the pleat: upper rolls under, descends) -->
+      <path d="M 320 568
+               C 222 568, 188 636, 188 716
+               C 188 814, 256 872, 372 872
+               L 372 568 Z"
+            fill="#e7e5e4" stroke="none"/>
+
+      <!-- lower band (Chaotic plateau) fill, running right under the overhang -->
+      <path d="M 372 872 L 1120 872 L 1120 920 L 372 920 Z"
+            fill="#f5f5f4" stroke="none"/>
+
+      <!-- generator ribs on the upper plateau (faint, evenly spaced) -->
+      <g stroke="#d6d3d1" stroke-width="1.5" fill="none">
+        <path d="M 1000 568 L 1000 230"/>
+        <path d="M 884 568 L 884 230"/>
+        <path d="M 768 568 L 768 230"/>
+        <path d="M 652 568 L 652 230"/>
+        <path d="M 536 568 L 536 230"/>
+        <path d="M 420 566 L 420 232"/>
+      </g>
+      <!-- ribs on the lower plateau -->
+      <g stroke="#d6d3d1" stroke-width="1.5" fill="none">
+        <path d="M 1000 920 L 1000 872"/>
+        <path d="M 884 920 L 884 872"/>
+        <path d="M 768 920 L 768 872"/>
+        <path d="M 652 920 L 652 872"/>
+        <path d="M 536 920 L 536 872"/>
+      </g>
+
+      <!-- ====================== SHEET OUTLINE (the read) ====================== -->
+      <!-- UPPER SURFACE top line: Clear plateau -> rounds the FOLD LIP at left. -->
+      <path d="M 1120 230 L 300 230 C 170 230, 150 320, 150 430"
+            fill="none" stroke="#1c1917" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- upper surface underside returning from the lip into the pleat -->
+      <path d="M 150 430 C 150 520, 196 568, 320 568 L 1120 568"
+            fill="none" stroke="#a8a29e" stroke-width="1.75"/>
+
+      <!-- the pleat: surface folds back and down to become the lower branch -->
+      <path d="M 320 568 C 222 568, 188 636, 188 716 C 188 814, 256 872, 372 872"
+            fill="none" stroke="#1c1917" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- LOWER SURFACE top line (Chaotic) running right under the overhang -->
+      <path d="M 372 872 L 1120 872"
+            fill="none" stroke="#1c1917" stroke-width="3.5"/>
+      <!-- lower front edge -->
+      <path d="M 372 920 L 1120 920"
+            fill="none" stroke="#a8a29e" stroke-width="1.75"/>
+
+      <!-- THE FOLD LIP — leftmost top edge, where the upper branch rounds over
+           and the overhang begins. -->
+      <circle cx="150" cy="430" r="6.5" fill="#1c1917"/>
+
+      <!-- OPEN AIR under the overhang: faint vertical hairlines mark the gap
+           between the two surfaces (the void you fall through). -->
+      <g stroke="#e7e5e4" stroke-width="1.5">
+        <path d="M 560 588 L 560 852" stroke-dasharray="2 12"/>
+        <path d="M 700 588 L 700 852" stroke-dasharray="2 12"/>
+        <path d="M 840 588 L 840 852" stroke-dasharray="2 12"/>
+        <path d="M 980 588 L 980 852" stroke-dasharray="2 12"/>
+      </g>
+
+      <!-- ================= ROUTE 1: THE SMOOTH PATH (the long way) ================= -->
+      <!-- rides the top from Clear (right), left along the plateau, eases down
+           around the bend onto the folded part = Complex. Footstep dashes. -->
+      <path d="M 1100 210
+               L 300 210
+               C 168 210, 130 312, 130 430
+               C 130 548, 196 600, 268 648"
+            fill="none" stroke="#143C8C" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="1.5 18"/>
+      <g fill="#143C8C">
+        <circle cx="1100" cy="210" r="6.5"/>
+        <circle cx="948" cy="210" r="6.5"/>
+        <circle cx="796" cy="210" r="6.5"/>
+        <circle cx="644" cy="210" r="6.5"/>
+        <circle cx="450" cy="210" r="6.5"/>
+        <circle cx="222" cy="266" r="6.5"/>
+        <circle cx="146" cy="430" r="6.5"/>
+        <circle cx="210" cy="588" r="6.5"/>
+      </g>
+      <!-- arrowhead easing down the slope into Complex -->
+      <path d="M 268 648 l -3 -15 l 16 6 z" fill="#143C8C"/>
+
+      <!-- ================= ROUTE 2: THE JUMP (the fold) ================= -->
+      <!-- the same marker, riding the top, steps off the fold and drops straight
+           down through the open air onto the lower branch (Chaotic). Placed in
+           the overhang zone so the drop visibly spans two parallel surfaces. -->
+      <!-- start marker, on the upper surface -->
+      <circle cx="452" cy="210" r="11" fill="#fafaf9" stroke="#143C8C" stroke-width="4.5"/>
+      <!-- the vertical drop: upper surface straight down to the lower surface -->
+      <line x1="452" y1="221" x2="452" y2="846" stroke="#143C8C" stroke-width="7"/>
+      <!-- arrowhead slamming onto the lower branch -->
+      <path d="M 452 872 l -15 -28 l 15 9 l 15 -9 z" fill="#143C8C"/>
+      <!-- impact tick on the lower branch -->
+      <line x1="424" y1="872" x2="480" y2="872" stroke="#143C8C" stroke-width="7"/>
+    </svg>
+
+    <!-- axis hints -->
+    <div class="axis y" aria-hidden="true">order →</div>
+    <div class="axis x" aria-hidden="true">the surface, end to end</div>
+
+    <!-- DOMAIN PLATES -->
+    <div class="dom clear" data-source="domain-clear">
+      <div class="dn" data-critical="title">Clear</div>
+      <div class="dv" data-critical="body">sense, categorize, respond</div>
+    </div>
+    <div class="dom complicated" data-source="domain-complicated">
+      <div class="dn" data-critical="title">Complicated</div>
+      <div class="dv" data-critical="body">sense, analyze, respond</div>
+    </div>
+    <div class="dom complex" data-source="domain-complex">
+      <div class="dn" data-critical="title">Complex</div>
+      <div class="dv" data-critical="body">probe, sense, respond</div>
+    </div>
+    <div class="dom chaotic" data-source="domain-chaotic">
+      <div class="dn" data-critical="title">Chaotic</div>
+      <div class="dv" data-critical="body">act, sense, respond</div>
+    </div>
+
+    <!-- DISORDER at the pleat -->
+    <div class="disorder" data-source="domain-disorder" data-critical="body">
+      <b>Disorder</b>the fold itself, up and down look the same
+    </div>
+
+    <!-- ROUTE LEGENDS -->
+    <div class="legend smooth" data-source="route-smooth">
+      <div class="lt"><span class="key" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>the long way</div>
+      <div class="lx" data-critical="body">Clear to Complicated to Complex, one step at a time</div>
+    </div>
+    <div class="legend jump" data-source="route-jump">
+      <div class="lt">the fold<span class="key" aria-hidden="true"><span class="bar"></span></span></div>
+      <div class="lx" data-critical="body">Clear to Chaotic, no steps in between</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="c r" data-critical="body">
+      Move between most domains by degrees and you can plan the trip. The <b>Clear–Chaotic fold</b> has no middle:
+      you are <span class="g">on top of the rule, then under it</span>, with nothing to analyze on the way down.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="attribution">Snowden, 1999 · after Thom's cusp catastrophe</div>
+    <div data-source="pronunciation"><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>
