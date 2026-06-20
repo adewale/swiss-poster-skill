@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent Harnesses — Source-Level Teardown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 56px 26px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .head{margin-top:22px}
+  .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:74px;line-height:.9;letter-spacing:-.01em;color:var(--stone-900)}
+  .head h1 .b{color:var(--blue-2)}
+  .head .sub{margin-top:9px;font-size:15.5px;line-height:1.4;color:var(--stone-700);max-width:96ch}
+  .head .sub b{color:var(--stone-900);font-weight:600}
+
+  table{width:100%;border-collapse:collapse;margin-top:20px;table-layout:fixed}
+  col.lab{width:138px} col.c{width:auto}
+  th,td{vertical-align:top;text-align:left;padding:9px 12px;border-top:1px solid var(--stone-300)}
+  thead th{border-top:0;padding-bottom:10px;vertical-align:bottom}
+  .hname{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.9;text-transform:uppercase}
+  .hwho{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--stone-500);margin-top:5px}
+  th.flue .hname{color:var(--blue-2)} th.flue{background:rgba(0,122,255,.06);border-bottom:3px solid var(--blue)}
+  td.flue{background:rgba(0,122,255,.045);border-left:2px solid var(--blue)}
+  th.flue .hwho{color:var(--blue-2)}
+  .rlab{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;
+    letter-spacing:.02em;color:var(--stone-900);text-align:right;line-height:1.05}
+  td .c{font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.32;color:var(--stone-900)}
+  td .c.q{color:var(--stone-700)}
+  .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0;color:var(--stone-900)}
+  td.flue .m{color:var(--blue-2)}
+
+  .foot{position:absolute;left:56px;right:56px;bottom:84px}
+  .common{display:flex;gap:14px;align-items:baseline;border-top:2px solid var(--stone-900);padding-top:10px}
+  .common .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--blue-2);white-space:nowrap}
+  .common .txt{font-size:14px;color:var(--stone-700)} .common .txt b{color:var(--stone-900);font-weight:600}
+
+  .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">a source-level teardown</div></div>
+    <div class="r">withastro / flue<div class="meta">read from the repos, not the pitch</div></div>
+  </div>
+
+  <div class="head">
+    <h1>Three harnesses,<br>torn <span class="b">down.</span></h1>
+    <div class="sub">Past the marketing, the divergence is structural — <b>how an agent is defined, where its state lives,
+      and what it's built on.</b> Pulled from each project's repo, package exports, and architecture docs.</div>
+  </div>
+
+  <table>
+    <colgroup><col class="lab"><col class="c"><col class="c"><col class="c"></colgroup>
+    <thead>
+      <tr>
+        <th></th>
+        <th class="flue"><div class="hname">Flue</div><div class="hwho">withastro · apache-2.0</div></th>
+        <th><div class="hname">Project Think</div><div class="hwho">cloudflare · preview</div></th>
+        <th><div class="hname">Eve</div><div class="hwho">vercel · beta</div></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rlab">The agent is</td>
+        <td class="flue"><div class="c"><span class="m">createAgent()</span> default export — served as an HTTP handler</div></td>
+        <td><div class="c"><span class="m">Agent</span> subclass — literally a Durable Object</div></td>
+        <td><div class="c">A directory; identifiers derived from file paths</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Authoring</td>
+        <td class="flue"><div class="c"><span class="m">createAgent()</span> · <span class="m">flue.config.ts</span> · <span class="m">flue add</span></div></td>
+        <td><div class="c">extend <span class="m">Agent</span> · <span class="m">@callable()</span> RPC · <span class="m">setState()</span></div></td>
+        <td><div class="c"><span class="m">defineAgent</span> / <span class="m">defineTool</span> / <span class="m">defineSkill</span></div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Execution</td>
+        <td class="flue"><div class="c">Agents <span class="q">+</span> Workflows <span class="m">(run)</span></div></td>
+        <td><div class="c">Agent · <span class="m">AgentWorkflow</span> · Code&nbsp;Mode</div></td>
+        <td><div class="c">session → turn → step</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">State model</td>
+        <td class="flue"><div class="c">Event-sourced <b>Durable Streams</b></div></td>
+        <td><div class="c">SQLite in the DO · <span class="m">setState()</span> broadcast · hibernation</div></td>
+        <td><div class="c">Checkpointed session / turn / step</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Persistence</td>
+        <td class="flue"><div class="c">Bring-your-own adapter — <span class="m">@flue/postgres</span></div></td>
+        <td><div class="c">SQLite, inside Durable Objects</div></td>
+        <td><div class="c">Vercel-managed</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Sandbox &amp; code</td>
+        <td class="flue"><div class="c"><span class="m">just-bash</span> · <span class="m">local()</span> · remote · <span class="m">cloudflareSandbox()</span></div></td>
+        <td><div class="c"><span class="m">@cloudflare/shell</span> Workspace VFS + Code&nbsp;Mode</div></td>
+        <td><div class="c">Isolated VM sandbox</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Client / live</td>
+        <td class="flue"><div class="c"><span class="m">@flue/sdk</span> · <span class="m">@flue/react</span> <span class="q">(useFlueAgent)</span></div></td>
+        <td><div class="c">WebSocket RPC · <span class="m">useAgent</span> · <span class="m">useAgentChat</span> · voice</div></td>
+        <td><div class="c">Channels — HTTP / Slack / Discord</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Built on</td>
+        <td class="flue"><div class="c"><span class="m">just-bash</span> + own Durable Streams</div></td>
+        <td><div class="c">Durable Objects + <span class="m">partyserver</span> + Hono</div></td>
+        <td><div class="c">Vercel AI SDK <span class="m">(ai)</span> + Nitro</div></td>
+      </tr>
+      <tr>
+        <td class="rlab">Runs on</td>
+        <td class="flue"><div class="c">Node · CF · GH&nbsp;Actions · GitLab · Daytona · Render</div></td>
+        <td><div class="c">Cloudflare only</div></td>
+        <td><div class="c">Vercel <span class="q">(Nitro)</span></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="foot">
+    <div class="common"><span class="lab">Shared at the core</span>
+      <span class="txt">All three: <b>TypeScript · typed tools · Markdown skills · subagents · MCP · scheduling · durable, resumable runs · OpenTelemetry.</b></span></div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from repos + deepwiki · APIs evolve · not affiliated with Cloudflare or Vercel
+      <div class="src">Sources: github.com/withastro/flue · github.com/cloudflare/agents · github.com/vercel/eve · deepwiki.com</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
