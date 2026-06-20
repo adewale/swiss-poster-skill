@@ -113,7 +113,7 @@
 
         <!-- WORKFLOW -> AGENT -->
         <line x1="300" y1="100" x2="300" y2="150" stroke="#44403c" stroke-width="2" marker-end="url(#ah)"/>
-        <text x="312" y="128" font-family="IBM Plex Mono,monospace" font-size="10" fill="#0057D8">init(agent) — drives it</text>
+        <text x="312" y="128" font-family="IBM Plex Mono,monospace" font-size="10" fill="#0057D8">ctx.init(agent) → harness</text>
 
         <!-- AGENT -->
         <rect x="120" y="152" width="300" height="106" fill="#fafaf9" stroke="#1c1917" stroke-width="2"/>
@@ -185,8 +185,9 @@
         <div class="drow"><div class="dk">How it ends</div>
           <div class="dv a"><span class="lab">AGT</span><span>it doesn't — waits for the next message</span></div>
           <div class="dv w"><span class="lab">WF</span><span>completes and returns <span class="m">response.data</span></span></div></div>
-        <div class="fnnote"><span class="m">createAgent</span> &amp; <span class="m">defineTool</span> are exported from <span class="m">@flue/runtime</span>;
-          <span class="m">run</span> / <span class="m">init</span> are not — a Workflow is a file the runtime discovers and invokes with a context.</div>
+        <div class="fnnote">No <span class="m">run</span>/<span class="m">defineWorkflow</span> export: a Workflow is a file whose <span class="m">run(ctx)</span> the runtime
+          invokes. <span class="m">init</span> is a method on that <span class="m">FlueContext</span> — <span class="m">init(agent) → FlueHarness</span> — so a Workflow boots an Agent,
+          then <span class="m">session().prompt()</span>.</div>
       </div>
     </div>
   </div>
@@ -200,7 +201,7 @@
 
   <div class="colo">
     <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from the runtime source on GitHub · APIs evolve
-      <div class="src">Source: withastro/flue · packages/runtime/src/{agent-definition, harness, index, adapter}.ts · loop: @mariozechner/pi-agent-core</div></div>
+      <div class="src">Source: withastro/flue · packages/runtime/src {agent-definition, harness, types, runtime/flue-app, runtime/handle-agent} · loop: @mariozechner/pi-agent-core</div></div>
     <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
   </div>
 
