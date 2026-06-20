@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — A country where height means knowing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --ochre:   #B07A2E;   /* flat ink — land */
+    --ochre-d: #6f4c19;   /* darkened ochre for ink-on-stone text */
+    --slate:   #3F5E6B;   /* flat ink — water / chasm */
+    --slate-d: #2b4350;   /* darkened slate for ink-on-stone text */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 40; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 16px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE row */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 34px; margin-bottom: 14px; }
+  .head .title { font-weight: 700; font-size: 60px; line-height: 0.86; letter-spacing: -0.03em; max-width: 900px; color: var(--stone-900); }
+  .head .title .acc { color: var(--ochre-d); }
+  .head .keymeta { text-align: right; padding-bottom: 6px; flex: 0 0 auto; }
+  .head .keymeta .n { font-family:'IBM Plex Mono',monospace; font-weight:600; font-size: 15px; letter-spacing: 0.04em; line-height: 1.0; color: var(--slate-d); text-transform: uppercase; }
+  .head .keymeta .l { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone-500); margin-top: 8px; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 12px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+  .seclabel .r { color: var(--stone-500); font-weight: 500; }
+
+  /* HERO — the computed cartographic plate (relief map) */
+  .hero {
+    position: relative; width: 1140px; height: 1196px;
+    border: 2.5px solid var(--stone-900); background: var(--stone-50); overflow: hidden;
+  }
+  #relief { position: absolute; inset: 0; display: block; width: 1140px; height: 1196px; }
+
+  /* leader lines (SVG) sit above the relief, below the label plates */
+  .leaders { position: absolute; inset: 0; z-index: 18; pointer-events: none; }
+  .leaders svg { position:absolute; inset:0; width:100%; height:100%; overflow: visible; }
+
+  /* region label plates — small solid stone fields, never bare over relief */
+  .rgn { position: absolute; z-index: 22; background: var(--stone-50);
+         border: 1.5px solid var(--stone-900); padding: 7px 11px 8px 11px; max-width: 252px; }
+  .rgn .rn { font-family:'IBM Plex Mono',monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--stone-900); line-height: 1.0; }
+  .rgn .rx { font-size: 12.5px; line-height: 1.26; color: var(--stone-700); margin-top: 5px; }
+  .rgn .rx b { font-weight: 600; color: var(--stone-900); }
+  /* land plates take an ochre rule; water/chasm plates a slate rule */
+  .rgn.land  { border-left: 4px solid var(--ochre); }
+  .rgn.water { border-left: 4px solid var(--slate); }
+  .rgn .tag { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+  .rgn.land  .tag { color: var(--ochre-d); }
+  .rgn.water .tag { color: var(--slate-d); }
+
+  /* the escarpment plate — the fold, called out on its own dark field */
+  .cliff { position: absolute; z-index: 24; background: var(--stone-950); color: var(--stone-50);
+           padding: 9px 13px 10px 13px; max-width: 250px; border-left: 4px solid var(--ochre); }
+  .cliff .ct { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--ochre); }
+  .cliff .cx { font-size: 13px; line-height: 1.28; color: rgba(250,250,249,0.94); margin-top: 6px; }
+  .cliff .cx b { color: var(--stone-50); font-weight: 600; }
+
+  /* compute stamp — top-right of the plate, on its own dark field */
+  .stamp {
+    position: absolute; z-index: 20; right: 0; top: 0;
+    background: var(--stone-950); color: var(--stone-50); padding: 7px 12px 8px 12px; text-align: right;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    border-left: 1.5px solid var(--stone-700); border-bottom: 1.5px solid var(--stone-700);
+  }
+  .stamp b { color: var(--stone-50); font-weight: 600; }
+
+  /* sheet caption — top-left of the plate, on solid stone */
+  .sheetlab {
+    position: absolute; z-index: 20; left: 0; top: 0;
+    background: var(--stone-50); padding: 7px 12px 8px 12px;
+    border-right: 1.5px solid var(--stone-300); border-bottom: 1.5px solid var(--stone-300);
+  }
+  .sheetlab .t { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-700); font-weight: 600; }
+  .sheetlab .s { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.05em; color: var(--stone-500); margin-top: 3px; }
+
+  /* hypsometric legend — lower-left, on solid stone */
+  .legend {
+    position: absolute; z-index: 20; left: 0; bottom: 0;
+    background: var(--stone-50); padding: 9px 12px 10px 12px;
+    border-right: 1.5px solid var(--stone-300); border-top: 1.5px solid var(--stone-300);
+  }
+  .legend .lt { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-700); font-weight: 600; }
+  .legend .bar { display:flex; height: 12px; width: 248px; margin-top: 7px; border: 1px solid var(--stone-400); }
+  .legend .bar i { flex: 1; display:block; }
+  .legend .ends { display:flex; justify-content:space-between; margin-top: 5px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.04em; color: var(--stone-500); }
+
+  /* north arrow + contour-interval note — lower-right on solid stone */
+  .northbox {
+    position: absolute; z-index: 20; right: 0; bottom: 0; text-align: right;
+    background: var(--stone-50); padding: 9px 12px 10px 12px;
+    border-left: 1.5px solid var(--stone-300); border-top: 1.5px solid var(--stone-300);
+    display:flex; align-items:center; gap: 12px;
+  }
+  .northbox .meta { text-align: right; }
+  .northbox .meta .t { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone-700); font-weight: 600; }
+  .northbox .meta .s { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.04em; color: var(--stone-500); margin-top: 3px; }
+  .northbox svg { display:block; }
+
+  /* FOOTER */
+  .foot { display: grid; grid-template-columns: 1fr; margin-top: 16px; }
+  .foot .c { font-size: 16px; line-height: 1.42; color: var(--stone-700); max-width: 1140px; border-left: 2.5px solid var(--ochre); padding-left: 16px; }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--ochre-d); font-weight: 600; }
+  .foot .c .s { color: var(--slate-d); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="travel-lithographic"
+     data-genre="computational-cartography"
+     data-palette="two-flat-inks"
+     data-encoding="value-noise elevation → hypsometric tint + hillshade + contours; domains → regions"
+     data-reference="cynefin-snowden-1999"
+     data-source="multi-octave value noise; NW hillshade az315 alt45; contour interval 0.04">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the habitat</div>
+      <div class="meta" data-source="gloss">Welsh: the place you know</div>
+    </div>
+    <div class="right">
+      <div>elevation = how knowable</div>
+      <div class="meta">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="title" data-critical="title">A country where height<br>means <span class="acc">knowing.</span></div>
+    <div class="keymeta" data-source="sheet">
+      <div class="n">relief sheet 01</div>
+      <div class="l">five domains, one cliff</div>
+    </div>
+  </div>
+
+  <div class="seclabel">
+    <span>High ground is knowable · low ground is not · the one sheer cliff runs between</span>
+    <span class="sp"></span>
+    <span class="r">value-noise relief</span>
+  </div>
+
+  <!-- HERO: the computed cartographic plate -->
+  <div class="hero" data-encoding="elevation → hypsometric band × NW hillshade, with contour lines every 0.04">
+    <canvas id="relief" width="2280" height="2392" aria-hidden="true"></canvas>
+
+    <!-- leader lines from each plate to its region on the relief.
+         coords are in the 1140×1196 CSS box. -->
+    <div class="leaders" aria-hidden="true">
+      <svg viewBox="0 0 1140 1196" preserveAspectRatio="none">
+        <!-- CLEAR plateau (upper-right) -->
+        <line x1="900" y1="232" x2="889" y2="250" stroke="#1c1917" stroke-width="1.5"/>
+        <circle cx="889" cy="250" r="4" fill="#1c1917"/>
+        <!-- COMPLICATED ridges (centre-right uplands) -->
+        <line x1="248" y1="486" x2="700" y2="612" stroke="#1c1917" stroke-width="1.5"/>
+        <circle cx="700" cy="612" r="4" fill="#1c1917"/>
+        <!-- COMPLEX marsh (lower-centre wet flats) -->
+        <line x1="502" y1="1046" x2="612" y2="1052" stroke="#1c1917" stroke-width="1.5"/>
+        <circle cx="612" cy="1052" r="4" fill="#1c1917"/>
+        <!-- CHAOTIC chasm — leader dives into the deep pit -->
+        <line x1="120" y1="430" x2="250" y2="892" stroke="#1c1917" stroke-width="1.5"/>
+        <circle cx="250" cy="892" r="4" fill="#1c1917"/>
+        <!-- DISORDER fog (centre seam) -->
+        <line x1="566" y1="688" x2="566" y2="582" stroke="#1c1917" stroke-width="1.5"/>
+        <circle cx="566" cy="582" r="4" fill="#1c1917"/>
+        <!-- ESCARPMENT — points at the cliff seam between plateau and chasm -->
+        <line x1="760" y1="556" x2="600" y2="470" stroke="#7c531c" stroke-width="2"/>
+        <circle cx="600" cy="470" r="4.5" fill="#7c531c"/>
+      </svg>
+    </div>
+
+    <!-- sheet caption -->
+    <div class="sheetlab" aria-hidden="true">
+      <div class="t">topographic relief — knowability</div>
+      <div class="s">grid 380×399 · value noise, 5 octaves</div>
+    </div>
+
+    <!-- compute stamp -->
+    <div class="stamp" data-source="compute">
+      hillshade NW · az 315° alt 45°<br><b>contours every 0.04</b>
+    </div>
+
+    <!-- region plates — each on a solid stone field, leader to its landform -->
+    <div class="rgn land" style="top: 150px; right: 0;" data-source="domain-clear">
+      <div class="tag">ordered · highest ground</div>
+      <div class="rn" data-critical="title">CLEAR</div>
+      <div class="rx" data-critical="body">the plateau — <b>flat, marked, walkable</b></div>
+    </div>
+
+    <div class="rgn land" style="top: 416px; left: 0;" data-source="domain-complicated">
+      <div class="tag">ordered · the heights</div>
+      <div class="rn" data-critical="title">COMPLICATED</div>
+      <div class="rx" data-critical="body">the ridges — <b>a route exists, bring a guide</b></div>
+    </div>
+
+    <div class="rgn water" style="top: 1006px; left: 250px;" data-source="domain-complex">
+      <div class="tag">unordered · low ground</div>
+      <div class="rn" data-critical="title">COMPLEX</div>
+      <div class="rx" data-critical="body">the marsh — <b>ground that shifts as you cross</b></div>
+    </div>
+
+    <div class="rgn water" style="top: 250px; left: 0;" data-source="domain-chaotic">
+      <div class="tag">unordered · the depths</div>
+      <div class="rn" data-critical="title">CHAOTIC</div>
+      <div class="rx" data-critical="body">the chasm — <b>no footing</b></div>
+    </div>
+
+    <div class="rgn land" style="top: 632px; left: 442px;" data-source="domain-disorder">
+      <div class="tag">the centre · no fix</div>
+      <div class="rn" data-critical="title">DISORDER</div>
+      <div class="rx" data-critical="body">the fog — <b>you can't read the map</b></div>
+    </div>
+
+    <!-- the escarpment / fold plate — points at the single cliff -->
+    <div class="cliff" style="top: 500px; right: 0;" data-source="fold">
+      <div class="ct" data-critical="title">↯ the escarpment</div>
+      <div class="cx" data-critical="body"><b>best practice walks off here</b></div>
+    </div>
+
+    <!-- hypsometric legend -->
+    <div class="legend" aria-hidden="true">
+      <div class="lt">elevation → knowability</div>
+      <div class="bar" id="legbar"></div>
+      <div class="ends"><span>chasm — unknown</span><span>plateau — known</span></div>
+    </div>
+
+    <!-- north arrow + contour note -->
+    <div class="northbox" data-source="orientation">
+      <div class="meta">
+        <div class="t">contour interval 0.04</div>
+        <div class="s">light from NW · az 315°</div>
+      </div>
+      <svg width="34" height="40" viewBox="0 0 34 40" aria-hidden="true">
+        <polygon points="17,3 25,30 17,23 9,30" fill="#1c1917"/>
+        <text x="17" y="40" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#1c1917" text-anchor="middle">N</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      Cynefin is Welsh for <b>the habitat you know in your bones.</b> Drawn as land, the framework is a relief map:
+      <span class="g">high ground is knowable</span>, <span class="s">low ground is not</span>, and the one sheer cliff
+      runs between the plateau and the chasm.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>value-noise relief · hillshade + contours</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/ · habitat</div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     COMPUTATION — runs synchronously during parse, before load.
+     A real cartographic plate of a generated "knowability" country.
+
+     1. ELEVATION FIELD — multi-octave value noise.
+        hash(i,j) -> [0,1] pseudo-random per lattice point;
+        smoothstep-interpolated within each cell; summed over 5
+        octaves (freq x2, amp x0.5). Normalised to [0,1].
+
+     2. STORY SHAPING — a high PLATEAU (Clear, upper-right), broken
+        RIDGES (Complicated, left), a low MARSH basin (Complex,
+        lower-left), a deep CHASM (Chaotic, lower-right). A sharp
+        ESCARPMENT (tanh step along a diagonal) is carved between
+        the plateau and the chasm — that cliff is the fold.
+
+     3. CARTOGRAPHIC RENDER — (a) hypsometric tint (flat bands:
+        slate water/chasm -> ochre lowland -> pale highland);
+        (b) HILLSHADE from the surface normal, light from NW
+        (azimuth 315, altitude 45), multiplied onto the tint;
+        (c) CONTOUR LINES wherever elevation crosses an interval
+        of 0.04, drawn as thin dark lines.
+     ============================================================ -->
+<script>
+(function () {
+  // ------------------------------------------------------------
+  // grid + canvas
+  // ------------------------------------------------------------
+  var GW = 380, GH = 399;                 // elevation samples (matches microtype)
+  var canvas = document.getElementById('relief');
+  var ctx = canvas.getContext('2d');
+  var CSS_W = 1140, CSS_H = 1196, DPR = 2;
+  var devW = CSS_W * DPR, devH = CSS_H * DPR;   // 2280 x 2392 backing store
+
+  // ------------------------------------------------------------
+  // 1. multi-octave VALUE NOISE
+  //    integer-lattice hash -> [0,1]; smoothstep interpolation;
+  //    summed over octaves with freq x2, amp x0.5.
+  // ------------------------------------------------------------
+  function hash(i, j) {
+    // deterministic 2D integer hash -> [0,1)
+    var h = (i * 374761393 + j * 668265263) | 0;   // two large primes
+    h = (h ^ (h >>> 13)) | 0;
+    h = (h * 1274126177) | 0;
+    h = (h ^ (h >>> 16)) >>> 0;
+    return h / 4294967296;
+  }
+  function smooth(t) { return t * t * (3 - 2 * t); }   // smoothstep
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // value noise sampled in a continuous (x,y) space at a given lattice frequency
+  function valueNoise(x, y) {
+    var x0 = Math.floor(x), y0 = Math.floor(y);
+    var fx = smooth(x - x0), fy = smooth(y - y0);
+    var v00 = hash(x0,     y0);
+    var v10 = hash(x0 + 1, y0);
+    var v01 = hash(x0,     y0 + 1);
+    var v11 = hash(x0 + 1, y0 + 1);
+    var a = lerp(v00, v10, fx);
+    var b = lerp(v01, v11, fx);
+    return lerp(a, b, fy);
+  }
+  // fractal sum of 5 octaves
+  function fbm(x, y) {
+    var sum = 0, amp = 0.5, freq = 1.0, norm = 0;
+    for (var o = 0; o < 5; o++) {
+      sum += amp * valueNoise(x * freq, y * freq);
+      norm += amp;
+      amp *= 0.5;
+      freq *= 2.0;
+    }
+    return sum / norm;   // [0,1]
+  }
+
+  // base lattice spans ~ BASE cells across the field's short dimension
+  var BASE = 5.0;
+  var elev = new Float64Array(GW * GH);
+
+  // ------------------------------------------------------------
+  // 2. STORY SHAPING — turn the noise into a country that tells
+  //    the Cynefin story. Normalised coords u=x/GW (→E), w=y/GH (→S).
+  //
+  //    GEOGRAPHY (one coherent tilt + one sheer cliff):
+  //      high ground in the EAST/NE, low ground in the WEST/SW.
+  //        plateau  CLEAR        upper-right  high & FLAT
+  //        ridges   COMPLICATED  centre-right high & BROKEN (creased)
+  //        chasm    CHAOTIC      lower-left   deep pit, below sea
+  //        marsh    COMPLEX      lower-centre low basin near sea
+  //        disorder DISORDER     centre       on the seam
+  //      The ESCARPMENT is ONE tanh cliff on the NE/SW divide — the
+  //      plateau's south-west rim falls straight into the chasm.
+  // ------------------------------------------------------------
+  function clamp01(t) { return t < 0 ? 0 : (t > 1 ? 1 : t); }
+  function smoothstep(e0, e1, x) {
+    var t = clamp01((x - e0) / (e1 - e0));
+    return t * t * (3 - 2 * t);
+  }
+  // smooth radial falloff (1 at centre, 0 past the unit radius)
+  function bump(u, w, cu, cw, ru, rw) {
+    var dx = (u - cu) / ru, dy = (w - cw) / rw;
+    var d = Math.sqrt(dx * dx + dy * dy);
+    return 1 - smoothstep(0.0, 1.0, d);
+  }
+
+  // --- the fold line: the single escarpment ---
+  // A straight line across the map separating the high tableland (NE,
+  // the plateau + ridges) from the deep ground (SW, the chasm + marsh).
+  // Its signed distance drives ONE sharp tanh cliff — the only sheer
+  // drop on the sheet. normal points to the HIGH (NE) side.
+  var FNX = 0.74, FNY = -0.67;                 // normal: +E, −S → up-right
+  var fnl = Math.sqrt(FNX * FNX + FNY * FNY); FNX /= fnl; FNY /= fnl;
+  var FPX = 0.50, FPY = 0.44;                  // a point on the fold line
+  function foldDist(u, w) { return (u - FPX) * FNX + (w - FPY) * FNY; }
+
+  // second-octave warp so the cliff edge is not a ruler-straight line
+  // (a real escarpment wanders); small lateral wobble of the seam.
+  function seamWobble(u, w) { return (fbm(u * 3.4 + 5.0, w * 3.4 + 9.0) - 0.5) * 0.07; }
+
+  var i, j;
+  for (j = 0; j < GH; j++) {
+    var w = j / (GH - 1);
+    for (i = 0; i < GW; i++) {
+      var u = i / (GW - 1);
+
+      // base fractal noise (rolling terrain), in [0,1]
+      var n = fbm(u * BASE, w * BASE);
+
+      // signed distance to the (wobbled) fold line: + = high NE side
+      var sd = foldDist(u, w) + seamWobble(u, w);
+
+      // ---- THE ESCARPMENT: one sharp tanh step (the fold) ----
+      // very narrow transition → a sheer cliff, not a ramp. The drop
+      // happens over a few grid cells, so contours pack tight and the
+      // hillshade throws a hard shadow on the face.
+      var cliff = 0.5 + 0.5 * Math.tanh(sd * 34.0);
+
+      // ---- region weights (smooth radial masks) ----
+      var wPlat  = bump(u, w, 0.78, 0.19, 0.34, 0.27);   // CLEAR  plateau
+      var wRidge = bump(u, w, 0.72, 0.56, 0.32, 0.26);   // COMPLICATED ridges
+      var wChasm = bump(u, w, 0.21, 0.73, 0.30, 0.27);   // CHAOTIC chasm
+      var wMarsh = bump(u, w, 0.49, 0.83, 0.32, 0.20);   // COMPLEX marsh
+
+      // ---- height targets per landform ----
+      // PLATEAU: high & FLAT (noise nearly killed) — a walkable tableland.
+      var hPlat = 0.84 + 0.03 * (n - 0.5);
+      // RIDGES: high but BROKEN — two octaves of ridged noise
+      // (1−|2n−1|) stack into sharp parallel crests with deep gullies,
+      // so the COMPLICATED ground reads visibly rougher than the plateau.
+      var rg1 = 1 - Math.abs(2 * fbm(u * BASE * 2.2 + 31.7, w * BASE * 2.2 + 7.3) - 1);
+      var rg2 = 1 - Math.abs(2 * fbm(u * BASE * 4.4 + 51.1, w * BASE * 4.4 + 3.9) - 1);
+      var ridged = 0.7 * rg1 + 0.3 * rg2;
+      var hRidge = 0.44 + 0.46 * ridged;                 // 0.44..0.90, gullied
+      // CHASM: the deepest gouge, well below sea — no footing.
+      var hChasm = 0.010 + 0.015 * n;
+      // MARSH: a wet lowland straddling the waterline — damped noise so
+      // it mottles between shoal and strand (ground that shifts as you
+      // cross). Distinctly SHALLOWER than the chasm pit.
+      var hMarsh = 0.31 + 0.06 * (n - 0.5);
+
+      // ---- background terrain: high tableland on NE, a SHALLOW shelf on
+      //      SW, joined by the single cliff. Keeping the low side shallow
+      //      (near the waterline) lets the deep chasm and the wet marsh
+      //      read as distinct landforms, not one flooded basin.
+      //      The high side stays near plateau height up to the rim so the
+      //      cliff face is TALL.
+      var hHigh = 0.66 + 0.20 * n;                       // rugged uplands
+      var hLow  = 0.24 + 0.07 * n;                       // shallow shelf, near sea
+      var e = hLow + (hHigh - hLow) * cliff;
+
+      // ---- blend the regions over the background by their weights ----
+      // (later regions win where they overlap; ordering chosen so the
+      //  deep chasm and flat plateau dominate their cores.)
+      e = lerp(e, hRidge, wRidge * 0.80 * cliff);        // ridges only on high side
+      e = lerp(e, hPlat,  wPlat  * 0.94);                // plateau: flatten, lift
+      e = lerp(e, hMarsh, wMarsh * 0.86 * (1 - cliff));  // marsh on low side
+      e = lerp(e, hChasm, wChasm * 0.97 * (1 - cliff));  // chasm: gouge deepest
+
+      elev[j * GW + i] = e;
+    }
+  }
+
+  // normalise elevation to [0,1]
+  var emin = Infinity, emax = -Infinity;
+  for (i = 0; i < elev.length; i++) {
+    if (elev[i] < emin) emin = elev[i];
+    if (elev[i] > emax) emax = elev[i];
+  }
+  var erange = (emax - emin) || 1;
+  for (i = 0; i < elev.length; i++) elev[i] = (elev[i] - emin) / erange;
+
+  // expose computed range (audit only)
+  canvas.setAttribute('data-emin', emin.toFixed(4));
+  canvas.setAttribute('data-emax', emax.toFixed(4));
+
+  // ------------------------------------------------------------
+  // 3a. HYPSOMETRIC TINT — flat bands.
+  //     Sea level fixed at SEA; below = slate water/chasm (two slate
+  //     bands), above = ochre lowland graded to pale highland.
+  //     Two flat inks only: slate #3F5E6B and ochre #B07A2E, lifted
+  //     toward stone paper for the high pale bands.
+  // ------------------------------------------------------------
+  var SEA = 0.30;   // anything below reads as water / chasm
+  // palette stops as [r,g,b] — only two inks (slate, ochre) graded
+  // against stone paper; slate stays cold for water, ochre warm for land.
+  var P = {
+    abyss:  [0x24, 0x39, 0x44],   // deepest slate — the chasm floor
+    chasm:  [0x32, 0x4c, 0x58],   // deep slate
+    water:  [0x3f, 0x5e, 0x6b],   // slate — the marsh / shallows
+    shoal:  [0x5c, 0x77, 0x80],   // pale slate — the wet edge
+    shore:  [0x9a, 0x86, 0x66],   // slate→ochre muddy strand (ink mix)
+    low:    [0xb0, 0x7a, 0x2e],   // ochre lowland
+    mid:    [0xc4, 0x97, 0x57],   // lifted ochre
+    high:   [0xd8, 0xbc, 0x8d],   // pale ochre — the high tableland
+    peak:   [0xea, 0xdf, 0xc9]    // near stone-paper — only the crests
+  };
+  // map normalised elevation -> flat band colour. No smooth gradient:
+  // quantise into discrete hypsometric bands, the way a relief plate does.
+  function hypsoBand(e) {
+    if (e < SEA) {
+      // water: four slate bands, deep → wet edge (bathymetric)
+      var wt = e / SEA;                 // 0..1 within water
+      if (wt < 0.22) return P.abyss;
+      if (wt < 0.48) return P.chasm;
+      if (wt < 0.78) return P.water;
+      return P.shoal;
+    }
+    // land: bands from the strand up to the plateau cap.
+    var t = (e - SEA) / (1 - SEA);
+    if (t < 0.06) return P.shore;
+    if (t < 0.24) return P.low;
+    if (t < 0.46) return P.mid;
+    if (t < 0.82) return P.high;        // wide pale band = the tableland
+    return P.peak;                      // thin crest cap (not a snowfield)
+  }
+
+  // ------------------------------------------------------------
+  // 3b. HILLSHADE — surface normal · light from NW.
+  //     gradient via central differences in grid space; normal =
+  //     (-dz/dx, -dz/dy, 1); light L from azimuth 315°, altitude 45°;
+  //     shade = clamp(N·L). Multiplied onto the tint.
+  // ------------------------------------------------------------
+  // vertical exaggeration so the shading has punch
+  var ZSCALE = 26.0;
+  // light direction (NW, az 315°, alt 45°)
+  var az = 315 * Math.PI / 180, alt = 45 * Math.PI / 180;
+  var lx = Math.cos(alt) * Math.sin(az);   // az measured clockwise from north
+  var ly = Math.cos(alt) * Math.cos(az);
+  var lz = Math.sin(alt);
+  // normalise light
+  var ll = Math.sqrt(lx * lx + ly * ly + lz * lz); lx /= ll; ly /= ll; lz /= ll;
+
+  function E(x, y) {
+    if (x < 0) x = 0; else if (x >= GW) x = GW - 1;
+    if (y < 0) y = 0; else if (y >= GH) y = GH - 1;
+    return elev[y * GW + x];
+  }
+  // precompute hillshade per grid cell -> [0,1]
+  var shade = new Float64Array(GW * GH);
+  for (j = 0; j < GH; j++) {
+    for (i = 0; i < GW; i++) {
+      var dzdx = (E(i + 1, j) - E(i - 1, j)) * 0.5 * ZSCALE;
+      var dzdy = (E(i, j + 1) - E(i, j - 1)) * 0.5 * ZSCALE;
+      // surface normal (-dzdx, -dzdy, 1)
+      var Nx = -dzdx, Ny = -dzdy, Nz = 1.0;
+      var Nlen = Math.sqrt(Nx * Nx + Ny * Ny + Nz * Nz);
+      Nx /= Nlen; Ny /= Nlen; Nz /= Nlen;
+      // y axis: grid row increases downward (south). Our light ly is
+      // toward north, so flip Ny sign to match screen orientation.
+      var dot = Nx * lx + (-Ny) * ly + Nz * lz;
+      if (dot < 0) dot = 0;
+      // soften: ambient floor + diffuse term
+      shade[j * GW + i] = 0.30 + 0.70 * dot;
+    }
+  }
+
+  // ------------------------------------------------------------
+  // RENDER PASS 1 — tinted + shaded raster, drawn per device pixel.
+  // Bilinear-sample elevation & shade so the plate is smooth at 2x.
+  // ------------------------------------------------------------
+  var img = ctx.createImageData(devW, devH);
+  var data = img.data;
+
+  function sampleBilinear(arr, gx, gy) {
+    var x0 = Math.floor(gx), y0 = Math.floor(gy);
+    var fx = gx - x0, fy = gy - y0;
+    var x1 = x0 + 1, y1 = y0 + 1;
+    if (x0 < 0) x0 = 0; if (y0 < 0) y0 = 0;
+    if (x1 >= GW) x1 = GW - 1; if (y1 >= GH) y1 = GH - 1;
+    if (x0 >= GW) x0 = GW - 1; if (y0 >= GH) y0 = GH - 1;
+    var a = arr[y0 * GW + x0], b = arr[y0 * GW + x1];
+    var c = arr[y1 * GW + x0], d = arr[y1 * GW + x1];
+    return lerp(lerp(a, b, fx), lerp(c, d, fx), fy);
+  }
+
+  // contour test: true if elevation interval boundary passes near this sample.
+  // We detect a crossing by comparing floor(e/INT) of neighbouring samples.
+  var INT = 0.04;                       // contour interval
+  function bandIndex(e) { return Math.floor(e / INT); }
+
+  var px, py;
+  for (py = 0; py < devH; py++) {
+    // map device row -> grid y
+    var gy = (py / (devH - 1)) * (GH - 1);
+    for (px = 0; px < devW; px++) {
+      var gx = (px / (devW - 1)) * (GW - 1);
+
+      var e = sampleBilinear(elev, gx, gy);
+      var sh = sampleBilinear(shade, gx, gy);
+
+      // hypsometric tint
+      var col = hypsoBand(e);
+      var r = col[0], g = col[1], b = col[2];
+
+      // multiply hillshade onto the tint
+      r = r * sh; g = g * sh; b = b * sh;
+
+      var o = (py * devW + px) * 4;
+      data[o]     = r > 255 ? 255 : r | 0;
+      data[o + 1] = g > 255 ? 255 : g | 0;
+      data[o + 2] = b > 255 ? 255 : b | 0;
+      data[o + 3] = 255;
+    }
+  }
+
+  // ------------------------------------------------------------
+  // 3c. CONTOUR LINES — overlay onto the raster.
+  // For each device pixel, sample elevation here vs one pixel right
+  // and one pixel down; if the contour band index changes, this pixel
+  // sits on a contour -> darken it. Index-crossing test gives crisp,
+  // terrain-following isolines at every INT. Water surface gets no
+  // contours below SEA except the shoreline (e == SEA crossing).
+  // ------------------------------------------------------------
+  function darkenPixel(o, k) {
+    data[o]     = data[o]     * (1 - k);
+    data[o + 1] = data[o + 1] * (1 - k);
+    data[o + 2] = data[o + 2] * (1 - k);
+  }
+  var stepX = (GW - 1) / (devW - 1);
+  var stepY = (GH - 1) / (devH - 1);
+  for (py = 0; py < devH - 1; py++) {
+    var gy0 = (py / (devH - 1)) * (GH - 1);
+    for (px = 0; px < devW - 1; px++) {
+      var gx0 = (px / (devW - 1)) * (GW - 1);
+
+      var eC = sampleBilinear(elev, gx0, gy0);
+      var eR = sampleBilinear(elev, gx0 + stepX, gy0);
+      var eD = sampleBilinear(elev, gx0, gy0 + stepY);
+
+      var o2 = (py * devW + px) * 4;
+
+      // shoreline: SEA crossing -> stronger slate-dark line
+      var seaC = eC < SEA, seaR = eR < SEA, seaD = eD < SEA;
+      if (seaC !== seaR || seaC !== seaD) {
+        darkenPixel(o2, 0.55);
+        continue;
+      }
+
+      // only draw elevation contours on land (above sea); keep water flat
+      if (eC < SEA) continue;
+
+      var bC = bandIndex(eC), bR = bandIndex(eR), bD = bandIndex(eD);
+      if (bC !== bR || bC !== bD) {
+        // emphasise index (every 5th band = every 0.20) as a heavier line
+        var heavy = (bC % 5 === 0);
+        darkenPixel(o2, heavy ? 0.42 : 0.24);
+      }
+    }
+  }
+
+  ctx.putImageData(img, 0, 0);
+
+  // ------------------------------------------------------------
+  // hypsometric legend bar (DOM) — slate -> ochre -> pale, banded.
+  // ------------------------------------------------------------
+  var leg = document.getElementById('legbar');
+  if (leg) {
+    var stops = [P.abyss, P.chasm, P.water, P.shoal, P.shore, P.low, P.mid, P.high, P.peak];
+    for (var q = 0; q < stops.length; q++) {
+      var sp = document.createElement('i');
+      var c = stops[q];
+      sp.style.background = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+      leg.appendChild(sp);
+    }
+  }
+})();
+</script>
+</body>
+</html>
