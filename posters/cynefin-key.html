@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — A Field Key</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --forest:   #2D6A4F;   /* single accent — the branch lines / the domain endpoints */
+    --forest-d: #1d4a36;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 20px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE row */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 14px; }
+  .head .title { font-weight: 700; font-size: 74px; line-height: 0.86; letter-spacing: -0.035em; }
+  .head .title .lead { display:block; color: var(--forest); }
+  .head .keymeta { text-align: right; padding-bottom: 6px; }
+  .head .keymeta .kk { font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-500); line-height: 1.85; }
+  .head .keymeta .kk b { color: var(--stone-900); font-weight: 600; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 4px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* ───────── THE KEY (a dichotomous branching tree) ───────── */
+  .key { position: relative; width: 1140px; height: 1232px; margin-top: 6px; }
+  .key svg.wires { position: absolute; inset: 0; width: 1140px; height: 1232px; z-index: 1; pointer-events: none; overflow: visible; }
+
+  /* a QUESTION node */
+  .node {
+    position: absolute; z-index: 3; background: var(--stone-50);
+    border: 2px solid var(--stone-900); padding: 13px 17px 14px 17px;
+  }
+  .node .qid {
+    font-family:'IBM Plex Mono',monospace; font-size: 11.5px; letter-spacing: 0.14em; font-weight: 600;
+    color: var(--forest); display:flex; align-items:baseline; gap: 8px; margin-bottom: 6px;
+  }
+  .node .qid .step { color: var(--stone-400); font-weight: 500; text-transform: uppercase; }
+  .node .qtext { font-size: 19px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; color: var(--stone-900); }
+
+  .node.q1 { left: 0;   top: 470px; width: 326px; }
+  .node.q2 { left: 372px; top: 150px;  width: 350px; }
+  .node.q3 { left: 372px; top: 820px; width: 350px; }
+
+  /* the YES / NO branch tags that ride the wires */
+  .tag {
+    position: absolute; z-index: 4; font-family:'IBM Plex Mono',monospace;
+    font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+    background: var(--stone-50); padding: 2px 8px; color: var(--forest-d);
+    border: 1.5px solid var(--forest); white-space: nowrap;
+  }
+  .tag.no { color: var(--stone-700); border-color: var(--stone-400); }
+
+  /* an OUTCOME card — a domain endpoint (specimen) */
+  .end {
+    position: absolute; z-index: 3; left: 774px; width: 366px; padding: 14px 17px 15px 18px;
+    border: 2px solid var(--stone-900); border-left: 7px solid var(--forest); background: var(--stone-50);
+  }
+  .end .ehead { display:flex; align-items:baseline; justify-content: space-between; gap: 10px; }
+  .end .ename { font-weight: 700; font-size: 29px; line-height: 0.92; letter-spacing: -0.02em; color: var(--stone-900); }
+  .end .etag { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone-500); text-align:right; line-height: 1.36; }
+  .end .eproto {
+    margin-top: 10px; font-family:'IBM Plex Mono',monospace; font-size: 13px; letter-spacing: 0.02em;
+    font-weight: 600; color: var(--forest-d); display:flex; align-items:center; gap: 7px; flex-wrap: wrap;
+  }
+  .end .eproto .arr { color: var(--stone-400); font-weight: 500; }
+  .end .edesc { margin-top: 8px; font-size: 13px; line-height: 1.32; color: var(--stone-700); }
+
+  .end.clear       { top: 22px;  }
+  .end.complicated { top: 272px; }
+  .end.complex     { top: 692px; }
+  .end.chaotic     { top: 942px; }
+
+  /* a small READING-THE-KEY legend filling the upper-left field */
+  .legend {
+    position: absolute; z-index: 3; left: 0; top: 150px; width: 326px;
+    border: 1.5px solid var(--stone-300); border-top: 3px solid var(--stone-900);
+    padding: 13px 16px 15px 16px; background: var(--stone-50);
+  }
+  .legend .lh {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 600; color: var(--stone-900); margin-bottom: 11px;
+  }
+  .legend ol { list-style: none; counter-reset: lg; }
+  .legend li {
+    counter-increment: lg; position: relative; padding-left: 26px; margin-bottom: 9px;
+    font-size: 13px; line-height: 1.3; color: var(--stone-700);
+  }
+  .legend li:last-child { margin-bottom: 0; }
+  .legend li::before {
+    content: counter(lg); position: absolute; left: 0; top: 0;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; font-weight: 600; color: var(--forest);
+    width: 17px; height: 17px; border: 1.5px solid var(--forest); border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .legend li b { color: var(--stone-900); font-weight: 600; }
+
+  /* DISORDER — the Q0 off-ramp, lower-left, dashed line from Q1 */
+  .disorder {
+    position: absolute; z-index: 3; left: 0; top: 1004px; width: 326px;
+    border: 2px dashed var(--stone-500); padding: 14px 17px 15px 17px; background: var(--stone-100);
+  }
+  .disorder .dq {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--stone-500); font-weight: 600; margin-bottom: 8px;
+  }
+  .disorder .dname { font-weight: 700; font-size: 30px; letter-spacing: -0.02em; color: var(--stone-900); line-height: 0.95; }
+  .disorder .ddesc { margin-top: 10px; font-size: 13.5px; line-height: 1.34; color: var(--stone-700); }
+  .disorder .ddesc b { color: var(--stone-900); font-weight: 600; }
+
+  /* FOOTER */
+  .foot {
+    position: absolute; left: 60px; right: 60px; bottom: 62px;
+  }
+  .foot .c { font-size: 16px; line-height: 1.42; color: var(--stone-700); border-left: 3px solid var(--forest); padding-left: 18px; max-width: 1020px; }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--forest-d); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="dichotomous-key"
+     data-reference="botanical-field-key"
+     data-encoding="yes/no answer → branch → domain">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · a field key</div>
+      <div class="meta" data-source="creator">Snowden, 1999</div>
+    </div>
+    <div class="right">
+      <div>answer in order; arrive at your domain</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="title" data-critical="title"><span class="lead">Which domain?</span>Follow the key.</div>
+    <div class="keymeta" data-source="instrument">
+      <div class="kk">a dichotomous key<br><b>3 questions · 5 outcomes</b><br>each answer is one branch</div>
+    </div>
+  </div>
+
+  <div class="seclabel"><span>Begin at Q1 · take one branch per answer</span><span class="sp"></span><span>terminate at a domain</span></div>
+
+  <!-- ───────── THE KEY ───────── -->
+  <div class="key" data-encoding="yes/no answer → branch → domain">
+
+    <!-- connector wires (dendrogram brackets); forest = the branches -->
+    <!-- coordinate system maps 1:1 to px within .key -->
+    <svg class="wires" viewBox="0 0 1140 1232" preserveAspectRatio="none" aria-hidden="true">
+      <!-- ① Q1 splits into Q2 (up) and Q3 (down) -->
+      <!-- Q1 right edge: x=326, cy=517 -->
+      <line x1="326" y1="517" x2="352" y2="517" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- vertical bus spanning Q2.cy (197) .. Q3.cy (867) -->
+      <line x1="352" y1="197" x2="352" y2="867" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- stub into Q2 (left edge x=372, cy=197) -->
+      <line x1="352" y1="197" x2="372" y2="197" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- stub into Q3 (left edge x=372, cy=867) -->
+      <line x1="352" y1="867" x2="372" y2="867" stroke="#2D6A4F" stroke-width="2.5"/>
+
+      <!-- ② Q2 splits into Clear (up) and Complicated (down) -->
+      <!-- Q2 right edge: x=722, cy=197 -->
+      <line x1="722" y1="197" x2="748" y2="197" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- vertical bus spanning Clear.cy (78) .. Complicated.cy (328) -->
+      <line x1="748" y1="78" x2="748" y2="328" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- stub into Clear (left edge x=774, cy=78) -->
+      <line x1="748" y1="78" x2="774" y2="78" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- stub into Complicated (left edge x=774, cy=328) -->
+      <line x1="748" y1="328" x2="774" y2="328" stroke="#2D6A4F" stroke-width="2.5"/>
+
+      <!-- ③ Q3 splits into Complex (up) and Chaotic (down) -->
+      <!-- Q3 right edge: x=722, cy=867 -->
+      <line x1="722" y1="867" x2="748" y2="867" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- vertical bus spanning Complex.cy (748) .. Chaotic.cy (998) -->
+      <line x1="748" y1="748" x2="748" y2="998" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- stub into Complex (left edge x=774, cy=748) -->
+      <line x1="748" y1="748" x2="774" y2="748" stroke="#2D6A4F" stroke-width="2.5"/>
+      <!-- stub into Chaotic (left edge x=774, cy=998) -->
+      <line x1="748" y1="998" x2="774" y2="998" stroke="#2D6A4F" stroke-width="2.5"/>
+
+      <!-- ⓪ Disorder off-ramp: dashed from Q1 bottom-left down to Disorder -->
+      <!-- Q1 bottom: x=40, y=564 → down to Disorder top (y=1004) -->
+      <line x1="40" y1="564" x2="40" y2="1004" stroke="#78716c" stroke-width="2" stroke-dasharray="3 5"/>
+
+      <!-- node dots at the two split points + the Q1 root -->
+      <circle cx="352" cy="517" r="5.5" fill="#2D6A4F"/>
+      <circle cx="748" cy="197" r="5.5" fill="#2D6A4F"/>
+      <circle cx="748" cy="867" r="5.5" fill="#2D6A4F"/>
+    </svg>
+
+    <!-- READING-THE-KEY legend (fills the upper-left field; a real field-key aid) -->
+    <div class="legend" data-source="how-to-read">
+      <div class="lh">Reading the key</div>
+      <ol>
+        <li>Start at <b>Q1</b>. Answer it for the situation in front of you.</li>
+        <li>Take the <b>Yes</b> or <b>No</b> branch; follow the line to the next question.</li>
+        <li>The branch you can't leave is your <b>domain</b>. Read its protocol.</li>
+      </ol>
+    </div>
+
+    <!-- Q1 -->
+    <div class="node q1" data-source="q1" data-critical="body">
+      <div class="qid"><span>Q1</span><span class="step">start here</span></div>
+      <div class="qtext" data-critical="title">Can you see cause and effect right now?</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="node q2" data-source="q2" data-critical="body">
+      <div class="qid"><span>Q2</span><span class="step">if Q1 = yes</span></div>
+      <div class="qtext" data-critical="title">Is it obvious to everyone, with no expertise needed?</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="node q3" data-source="q3" data-critical="body">
+      <div class="qid"><span>Q3</span><span class="step">if Q1 = no</span></div>
+      <div class="qtext" data-critical="title">Is there time to run a small, safe experiment?</div>
+    </div>
+
+    <!-- branch tags (ride the vertical bus, centred on the line, near the box each labels) -->
+    <!-- Q1's two branches (bus at x=352) -->
+    <div class="tag"    style="left:317px; top:212px;">Yes ↑</div>
+    <div class="tag no" style="left:319px; top:822px;">No ↓</div>
+    <!-- Q2's two branches (bus at x=748) -->
+    <div class="tag"    style="left:713px; top:93px;">Yes ↑</div>
+    <div class="tag no" style="left:715px; top:303px;">No ↓</div>
+    <!-- Q3's two branches (bus at x=748) -->
+    <div class="tag"    style="left:713px; top:763px;">Yes ↑</div>
+    <div class="tag no" style="left:715px; top:973px;">No ↓</div>
+    <!-- Disorder off-ramp tag (dashed bus at x=40) -->
+    <div class="tag no" style="left:64px; top:770px; border-style: dashed;">Can't answer ↓</div>
+
+    <!-- endpoints -->
+    <div class="end clear" data-source="domain-clear" data-critical="body">
+      <div class="ehead"><div class="ename" data-critical="title">Clear</div><div class="etag">ordered<br>known knowns</div></div>
+      <div class="eproto">sense <span class="arr">→</span> categorize <span class="arr">→</span> respond</div>
+      <div class="edesc">Obvious cause and effect. Apply the established rule.</div>
+    </div>
+
+    <div class="end complicated" data-source="domain-complicated" data-critical="body">
+      <div class="ehead"><div class="ename" data-critical="title">Complicated</div><div class="etag">ordered<br>known unknowns</div></div>
+      <div class="eproto">sense <span class="arr">→</span> analyze <span class="arr">→</span> respond</div>
+      <div class="edesc">Knowable, but only by analysis. Convene the experts.</div>
+    </div>
+
+    <div class="end complex" data-source="domain-complex" data-critical="body">
+      <div class="ehead"><div class="ename" data-critical="title">Complex</div><div class="etag">unordered<br>unknown unknowns</div></div>
+      <div class="eproto">probe <span class="arr">→</span> sense <span class="arr">→</span> respond</div>
+      <div class="edesc">Cause shows only in hindsight. Run a safe-to-fail probe, then amplify or dampen.</div>
+    </div>
+
+    <div class="end chaotic" data-source="domain-chaotic" data-critical="body">
+      <div class="ehead"><div class="ename" data-critical="title">Chaotic</div><div class="etag">unordered<br>no knowns</div></div>
+      <div class="eproto">act <span class="arr">→</span> sense <span class="arr">→</span> respond</div>
+      <div class="edesc">No usable cause and effect in time. Act first to make order, then sense.</div>
+    </div>
+
+    <!-- DISORDER (Q0) -->
+    <div class="disorder" data-source="domain-disorder" data-critical="body">
+      <div class="dleft">
+        <div class="dq">Q0 — can't answer Q1?</div>
+        <div class="dname" data-critical="title">Disorder</div>
+      </div>
+      <div class="ddesc">You don't yet know which domain you're in. <b>Split the problem</b> into parts and run the key on each part.</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      Two questions place you in a domain. The discipline is answering honestly; <span class="g">most bad calls start by treating a complex problem as merely complicated.</span>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · sense-making, not sorting</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>
