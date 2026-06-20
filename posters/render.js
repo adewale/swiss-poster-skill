@@ -36,6 +36,16 @@ const POSTERS = [
   { html: 'flue-deco.html',                       png: 'flue-deco.png' },
   { html: 'flue-riso.html',                       png: 'flue-riso.png' },
   { html: 'flue-manifesto.html',                  png: 'flue-manifesto.png' },
+  { html: 'flue-orbit.html',                      png: 'flue-orbit.png' },
+  { html: 'flue-hollick.html',                    png: 'flue-hollick.png' },
+  { html: 'flue-spiral.html',                     png: 'flue-spiral.png' },
+  { html: 'flue-hex.html',                        png: 'flue-hex.png' },
+  { html: 'flue-rings.html',                      png: 'flue-rings.png' },
+  { html: 'flue-tree.html',                       png: 'flue-tree.png' },
+  { html: 'flue-constellation.html',              png: 'flue-constellation.png' },
+  { html: 'flue-letter.html',                     png: 'flue-letter.png' },
+  { html: 'flue-circuit.html',                    png: 'flue-circuit.png' },
+  { html: 'flue-infinity.html',                   png: 'flue-infinity.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name

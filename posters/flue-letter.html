@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Assembled into Flue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 9;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* TITLE lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 4;
+  }
+  .title .mark { width: 92px; height: 92px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 116px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* DECK */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 4;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 27px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: normal; color: var(--blue-2); font-weight: 600; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── THE STAGE — component blocks compose a giant F ──────────────── */
+  .stage {
+    position: relative;
+    width: 1132px;
+    height: 1188px;
+    z-index: 4;
+  }
+  /* faint baseline frame the F sits within */
+  .stage .frame {
+    position: absolute;
+    inset: 0;
+    border-left: 1.5px solid var(--stone-200);
+    border-bottom: 1.5px solid var(--stone-200);
+    pointer-events: none;
+  }
+  .stage .axis-lab {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--stone-400);
+    font-weight: 500;
+  }
+
+  /* a component block / node */
+  .node {
+    position: absolute;
+    background: var(--stone-50);
+    border: 2px solid var(--stone-900);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 16px 18px 14px 18px;
+    overflow: hidden;
+  }
+  .node .tick {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 7px;
+  }
+  .node .nm {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+  }
+  .node .gl {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.32;
+    color: var(--stone-700);
+    margin-top: 9px;
+    max-width: 42ch;
+  }
+  .node .gl b { color: var(--stone-900); font-weight: 600; }
+  .node .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--stone-500);
+    margin-top: auto;
+    padding-top: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  /* the anchor junction = Model, solid blue field */
+  .node.lead {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .node.lead .tick { color: rgba(250,250,249,0.9); }
+  .node.lead .nm { color: var(--stone-50); }
+  .node.lead .gl { color: rgba(250,250,249,0.94); }
+  .node.lead .gl b { color: var(--stone-50); }
+  .node.lead .mono { color: rgba(250,250,249,0.85); }
+
+  /* blocks sitting on the two arms read slightly heavier */
+  .node.arm .tick { color: var(--blue-2); }
+
+  /* connective seams between blocks (hard, not decorative) */
+  .seam {
+    position: absolute;
+    background: var(--stone-900);
+    z-index: 3;
+  }
+
+  /* ghost F behind the blocks — texture only, demoted */
+  .ghostF {
+    position: absolute;
+    top: 0; left: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1500px;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: var(--blue);
+    opacity: 0.05;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    top: -150px;
+    left: -70px;
+  }
+
+  /* corner index inside the stage, tiny support type */
+  .stage-tag {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    z-index: 4;
+  }
+  .stage-tag b { color: var(--blue-2); }
+
+  /* ── FOOT synthesis line ─────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 78px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.34;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 13px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="typographic-specimen"
+     data-reference="hofmann-figure-ground"
+     data-encoding="agent component → block placed on letterform F">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">agent = model + harness</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · type-as-layout</div>
+      <div class="meta">the parts, assembled</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">Assembled into Flue.</span>
+      <span class="small">seven parts compose one letter</span>
+    </span>
+  </div>
+
+  <!-- DECK -->
+  <div class="deck" data-critical="body">
+    <div class="deck-big">Set the parts in place and the shape resolves: an <b>agent</b> is a <em>model + harness</em>.</div>
+    <div class="deck-count">Components<br>01 — 07</div>
+  </div>
+
+  <!-- STAGE: the giant F built from labeled component blocks -->
+  <section class="stage">
+
+    <!-- demoted texture: ghost F -->
+    <div class="ghostF" aria-hidden="true">F</div>
+
+    <div class="frame" aria-hidden="true"></div>
+
+    <!-- hard seams welding the blocks into one continuous letterform -->
+    <!-- stem inner spine -->
+    <div class="seam" style="left:404px; top:0; width:3px; height:1188px;" aria-hidden="true"></div>
+    <!-- top arm under-rule -->
+    <div class="seam" style="left:0; top:0; width:1132px; height:3px;" aria-hidden="true"></div>
+    <!-- mid arm under-rule -->
+    <div class="seam" style="left:0; top:497px; width:760px; height:3px;" aria-hidden="true"></div>
+
+    <!-- ===== TOP ARM of the F (horizontal, top) ===== -->
+
+    <!-- Model — top-left junction anchor (corner of stem + top arm) -->
+    <div class="node lead" style="left:0; top:3px; width:404px; height:240px;"
+         data-critical="title" data-source="model">
+      <div class="tick">01 · reasoning core</div>
+      <div class="nm">Model</div>
+      <div class="gl">The LLM that thinks over the task and <b>picks the next action.</b> Swap it; the harness around it stays.</div>
+      <div class="mono">anthropic/claude-sonnet-4-6</div>
+    </div>
+
+    <!-- Tools — top arm, middle -->
+    <div class="node arm" style="left:407px; top:3px; width:360px; height:240px;"
+         data-source="tools">
+      <div class="tick">02 · typed actions</div>
+      <div class="nm">Tools</div>
+      <div class="gl">Functions the agent calls to reach your APIs and make <b>controlled, safe changes</b> to the world.</div>
+      <div class="mono">tools: [ ... ]</div>
+    </div>
+
+    <!-- MCP servers — top arm, far right tip -->
+    <div class="node arm" style="left:770px; top:3px; width:362px; height:240px;"
+         data-source="mcp">
+      <div class="tick">03 · external surface</div>
+      <div class="nm">MCP servers</div>
+      <div class="gl">Open connectors that <b>plug in capabilities</b> — let the agent speak to systems it didn't ship with.</div>
+      <div class="mono">mcp: connect()</div>
+    </div>
+
+    <!-- ===== MIDDLE ARM of the F (horizontal, middle) ===== -->
+
+    <!-- Skills — middle arm, after the stem -->
+    <div class="node arm" style="left:407px; top:500px; width:360px; height:236px;"
+         data-source="skills">
+      <div class="tick">05 · loadable expertise</div>
+      <div class="nm">Skills</div>
+      <div class="gl">Packaged know-how the agent <b>loads on demand</b> for specialized, task-specific guidance.</div>
+      <div class="mono">SKILL.md</div>
+    </div>
+
+    <!-- ===== VERTICAL STEM of the F (left column, full height) ===== -->
+
+    <!-- Sandbox — stem, upper-middle (between the two arms) -->
+    <div class="node" style="left:0; top:246px; width:404px; height:248px;"
+         data-source="sandbox">
+      <div class="tick">04 · secure execution</div>
+      <div class="nm">Sandbox</div>
+      <div class="gl">An isolated <b>fs + shell</b> where the agent runs code and edits files — never your machine.</div>
+      <div class="mono">sandbox: fs + shell</div>
+    </div>
+
+    <!-- Sessions — stem, lower-middle -->
+    <div class="node" style="left:0; top:500px; width:404px; height:328px;"
+         data-source="sessions">
+      <div class="tick">06 · persistent memory</div>
+      <div class="nm">Sessions</div>
+      <div class="gl">Durable memory across turns and runs. The agent <b>remembers the thread</b> — context carries forward instead of resetting.</div>
+      <div class="mono">session.resume()</div>
+    </div>
+
+    <!-- Instructions — stem foot, base of the F -->
+    <div class="node" style="left:0; top:834px; width:404px; height:354px;"
+         data-critical="title" data-source="instructions">
+      <div class="tick">07 · the directive</div>
+      <div class="nm">Instructions</div>
+      <div class="gl">The task and its context, in plain words. You hand it <b>a goal, not a script,</b> and trust it to finish the loop on its own.</div>
+      <div class="mono">a goal, stated</div>
+    </div>
+
+    <!-- support microtype tucked in the open quadrant of the F -->
+    <div class="stage-tag" style="left:430px; top:792px;" data-critical="title">
+      The blocks resolve into one letter — <b>F</b>.
+    </div>
+    <div class="stage-tag" style="left:430px; top:818px; color:var(--stone-500); font-weight:500; letter-spacing:0.14em;">
+      stem + two arms · the Flue mark, at scale
+    </div>
+    <div class="axis-lab" style="left:430px; bottom:18px;" aria-hidden="true">model + harness</div>
+    <div class="stage-tag" style="right:6px; bottom:14px; color:var(--blue-2);">07 parts · 01 agent</div>
+
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth" data-critical="body">
+    A <b>model</b> at the junction; <b>tools</b>, <b>skills</b> and <b>MCP</b> reaching out; a <b>sandbox</b> with <b>sessions</b> to remember,
+    and <b>instructions</b> at the foot. <em>Assemble the parts and you get an agent — Flue.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Seven parts · one autonomous agent</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

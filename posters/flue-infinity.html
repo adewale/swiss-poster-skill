@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — A loop that doesn't end</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 8;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 6;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* TITLE lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 6;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 132px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-950);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-950);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* DECK / headline */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-950);
+    padding-top: 12px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 6;
+  }
+  .deck .hl {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 70px;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--stone-950);
+  }
+  .deck .hl em { font-style: italic; font-weight: 300; color: var(--blue-2); }
+  .deck .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 30ch;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 30px;
+    padding-bottom: 6px;
+  }
+  .deck .sub b { font-weight: 700; color: var(--stone-950); }
+
+  /* HERO — the figure-8 stage */
+  .stage {
+    position: absolute;
+    left: 0; right: 0;
+    top: 408px;
+    height: 1130px;
+    z-index: 2;
+  }
+  .stage svg { display: block; width: 100%; height: 100%; }
+
+  /* phase markers — bold mono labels at the turns */
+  .phase {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    z-index: 5;
+    text-align: center;
+  }
+  .phase .n {
+    font-size: 11px;
+    color: var(--blue-2);
+    letter-spacing: 0.26em;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .phase .t {
+    font-size: 30px;
+    color: var(--stone-950);
+    letter-spacing: -0.01em;
+    line-height: 0.9;
+  }
+
+  /* station node labels */
+  .station {
+    position: absolute;
+    z-index: 5;
+    width: 232px;
+  }
+  .station .nm {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 31px;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--stone-950);
+  }
+  .station .rl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    margin-top: 6px;
+  }
+  .station .ds {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.34;
+    color: var(--stone-700);
+    margin-top: 5px;
+  }
+  .station.r { text-align: right; }
+
+  /* MODEL — the crossover core block */
+  .core {
+    position: absolute;
+    z-index: 6;
+    width: 300px;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .core .core-lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(250,250,249,0.85);
+    margin-bottom: 4px;
+  }
+  .core .core-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+    color: var(--stone-50);
+  }
+  .core .core-role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(250,250,249,0.92);
+    margin-top: 7px;
+  }
+  .core .core-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--stone-50);
+    margin-top: 6px;
+  }
+
+  /* EQUATION footer strip — full bleed blue */
+  .equation {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 76px;
+    background: var(--blue);
+    color: var(--stone-50);
+    padding: 16px 64px 18px 64px;
+    z-index: 6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .equation .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 33px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--stone-50);
+  }
+  .equation .eq .op { color: rgba(250,250,249,0.5); font-weight: 300; }
+  .equation .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(250,250,249,0.9);
+    text-align: right;
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 6;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the loop never stops</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">reason · act · observe</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+
+  <!-- DECK -->
+  <div class="deck">
+    <div class="hl">A loop that<br><em>doesn't end.</em></div>
+    <div class="sub">An agent is a <b>model</b> wrapped in a <b>harness</b> — set running on a single continuous loop it drives on its own.</div>
+  </div>
+
+  <!-- HERO STAGE: the figure-8 -->
+  <div class="stage">
+    <svg viewBox="0 0 1260 1130" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <marker id="arrow" markerWidth="9" markerHeight="9" refX="4.4" refY="4.4" orient="auto" markerUnits="strokeWidth">
+          <path d="M1,1 L7.5,4.4 L1,7.8 Z" fill="#0057D8"></path>
+        </marker>
+      </defs>
+
+      <!-- The figure-8 ribbon. Two lobes crossing at center (630,565).
+           Drawn as one continuous path so the ribbon never breaks. -->
+      <!-- ghost-wide track behind for ribbon weight -->
+      <path d="M630,565
+               C 470,360 200,360 200,565
+               C 200,770 470,770 630,565
+               C 790,360 1060,360 1060,565
+               C 1060,770 790,770 630,565 Z"
+            fill="none" stroke="#007AFF" stroke-opacity="0.10" stroke-width="58"
+            stroke-linecap="round"></path>
+
+      <!-- main bold ribbon -->
+      <path d="M630,565
+               C 470,360 200,360 200,565
+               C 200,770 470,770 630,565
+               C 790,360 1060,360 1060,565
+               C 1060,770 790,770 630,565 Z"
+            fill="none" stroke="#007AFF" stroke-width="11" stroke-linecap="round"></path>
+
+      <!-- inner hairline for engineered feel -->
+      <path d="M630,565
+               C 470,360 200,360 200,565
+               C 200,770 470,770 630,565
+               C 790,360 1060,360 1060,565
+               C 1060,770 790,770 630,565 Z"
+            fill="none" stroke="#fafaf9" stroke-width="2.2" stroke-opacity="0.55"></path>
+
+      <!-- directional arrowheads riding the path, one-way flow -->
+      <!-- left lobe top (flowing left, then down) -->
+      <path d="M415,389 L405,388" stroke="#0057D8" stroke-width="11" marker-end="url(#arrow)" stroke-linecap="round"></path>
+      <!-- left lobe bottom (flowing right toward center) -->
+      <path d="M470,732 L482,737" stroke="#0057D8" stroke-width="11" marker-end="url(#arrow)" stroke-linecap="round"></path>
+      <!-- right lobe top (flowing right) -->
+      <path d="M845,389 L856,388" stroke="#0057D8" stroke-width="11" marker-end="url(#arrow)" stroke-linecap="round"></path>
+      <!-- right lobe bottom (flowing left back to center) -->
+      <path d="M790,732 L778,737" stroke="#0057D8" stroke-width="11" marker-end="url(#arrow)" stroke-linecap="round"></path>
+
+      <!-- station nodes (dots) -->
+      <!-- left lobe: top-left, far-left, bottom-left -->
+      <circle cx="312" cy="412" r="11" fill="#fafaf9" stroke="#0057D8" stroke-width="5"></circle>
+      <circle cx="200" cy="565" r="11" fill="#fafaf9" stroke="#0057D8" stroke-width="5"></circle>
+      <circle cx="312" cy="718" r="11" fill="#fafaf9" stroke="#0057D8" stroke-width="5"></circle>
+      <!-- right lobe: top-right, far-right, bottom-right -->
+      <circle cx="948" cy="412" r="11" fill="#fafaf9" stroke="#0057D8" stroke-width="5"></circle>
+      <circle cx="1060" cy="565" r="11" fill="#fafaf9" stroke="#0057D8" stroke-width="5"></circle>
+      <circle cx="948" cy="718" r="11" fill="#fafaf9" stroke="#0057D8" stroke-width="5"></circle>
+
+      <!-- phase pulse dots at the two lobe apexes + crossover handled by core block -->
+      <circle cx="200" cy="565" r="22" fill="none" stroke="#007AFF" stroke-width="2" stroke-opacity="0.4"></circle>
+      <circle cx="1060" cy="565" r="22" fill="none" stroke="#007AFF" stroke-width="2" stroke-opacity="0.4"></circle>
+
+      <!-- MODEL crossover plate at center -->
+      <rect x="455" y="498" width="350" height="134" fill="#007AFF"></rect>
+      <rect x="455" y="498" width="350" height="134" fill="none" stroke="#fafaf9" stroke-width="2" stroke-opacity="0.4"></rect>
+    </svg>
+
+    <!-- MODEL core text, centered over the crossover plate -->
+    <div class="core" style="top:520px;">
+      <div class="core-lab">at the crossover</div>
+      <div class="core-name">Model</div>
+      <div class="core-role">the reasoning core</div>
+      <div class="core-id">anthropic / claude-sonnet-4-6</div>
+    </div>
+
+    <!-- PHASE markers at the key turns -->
+    <div class="phase" style="left:0; top:496px; width:200px;">
+      <span class="n">turn · 01</span>
+      <span class="t">Reason</span>
+    </div>
+    <div class="phase" style="right:0; top:496px; width:200px;">
+      <span class="n">turn · 02</span>
+      <span class="t">Act</span>
+    </div>
+    <div class="phase" style="left:50%; transform:translateX(-50%); top:855px; width:260px;">
+      <span class="n">turn · 03</span>
+      <span class="t">Observe</span>
+    </div>
+
+    <!-- STATIONS — distributed along the two lobes -->
+    <!-- LEFT lobe (the Reason / context side) -->
+    <div class="station r" style="left:8px; top:300px; width:262px;">
+      <div class="nm">Instructions</div>
+      <div class="rl">the goal, stated</div>
+      <div class="ds">A goal in plain words — not a script. The loop starts here.</div>
+    </div>
+    <div class="station r" style="left:8px; top:620px; width:262px;">
+      <div class="nm">Sessions</div>
+      <div class="rl">memory across turns</div>
+      <div class="ds">State that persists, so each pass builds on the last.</div>
+    </div>
+    <div class="station r" style="left:8px; top:760px; width:262px;">
+      <div class="nm">Skills</div>
+      <div class="rl">SKILL.md · loadable expertise</div>
+      <div class="ds">Packaged know-how the model pulls in on demand.</div>
+    </div>
+
+    <!-- RIGHT lobe (the Act side) -->
+    <div class="station" style="right:8px; top:300px; width:262px; margin-left:auto;">
+      <div class="nm">Tools</div>
+      <div class="rl">typed actions</div>
+      <div class="ds">Functions the agent calls to reach your APIs and act.</div>
+    </div>
+    <div class="station" style="right:8px; top:620px; width:262px;">
+      <div class="nm">Sandbox</div>
+      <div class="rl">fs + shell · isolated</div>
+      <div class="ds">Where it runs code and edits files, safely contained.</div>
+    </div>
+    <div class="station" style="right:8px; top:760px; width:262px;">
+      <div class="nm">MCP servers</div>
+      <div class="rl">external capability</div>
+      <div class="ds">Standardized connections to the systems around it.</div>
+    </div>
+  </div>
+
+  <!-- EQUATION footer -->
+  <section class="equation">
+    <div class="eq">Agent <span class="op">=</span> Model <span class="op">+</span> Harness</div>
+    <div class="note">reason · act · observe<br>then begin again</div>
+  </section>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>One continuous loop · the agent runs it on its own</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

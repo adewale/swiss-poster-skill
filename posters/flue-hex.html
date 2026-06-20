@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — One core, six faculties</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* TITLE lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* DECK / heading line */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 12px;
+    margin-bottom: 4px;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 52px;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: normal; color: var(--blue-2); font-weight: 700; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* equation sub-line under deck */
+  .subeq {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: var(--stone-500);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .subeq b { color: var(--blue-2); font-weight: 700; }
+  .subeq .op { color: var(--stone-400); }
+
+  /* ── HONEYCOMB hero ─────────────────────────────────────────────── */
+  .hive {
+    position: relative;
+    z-index: 4;
+    width: 1132px;
+    height: 1018px;
+    margin: 0 auto;
+  }
+  .hive svg { display: block; width: 100%; height: 100%; }
+
+  /* COLOPHON */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+
+  /* SVG text classes */
+  .h-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .h-role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .h-gloss {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">one core, six faculties</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">the shape of an agent</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+
+  <div class="deck">
+    <div class="deck-big">One <b>core</b>,<br>six <em>faculties</em>.</div>
+    <div class="deck-count">The Hive<br>1 model + 6 harness</div>
+  </div>
+  <div class="subeq">Agent <span class="op">=</span> <b>Model</b> <span class="op">+</span> Harness <span class="op">·</span> the model reasons, the harness lets it act</div>
+
+  <!-- HONEYCOMB -->
+  <div class="hive">
+    <svg viewBox="0 0 1132 1018" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- flat-top hexagon path, centered at (0,0). circumradius R=170, so
+             width = 2R = 340, height = sqrt(3)*R = 294.45 -->
+        <g id="hexglyph"></g>
+      </defs>
+
+      <!-- ============================================================
+           Geometry: flat-top hexagons.
+           R = 170 (vertex radius). w = 2R = 340. h = sqrt(3)R ≈ 294.45.
+           Tessellation: neighbor centers are at distance sqrt(3)*R apart.
+           Six surrounding centers sit at angles 30,90,150,210,270,330
+           from the central hex, at radius sqrt(3)*R ≈ 294.45.
+           Center of cluster: (566, 509).
+           ============================================================ -->
+
+      <!-- ringed positions (flat-top): horizontal neighbors at ±294.45 x,
+           diagonal neighbors at ±147.22 x, ±255 y -->
+
+      <!-- ============ EDGE-TO-EDGE STROKES (under) ============ -->
+
+      <!-- SURROUNDING HEXES (stone outline) -->
+
+      <!-- TOP-LEFT : Instructions  (center 418.78, 254) -->
+      <g transform="translate(418.78,254)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="3"/>
+        <!-- pictogram: target / goal -->
+        <g transform="translate(0,-78)" fill="none" stroke="var(--stone-900)" stroke-width="3.5">
+          <circle cx="0" cy="0" r="22"/>
+          <circle cx="0" cy="0" r="10"/>
+          <circle cx="0" cy="0" r="1.6" fill="var(--stone-900)" stroke="none"/>
+        </g>
+        <text class="h-role" x="0" y="-8" text-anchor="middle" font-size="13" fill="var(--blue-2)">the goal</text>
+        <text class="h-name" x="0" y="32" text-anchor="middle" font-size="36" fill="var(--stone-900)">Instructions</text>
+        <text class="h-gloss" x="0" y="64" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">A task, not a script.</text>
+        <text class="h-gloss" x="0" y="88" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">State the goal; trust it.</text>
+      </g>
+
+      <!-- TOP-RIGHT : Tools  (center 713.22, 254) -->
+      <g transform="translate(713.22,254)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="3"/>
+        <!-- pictogram: wrench/action bracket -->
+        <g transform="translate(0,-80)" fill="none" stroke="var(--stone-900)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M-20,-18 L-2,0 L-20,18"/>
+          <path d="M6,18 L22,18"/>
+        </g>
+        <text class="h-role" x="0" y="-8" text-anchor="middle" font-size="13" fill="var(--blue-2)">typed actions</text>
+        <text class="h-name" x="0" y="32" text-anchor="middle" font-size="36" fill="var(--stone-900)">Tools</text>
+        <text class="h-gloss" x="0" y="64" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">Functions it can call —</text>
+        <text class="h-gloss" x="0" y="88" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">your APIs, typed and safe.</text>
+      </g>
+
+      <!-- RIGHT : MCP servers  (center 860.45, 509) — BLUE FILL for rhythm -->
+      <g transform="translate(860.45,509)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--blue)" stroke="var(--blue)" stroke-width="3"/>
+        <!-- pictogram: linked nodes -->
+        <g transform="translate(0,-80)" fill="none" stroke="var(--stone-50)" stroke-width="3.5">
+          <circle cx="-22" cy="0" r="9" fill="var(--stone-50)" stroke="none"/>
+          <circle cx="22" cy="-12" r="9" fill="var(--stone-50)" stroke="none"/>
+          <circle cx="14" cy="16" r="9" fill="var(--stone-50)" stroke="none"/>
+          <path d="M-14,-3 L13,-11 M-15,4 L7,13" stroke="var(--stone-50)"/>
+        </g>
+        <text class="h-role" x="0" y="-8" text-anchor="middle" font-size="13" fill="rgba(250,250,249,0.92)">external tools</text>
+        <text class="h-name" x="0" y="32" text-anchor="middle" font-size="34" fill="var(--stone-50)">MCP servers</text>
+        <text class="h-gloss" x="0" y="64" text-anchor="middle" font-size="17.5" fill="rgba(250,250,249,0.92)">Plug in capabilities</text>
+        <text class="h-gloss" x="0" y="88" text-anchor="middle" font-size="17.5" fill="rgba(250,250,249,0.92)">over a shared protocol.</text>
+      </g>
+
+      <!-- BOTTOM-RIGHT : Sessions  (center 713.22, 764) -->
+      <g transform="translate(713.22,764)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="3"/>
+        <!-- pictogram: stacked turns / memory -->
+        <g transform="translate(0,-82)" fill="none" stroke="var(--stone-900)" stroke-width="3.5" stroke-linejoin="round">
+          <path d="M-20,-12 L20,-12"/>
+          <path d="M-20,0 L20,0"/>
+          <path d="M-20,12 L8,12"/>
+        </g>
+        <text class="h-role" x="0" y="-8" text-anchor="middle" font-size="13" fill="var(--blue-2)">memory</text>
+        <text class="h-name" x="0" y="32" text-anchor="middle" font-size="36" fill="var(--stone-900)">Sessions</text>
+        <text class="h-gloss" x="0" y="64" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">State that persists</text>
+        <text class="h-gloss" x="0" y="88" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">across turns.</text>
+      </g>
+
+      <!-- BOTTOM-LEFT : Sandbox  (center 418.78, 764) -->
+      <g transform="translate(418.78,764)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="3"/>
+        <!-- pictogram: terminal box -->
+        <g transform="translate(0,-82)" fill="none" stroke="var(--stone-900)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-24" y="-16" width="48" height="32" rx="2"/>
+          <path d="M-14,-4 L-6,2 L-14,8"/>
+          <path d="M-1,9 L10,9"/>
+        </g>
+        <text class="h-role" x="0" y="-8" text-anchor="middle" font-size="13" fill="var(--blue-2)">fs + shell</text>
+        <text class="h-name" x="0" y="32" text-anchor="middle" font-size="36" fill="var(--stone-900)">Sandbox</text>
+        <text class="h-gloss" x="0" y="64" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">Run code, edit files —</text>
+        <text class="h-gloss" x="0" y="88" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">isolated and safe.</text>
+      </g>
+
+      <!-- LEFT : Skills  (center 271.55, 509) -->
+      <g transform="translate(271.55,509)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="3"/>
+        <!-- pictogram: document / SKILL.md -->
+        <g transform="translate(0,-82)" fill="none" stroke="var(--stone-900)" stroke-width="3.5" stroke-linejoin="round">
+          <path d="M-15,-18 L10,-18 L20,-8 L20,18 L-15,18 Z"/>
+          <path d="M10,-18 L10,-8 L20,-8"/>
+          <path d="M-8,2 L12,2 M-8,10 L12,10" stroke-width="3"/>
+        </g>
+        <text class="h-role" x="0" y="-8" text-anchor="middle" font-size="13" fill="var(--blue-2)">SKILL.md</text>
+        <text class="h-name" x="0" y="32" text-anchor="middle" font-size="36" fill="var(--stone-900)">Skills</text>
+        <text class="h-gloss" x="0" y="64" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">Packaged expertise,</text>
+        <text class="h-gloss" x="0" y="88" text-anchor="middle" font-size="17.5" fill="var(--stone-700)">loaded on demand.</text>
+      </g>
+
+      <!-- CENTER : Model  (center 566, 509) — SOLID BLUE -->
+      <g transform="translate(566,509)">
+        <polygon points="170,0 85,-147.22 -85,-147.22 -170,0 -85,147.22 85,147.22"
+          fill="var(--blue)" stroke="var(--blue-2)" stroke-width="3"/>
+        <!-- pictogram: reasoning core, concentric hex spark -->
+        <g transform="translate(0,-86)" fill="none" stroke="var(--stone-50)" stroke-width="3.5" stroke-linejoin="round">
+          <polygon points="0,-26 22,-13 22,13 0,26 -22,13 -22,-13"/>
+          <circle cx="0" cy="0" r="6" fill="var(--stone-50)" stroke="none"/>
+        </g>
+        <text class="h-role" x="0" y="-26" text-anchor="middle" font-size="14" fill="rgba(250,250,249,0.92)">the reasoning core</text>
+        <text class="h-name" x="0" y="20" text-anchor="middle" font-size="58" fill="var(--stone-50)">Model</text>
+        <text class="h-gloss" x="0" y="56" text-anchor="middle" font-size="18.5" fill="rgba(250,250,249,0.95)">It thinks over the task</text>
+        <text class="h-gloss" x="0" y="82" text-anchor="middle" font-size="18.5" fill="rgba(250,250,249,0.95)">and picks the next move.</text>
+        <text x="0" y="120" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600" font-size="17" letter-spacing="-0.01em" fill="var(--stone-50)">anthropic/claude-sonnet-4-6</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The harness equips a model to act</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

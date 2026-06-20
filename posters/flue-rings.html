@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — From core to shell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  /* corner brackets */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* TITLE lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 132px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-950);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-950);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* DECK / headline strip */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-950);
+    padding-top: 12px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 4;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 54px;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--stone-950);
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-big em { font-style: normal; color: var(--blue-2); font-weight: 700; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+  .deck .deck-count b { color: var(--stone-950); }
+
+  .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--stone-700);
+    max-width: 70ch;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 4;
+  }
+  .sub b { color: var(--stone-950); font-weight: 600; }
+  .sub em { font-style: normal; color: var(--blue-2); font-weight: 600; }
+
+  /* HERO — the rings cross-section */
+  .hero {
+    position: relative;
+    width: 1160px;
+    height: 1180px;
+    margin: 6px auto 0 auto;
+    z-index: 3;
+  }
+  .hero svg { display: block; width: 100%; height: 100%; }
+
+  /* legend rail beneath hero */
+  .legend {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 88px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1.5px solid var(--stone-950);
+    z-index: 4;
+  }
+  .leg {
+    border-right: 1px solid var(--stone-200);
+    padding: 13px 20px 4px 0;
+  }
+  .leg:last-child { border-right: 0; }
+  .leg .lk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .leg .lk .dot {
+    width: 10px; height: 10px;
+    border: 1.5px solid var(--stone-400);
+    flex: 0 0 auto;
+    border-radius: 50%;
+  }
+  .leg.core .lk .dot { background: var(--blue); border-color: var(--blue); }
+  .leg.ring1 .lk .dot { border-color: var(--blue); border-width: 3px; }
+  .leg .ln {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 27px;
+    letter-spacing: -0.03em;
+    color: var(--stone-950);
+    line-height: 0.95;
+  }
+  .leg.core .ln { color: var(--blue-2); }
+  .leg .lp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--stone-700);
+    margin-top: 7px;
+    line-height: 1.4;
+  }
+
+  /* colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+
+  /* SVG text styling */
+  .ring-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .ring-comp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue &middot; The Agent Harness Framework</div>
+      <div class="meta">cross-section of an agent</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">core to outer shell</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">universal agent architecture</span>
+    </span>
+  </div>
+
+  <!-- DECK -->
+  <div class="deck">
+    <div class="deck-big">From <b>core</b> to <em>shell.</em></div>
+    <div class="deck-count">Four layers<br><b>nested</b></div>
+  </div>
+  <p class="sub">An agent is a <b>model</b> wrapped in a <b>harness</b> &mdash; that pairing is the whole idea. Around it: a <b>sandbox</b> to act in, and a <b>filesystem</b> to read and change. One core, three shells.</p>
+
+  <!-- HERO: concentric rings cross-section -->
+  <div class="hero" aria-hidden="true">
+    <svg viewBox="0 0 1132 1151" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <!-- radial guide ticks rendered manually below -->
+      </defs>
+
+      <!-- cx 566, cy 500 -->
+
+      <!-- faint radial guide ticks (every 30deg) -->
+      <g stroke="var(--stone-300)" stroke-width="1">
+        <line x1="566" y1="44"  x2="566" y2="84"/>
+        <line x1="566" y1="916" x2="566" y2="956"/>
+        <line x1="110" y1="500" x2="150" y2="500"/>
+        <line x1="982" y1="500" x2="1022" y2="500"/>
+      </g>
+      <g stroke="var(--stone-200)" stroke-width="1">
+        <!-- 30 / 60 etc, lighter -->
+        <line x1="566" y1="500" x2="566" y2="60"/>
+        <line x1="566" y1="500" x2="566" y2="940"/>
+        <line x1="566" y1="500" x2="132" y2="500"/>
+        <line x1="566" y1="500" x2="1000" y2="500"/>
+        <line x1="566" y1="500" x2="941" y2="120"/>
+        <line x1="566" y1="500" x2="191" y2="880"/>
+        <line x1="566" y1="500" x2="191" y2="120"/>
+        <line x1="566" y1="500" x2="941" y2="880"/>
+      </g>
+
+      <!-- RING 3 — FILESYSTEM (outermost), stone -->
+      <circle cx="566" cy="500" r="448" fill="none" stroke="var(--stone-400)" stroke-width="1.5"/>
+      <circle cx="566" cy="500" r="372" fill="none" stroke="var(--stone-300)" stroke-width="1"/>
+
+      <!-- RING 2 — SANDBOX, stone -->
+      <circle cx="566" cy="500" r="296" fill="none" stroke="var(--stone-500)" stroke-width="1.5"/>
+      <circle cx="566" cy="500" r="226" fill="none" stroke="var(--stone-300)" stroke-width="1"/>
+
+      <!-- RING 1 — HARNESS, the tinted blue band -->
+      <circle cx="566" cy="500" r="226" fill="var(--blue)" fill-opacity="0.10" stroke="none"/>
+      <circle cx="566" cy="500" r="226" fill="none" stroke="var(--blue)" stroke-width="2"/>
+      <circle cx="566" cy="500" r="150" fill="var(--stone-50)" stroke="var(--blue-lt)" stroke-width="1.25"/>
+
+      <!-- MODEL — solid blue core disc -->
+      <circle cx="566" cy="500" r="150" fill="none" stroke="var(--blue-2)" stroke-width="1"/>
+      <circle cx="566" cy="500" r="118" fill="var(--blue)" stroke="var(--blue-2)" stroke-width="2"/>
+
+      <!-- tick marks where guide lines meet outer ring -->
+      <g fill="var(--stone-400)">
+        <circle cx="566" cy="52"  r="3"/>
+        <circle cx="566" cy="948" r="3"/>
+        <circle cx="118" cy="500" r="3"/>
+        <circle cx="1014" cy="500" r="3"/>
+      </g>
+
+      <!-- ===== CORE LABEL: MODEL ===== -->
+      <text x="566" y="476" text-anchor="middle" class="ring-label"
+            font-size="34" fill="var(--stone-50)">Model</text>
+      <text x="566" y="508" text-anchor="middle" class="ring-comp"
+            font-size="13" fill="rgba(250,250,249,0.92)">the reasoning core</text>
+      <text x="566" y="538" text-anchor="middle" class="ring-comp"
+            font-size="12.5" fill="rgba(250,250,249,0.85)">tokens &middot; tools &middot; prompts</text>
+
+      <!-- ===== RING 1 LABEL: HARNESS (band ~r188, top) ===== -->
+      <text x="566" y="306" text-anchor="middle" class="ring-label"
+            font-size="22" fill="var(--blue-2)">Harness</text>
+      <text x="566" y="332" text-anchor="middle" class="ring-comp"
+            font-size="12.5" fill="var(--blue-2)">skills &middot; memory &middot; sessions</text>
+
+      <!-- ===== RING 2 LABEL: SANDBOX (band ~r261, top) ===== -->
+      <text x="566" y="226" text-anchor="middle" class="ring-label"
+            font-size="22" fill="var(--stone-700)">Sandbox</text>
+      <text x="566" y="252" text-anchor="middle" class="ring-comp"
+            font-size="12.5" fill="var(--stone-500)">bash &middot; security &middot; network</text>
+
+      <!-- ===== RING 3 LABEL: FILESYSTEM (band ~r410, top) ===== -->
+      <text x="566" y="100" text-anchor="middle" class="ring-label"
+            font-size="24" fill="var(--stone-900)">Filesystem</text>
+      <text x="566" y="126" text-anchor="middle" class="ring-comp"
+            font-size="12.5" fill="var(--stone-500)">read &middot; write &middot; grep &middot; glob</text>
+
+      <!-- Equation chip anchored to core, bottom -->
+      <text x="566" y="876" text-anchor="middle" class="ring-comp"
+            font-size="14" fill="var(--stone-950)" letter-spacing="0.12em">
+        <tspan font-weight="700">AGENT</tspan><tspan fill="var(--stone-400)">  =  </tspan><tspan fill="var(--blue-2)" font-weight="700">MODEL</tspan><tspan fill="var(--stone-400)">  +  </tspan><tspan font-weight="700">HARNESS</tspan>
+      </text>
+
+      <!-- band index numerals, faint, on the right arc of each ring -->
+      <g class="ring-comp" text-anchor="middle" font-size="11">
+        <text x="754" y="505" fill="var(--blue)" opacity="0.85">01</text>
+        <text x="862" y="505" fill="var(--stone-400)">02</text>
+        <text x="1014" y="505" fill="var(--stone-400)">03</text>
+      </g>
+      <!-- left arc component echoes for filesystem & sandbox -->
+      <g class="ring-comp" text-anchor="middle" font-size="12">
+        <text x="252" y="505" fill="var(--stone-400)">filesystem</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- LEGEND RAIL -->
+  <div class="legend">
+    <div class="leg core">
+      <div class="lk"><span class="dot"></span>Center disc</div>
+      <div class="ln">Model</div>
+      <div class="lp">tokens, tools, prompts</div>
+    </div>
+    <div class="leg ring1">
+      <div class="lk"><span class="dot"></span>Ring 01</div>
+      <div class="ln">Harness</div>
+      <div class="lp">skills, memory, sessions</div>
+    </div>
+    <div class="leg">
+      <div class="lk"><span class="dot"></span>Ring 02</div>
+      <div class="ln">Sandbox</div>
+      <div class="lp">bash, security, network</div>
+    </div>
+    <div class="leg">
+      <div class="lk"><span class="dot"></span>Ring 03</div>
+      <div class="ln">Filesystem</div>
+      <div class="lp">read, write, grep, glob</div>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Universal agent architecture &middot; one core, three shells</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Everything winds into the model.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 9;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    position: relative;
+    z-index: 6;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ───────────────────────────────────────────────────────── */
+  .head {
+    position: relative;
+    z-index: 6;
+    margin-top: 24px;
+    border-top: 4px solid var(--stone-950);
+    padding-top: 16px;
+  }
+  .head .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .head .eyebrow .mk { width: 26px; height: 26px; }
+  .head .title {
+    font-family: 'Barlow Condensed', 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 116px;
+    line-height: 0.84;
+    letter-spacing: -0.02em;
+    color: var(--stone-950);
+    text-transform: none;
+  }
+  .head .title em { font-style: normal; color: var(--blue-2); }
+  .head .sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+  }
+  .head .sub .lede {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 60ch;
+  }
+  .head .sub .lede b { font-weight: 600; color: var(--stone-950); }
+  .head .sub .eq {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    color: var(--stone-950);
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 30px;
+    white-space: nowrap;
+  }
+  .head .sub .eq span { color: var(--stone-400); font-weight: 400; }
+
+  /* ── SPIRAL STAGE — the dominant graphic event ───────────────────── */
+  .stage {
+    position: absolute;
+    left: 0; right: 0;
+    top: 470px;
+    height: 1180px;
+    z-index: 4;
+  }
+  .stage svg { display: block; width: 1260px; height: 1180px; }
+
+  /* ── COLOPHON ────────────────────────────────────────────────────── */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 8;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+
+  /* SVG text classes */
+  .s-name  { font-family:'Barlow Condensed','IBM Plex Sans',sans-serif; font-weight:700; letter-spacing:-0.01em; }
+  .s-role  { font-family:'IBM Plex Mono', monospace; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; }
+  .s-gloss { font-family:'IBM Plex Sans', sans-serif; font-weight:400; }
+  .s-num   { font-family:'IBM Plex Mono', monospace; font-weight:600; letter-spacing:0.1em; }
+  .s-loop  { font-family:'IBM Plex Mono', monospace; font-weight:600; letter-spacing:0.28em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the task enters at the rim, the model sits at the center</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">agent = model + harness</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="eyebrow">
+      <span class="mark mk">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <span>The inward turn</span>
+    </div>
+    <div class="title">Everything winds<br>into the <em>model.</em></div>
+    <div class="sub">
+      <div class="lede">A goal enters at the outer edge and spirals inward through the harness &mdash; each station equipping the agent &mdash; until it arrives at the <b>reasoning core.</b> The tightest turns are the loop itself: <b>reason, act, observe.</b></div>
+      <div class="eq">model <span>+</span> tools <span>+</span> skills<br>+ sandbox <span>+</span> sessions <span>+</span> mcp<br>+ instructions</div>
+    </div>
+  </div>
+
+  <!-- SPIRAL -->
+  <div class="stage">
+    <svg viewBox="0 0 1260 1180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--blue)"></path>
+        </marker>
+      </defs>
+
+      <!-- center of spiral: (630, 600) -->
+
+      <!-- The spiral line: a single smooth Archimedean curve winding inward.
+           Drawn thin in blue. Outer rim near Instructions, inner near Model. -->
+      <path d="
+        M 1118 600
+        C 1118 322, 908 112, 630 112
+        C 352 112, 142 322, 142 600
+        C 142 855, 352 1042, 588 1042
+        C 824 1042, 1018 870, 1018 643
+        C 1018 437, 851 281, 651 281
+        C 470 281, 315 432, 315 612
+        C 315 770, 446 894, 600 894
+        C 740 894, 858 779, 858 643
+        C 858 524, 758 426, 645 426
+        C 549 426, 467 506, 467 605
+        C 467 685, 533 745, 608 745
+        C 671 745, 723 695, 723 638
+        "
+        fill="none" stroke="var(--blue)" stroke-width="2.4"
+        stroke-linecap="round" opacity="0.92"></path>
+
+      <!-- faint companion guide turn for density -->
+      <path d="
+        M 1118 600
+        C 1118 322, 908 112, 630 112
+        C 352 112, 142 322, 142 600
+        C 142 855, 352 1042, 588 1042
+        "
+        fill="none" stroke="var(--blue)" stroke-width="14" opacity="0.05"></path>
+
+      <!-- ENTRY arrow into the rim (the task enters) -->
+      <path d="M 1186 600 L 1130 600" fill="none" stroke="var(--blue)" stroke-width="2.4"
+        marker-end="url(#arrow)" opacity="0.9"></path>
+      <text x="1196" y="585" class="s-role" font-size="11" fill="var(--blue-2)" text-anchor="end">THE TASK</text>
+      <text x="1196" y="568" class="s-role" font-size="11" fill="var(--blue-2)" text-anchor="end">ENTERS</text>
+
+      <!-- ============ STATIONS (outer → inner) ============ -->
+
+      <!-- 01 INSTRUCTIONS — outer start, right -->
+      <circle cx="1118" cy="600" r="11" fill="var(--blue)"></circle>
+      <circle cx="1118" cy="600" r="20" fill="none" stroke="var(--blue)" stroke-width="1.4" opacity="0.5"></circle>
+      <text x="1100" y="540" class="s-num"  font-size="13" fill="var(--blue-2)" text-anchor="end">01</text>
+      <text x="1100" y="572" class="s-name" font-size="40" fill="var(--stone-950)" text-anchor="end">Instructions</text>
+      <text x="1100" y="592" class="s-role" font-size="11" fill="var(--blue-2)" text-anchor="end">the goal, stated</text>
+      <text x="1100" y="616" class="s-gloss" font-size="15.5" fill="var(--stone-700)" text-anchor="end">A task, not a script &mdash; describe</text>
+      <text x="1100" y="637" class="s-gloss" font-size="15.5" fill="var(--stone-700)" text-anchor="end">the outcome and let it run.</text>
+
+      <!-- 02 TOOLS — top -->
+      <circle cx="630" cy="112" r="11" fill="var(--blue)"></circle>
+      <circle cx="630" cy="112" r="20" fill="none" stroke="var(--blue)" stroke-width="1.4" opacity="0.5"></circle>
+      <text x="660" y="92"  class="s-num"  font-size="13" fill="var(--blue-2)">02</text>
+      <text x="660" y="124" class="s-name" font-size="40" fill="var(--stone-950)">Tools</text>
+      <text x="660" y="144" class="s-role" font-size="11" fill="var(--blue-2)">typed actions</text>
+      <text x="660" y="168" class="s-gloss" font-size="15.5" fill="var(--stone-700)">Your APIs, typed &mdash; controlled,</text>
+      <text x="660" y="189" class="s-gloss" font-size="15.5" fill="var(--stone-700)">safe changes to the world.</text>
+
+      <!-- 03 SKILLS — left -->
+      <circle cx="142" cy="600" r="11" fill="var(--blue)"></circle>
+      <circle cx="142" cy="600" r="20" fill="none" stroke="var(--blue)" stroke-width="1.4" opacity="0.5"></circle>
+      <text x="172" y="538" class="s-num"  font-size="13" fill="var(--blue-2)">03</text>
+      <text x="172" y="570" class="s-name" font-size="40" fill="var(--stone-950)">Skills</text>
+      <text x="172" y="590" class="s-role" font-size="11" fill="var(--blue-2)">SKILL.md</text>
+      <text x="172" y="614" class="s-gloss" font-size="15.5" fill="var(--stone-700)">Loadable expertise, packaged &mdash;</text>
+      <text x="172" y="635" class="s-gloss" font-size="15.5" fill="var(--stone-700)">read on demand.</text>
+
+      <!-- 04 SANDBOX — bottom -->
+      <circle cx="588" cy="1042" r="11" fill="var(--blue)"></circle>
+      <circle cx="588" cy="1042" r="20" fill="none" stroke="var(--blue)" stroke-width="1.4" opacity="0.5"></circle>
+      <text x="620" y="1002" class="s-num"  font-size="13" fill="var(--blue-2)">04</text>
+      <text x="620" y="1034" class="s-name" font-size="40" fill="var(--stone-950)">Sandbox</text>
+      <text x="620" y="1054" class="s-role" font-size="11" fill="var(--blue-2)">fs + shell</text>
+      <text x="620" y="1078" class="s-gloss" font-size="15.5" fill="var(--stone-700)">An isolated place to run code</text>
+      <text x="620" y="1099" class="s-gloss" font-size="15.5" fill="var(--stone-700)">and edit files &mdash; real work, safe.</text>
+
+      <!-- 05 SESSIONS — right inner -->
+      <circle cx="1018" cy="643" r="10" fill="var(--blue)"></circle>
+      <circle cx="1018" cy="643" r="18" fill="none" stroke="var(--blue)" stroke-width="1.3" opacity="0.5"></circle>
+      <text x="1000" y="688" class="s-num"  font-size="12" fill="var(--blue-2)" text-anchor="end">05</text>
+      <text x="1000" y="716" class="s-name" font-size="34" fill="var(--stone-950)" text-anchor="end">Sessions</text>
+      <text x="1000" y="734" class="s-role" font-size="10.5" fill="var(--blue-2)" text-anchor="end">memory</text>
+      <text x="1000" y="756" class="s-gloss" font-size="14.5" fill="var(--stone-700)" text-anchor="end">State that persists across turns.</text>
+
+      <!-- 06 MCP SERVERS — left inner -->
+      <circle cx="315" cy="612" r="10" fill="var(--blue)"></circle>
+      <circle cx="315" cy="612" r="18" fill="none" stroke="var(--blue)" stroke-width="1.3" opacity="0.5"></circle>
+      <text x="338" y="436" class="s-num"  font-size="12" fill="var(--blue-2)">06</text>
+      <text x="338" y="464" class="s-name" font-size="34" fill="var(--stone-950)">MCP servers</text>
+      <text x="338" y="482" class="s-role" font-size="10.5" fill="var(--blue-2)">connected capability</text>
+      <text x="338" y="504" class="s-gloss" font-size="14.5" fill="var(--stone-700)">Third-party tools, plugged in.</text>
+
+      <!-- ===== INNER LOOP: reason → act → observe ===== -->
+      <!-- tightening turns annotation -->
+      <text x="630" y="396" class="s-loop" font-size="11.5" fill="var(--blue-2)" text-anchor="middle">REASON</text>
+      <text x="800" y="700" class="s-loop" font-size="11.5" fill="var(--blue-2)" text-anchor="middle">ACT</text>
+      <text x="468" y="700" class="s-loop" font-size="11.5" fill="var(--blue-2)" text-anchor="middle">OBSERVE</text>
+
+      <!-- small directional arrowheads riding the inner turns -->
+      <path d="M 723 560 L 723 600" fill="none" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#arrow)" opacity="0.0"></path>
+
+      <!-- ===== MODEL CORE — center, the hero arrival ===== -->
+      <circle cx="630" cy="600" r="92" fill="var(--blue)"></circle>
+      <circle cx="630" cy="600" r="112" fill="none" stroke="var(--blue)" stroke-width="1.6" opacity="0.35"></circle>
+      <circle cx="630" cy="600" r="134" fill="none" stroke="var(--blue)" stroke-width="1.2" opacity="0.18"></circle>
+      <text x="630" y="568" class="s-role" font-size="11" fill="var(--stone-50)" text-anchor="middle" opacity="0.9">REASONING CORE</text>
+      <text x="630" y="616" class="s-name" font-size="58" fill="var(--stone-50)" text-anchor="middle">Model</text>
+      <text x="630" y="648" class="s-num"  font-size="13" fill="var(--stone-50)" text-anchor="middle" opacity="0.92">anthropic/claude-sonnet-4-6</text>
+    </svg>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>One spiral · seven stations · one reasoning core</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

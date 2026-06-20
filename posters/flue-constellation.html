@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The agent, charted.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-700: #44403c;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-950);
+    color: var(--stone-50);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+    background:
+      radial-gradient(120% 80% at 50% 38%, rgba(0,122,255,0.07) 0%, rgba(12,10,9,0) 55%),
+      var(--stone-950);
+  }
+
+  /* corner brackets */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-500);
+    z-index: 9;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-300);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 6;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-950); display: block; }
+
+  /* title lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 6;
+  }
+  .title .mark { width: 86px; height: 86px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 112px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-50);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-200);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* deck / hero title */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 2px solid var(--blue);
+    padding-top: 14px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 6;
+  }
+  .deck .charted {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 700;
+    font-size: 58px;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--stone-50);
+  }
+  .deck .charted em { font-style: italic; color: var(--blue-lt); font-weight: 600; }
+  .deck .eq {
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 30px;
+  }
+  .deck .eq .l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    margin-bottom: 7px;
+  }
+  .deck .eq .v {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--stone-100);
+  }
+  .deck .eq .v .op { color: var(--blue-lt); font-weight: 300; }
+
+  /* the chart plate */
+  .chart {
+    position: absolute;
+    left: 0; top: 0;
+    width: 1260px;
+    height: 1800px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* margin tick labels (celestial coordinates) */
+  .coord {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--stone-600);
+    z-index: 5;
+  }
+
+  /* star labels */
+  .lab {
+    position: absolute;
+    z-index: 7;
+    width: 230px;
+  }
+  .lab .nm {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--stone-50);
+  }
+  .lab .mag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    color: var(--blue-lt);
+    margin-top: 4px;
+  }
+  .lab .gl {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.32;
+    color: var(--stone-400);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+  .lab.r { text-align: right; }
+  .lab.r .nm, .lab.r .mag, .lab.r .gl { }
+
+  /* the brightest star — Model */
+  .lab.model .nm {
+    font-size: 30px;
+    color: #fff;
+    letter-spacing: 0.14em;
+  }
+  .lab.model { width: 280px; }
+  .lab.model .mag { color: var(--blue-lt); font-size: 11px; }
+  .lab.model .gl { color: var(--stone-300); font-size: 14px; }
+
+  /* legend / footer note */
+  .legend {
+    position: absolute;
+    left: 64px;
+    bottom: 86px;
+    z-index: 7;
+    width: 560px;
+    border-top: 1px dotted var(--stone-700);
+    padding-top: 13px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--stone-300);
+  }
+  .legend b { font-weight: 700; color: var(--stone-50); }
+  .legend em { font-style: italic; color: var(--blue-lt); font-weight: 500; }
+
+  .plate-key {
+    position: absolute;
+    right: 64px;
+    bottom: 86px;
+    z-index: 7;
+    text-align: right;
+    border-top: 1px dotted var(--stone-700);
+    padding-top: 13px;
+    width: 360px;
+  }
+  .plate-key .row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone-400);
+    margin-bottom: 7px;
+  }
+  .plate-key .row:last-child { margin-bottom: 0; }
+  .plate-key .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--blue-lt); flex: 0 0 auto; }
+  .plate-key .dot.sm { width: 5px; height: 5px; background: var(--stone-400); }
+  .plate-key .dot.lg { width: 14px; height: 14px; background: var(--blue); box-shadow: 0 0 0 3px rgba(0,122,255,0.18); }
+
+  /* colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-800);
+    padding-top: 9px;
+    z-index: 8;
+  }
+  .colophon b { color: var(--stone-200); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">an astronomical plate of the agent</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · sky chart</div>
+      <div class="meta">model + harness, in one figure</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+
+  <!-- DECK -->
+  <div class="deck">
+    <div class="charted">The agent,<br><em>charted.</em></div>
+    <div class="eq">
+      <div class="l">The whole, as one line</div>
+      <div class="v">Model <span class="op">+</span> Harness</div>
+    </div>
+  </div>
+
+  <!-- ───────────────────────── STAR CHART ───────────────────────── -->
+  <svg class="chart" viewBox="0 0 1260 1800" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <radialGradient id="glowModel" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#4DA3FF" stop-opacity="0.55"/>
+        <stop offset="35%" stop-color="#007AFF" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#007AFF" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glowStar" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#4DA3FF" stop-opacity="0.40"/>
+        <stop offset="100%" stop-color="#4DA3FF" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- faint background star-field -->
+    <g fill="#a8a29e">
+      <circle cx="120" cy="640" r="1.1" opacity="0.35"/>
+      <circle cx="210" cy="880" r="0.9" opacity="0.3"/>
+      <circle cx="300" cy="540" r="1.3" opacity="0.4"/>
+      <circle cx="175" cy="1120" r="1" opacity="0.3"/>
+      <circle cx="95" cy="1280" r="0.8" opacity="0.28"/>
+      <circle cx="260" cy="1340" r="1.2" opacity="0.34"/>
+      <circle cx="340" cy="980" r="0.9" opacity="0.3"/>
+      <circle cx="150" cy="780" r="0.7" opacity="0.25"/>
+      <circle cx="400" cy="700" r="1" opacity="0.3"/>
+      <circle cx="220" cy="1480" r="1.1" opacity="0.32"/>
+      <circle cx="90" cy="980" r="1" opacity="0.3"/>
+      <circle cx="370" cy="1230" r="0.8" opacity="0.26"/>
+      <circle cx="480" cy="900" r="0.9" opacity="0.28"/>
+      <circle cx="520" cy="1320" r="1.1" opacity="0.32"/>
+      <circle cx="430" cy="1480" r="0.8" opacity="0.26"/>
+
+      <circle cx="1140" cy="600" r="1.2" opacity="0.38"/>
+      <circle cx="1060" cy="820" r="0.9" opacity="0.3"/>
+      <circle cx="1170" cy="980" r="1" opacity="0.32"/>
+      <circle cx="980" cy="700" r="0.8" opacity="0.26"/>
+      <circle cx="1190" cy="1240" r="1.1" opacity="0.34"/>
+      <circle cx="1100" cy="1400" r="0.9" opacity="0.3"/>
+      <circle cx="1010" cy="1180" r="1" opacity="0.3"/>
+      <circle cx="940" cy="1340" r="0.8" opacity="0.26"/>
+      <circle cx="1160" cy="760" r="0.7" opacity="0.24"/>
+      <circle cx="880" cy="980" r="0.9" opacity="0.28"/>
+      <circle cx="1050" cy="1520" r="1" opacity="0.3"/>
+      <circle cx="860" cy="1200" r="0.8" opacity="0.26"/>
+      <circle cx="780" cy="1500" r="0.9" opacity="0.28"/>
+      <circle cx="630" cy="1530" r="0.8" opacity="0.26"/>
+      <circle cx="720" cy="640" r="0.9" opacity="0.28"/>
+      <circle cx="560" cy="600" r="0.8" opacity="0.26"/>
+      <circle cx="650" cy="920" r="0.7" opacity="0.24"/>
+      <circle cx="820" cy="700" r="0.8" opacity="0.26"/>
+      <circle cx="500" cy="1100" r="0.7" opacity="0.22"/>
+      <circle cx="760" cy="1080" r="0.7" opacity="0.22"/>
+    </g>
+
+    <!-- CONSTELLATION LINES (silhouette: a tall chimney / flue rising)
+         Model is the bright core at mid-height; lines branch up the flue
+         and out to the harness stars. -->
+    <g stroke="#4DA3FF" stroke-width="1.3" fill="none" opacity="0.5">
+      <!-- spine of the flue, rising -->
+      <line x1="630" y1="1380" x2="630" y2="1020"/>   <!-- Instructions -> Model -->
+      <line x1="630" y1="1020" x2="630" y2="700"/>    <!-- Model -> upper neck -->
+      <line x1="630" y1="700"  x2="540" y2="540"/>    <!-- neck -> Tools (left top) -->
+      <line x1="630" y1="700"  x2="740" y2="560"/>    <!-- neck -> Skills (right top) -->
+      <!-- shoulders out from the Model core -->
+      <line x1="630" y1="1020" x2="400" y2="900"/>    <!-- Model -> Sandbox (left) -->
+      <line x1="630" y1="1020" x2="880" y2="940"/>    <!-- Model -> Sessions (right) -->
+      <line x1="630" y1="1020" x2="450" y2="1230"/>   <!-- Model -> MCP (lower left) -->
+      <!-- base spreads -->
+      <line x1="630" y1="1380" x2="450" y2="1230"/>   <!-- Instructions tie to MCP -->
+      <line x1="540" y1="540"  x2="740" y2="560"/>    <!-- cap of the flue -->
+    </g>
+
+    <!-- HARNESS STARS (4-point sparkles, varied size) -->
+    <!-- Tools -->
+    <g transform="translate(540,540)">
+      <circle r="26" fill="url(#glowStar)"/>
+      <path d="M0,-13 L2.4,-2.4 L13,0 L2.4,2.4 L0,13 L-2.4,2.4 L-13,0 L-2.4,-2.4 Z" fill="#4DA3FF"/>
+      <circle r="3.2" fill="#ffffff"/>
+    </g>
+    <!-- Skills -->
+    <g transform="translate(740,560)">
+      <circle r="24" fill="url(#glowStar)"/>
+      <path d="M0,-12 L2.2,-2.2 L12,0 L2.2,2.2 L0,12 L-2.2,2.2 L-12,0 L-2.2,-2.2 Z" fill="#4DA3FF"/>
+      <circle r="2.8" fill="#ffffff"/>
+    </g>
+    <!-- Sandbox -->
+    <g transform="translate(400,900)">
+      <circle r="24" fill="url(#glowStar)"/>
+      <path d="M0,-12 L2.2,-2.2 L12,0 L2.2,2.2 L0,12 L-2.2,2.2 L-12,0 L-2.2,-2.2 Z" fill="#4DA3FF"/>
+      <circle r="2.8" fill="#ffffff"/>
+    </g>
+    <!-- Sessions -->
+    <g transform="translate(880,940)">
+      <circle r="22" fill="url(#glowStar)"/>
+      <path d="M0,-11 L2,-2 L11,0 L2,2 L0,11 L-2,2 L-11,0 L-2,-2 Z" fill="#4DA3FF"/>
+      <circle r="2.6" fill="#ffffff"/>
+    </g>
+    <!-- MCP servers -->
+    <g transform="translate(450,1230)">
+      <circle r="22" fill="url(#glowStar)"/>
+      <path d="M0,-11 L2,-2 L11,0 L2,2 L0,11 L-2,2 L-11,0 L-2,-2 Z" fill="#4DA3FF"/>
+      <circle r="2.6" fill="#ffffff"/>
+    </g>
+    <!-- Instructions (the goal) -->
+    <g transform="translate(630,1380)">
+      <circle r="26" fill="url(#glowStar)"/>
+      <path d="M0,-13 L2.4,-2.4 L13,0 L2.4,2.4 L0,13 L-2.4,2.4 L-13,0 L-2.4,-2.4 Z" fill="#4DA3FF"/>
+      <circle r="3.2" fill="#ffffff"/>
+    </g>
+
+    <!-- MODEL — the brightest, largest blue star -->
+    <g transform="translate(630,1020)">
+      <circle r="120" fill="url(#glowModel)"/>
+      <circle r="60" fill="url(#glowModel)"/>
+      <!-- 4-point sparkle, large -->
+      <path d="M0,-46 L7,-7 L46,0 L7,7 L0,46 L-7,7 L-46,0 L-7,-7 Z" fill="#007AFF"/>
+      <path d="M0,-30 L4.5,-4.5 L30,0 L4.5,4.5 L0,30 L-4.5,4.5 L-30,0 L-4.5,-4.5 Z" fill="#4DA3FF"/>
+      <circle r="9" fill="#ffffff"/>
+      <!-- diffraction spikes -->
+      <line x1="-78" y1="0" x2="78" y2="0" stroke="#4DA3FF" stroke-width="1" opacity="0.55"/>
+      <line x1="0" y1="-78" x2="0" y2="78" stroke="#4DA3FF" stroke-width="1" opacity="0.55"/>
+    </g>
+
+    <!-- margin tick marks, left & right (celestial scale) -->
+    <g stroke="#57534e" stroke-width="1" opacity="0.8">
+      <line x1="64" y1="560" x2="78" y2="560"/>
+      <line x1="64" y1="720" x2="78" y2="720"/>
+      <line x1="64" y1="880" x2="78" y2="880"/>
+      <line x1="64" y1="1040" x2="78" y2="1040"/>
+      <line x1="64" y1="1200" x2="78" y2="1200"/>
+      <line x1="64" y1="1360" x2="78" y2="1360"/>
+      <line x1="64" y1="1520" x2="78" y2="1520"/>
+
+      <line x1="1196" y1="560" x2="1182" y2="560"/>
+      <line x1="1196" y1="720" x2="1182" y2="720"/>
+      <line x1="1196" y1="880" x2="1182" y2="880"/>
+      <line x1="1196" y1="1040" x2="1182" y2="1040"/>
+      <line x1="1196" y1="1200" x2="1182" y2="1200"/>
+      <line x1="1196" y1="1360" x2="1182" y2="1360"/>
+      <line x1="1196" y1="1520" x2="1182" y2="1520"/>
+    </g>
+    <!-- top & bottom ticks -->
+    <g stroke="#57534e" stroke-width="1" opacity="0.7">
+      <line x1="360" y1="500" x2="360" y2="512"/>
+      <line x1="540" y1="500" x2="540" y2="512"/>
+      <line x1="720" y1="500" x2="720" y2="512"/>
+      <line x1="900" y1="500" x2="900" y2="512"/>
+      <line x1="360" y1="1568" x2="360" y2="1556"/>
+      <line x1="540" y1="1568" x2="540" y2="1556"/>
+      <line x1="720" y1="1568" x2="720" y2="1556"/>
+      <line x1="900" y1="1568" x2="900" y2="1556"/>
+    </g>
+  </svg>
+
+  <!-- coordinate labels along margins -->
+  <div class="coord" style="left:30px; top:553px;">+60°</div>
+  <div class="coord" style="left:30px; top:873px;">+30°</div>
+  <div class="coord" style="left:34px; top:1033px;">00°</div>
+  <div class="coord" style="left:32px; top:1353px;">−30°</div>
+  <div class="coord" style="left:32px; top:1513px;">−45°</div>
+  <div class="coord" style="right:30px; top:553px;">22ʰ</div>
+  <div class="coord" style="right:30px; top:873px;">20ʰ</div>
+  <div class="coord" style="right:30px; top:1193px;">18ʰ</div>
+  <div class="coord" style="right:30px; top:1513px;">16ʰ</div>
+  <div class="coord" style="left:348px; top:478px;">α</div>
+  <div class="coord" style="left:708px; top:478px;">δ</div>
+
+  <!-- STAR LABELS -->
+  <div class="lab r" style="left:295px; top:506px;">
+    <div class="nm">Tools</div>
+    <div class="mag">typed actions · your APIs</div>
+    <div class="gl">Functions the agent can call to act on the systems around it.</div>
+  </div>
+
+  <div class="lab" style="left:768px; top:526px;">
+    <div class="nm">Skills</div>
+    <div class="mag">SKILL.md · loadable expertise</div>
+    <div class="gl">Packaged know-how, loaded on demand for the task at hand.</div>
+  </div>
+
+  <div class="lab r" style="left:160px; top:864px;">
+    <div class="nm">Sandbox</div>
+    <div class="mag">fs + shell · isolated</div>
+    <div class="gl">Where it runs code and edits files without touching your machine.</div>
+  </div>
+
+  <div class="lab" style="left:910px; top:902px;">
+    <div class="nm">Sessions</div>
+    <div class="mag">memory · state</div>
+    <div class="gl">Context that persists, so the agent remembers across turns.</div>
+  </div>
+
+  <div class="lab r" style="left:200px; top:1196px;">
+    <div class="nm">MCP&nbsp;servers</div>
+    <div class="mag">standard connectors</div>
+    <div class="gl">Third-party capabilities, spoken over one protocol.</div>
+  </div>
+
+  <div class="lab model" style="left:710px; top:996px;">
+    <div class="nm">Model</div>
+    <div class="mag">anthropic / claude-sonnet-4-6</div>
+    <div class="gl">The reasoning core. It thinks over the task and picks the next action — swappable, the rest stays the same.</div>
+  </div>
+
+  <div class="lab" style="left:666px; top:1356px;">
+    <div class="nm">Instructions</div>
+    <div class="mag">the goal, stated</div>
+    <div class="gl">A goal, not a script. The point the whole figure rises from.</div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    One bright core, six attendant stars, drawn into a single figure that
+    rises like a flue. <b>The model reasons; the harness gives it reach.</b>
+    <em>Read together, they make an agent.</em>
+  </div>
+
+  <div class="plate-key">
+    <div class="row"><span>reasoning core</span><span class="dot lg"></span></div>
+    <div class="row"><span>harness components</span><span class="dot"></span></div>
+    <div class="row"><span>field stars · context</span><span class="dot sm"></span></div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Agent = Model + Harness · charted as one</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
