@@ -50,6 +50,13 @@
     background:var(--stone-100);border-left:3px solid var(--blue);padding:12px 14px;white-space:pre;overflow:hidden;margin:0}
   .code .kw{color:var(--blue-2)} .code .fn{color:var(--blue-2);font-weight:600} .code .c{color:var(--stone-400);font-style:italic} .code .hl{background:rgba(0,122,255,.14)}
 
+  .why3 .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;margin-top:12px}
+  .why3 .c .n{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:19px;color:var(--stone-950);line-height:1.06}
+  .why3 .c .n b{color:var(--blue-2)}
+  .why3 .c .d{font-size:13px;line-height:1.4;color:var(--stone-700);margin-top:5px} .why3 .c .d b{color:var(--stone-900);font-weight:600}
+  .why3 .c .d .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--blue-2)}
+  .why3 .c .src{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-400);margin-top:7px}
+
   .band{position:absolute;left:56px;right:56px;bottom:78px;background:var(--stone-950);color:var(--stone-50);padding:20px 26px}
   .band .h{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:32px;line-height:1;color:var(--stone-50)}
   .band .h b{color:var(--blue-lt)}
@@ -174,6 +181,28 @@
   <span class="kw">const</span> s = <span class="kw">await</span> (<span class="kw">await</span> <span class="fn">init</span>(<span class="hl">triageAgent</span>)).<span class="fn">session</span>();
   <span class="kw">return</span> (<span class="kw">await</span> s.<span class="fn">prompt</span>(payload, { result })).data;
 }</pre>
+    </div>
+  </div>
+
+  <!-- WHY TWO ABSTRACTIONS -->
+  <div class="why3">
+    <div class="sech">Why two abstractions <span>the decision trail · from the changelog</span></div>
+    <div class="g">
+      <div class="c">
+        <div class="n"><b>1</b> · Two shapes of work</div>
+        <div class="d">Some tasks are open-ended — let the model decide; others are bounded — run your exact steps. Flue ships <b>both on one core</b> rather than forcing a choice.</div>
+        <div class="src">“two sides of the same coin” — 1.0 beta</div>
+      </div>
+      <div class="c">
+        <div class="n"><b>2</b> · The line is persistence</div>
+        <div class="d">Not capability — lifecycle. An agent keeps a <b>persistent session</b>; a workflow owns a <b>finite, recorded run</b> (<span class="m">runId</span>). “Runs are workflow-only.”</div>
+        <div class="src">AGENTS.md · changelog 0.5</div>
+      </div>
+      <div class="c">
+        <div class="n"><b>3</b> · Converging by use</div>
+        <div class="d">Began as Astro's own repo workflows, then hardened: parallel <span class="m">define*</span> names, named sessions dropped, and now <b>every workflow wraps an agent</b> — <span class="m">defineWorkflow({ agent, action })</span>.</div>
+        <div class="src">changelog 0.6 → unreleased</div>
+      </div>
     </div>
   </div>
 
