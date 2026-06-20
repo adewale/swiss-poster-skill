@@ -16,13 +16,11 @@ const POSTERS = [
   { html: 'cynefin-rhythm.html',                  png: 'cynefin-rhythm.png' },
   // iteration set — Fold family + Protocols family
   { html: 'cynefin-cliff.html',                   png: 'cynefin-cliff.png' },
-  { html: 'cynefin-masses.html',                  png: 'cynefin-masses.png' },
   { html: 'cynefin-horizon.html',                 png: 'cynefin-horizon.png' },
   { html: 'cynefin-catastrophe.html',             png: 'cynefin-catastrophe.png' },
   { html: 'cynefin-void.html',                    png: 'cynefin-void.png' },
   { html: 'cynefin-melody.html',                  png: 'cynefin-melody.png' },
   { html: 'cynefin-columns.html',                 png: 'cynefin-columns.png' },
-  { html: 'cynefin-firstmove.html',               png: 'cynefin-firstmove.png' },
   { html: 'cynefin-wrongmove.html',               png: 'cynefin-wrongmove.png' },
   { html: 'cynefin-radial.html',                  png: 'cynefin-radial.png' },
   { html: 'cynefin-matrix-rhythm.html',           png: 'cynefin-matrix-rhythm.png' },
@@ -30,7 +28,6 @@ const POSTERS = [
   // divergent set — new lineages, forms, and content angles
   { html: 'cynefin-dynamics.html',                png: 'cynefin-dynamics.png' },
   { html: 'cynefin-travel.html',                  png: 'cynefin-travel.png' },
-  { html: 'cynefin-compass.html',                 png: 'cynefin-compass.png' },
   { html: 'cynefin-history.html',                 png: 'cynefin-history.png' },
   { html: 'cynefin-sensemaking.html',             png: 'cynefin-sensemaking.png' },
   { html: 'cynefin-wayfinding.html',              png: 'cynefin-wayfinding.png' },
@@ -39,11 +36,7 @@ const POSTERS = [
   { html: 'cynefin-software.html',                png: 'cynefin-software.png' },
   { html: 'cynefin-key.html',                     png: 'cynefin-key.png' },
   // computational set — real simulations rendered to canvas
-  { html: 'cynefin-bifurcation.html',             png: 'cynefin-bifurcation.png' },
-  { html: 'cynefin-attractor.html',               png: 'cynefin-attractor.png' },
   { html: 'cynefin-automata.html',                png: 'cynefin-automata.png' },
-  { html: 'cynefin-emergence.html',               png: 'cynefin-emergence.png' },
-  { html: 'cynefin-divergence.html',              png: 'cynefin-divergence.png' },
   { html: 'cynefin-manifold.html',                png: 'cynefin-manifold.png' },
   { html: 'cynefin-terrain.html',                 png: 'cynefin-terrain.png' },
   { html: 'cynefin-network.html',                 png: 'cynefin-network.png' },
