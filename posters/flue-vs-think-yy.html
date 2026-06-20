@@ -26,9 +26,9 @@
   /* ── ARENA (yin-yang split) ── */
   .arena{position:absolute;top:0;left:0;width:1260px;height:1320px;overflow:hidden;background:var(--stone-950)}
   .dark-l{position:absolute;inset:0;background:var(--stone-950);
-    clip-path:path('M0,0 L1260,0 L1260,640 C780,300 480,1180 0,820 Z')}
+    clip-path:polygon(0 0,100% 0,100% 39%,0 77%)}
   .blue-l{position:absolute;inset:0;background:var(--blue);
-    clip-path:path('M0,820 C480,1180 780,300 1260,640 L1260,1320 L0,1320 Z')}
+    clip-path:polygon(0 77%,100% 39%,100% 100%,0 100%)}
   .seam{position:absolute;inset:0;z-index:5;pointer-events:none}
 
   .topbar{position:absolute;top:40px;left:60px;right:60px;z-index:20;display:flex;justify-content:space-between;
@@ -105,8 +105,8 @@
     <div class="dark-l"></div>
     <div class="blue-l"></div>
     <svg class="seam" viewBox="0 0 1260 1320" preserveAspectRatio="none">
-      <path d="M0,820 C480,1180 780,300 1260,640" fill="none" stroke="#fafaf9" stroke-width="9"/>
-      <path d="M0,838 C480,1198 780,318 1260,658" fill="none" stroke="#4DA3FF" stroke-width="3"/>
+      <line x1="0" y1="1016" x2="1260" y2="515" stroke="#fafaf9" stroke-width="9"/>
+      <line x1="0" y1="1034" x2="1260" y2="533" stroke="#4DA3FF" stroke-width="3"/>
     </svg>
   </div>
 
