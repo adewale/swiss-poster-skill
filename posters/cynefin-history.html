@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — A Short History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — years and the timeline rule */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 70px 28px 70px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 60px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; letter-spacing: 0.16em; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE block — flush left, asymmetric */
+  .head { margin-bottom: 30px; max-width: 880px; }
+  .head .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500; margin-bottom: 20px;
+  }
+  .head .title {
+    font-weight: 600; font-size: 58px; line-height: 0.96; letter-spacing: -0.025em; color: var(--stone-900);
+    max-width: 17ch;
+  }
+
+  .seclabel {
+    display:flex; align-items:center; gap:16px;
+    border-top: 2px solid var(--stone-900); padding-top: 9px; margin-bottom: 42px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* TIMELINE — a single vertical rule with dated milestones */
+  .timeline {
+    position: relative;
+    padding-left: 234px;   /* year column to the left of the rule */
+  }
+  /* the rule itself */
+  .timeline::before {
+    content: ""; position: absolute; top: 6px; bottom: 6px; left: 210px;
+    width: 2px; background: var(--cobalt);
+  }
+
+  .ms { position: relative; padding: 0 0 146px 0; }
+  .ms:last-child { padding-bottom: 0; }
+
+  /* the tick where the milestone meets the rule */
+  .ms .tick {
+    position: absolute; left: -34px; top: 18px;
+    width: 16px; height: 2px; background: var(--cobalt);
+  }
+  .ms .node {
+    position: absolute; left: -27px; top: 11px;
+    width: 16px; height: 16px; border: 2px solid var(--cobalt);
+    background: var(--stone-50); border-radius: 50%;
+  }
+
+  /* big YEAR sits in its own left column, flush right against the rule */
+  .ms .year {
+    position: absolute; left: -234px; top: -8px; width: 200px; text-align: right;
+    font-weight: 600; font-size: 74px; line-height: 0.86; letter-spacing: -0.03em;
+    color: var(--cobalt); font-variant-numeric: tabular-nums;
+  }
+
+  .ms .head2 {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; font-weight: 600; color: var(--stone-900); margin-bottom: 12px;
+  }
+  .ms .body {
+    font-size: 19px; line-height: 1.4; color: var(--stone-700); max-width: 50ch; font-weight: 400;
+  }
+  .ms .body b { color: var(--stone-900); font-weight: 600; }
+  .ms .body .src {
+    display:block; margin-top: 7px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.06em;
+    text-transform: none; color: var(--stone-500); font-weight: 400;
+  }
+
+  /* FOOTER takeaway */
+  .foot {
+    position: absolute; left: 70px; right: 70px; bottom: 92px;
+    border-top: 2px solid var(--stone-900); padding-top: 20px;
+    display: grid; grid-template-columns: 232px 1fr; gap: 0;
+  }
+  .foot .lab {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--cobalt); font-weight: 600; padding-top: 4px;
+  }
+  .foot .take { font-size: 20px; line-height: 1.4; color: var(--stone-900); font-weight: 400; max-width: 62ch; }
+  .foot .take b { font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 70px; right: 70px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="zurich-international"
+     data-genre="timeline"
+     data-reference="ruder-typographic-function"
+     data-encoding="time → vertical axis · accent → years and the rule">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · a short history</div>
+      <div class="meta" data-source="span">1999 → today</div>
+    </div>
+    <div class="right">
+      <div>knowledge model to complexity framework</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="kicker">A short history · five turns</div>
+    <div class="title" data-critical="title">Even the framework had to re-sense itself.</div>
+  </div>
+
+  <div class="seclabel"><span>The record, in order</span><span class="sp"></span><span>1999 — 2020</span></div>
+
+  <!-- TIMELINE -->
+  <div class="timeline" data-encoding="five milestones down a single cobalt rule">
+
+    <div class="ms" data-source="milestone-1999">
+      <div class="year" data-critical="date">1999</div>
+      <span class="node" aria-hidden="true"></span><span class="tick" aria-hidden="true"></span>
+      <div class="head2">Origin · IBM</div>
+      <div class="body" data-critical="body">
+        <b>Dave Snowden</b> builds Cynefin at IBM to map how organisations actually know what they know.
+      </div>
+    </div>
+
+    <div class="ms" data-source="milestone-2003">
+      <div class="year" data-critical="date">2003</div>
+      <span class="node" aria-hidden="true"></span><span class="tick" aria-hidden="true"></span>
+      <div class="head2">Sense-making named</div>
+      <div class="body" data-critical="body">
+        <b>Kurtz &amp; Snowden</b> publish ‘The new dynamics of strategy’ (IBM Systems Journal): sense-making over categorising.
+      </div>
+    </div>
+
+    <div class="ms" data-source="milestone-2007">
+      <div class="year" data-critical="date">2007</div>
+      <span class="node" aria-hidden="true"></span><span class="tick" aria-hidden="true"></span>
+      <div class="head2">The four domains go wide</div>
+      <div class="body" data-critical="body">
+        ‘A Leader’s Framework for Decision Making’ runs in <b>Harvard Business Review</b>; the four domains reach a wide audience.
+      </div>
+    </div>
+
+    <div class="ms" data-source="milestone-2014">
+      <div class="year" data-critical="date">2014</div>
+      <span class="node" aria-hidden="true"></span><span class="tick" aria-hidden="true"></span>
+      <div class="head2">The easy domain, renamed</div>
+      <div class="body" data-critical="body">
+        ‘Simple’ becomes ‘Obvious’, then ‘Clear’ — the easy domain is where leaders walk off the cliff.
+      </div>
+    </div>
+
+    <div class="ms" data-source="milestone-2020">
+      <div class="year" data-critical="date">2020</div>
+      <span class="node" aria-hidden="true"></span><span class="tick" aria-hidden="true"></span>
+      <div class="head2">St David’s Day · liminal zones</div>
+      <div class="body" data-critical="body">
+        The St David’s Day model adds liminal zones: the thresholds where a situation is between domains.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot" data-source="takeaway">
+    <div class="lab">The takeaway</div>
+    <div class="take" data-critical="body">
+      The names changed because the world did. A sense-making framework that never revised itself would be the <b>sorting box it warns against.</b>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · Cognitive Edge / the Cynefin Co</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>

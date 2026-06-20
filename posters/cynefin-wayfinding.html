@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Wayfinding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --green:   #1F6B45;   /* single accent — the directional / signal system */
+    --green-d: #165033;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 20px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar .right .meta { text-transform: none; letter-spacing: 0.08em; }
+
+  /* ===== TITLE BLOCK ===== */
+  .head { position: relative; margin-bottom: 20px; }
+  .head .kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.30em;
+    text-transform: uppercase; font-weight: 600; color: var(--green-d); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .head .kicker .sp { flex: 1; height: 2px; background: var(--stone-200); }
+  .head .title {
+    font-weight: 700; font-size: 82px; line-height: 0.86; letter-spacing: -0.035em;
+    color: var(--stone-900); max-width: 1000px;
+  }
+  .head .title .g { color: var(--green); }
+  .head .pron {
+    position: absolute; right: 0; top: 0; text-align: right;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); line-height: 1.7;
+  }
+
+  /* ===== SIGNAGE CLUSTER ===== */
+  .cluster {
+    position: relative; margin-top: 0;
+    height: 1168px;
+    border-top: 2.5px solid var(--stone-900);
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 0;
+  }
+  /* each sign panel — a full-height signage plate */
+  .sign {
+    position: relative; min-height: 0; min-width: 0; padding: 40px 40px 40px 40px;
+    border-bottom: 1.5px solid var(--stone-300);
+    display: grid; grid-template-columns: 120px 1fr; column-gap: 30px;
+    grid-template-rows: 1fr auto auto auto 1fr; align-items: start;
+  }
+  .sign.l { border-right: 1.5px solid var(--stone-300); }
+  .sign.brow { border-bottom: 0; }
+  /* the route code sits high in the empty top row, pinned to the panel's outer corner */
+  .sign .code {
+    grid-row: 1 / 2; grid-column: 1 / 3; align-self: start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--stone-400); font-weight: 500;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  }
+  .sign .code .dash { width: 30px; height: 2px; background: var(--green); }
+  /* right-column panels: mirror the code to the right edge, away from the central hub */
+  .sign.rcol .code { flex-direction: row-reverse; }
+
+  /* the green directional arrow — large, the sign face */
+  .sign .arrow {
+    grid-row: 2 / 4; grid-column: 1; align-self: start;
+    width: 120px; height: 116px; display: flex; align-items: center; justify-content: center;
+  }
+  .sign .arrow svg { width: 116px; height: 116px; display: block; }
+  /* the pictogram glyph sits under the arrow, boxed like a sign tile */
+  .sign .picto {
+    grid-row: 4 / 5; grid-column: 1; align-self: start;
+    width: 120px; height: 88px; margin-top: 16px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid var(--stone-300);
+  }
+  .sign .picto svg { width: 64px; height: 64px; display: block; }
+
+  /* domain name */
+  .sign .name {
+    grid-row: 2 / 3; grid-column: 2; align-self: start;
+    font-weight: 700; font-size: 52px; line-height: 0.84; letter-spacing: -0.028em;
+    text-transform: uppercase; color: var(--stone-900);
+  }
+  .sign .cause {
+    grid-row: 3 / 4; grid-column: 2; margin-top: 16px;
+    font-size: 17px; line-height: 1.3; color: var(--stone-700); font-weight: 400;
+    max-width: 27ch;
+  }
+  /* the route protocol — green strip, the signposted method */
+  .sign .route {
+    grid-row: 4 / 5; grid-column: 2; margin-top: 22px;
+    display: flex; flex-direction: column; gap: 9px; align-items: flex-start;
+  }
+  .sign .route .way {
+    display: inline-flex; align-items: center;
+    background: var(--green); color: var(--stone-50);
+    font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.03em; padding: 9px 15px; text-transform: lowercase; white-space: nowrap;
+  }
+  .sign .route .prac {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--green-d); font-weight: 600;
+  }
+
+  /* ===== JUNCTION HUB — Disorder, the missing sign ===== */
+  .hub {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 230px; height: 214px; z-index: 6;
+    background: var(--stone-50);
+    border: 2px dashed var(--stone-400);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 16px;
+  }
+  /* a small stone ring frames the dashed hub so it reads as an intentional junction node */
+  .hub::before {
+    content: ""; position: absolute; inset: -11px;
+    border: 1.5px solid var(--stone-300); z-index: -1; background: var(--stone-50);
+  }
+  .hub .hpicto { width: 60px; height: 60px; margin-bottom: 10px; }
+  .hub .hpicto svg { width: 60px; height: 60px; display: block; }
+  .hub .hname {
+    font-weight: 700; font-size: 24px; letter-spacing: 0.03em; text-transform: uppercase;
+    color: var(--stone-900); line-height: 1;
+  }
+  .hub .hsub {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.45;
+    letter-spacing: 0.02em; color: var(--stone-500); margin-top: 9px; max-width: 26ch;
+  }
+
+  /* ===== FOOTER ===== */
+  .foot {
+    margin-top: 20px; border-top: 2.5px solid var(--stone-900); padding-top: 16px;
+    display: grid; grid-template-columns: 64px 1fr; gap: 22px; align-items: center;
+  }
+  .foot .glyph {
+    width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;
+  }
+  .foot .glyph svg { width: 64px; height: 64px; display: block; }
+  .foot .msg {
+    font-size: 20px; line-height: 1.36; color: var(--stone-900); font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+  .foot .msg b { color: var(--green); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="contemporary-signage"
+     data-genre="wayfinding"
+     data-reference="aicher-pictogram-system"
+     data-encoding="domain → pictogram + arrow direction">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · wayfinding</div>
+      <div class="meta" data-source="creator">Snowden, 1999</div>
+    </div>
+    <div class="right">
+      <div>at the junction, which way?</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- TITLE BLOCK -->
+  <div class="head">
+    <div class="kicker"><span>Decide how to decide</span><span class="sp"></span></div>
+    <div class="title" data-critical="title">Read the <span class="g">signs</span><br>before you pick the road.</div>
+    <div class="pron" data-source="gloss">Welsh · habitat<br>kuh·NEV·in</div>
+  </div>
+
+  <!-- SIGNAGE CLUSTER -->
+  <div class="cluster" data-encoding="domain → pictogram + directional arrow · route → signposted protocol">
+
+    <!-- CLEAR — arrow left -->
+    <div class="sign l" data-source="domain-clear">
+      <div class="code" aria-hidden="true"><span class="dash"></span>Route 01 · west</div>
+      <div class="arrow" aria-hidden="true">
+        <!-- directional arrow pointing LEFT -->
+        <svg viewBox="0 0 116 116">
+          <line x1="104" y1="58" x2="26" y2="58" stroke="#1F6B45" stroke-width="11" stroke-linecap="butt"/>
+          <polygon points="12,58 36,42 36,74" fill="#1F6B45"/>
+        </svg>
+      </div>
+      <div class="picto" aria-hidden="true">
+        <!-- CLEAR pictogram: one known path, origin dot → straight line → destination bar -->
+        <svg viewBox="0 0 64 64">
+          <circle cx="9" cy="32" r="6" fill="#1c1917"/>
+          <line x1="15" y1="32" x2="49" y2="32" stroke="#1c1917" stroke-width="5"/>
+          <rect x="49" y="20" width="6" height="24" fill="#1c1917"/>
+        </svg>
+      </div>
+      <div class="name" data-critical="title">Clear</div>
+      <div class="cause" data-critical="body">Cause is obvious. The road is already marked.</div>
+      <div class="route">
+        <span class="way" data-critical="body">sense → categorize → respond</span>
+        <span class="prac" data-critical="body">best practice</span>
+      </div>
+    </div>
+
+    <!-- COMPLICATED — arrow up -->
+    <div class="sign rcol" data-source="domain-complicated">
+      <div class="code" aria-hidden="true"><span class="dash"></span>Route 02 · north</div>
+      <div class="arrow" aria-hidden="true">
+        <!-- directional arrow pointing UP -->
+        <svg viewBox="0 0 116 116">
+          <line x1="58" y1="104" x2="58" y2="26" stroke="#1F6B45" stroke-width="11" stroke-linecap="butt"/>
+          <polygon points="58,12 42,36 74,36" fill="#1F6B45"/>
+        </svg>
+      </div>
+      <div class="picto" aria-hidden="true">
+        <!-- COMPLICATED pictogram: a gear — knowable by expertise -->
+        <svg viewBox="0 0 64 64">
+          <g fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linejoin="round">
+            <path d="M32 7 l4.5 0 1.8 7.4 5.5 2.3 6.4-3.7 3.2 3.2 -3.7 6.4 2.3 5.5 7.4 1.8 0 4.5 -7.4 1.8 -2.3 5.5 3.7 6.4 -3.2 3.2 -6.4-3.7 -5.5 2.3 -1.8 7.4 -4.5 0 -1.8-7.4 -5.5-2.3 -6.4 3.7 -3.2-3.2 3.7-6.4 -2.3-5.5 -7.4-1.8 0-4.5 7.4-1.8 2.3-5.5 -3.7-6.4 3.2-3.2 6.4 3.7 5.5-2.3 z"/>
+            <circle cx="32" cy="32" r="8.5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="name" data-critical="title">Complicated</div>
+      <div class="cause" data-critical="body">Cause needs an expert. A route exists; read it.</div>
+      <div class="route">
+        <span class="way" data-critical="body">sense → analyze → respond</span>
+        <span class="prac" data-critical="body">good practice</span>
+      </div>
+    </div>
+
+    <!-- COMPLEX — arrow right -->
+    <div class="sign l brow" data-source="domain-complex">
+      <div class="code" aria-hidden="true"><span class="dash"></span>Route 03 · east</div>
+      <div class="arrow" aria-hidden="true">
+        <!-- directional arrow pointing RIGHT -->
+        <svg viewBox="0 0 116 116">
+          <line x1="12" y1="58" x2="90" y2="58" stroke="#1F6B45" stroke-width="11" stroke-linecap="butt"/>
+          <polygon points="104,58 80,42 80,74" fill="#1F6B45"/>
+        </svg>
+      </div>
+      <div class="picto" aria-hidden="true">
+        <!-- COMPLEX pictogram: interlocking nodes / network -->
+        <svg viewBox="0 0 64 64">
+          <g stroke="#1c1917" stroke-width="3" fill="none">
+            <line x1="14" y1="15" x2="32" y2="32"/>
+            <line x1="50" y1="13" x2="32" y2="32"/>
+            <line x1="12" y1="49" x2="32" y2="32"/>
+            <line x1="52" y1="51" x2="32" y2="32"/>
+            <line x1="14" y1="15" x2="12" y2="49"/>
+            <line x1="50" y1="13" x2="52" y2="51"/>
+          </g>
+          <g fill="#1c1917">
+            <circle cx="14" cy="15" r="5.5"/>
+            <circle cx="50" cy="13" r="5.5"/>
+            <circle cx="12" cy="49" r="5.5"/>
+            <circle cx="52" cy="51" r="5.5"/>
+            <circle cx="32" cy="32" r="6.5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="name" data-critical="title">Complex</div>
+      <div class="cause" data-critical="body">Cause shows only after you move. Step, then read.</div>
+      <div class="route">
+        <span class="way" data-critical="body">probe → sense → respond</span>
+        <span class="prac" data-critical="body">emergent practice</span>
+      </div>
+    </div>
+
+    <!-- CHAOTIC — arrow down -->
+    <div class="sign brow rcol" data-source="domain-chaotic">
+      <div class="code" aria-hidden="true"><span class="dash"></span>Route 04 · south</div>
+      <div class="arrow" aria-hidden="true">
+        <!-- directional arrow pointing DOWN -->
+        <svg viewBox="0 0 116 116">
+          <line x1="58" y1="12" x2="58" y2="90" stroke="#1F6B45" stroke-width="11" stroke-linecap="butt"/>
+          <polygon points="58,104 42,80 74,80" fill="#1F6B45"/>
+        </svg>
+      </div>
+      <div class="picto" aria-hidden="true">
+        <!-- CHAOTIC pictogram: a jagged burst -->
+        <svg viewBox="0 0 64 64">
+          <polygon points="32,5 38,24 55,16 42,30 58,38 40,38 46,57 32,43 18,57 24,38 6,38 22,30 9,16 26,24"
+                   fill="none" stroke="#1c1917" stroke-width="3.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="name" data-critical="title">Chaotic</div>
+      <div class="cause" data-critical="body">No cause, no time. Act first to make any ground.</div>
+      <div class="route">
+        <span class="way" data-critical="body">act → sense → respond</span>
+        <span class="prac" data-critical="body">novel practice</span>
+      </div>
+    </div>
+
+    <!-- JUNCTION HUB: DISORDER, the missing sign -->
+    <div class="hub" data-source="domain-disorder">
+      <div class="hpicto" aria-hidden="true">
+        <!-- DISORDER pictogram: a question mark -->
+        <svg viewBox="0 0 58 58">
+          <path d="M18 21 q0 -12 11 -12 q11 0 11 11 q0 8 -8 11 q-4 1.5 -4 7"
+                fill="none" stroke="#78716c" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="28" cy="48" r="3.4" fill="#78716c"/>
+        </svg>
+      </div>
+      <div class="hname" data-critical="title">Disorder</div>
+      <div class="hsub" data-critical="body">No sign yet —<br>find out where you are</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="glyph" aria-hidden="true">
+      <!-- a wayfinding fingerpost: one post, signs both ways -->
+      <svg viewBox="0 0 64 64">
+        <line x1="32" y1="8" x2="32" y2="58" stroke="#1F6B45" stroke-width="5" stroke-linecap="butt"/>
+        <polygon points="6,18 26,18 26,32 6,32 0,25" fill="none" stroke="#1F6B45" stroke-width="4" stroke-linejoin="round"/>
+        <polygon points="58,36 38,36 38,50 58,50 64,43" fill="none" stroke="#1F6B45" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="msg" data-critical="body">
+      The signs point to <b>methods, not answers.</b> Take the road the terrain marks; the wrong road is signposted too.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="lineage">modernist signage · after Aicher</div>
+    <div data-source="origin"><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>

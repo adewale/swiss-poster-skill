@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — A Leader's Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — marks THE TRAP */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 26px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; letter-spacing: 0.16em; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE block */
+  .head { margin-bottom: 54px; }
+  .head .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500; margin-bottom: 22px;
+  }
+  .head .title {
+    font-weight: 700; font-size: 66px; line-height: 0.94; letter-spacing: -0.035em;
+    color: var(--stone-900); white-space: nowrap;
+  }
+  .head .title .t2 { color: var(--cobalt); }
+
+  /* ============ THE TABLE ============ */
+  .sheet {
+    border-top: 3px solid var(--stone-900);
+    border-bottom: 3px solid var(--stone-900);
+  }
+  /* column header strip */
+  .colhead {
+    display: grid; grid-template-columns: 360px 1fr 1fr;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+    border-bottom: 1.5px solid var(--stone-900);
+  }
+  .colhead > div { padding: 16px 0 15px 0; }
+  .colhead .c-move  { padding-left: 30px; border-left: 1px solid var(--stone-300); }
+  .colhead .c-trap  {
+    padding-left: 30px; border-left: 1px solid var(--cobalt);
+    color: var(--cobalt); position: relative;
+  }
+  .colhead .c-trap .dot {
+    display:inline-block; width:7px; height:7px; background: var(--cobalt);
+    margin-right: 9px; vertical-align: 1px;
+  }
+
+  /* a row */
+  .row {
+    display: grid; grid-template-columns: 360px 1fr 1fr;
+    border-bottom: 1px solid var(--stone-300); position: relative;
+  }
+  .row:last-child { border-bottom: 0; }
+
+  .cell { padding: 82px 0 82px 0; display: flex; flex-direction: column; justify-content: center; }
+
+  /* DOMAIN cell */
+  .c-dom { padding-right: 26px; }
+  .c-dom .idx {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em;
+    color: var(--stone-400); font-weight: 500; margin-bottom: 12px;
+  }
+  .c-dom .name {
+    font-weight: 700; font-size: 54px; line-height: 0.88; letter-spacing: -0.03em;
+    color: var(--stone-900);
+  }
+  .c-dom .order {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500; margin-top: 16px;
+  }
+
+  /* MOVE cell */
+  .c-move {
+    padding-left: 30px; border-left: 1px solid var(--stone-300);
+  }
+  .c-move .lab {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 600; margin-bottom: 14px;
+  }
+  .c-move .txt { font-size: 21px; line-height: 1.36; color: var(--stone-900); font-weight: 400; max-width: 30ch; }
+
+  /* TRAP cell — accented */
+  .c-trap {
+    padding-left: 30px; border-left: 1px solid var(--cobalt);
+  }
+  .c-trap .lab {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--cobalt); font-weight: 600; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .c-trap .lab .ar { font-weight: 600; }
+  .c-trap .txt { font-size: 21px; line-height: 1.36; color: var(--stone-900); font-weight: 400; max-width: 30ch; }
+  .c-trap .txt b { color: var(--cobalt); font-weight: 600; }
+
+  /* FOOTER takeaway */
+  .foot {
+    margin-top: 70px; display: grid; grid-template-columns: 64px 1fr; gap: 0; align-items: start;
+  }
+  .foot .mark {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--cobalt); font-weight: 600;
+    writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap;
+  }
+  .foot .take {
+    border-left: 3px solid var(--cobalt); padding-left: 30px;
+    font-size: 29px; line-height: 1.28; letter-spacing: -0.015em; color: var(--stone-900); font-weight: 400; max-width: 42ch;
+  }
+  .foot .take b { color: var(--cobalt); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="zurich-international"
+     data-genre="decision-sheet"
+     data-source="hbr-2007"
+     data-encoding="trap column → cobalt accent · move vs trap opposed">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · a leader's framework</div>
+      <div class="meta" data-source="reference">Snowden &amp; Boone · HBR, 2007</div>
+    </div>
+    <div class="right">
+      <div>the move, and the trap</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="kicker">A decision sheet · four domains · four leaders</div>
+    <div class="title" data-critical="title">Lead the domain you're in,<br>not the one <span class="t2">you're good at.</span></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="sheet" data-encoding="DOMAIN · THE MOVE · THE TRAP">
+    <div class="colhead">
+      <div class="c-domh">Domain</div>
+      <div class="c-move">The move</div>
+      <div class="c-trap"><span class="dot"></span>The trap</div>
+    </div>
+
+    <!-- CLEAR -->
+    <div class="row" data-source="domain-clear">
+      <div class="cell c-dom">
+        <div class="idx">01</div>
+        <div class="name" data-critical="body">Clear</div>
+        <div class="order">Ordered</div>
+      </div>
+      <div class="cell c-move">
+        <div class="lab">The move</div>
+        <div class="txt" data-critical="body">Set the rule, delegate, communicate plainly.</div>
+      </div>
+      <div class="cell c-trap">
+        <div class="lab"><span class="ar">↯</span> The trap</div>
+        <div class="txt" data-critical="body"><b>Complacency.</b> You stop checking, and the world changes under the rule.</div>
+      </div>
+    </div>
+
+    <!-- COMPLICATED -->
+    <div class="row" data-source="domain-complicated">
+      <div class="cell c-dom">
+        <div class="idx">02</div>
+        <div class="name" data-critical="body">Complicated</div>
+        <div class="order">Ordered</div>
+      </div>
+      <div class="cell c-move">
+        <div class="lab">The move</div>
+        <div class="txt" data-critical="body">Convene experts, weigh conflicting advice, decide.</div>
+      </div>
+      <div class="cell c-trap">
+        <div class="lab"><span class="ar">↯</span> The trap</div>
+        <div class="txt" data-critical="body"><b>Paralysis,</b> or experts who wave away the answer they didn't think of.</div>
+      </div>
+    </div>
+
+    <!-- COMPLEX -->
+    <div class="row" data-source="domain-complex">
+      <div class="cell c-dom">
+        <div class="idx">03</div>
+        <div class="name" data-critical="body">Complex</div>
+        <div class="order">Unordered</div>
+      </div>
+      <div class="cell c-move">
+        <div class="lab">The move</div>
+        <div class="txt" data-critical="body">Run safe-to-fail probes, raise interaction, let patterns emerge.</div>
+      </div>
+      <div class="cell c-trap">
+        <div class="lab"><span class="ar">↯</span> The trap</div>
+        <div class="txt" data-critical="body"><b>Demanding certainty</b> up front, and managing it like it's merely complicated.</div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC -->
+    <div class="row" data-source="domain-chaotic">
+      <div class="cell c-dom">
+        <div class="idx">04</div>
+        <div class="name" data-critical="body">Chaotic</div>
+        <div class="order">Unordered</div>
+      </div>
+      <div class="cell c-move">
+        <div class="lab">The move</div>
+        <div class="txt" data-critical="body">Act now to make order, then move toward complex.</div>
+      </div>
+      <div class="cell c-trap">
+        <div class="lab"><span class="ar">↯</span> The trap</div>
+        <div class="txt" data-critical="body"><b>Staying the commander</b> after the crisis, when the room is ready to learn.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER takeaway -->
+  <div class="foot">
+    <div class="mark">the danger</div>
+    <div class="take" data-critical="body">Each domain rewards a different kind of leader. The danger is bringing <b>last year's strength</b> to this year's problem.</div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden &amp; Boone · Harvard Business Review, Nov 2007</div>
+    <div><b>Cynefin</b> · lead the domain</div>
+  </div>
+
+</div>
+</body>
+</html>

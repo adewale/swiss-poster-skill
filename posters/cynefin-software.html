@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin for software — field guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — cobalt plate ink */
+    --cobalt-l: #dde3f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 26px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE row — plate header */
+  .head { position: relative; z-index: 4; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 26px; }
+  .head .title { font-weight: 700; font-size: 88px; line-height: 0.84; letter-spacing: -0.045em; color: var(--stone-900); }
+  .head .plate {
+    text-align: right; padding-bottom: 8px; font-family:'IBM Plex Mono',monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); line-height: 1.7;
+  }
+  .head .plate b { color: var(--cobalt); font-weight: 600; }
+  .head .plate .pn { color: var(--stone-700); }
+
+  /* THE PLATE — technical field-guide table */
+  .plate-table {
+    position: relative; z-index: 4;
+    border: 2.5px solid var(--stone-900);
+    background: var(--stone-50);
+  }
+
+  /* column header strip */
+  .thead {
+    display: grid; grid-template-columns: 300px 1fr 1fr 200px;
+    border-bottom: 2.5px solid var(--stone-900);
+    background: var(--stone-900);
+  }
+  .thead .h {
+    font-family:'IBM Plex Mono',monospace; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    font-weight: 600; color: var(--stone-50); padding: 17px 26px;
+    border-left: 1px solid rgba(250,250,249,0.22);
+  }
+  .thead .h:first-child { border-left: 0; }
+  .thead .h.est { color: #cdd6ec; text-align: left; }
+
+  /* a domain row */
+  .row {
+    display: grid; grid-template-columns: 300px 1fr 1fr 200px;
+    border-bottom: 1.5px solid var(--stone-900);
+    min-height: 252px;
+  }
+  .row:last-child { border-bottom: 0; }
+  .cell { border-left: 1.5px solid var(--stone-300); padding: 30px 28px; display: flex; flex-direction: column; justify-content: center; }
+  .cell:first-child { border-left: 0; }
+
+  /* DOMAIN cell — mono index + display name */
+  .cell.dom { background: var(--stone-100); }
+  .row.un .cell.dom { background: var(--stone-200); }
+  .cell.dom .ix {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--stone-500); margin-bottom: 12px;
+  }
+  .cell.dom .ix b { color: var(--cobalt); font-weight: 600; }
+  .cell.dom .dn { font-weight: 700; font-size: 44px; line-height: 0.84; letter-spacing: -0.035em; color: var(--stone-900); white-space: nowrap; }
+  .cell.dom .side {
+    margin-top: 16px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500;
+  }
+
+  /* THE WORK cell */
+  .cell.work .wk { font-size: 23px; line-height: 1.34; color: var(--stone-900); font-weight: 400; letter-spacing: -0.01em; }
+
+  /* HOW TO RUN IT cell — protocol */
+  .cell.run .do { font-size: 21px; line-height: 1.34; color: var(--stone-900); font-weight: 400; letter-spacing: -0.01em; }
+  .cell.run .proto {
+    margin-top: 16px; font-family:'IBM Plex Mono',monospace; font-size: 13.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--cobalt); font-weight: 600; line-height: 1.4;
+  }
+
+  /* ESTIMATE cell */
+  .cell.est { align-items: flex-start; }
+  .cell.est .ev { font-size: 17px; line-height: 1.26; font-weight: 600; letter-spacing: -0.005em; }
+  /* ordered estimates — confident cobalt chip */
+  .cell.est.ord .chip {
+    display: inline-block; background: var(--cobalt); color: var(--stone-50);
+    padding: 10px 15px; font-weight: 600; font-size: 17px; line-height: 1.22; letter-spacing: -0.005em; border-radius: 2px;
+  }
+  /* the second ordered row — a range, slightly cooler */
+  .cell.est.ord2 .chip { background: var(--cobalt); }
+  /* unordered estimates — outline, the confidence drains out */
+  .cell.est.uno .ev { color: var(--cobalt); }
+  .cell.est.uno .tag {
+    display: inline-block; border: 1.5px dashed var(--cobalt); color: var(--cobalt);
+    padding: 8px 13px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 12px; border-radius: 2px;
+  }
+  .cell.est.uno .note { font-size: 17px; line-height: 1.28; color: var(--stone-700); font-weight: 400; letter-spacing: -0.005em; }
+  /* chaotic — struck out */
+  .cell.est.later .big {
+    font-weight: 700; font-size: 36px; letter-spacing: -0.02em; color: var(--cobalt); line-height: 0.9;
+  }
+  .cell.est.later .strike {
+    margin-top: 14px; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--stone-500); text-decoration: line-through; text-decoration-color: var(--stone-400);
+  }
+
+  /* THE FOLD — order/disorder seam between row 2 and row 3 */
+  .seam {
+    position: relative; z-index: 6;
+    display: grid; grid-template-columns: 300px 1fr;
+    border-top: 2.5px solid var(--cobalt); border-bottom: 2.5px solid var(--cobalt);
+    background: var(--cobalt);
+  }
+  .seam .sl, .seam .sr {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 600; color: var(--stone-50); padding: 11px 28px;
+  }
+  .seam .sr { color: #cdd6ec; }
+
+  /* FOOTER takeaway band */
+  .foot {
+    position: relative; z-index: 4; margin-top: 30px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 22px;
+    display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start;
+  }
+  .foot .lab {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cobalt); font-weight: 600; line-height: 1.7; padding-top: 4px;
+  }
+  .foot .big { font-size: 26px; font-weight: 400; line-height: 1.36; letter-spacing: -0.012em; color: var(--stone-900); }
+  .foot .big b { color: var(--cobalt); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="field-guide"
+     data-source="cynefin-for-software"
+     data-encoding="ordered/unordered → estimate confidence; cobalt chip → reliable, dashed → bet, struck → later">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · for software</div>
+      <div class="meta" data-source="creator">Snowden, 1999</div>
+    </div>
+    <div class="right">
+      <div>where best practice and estimates stop working</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="title" data-critical="title">Which domain<br>is your code in?</div>
+    <div class="plate">
+      <div class="pn">a field guide for engineers</div>
+      <div><b>ordered</b> → estimates hold</div>
+      <div><b>unordered</b> → estimates break</div>
+    </div>
+  </div>
+
+  <!-- THE PLATE -->
+  <div class="plate-table" data-encoding="four domains top→bottom by knowability; estimate column drains confidence downward">
+
+    <div class="thead">
+      <div class="h">DOMAIN</div>
+      <div class="h">THE WORK</div>
+      <div class="h">HOW TO RUN IT</div>
+      <div class="h est">ESTIMATE?</div>
+    </div>
+
+    <!-- CLEAR -->
+    <div class="row ord" data-source="domain-clear">
+      <div class="cell dom">
+        <div class="ix"><b>01</b> · ordered</div>
+        <div class="dn" data-critical="title">Clear</div>
+        <div class="side">known knowns</div>
+      </div>
+      <div class="cell work"><div class="wk" data-critical="body">CRUD, config, a known migration.</div></div>
+      <div class="cell run">
+        <div class="do" data-critical="body">Apply the standard.</div>
+        <div class="proto" data-critical="body">Sense · Categorize · Respond</div>
+      </div>
+      <div class="cell est ord"><span class="chip" data-critical="body">Reliable.</span></div>
+    </div>
+
+    <!-- COMPLICATED -->
+    <div class="row ord" data-source="domain-complicated">
+      <div class="cell dom">
+        <div class="ix"><b>02</b> · ordered</div>
+        <div class="dn" data-critical="title">Complicated</div>
+        <div class="side">known unknowns</div>
+      </div>
+      <div class="cell work"><div class="wk" data-critical="body">Performance, schema design, an integration.</div></div>
+      <div class="cell run">
+        <div class="do" data-critical="body">Bring expertise; more than one good answer.</div>
+        <div class="proto" data-critical="body">Sense · Analyze · Respond</div>
+      </div>
+      <div class="cell est ord ord2"><span class="chip" data-critical="body">A range, with experts.</span></div>
+    </div>
+
+    <!-- THE FOLD / seam -->
+    <div class="seam" aria-hidden="false" data-source="fold">
+      <div class="sl">↓ the fold · order ends</div>
+      <div class="sr">cause &amp; effect appear only in hindsight →</div>
+    </div>
+
+    <!-- COMPLEX -->
+    <div class="row un" data-source="domain-complex">
+      <div class="cell dom">
+        <div class="ix"><b>03</b> · unordered</div>
+        <div class="dn" data-critical="title">Complex</div>
+        <div class="side">unknown unknowns</div>
+      </div>
+      <div class="cell work"><div class="wk" data-critical="body">A new product, user behaviour, an unproven design.</div></div>
+      <div class="cell run">
+        <div class="do" data-critical="body">Ship small probes; let the system answer.</div>
+        <div class="proto" data-critical="body">Probe · Sense · Respond</div>
+      </div>
+      <div class="cell est uno">
+        <span class="tag" data-critical="body">a bet</span>
+        <div class="note" data-critical="body">Size the bet, not the outcome.</div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC -->
+    <div class="row un" data-source="domain-chaotic">
+      <div class="cell dom">
+        <div class="ix"><b>04</b> · unordered</div>
+        <div class="dn" data-critical="title">Chaotic</div>
+        <div class="side">no knowns</div>
+      </div>
+      <div class="cell work"><div class="wk" data-critical="body">Production is down. Data is leaking.</div></div>
+      <div class="cell run">
+        <div class="do" data-critical="body">Stop the bleeding first.</div>
+        <div class="proto" data-critical="body">Act · Sense · Respond</div>
+      </div>
+      <div class="cell est later">
+        <div class="big" data-critical="body">Later.</div>
+        <div class="strike" data-critical="body">no estimate now</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot" data-source="insight">
+    <div class="lab">read the<br>estimate<br>column</div>
+    <div class="big" data-critical="body">Best-practice playbooks and confident estimates belong to the <b>ordered half</b>. Force them onto complex work and the plan becomes <b>fiction with a deadline.</b></div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · sense-making for engineers</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+</body>
+</html>

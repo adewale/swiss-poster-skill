@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Visit the Five Domains</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    /* two flat travel inks — lake blue + ochre, on warm stone paper */
+    --blue:   #1E5B8C;
+    --blue-d: #16466b;
+    --ochre:  #C8862B;
+    --ochre-d:#9c6716;
+    --paper:  #f4ece0;   /* warm stone paper, lithographic tint of stone-100 */
+    --paper-d:#ece2d2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--paper); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 56px 28px 56px; background: var(--paper); }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--blue); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--blue-d); margin-bottom: 16px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; letter-spacing: 0.16em; }
+  .topbar .right { text-align: right; }
+
+  /* ===== DESTINATION HEADLINE ===== */
+  .head { position: relative; z-index: 6; }
+  .head .kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.42em;
+    text-transform: uppercase; font-weight: 600; color: var(--ochre-d); margin-bottom: 2px;
+  }
+  .head .title {
+    font-family: 'Barlow Condensed', 'IBM Plex Sans', sans-serif;
+    font-weight: 700; font-size: 170px; line-height: 0.80; letter-spacing: -0.005em;
+    text-transform: uppercase; color: var(--blue); margin: 0;
+  }
+  .head .title .em { color: var(--ochre); }
+  .head .subline {
+    display: flex; align-items: baseline; gap: 16px; margin-top: 10px;
+    border-top: 2.5px solid var(--blue); padding-top: 9px;
+  }
+  .head .subline .lead {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 500; font-size: 27px;
+    letter-spacing: 0.01em; color: var(--stone-900); text-transform: uppercase;
+  }
+  .head .subline .lead b { color: var(--ochre-d); font-weight: 600; }
+  .head .subline .sp { flex: 1; height: 2px; background: var(--paper-d); align-self: center; }
+  .head .subline .pron {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--stone-500); white-space: nowrap;
+  }
+
+  /* ===== CENTRAL TERRAIN BAND (flat lithographic illustration) ===== */
+  .band {
+    position: relative; height: 524px; margin-top: 18px;
+    border: 2.5px solid var(--blue); overflow: hidden; background: var(--paper);
+  }
+  .band svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .band .bandcap {
+    position: absolute; left: 16px; bottom: 12px; z-index: 4;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--paper); font-weight: 600;
+    background: var(--blue-d); padding: 4px 10px;
+  }
+  .band .bandtag {
+    position: absolute; right: 16px; top: 12px; z-index: 4;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.20em;
+    text-transform: uppercase; color: var(--blue-d); font-weight: 600;
+    background: var(--paper); padding: 4px 10px; border: 1.5px solid var(--blue);
+  }
+
+  /* ===== FIVE REGION PLATES ===== */
+  .regions {
+    margin-top: 16px; border-top: 2.5px solid var(--blue);
+  }
+  .seclabel {
+    display: flex; align-items: center; gap: 14px; padding: 8px 0 10px 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 600; color: var(--blue-d);
+  }
+  .seclabel .sp { flex: 1; height: 1px; background: var(--paper-d); }
+  .seclabel .r { color: var(--ochre-d); }
+
+  .plate {
+    display: grid; grid-template-columns: 56px 250px 1fr; align-items: stretch;
+    border-top: 1.5px solid var(--paper-d); min-height: 0;
+  }
+  .plate:first-of-type { border-top: 0; }
+  /* numeral stamp */
+  .plate .num {
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px;
+    color: var(--ochre); line-height: 1; padding-top: 2px;
+  }
+  /* region name + nickname */
+  .plate .name {
+    padding: 18px 18px 18px 6px; border-left: 0;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .plate .name .rn {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 38px;
+    line-height: 0.92; letter-spacing: 0.005em; text-transform: uppercase; color: var(--blue);
+  }
+  .plate .name .nick {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ochre-d); font-weight: 600; margin-top: 5px;
+  }
+  /* terrain + the way to travel */
+  .plate .desc {
+    padding: 18px 4px 18px 22px; border-left: 1.5px solid var(--paper-d);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .plate .desc .terrain {
+    font-size: 15.5px; line-height: 1.34; color: var(--stone-900); font-weight: 400;
+  }
+  .plate .desc .travel {
+    margin-top: 7px; display: flex; align-items: baseline; gap: 10px;
+  }
+  .plate .desc .travel .lbl {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500; white-space: nowrap;
+    padding-top: 1px;
+  }
+  .plate .desc .travel .way {
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.06em;
+    color: var(--blue-d); font-weight: 600;
+  }
+  .plate .desc .travel .way em { color: var(--ochre-d); font-style: normal; }
+
+  /* ===== FOOTER BANNER ===== */
+  .banner {
+    margin-top: 18px; background: var(--blue); color: var(--paper);
+    display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 24px;
+    padding: 22px 24px;
+  }
+  .banner .mark {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px;
+    letter-spacing: 0.20em; text-transform: uppercase; color: var(--ochre);
+    writing-mode: horizontal-tb; white-space: nowrap; line-height: 1.05; text-align: center;
+    border-right: 2px solid rgba(244,236,224,0.4); padding-right: 22px;
+  }
+  .banner .msg {
+    font-size: 19px; line-height: 1.36; color: var(--paper); font-weight: 400;
+  }
+  .banner .msg b { color: var(--ochre); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 56px; right: 56px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--paper-d); padding-top: 9px;
+  }
+  .colophon b { color: var(--blue-d); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-palette="two-flat-inks"
+     data-lineage="travel-lithographic"
+     data-genre="travel-placard"
+     data-reference="matter-photomontage"
+     data-encoding="domain → region · protocol → way to travel · terrain → flat litho shapes">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · a traveller's map</div>
+      <div class="meta" data-source="etymology">Welsh for habitat · /kəˈnɛvɪn/</div>
+    </div>
+    <div class="right">
+      <div>five regions, five ways to travel</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+  </div>
+
+  <!-- DESTINATION HEADLINE -->
+  <div class="head">
+    <div class="kicker">The country of multiple belongings</div>
+    <h1 class="title" data-critical="title">Visit the<br>Five <span class="em">Domains</span></h1>
+    <div class="subline">
+      <div class="lead">Know the terrain · <b>pack for the ground</b></div>
+      <div class="sp"></div>
+      <div class="pron">kuh·NEV·in</div>
+    </div>
+  </div>
+
+  <!-- CENTRAL TERRAIN BAND -->
+  <div class="band" data-source="terrain-illustration">
+    <svg viewBox="0 0 1148 524" preserveAspectRatio="none" aria-hidden="true">
+      <!-- sky stays warm paper; a single flat ochre horizon band ties the scene -->
+      <rect x="0" y="360" width="1148" height="160" fill="#f0e3cf"/>
+
+      <!-- SUN over the lowlands (left) -->
+      <circle cx="158" cy="136" r="62" fill="#C8862B"/>
+      <g stroke="#C8862B" stroke-width="6" stroke-linecap="round">
+        <line x1="158" y1="24" x2="158" y2="54"/>
+        <line x1="68" y1="56" x2="88" y2="76"/>
+        <line x1="248" y1="56" x2="228" y2="76"/>
+        <line x1="42" y1="136" x2="72" y2="136"/>
+        <line x1="274" y1="136" x2="244" y2="136"/>
+        <line x1="68" y1="216" x2="88" y2="196"/>
+        <line x1="248" y1="216" x2="228" y2="196"/>
+      </g>
+      <!-- a pair of birds over the lowlands -->
+      <g stroke="#16466b" stroke-width="3.5" fill="none" stroke-linecap="round">
+        <path d="M300 124 q 15 -13 30 0 q 15 -13 30 0"/>
+        <path d="M346 156 q 12 -10 24 0 q 12 -10 24 0"/>
+      </g>
+
+      <!-- LOWLAND hills (rolling, ochre) far left -->
+      <path d="M0 378 Q 100 318 210 358 Q 300 392 372 360 L372 524 L0 524 Z" fill="#C8862B"/>
+      <path d="M0 424 Q 120 386 250 418 Q 330 442 372 424 L372 524 L0 524 Z" fill="#9c6716"/>
+      <!-- a winding marked road on the lowlands -->
+      <path d="M74 524 Q 158 440 244 418 Q 314 402 372 408" stroke="#f4ece0" stroke-width="7" fill="none" stroke-dasharray="15 13"/>
+
+      <!-- HIGHLAND peaks (sharp, blue) center-left -->
+      <path d="M352 524 L504 178 L606 396 L678 256 L772 524 Z" fill="#1E5B8C"/>
+      <path d="M504 178 L540 236 L480 288 Z" fill="#f4ece0"/>
+      <path d="M678 256 L707 310 L652 338 Z" fill="#f4ece0"/>
+      <!-- a back ridge for depth -->
+      <path d="M298 524 L412 314 L478 416 L532 334 L616 524 Z" fill="#16466b" opacity="0.85"/>
+
+      <!-- MARSH: flat blue lake set into the ground, reeds + tussocks -->
+      <path d="M730 524 Q 730 408 808 402 Q 890 396 948 408 Q 956 462 948 524 Z" fill="#1E5B8C"/>
+      <g stroke="#f4ece0" stroke-width="3.5" stroke-linecap="round">
+        <line x1="764" y1="448" x2="764" y2="408"/>
+        <line x1="788" y1="452" x2="788" y2="412"/>
+        <line x1="842" y1="448" x2="842" y2="408"/>
+        <line x1="902" y1="452" x2="902" y2="412"/>
+        <line x1="924" y1="446" x2="924" y2="408"/>
+      </g>
+      <!-- still-water reflection lines -->
+      <g stroke="#f4ece0" stroke-width="2.5" opacity="0.7">
+        <line x1="768" y1="478" x2="912" y2="478"/>
+        <line x1="788" y1="496" x2="894" y2="496"/>
+      </g>
+      <ellipse cx="748" cy="408" rx="32" ry="13" fill="#9c6716"/>
+      <ellipse cx="924" cy="412" rx="32" ry="13" fill="#9c6716"/>
+
+      <!-- STORM COAST (right): storm cloud, lightning, dark choppy sea -->
+      <path d="M936 524 L936 420 Q 982 402 1036 420 Q 1092 402 1148 420 L1148 524 Z" fill="#16466b"/>
+      <g stroke="#f4ece0" stroke-width="3.5" fill="none" stroke-linecap="round">
+        <path d="M952 454 q 19 -19 38 0 q 19 19 38 0"/>
+        <path d="M1052 460 q 19 -19 38 0 q 19 19 38 0"/>
+        <path d="M952 486 q 19 -17 38 0 q 19 17 38 0"/>
+        <path d="M1052 490 q 19 -17 38 0 q 19 17 38 0"/>
+      </g>
+      <!-- big storm cloud -->
+      <path d="M978 168 Q 962 116 1018 114 Q 1038 72 1090 92 Q 1138 72 1148 126 L1148 196 L978 196 Q 956 188 978 168 Z" fill="#1E5B8C"/>
+      <!-- rain streaks -->
+      <g stroke="#16466b" stroke-width="3" stroke-linecap="round">
+        <line x1="1004" y1="204" x2="992" y2="240"/>
+        <line x1="1126" y1="204" x2="1114" y2="240"/>
+      </g>
+      <!-- lightning bolt (ochre) -->
+      <path d="M1068 196 L1042 282 L1070 282 L1046 358 L1108 264 L1076 264 L1100 196 Z" fill="#C8862B"/>
+
+      <!-- ground baseline -->
+      <rect x="0" y="518" width="1148" height="6" fill="#16466b"/>
+    </svg>
+    <div class="bandtag">one map · five terrains</div>
+    <div class="bandcap" data-critical="body">Lowlands · Highlands · Marshes · Storm Coast · the Crossroads</div>
+  </div>
+
+  <!-- FIVE REGION PLATES -->
+  <div class="regions">
+    <div class="seclabel">
+      <span>The five regions</span>
+      <span class="sp"></span>
+      <span class="r">how each one is travelled</span>
+    </div>
+
+    <!-- CLEAR -->
+    <div class="plate" data-source="domain-clear">
+      <div class="num" aria-hidden="true">01</div>
+      <div class="name">
+        <div class="rn" data-critical="title">Clear</div>
+        <div class="nick">the Lowlands</div>
+      </div>
+      <div class="desc" data-critical="body">
+        <div class="terrain">Marked roads, known cause and effect.</div>
+        <div class="travel">
+          <span class="lbl">Travel by the rulebook</span>
+          <span class="way">sense → categorize → respond</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLICATED -->
+    <div class="plate" data-source="domain-complicated">
+      <div class="num" aria-hidden="true">02</div>
+      <div class="name">
+        <div class="rn" data-critical="title">Complicated</div>
+        <div class="nick">the Highlands</div>
+      </div>
+      <div class="desc" data-critical="body">
+        <div class="terrain">A route exists but needs a guide.</div>
+        <div class="travel">
+          <span class="lbl">Hire an expert</span>
+          <span class="way">sense → analyze → respond</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLEX -->
+    <div class="plate" data-source="domain-complex">
+      <div class="num" aria-hidden="true">03</div>
+      <div class="name">
+        <div class="rn" data-critical="title">Complex</div>
+        <div class="nick">the Marshes</div>
+      </div>
+      <div class="desc" data-critical="body">
+        <div class="terrain">No fixed path; the ground answers only when you step.</div>
+        <div class="travel">
+          <span class="lbl">Feel your way</span>
+          <span class="way"><em>probe</em> → sense → respond</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC -->
+    <div class="plate" data-source="domain-chaotic">
+      <div class="num" aria-hidden="true">04</div>
+      <div class="name">
+        <div class="rn" data-critical="title">Chaotic</div>
+        <div class="nick">the Storm Coast</div>
+      </div>
+      <div class="desc" data-critical="body">
+        <div class="terrain">No ground at all. Act first, then look.</div>
+        <div class="travel">
+          <span class="lbl">Move before you sense</span>
+          <span class="way"><em>act</em> → sense → respond</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISORDER -->
+    <div class="plate" data-source="domain-disorder">
+      <div class="num" aria-hidden="true">05</div>
+      <div class="name">
+        <div class="rn" data-critical="title">Disorder</div>
+        <div class="nick">the Crossroads</div>
+      </div>
+      <div class="desc" data-critical="body">
+        <div class="terrain">You can't tell which region you're in.</div>
+        <div class="travel">
+          <span class="lbl">Before you set out</span>
+          <span class="way">stop → tell them apart → set out</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER BANNER -->
+  <div class="banner" data-critical="cta">
+    <div class="mark" aria-hidden="true">Pack<br>for the<br>terrain</div>
+    <div class="msg">
+      Pack for the terrain you're crossing. The traveller who brings <b>lowland rules to the storm coast</b> rarely makes it home.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden, 1999 · cynefin, the place of your multiple belongings</div>
+    <div><b>Five regions</b> · one map</div>
+  </div>
+
+</div>
+</body>
+</html>

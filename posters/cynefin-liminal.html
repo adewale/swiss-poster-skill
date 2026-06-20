@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Liminal Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --terra:   #BF5B2E;   /* single accent — the threshold mark */
+    --terra-d: #8c3f1d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 26px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* HERO */
+  .hero { margin-bottom: 18px; }
+  .hero .kicker {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--terra-d); font-weight: 600; margin-bottom: 14px;
+    display:flex; align-items:center; gap: 14px;
+  }
+  .hero .kicker .sp { flex:1; height: 2px; background: var(--stone-900); }
+  .hero h1 {
+    font-weight: 700; font-size: 92px; line-height: 0.86; letter-spacing: -0.035em;
+    color: var(--stone-900); max-width: 16ch;
+  }
+  .hero h1 .edge { color: var(--terra); }
+
+  .intro {
+    display: grid; grid-template-columns: 1fr 366px; gap: 34px; align-items: end;
+    margin-top: 20px; margin-bottom: 24px;
+    border-bottom: 2px solid var(--stone-900); padding-bottom: 22px;
+  }
+  .intro .lede { font-size: 19px; line-height: 1.34; color: var(--stone-900); font-weight: 400; }
+  .intro .lede b { color: var(--terra-d); font-weight: 600; }
+  .intro .note {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.13em;
+    line-height: 1.7; text-transform: uppercase; color: var(--stone-500); text-align: right;
+  }
+  .intro .note b { color: var(--stone-900); font-weight: 600; }
+
+  /* BANDS — the thresholds are the subject */
+  .bands { display: flex; flex-direction: column; gap: 20px; }
+  .band {
+    position: relative; height: 318px; overflow: hidden;
+    border: 2px solid var(--stone-900); background: var(--stone-50);
+  }
+
+  /* domain end-plates */
+  .endcap {
+    position: absolute; top: 0; bottom: 0; z-index: 4; width: 232px;
+    display: flex; flex-direction: column; justify-content: center; padding: 0 26px;
+  }
+  .endcap.from { left: 0; }
+  .endcap.to   { right: 0; text-align: right; align-items: flex-end; }
+  .endcap .dn { font-weight: 700; font-size: 38px; line-height: 0.9; letter-spacing: -0.02em; color: var(--stone-900); }
+  .endcap .dv {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--stone-500); margin-top: 9px;
+  }
+  .endcap.from .dn { text-align: left; }
+
+  /* the live threshold zone in the middle — texture lives here, behind a routed text plate */
+  .zone {
+    position: absolute; top: 0; bottom: 0; left: 232px; right: 232px; z-index: 2;
+    overflow: hidden;
+  }
+  .zone .tex { position: absolute; inset: 0; pointer-events: none; }
+
+  /* zone label strip + arrows over the texture (top), text plate (bottom) */
+  .zone .marker {
+    position: absolute; top: 22px; left: 0; right: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--terra-d); font-weight: 600;
+  }
+  .zone .marker .ar { color: var(--terra); font-size: 18px; letter-spacing: 0; }
+  .zone .marker .tag {
+    background: var(--stone-50); padding: 4px 12px; border: 1.5px solid var(--terra);
+    color: var(--terra-d);
+  }
+
+  /* protected reading layer — solid backing routed clear of texture */
+  .plate {
+    position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); z-index: 6;
+    width: 560px; background: var(--stone-50);
+    border-left: 3px solid var(--terra); padding: 14px 20px 14px 18px;
+  }
+  .plate .feel {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--stone-500); margin-bottom: 9px;
+  }
+  .plate .desc { font-size: 17px; line-height: 1.32; color: var(--stone-900); }
+  .plate .desc b { color: var(--terra-d); font-weight: 600; }
+
+  /* small index numeral */
+  .band .idx {
+    position: absolute; top: 14px; left: 244px; z-index: 5;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.1em;
+    color: var(--stone-400); font-weight: 500;
+  }
+
+  /* FOOTER */
+  .foot {
+    display: grid; grid-template-columns: 64px 1fr; gap: 22px; align-items: start;
+    margin-top: 22px;
+  }
+  .foot .mk {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--terra-d); font-weight: 600; padding-top: 4px;
+  }
+  .foot .c { font-size: 20px; line-height: 1.36; color: var(--stone-900); font-weight: 400; }
+  .foot .c b { color: var(--terra-d); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="contemporary-cultural"
+     data-genre="conceptual"
+     data-reference="snowden-st-davids-day-2020"
+     data-source="cynefin-liminal-model"
+     data-encoding="boundary → liminal band">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the liminal model</div>
+      <div class="meta" data-source="reference">St David's Day, 2020</div>
+    </div>
+    <div class="right">
+      <div>the lines are not walls</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kicker"><span>Threshold zones</span><span class="sp"></span><span>between the domains</span></div>
+    <h1 data-critical="title">Most of the work happens at the <span class="edge">edges.</span></h1>
+  </div>
+
+  <div class="intro">
+    <div class="lede" data-critical="body">
+      The 2020 model adds <b>liminal zones</b> — thresholds between the domains. A situation crossing from
+      complex toward complicated is neither yet: the old method no longer fits, the new one isn't earned.
+    </div>
+    <div class="note">
+      <b>Three live boundaries</b><br>
+      where method has<br>to change · read down
+    </div>
+  </div>
+
+  <!-- BANDS -->
+  <div class="bands" data-encoding="transition → hatch / dash / scatter texture, low-contrast behind routed text">
+
+    <!-- BAND 1: COMPLEX ⇢ COMPLICATED -->
+    <div class="band" data-source="liminal-complex-complicated">
+      <div class="endcap from"><div class="dn" data-critical="title">Complex</div><div class="dv">probe · sense · respond</div></div>
+      <div class="endcap to"><div class="dn" data-critical="title">Complicated</div><div class="dv">sense · analyze · respond</div></div>
+      <div class="zone">
+        <div class="tex" aria-hidden="true" id="tex1"></div>
+        <div class="marker"><span>Complex</span><span class="ar">⇢</span><span class="tag">hardening</span><span class="ar">⇢</span><span>Complicated</span></div>
+        <div class="plate" data-critical="body">
+          <div class="feel">in the zone</div>
+          <div class="desc">A pattern is hardening into a rule. <b>Trust it too early and you lock in a guess.</b></div>
+        </div>
+      </div>
+      <div class="idx" aria-hidden="true">01</div>
+    </div>
+
+    <!-- BAND 2: CLEAR ⇢ CHAOTIC -->
+    <div class="band" data-source="liminal-clear-chaotic">
+      <div class="endcap from"><div class="dn" data-critical="title">Clear</div><div class="dv">sense · categorize · respond</div></div>
+      <div class="endcap to"><div class="dn" data-critical="title">Chaotic</div><div class="dv">act · sense · respond</div></div>
+      <div class="zone">
+        <div class="tex" aria-hidden="true" id="tex2"></div>
+        <div class="marker"><span>Clear</span><span class="ar">⇢</span><span class="tag">thinning</span><span class="ar">⇢</span><span>Chaotic</span></div>
+        <div class="plate" data-critical="body">
+          <div class="feel">in the zone</div>
+          <div class="desc">The thinning edge before the fall. <b>This is where to watch, not relax.</b></div>
+        </div>
+      </div>
+      <div class="idx" aria-hidden="true">02</div>
+    </div>
+
+    <!-- BAND 3: CHAOTIC ⇢ COMPLEX -->
+    <div class="band" data-source="liminal-chaotic-complex">
+      <div class="endcap from"><div class="dn" data-critical="title">Chaotic</div><div class="dv">act · sense · respond</div></div>
+      <div class="endcap to"><div class="dn" data-critical="title">Complex</div><div class="dv">probe · sense · respond</div></div>
+      <div class="zone">
+        <div class="tex" aria-hidden="true" id="tex3"></div>
+        <div class="marker"><span>Chaotic</span><span class="ar">⇢</span><span class="tag">re-forming</span><span class="ar">⇢</span><span>Complex</span></div>
+        <div class="plate" data-critical="body">
+          <div class="feel">in the zone</div>
+          <div class="desc">After the crisis, before the new normal. <b>Keep probing; don't freeze the first fix.</b></div>
+        </div>
+      </div>
+      <div class="idx" aria-hidden="true">03</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="mk">↳ read</div>
+    <div class="c" data-critical="body">
+      Treat the boundaries as live ground. <b>A framework drawn as five tidy boxes hides the only places that move.</b>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>Snowden · the St David's Day Cynefin, 2020</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/ · thresholds</div>
+  </div>
+
+</div>
+
+<!-- threshold textures: flat lines only (hatch / dash / scatter), low-contrast, generated -->
+<canvas id="dump" style="display:none"></canvas>
+<script>
+  // Each zone texture is built from flat strokes — no gradients, no blur.
+  // Contrast kept low (stone-300/400 alpha) so the protected text reads.
+  function mkCanvas(w, h) {
+    const c = document.createElement('canvas');
+    c.width = w * 2; c.height = h * 2;
+    c.style.width = w + 'px'; c.style.height = h + 'px';
+    const x = c.getContext('2d'); x.scale(2, 2);
+    return { c, x, w, h };
+  }
+  function mount(id, c) {
+    const host = document.getElementById(id);
+    c.style.position = 'absolute'; c.style.inset = '0';
+    host.appendChild(c);
+  }
+
+  // BAND 1 — diagonal hatch that DENSIFIES left→right (pattern hardening into a rule)
+  (function () {
+    const host = document.getElementById('tex1');
+    const w = host.clientWidth || 560, h = host.clientHeight || 314;
+    const { c, x } = mkCanvas(w, h);
+    x.strokeStyle = 'rgba(120,113,108,1)'; // stone-500
+    x.lineWidth = 1;
+    // gap shrinks as we move right: from sparse (30px) to tight (6px) — the rule hardening
+    let px = -h;
+    while (px < w + h) {
+      const t = Math.max(0, Math.min(1, (px) / w));
+      const gap = 30 - t * 24;            // 30 → 6
+      x.globalAlpha = 0.20 + t * 0.34;     // also slightly darker as it hardens
+      x.beginPath();
+      x.moveTo(px, h); x.lineTo(px + h, 0); // 45° diagonals
+      x.stroke();
+      px += gap;
+    }
+    x.globalAlpha = 1;
+    mount('tex1', c);
+  })();
+
+  // BAND 2 — horizontal lines, solid at left (Clear), fraying into broken ticks at right (Chaotic).
+  // Stays present across the full width: it THINS (shorter dashes, bigger gaps) but never vanishes.
+  (function () {
+    const host = document.getElementById('tex2');
+    const w = host.clientWidth || 560, h = host.clientHeight || 314;
+    const { c, x } = mkCanvas(w, h);
+    x.lineCap = 'butt';
+    const rows = 17;
+    for (let r = 0; r < rows; r++) {
+      const y = (r + 0.5) * (h / rows);
+      let cx = 0;
+      while (cx < w) {
+        const t = cx / w;                 // 0 left (Clear, solid) → 1 right (Chaotic, broken)
+        const dash = 44 - t * 32;          // long runs → short ticks (12px min)
+        const gapAfter = 4 + t * 18;       // small gaps → bigger gaps, but bounded
+        const alpha = 0.42 - t * 0.20;     // fades a little, but holds presence (≥0.2)
+        x.strokeStyle = 'rgba(68,64,60,1)'; // stone-700
+        x.globalAlpha = Math.max(0.2, alpha);
+        x.lineWidth = 1.5 - t * 0.6;
+        // vertical jitter on the right end so the "edge" looks frayed, not ruled
+        const jy = (Math.sin((cx + r * 13) * 0.05) * t) * 4;
+        x.beginPath(); x.moveTo(cx, y + jy); x.lineTo(Math.min(cx + dash, w), y + jy); x.stroke();
+        cx += dash + gapAfter;
+      }
+    }
+    x.globalAlpha = 1;
+    mount('tex2', c);
+  })();
+
+  // BAND 3 — scatter of short strokes resolving from noise (left) into aligned verticals (right)
+  (function () {
+    const host = document.getElementById('tex3');
+    const w = host.clientWidth || 560, h = host.clientHeight || 314;
+    const { c, x } = mkCanvas(w, h);
+    x.strokeStyle = 'rgba(120,113,108,0.45)';
+    x.lineWidth = 1.2; x.lineCap = 'round';
+    // deterministic pseudo-random so render is stable
+    let seed = 7;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    const cols = 34, rows = 11;
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const t = i / (cols - 1);          // chaos (0) → order (1)
+        const cx = (i + 0.5) * (w / cols);
+        const cy = (j + 0.5) * (h / rows);
+        // angle: random when chaotic, → vertical (90°) when ordered
+        const baseAng = (rnd() - 0.5) * Math.PI;      // -90..+90
+        const ang = baseAng * (1 - t) + (Math.PI / 2) * t;
+        const len = 9 + (1 - t) * 7;        // longer/erratic in chaos
+        const jx = (rnd() - 0.5) * (1 - t) * 14; // positional jitter dies out
+        const jy = (rnd() - 0.5) * (1 - t) * 14;
+        x.globalAlpha = 0.28 + t * 0.20;
+        const dx = Math.cos(ang) * len / 2, dy = Math.sin(ang) * len / 2;
+        x.beginPath();
+        x.moveTo(cx + jx - dx, cy + jy - dy);
+        x.lineTo(cx + jx + dx, cy + jy + dy);
+        x.stroke();
+      }
+    }
+    x.globalAlpha = 1;
+    mount('tex3', c);
+  })();
+</script>
+</body>
+</html>

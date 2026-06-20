@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Dynamics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --teal:   #0E7490;   /* single accent — movement / the transitions */
+    --teal-d: #0a566b;
+    --teal-l: #d3e6ec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 5;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 20px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE BLOCK */
+  .head { position: relative; z-index: 5; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 8px; }
+  .head .ttl { font-weight: 700; font-size: 118px; line-height: 0.80; letter-spacing: -0.045em; color: var(--stone-900); }
+  .head .sub { max-width: 430px; text-align: right; padding-bottom: 13px; }
+  .head .sub .s { font-size: 19px; line-height: 1.34; letter-spacing: -0.005em; color: var(--stone-700); }
+  .head .sub .s b { color: var(--teal-d); font-weight: 600; }
+  .head .sub .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-500); margin-bottom: 11px; }
+
+  /* ===== DIAGRAM REGION — the circulation map ===== */
+  .diagram {
+    position: relative; height: 1196px; margin-top: 14px;
+    border-top: 2.5px solid var(--stone-900); border-bottom: 2.5px solid var(--stone-900);
+  }
+  .diagram .secrow {
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
+    color: var(--stone-500); padding: 9px 2px 0 2px;
+  }
+  .diagram .secrow .ord { color: var(--teal-d); }
+
+  /* arrow field sits behind everything, clipped — 1:1 coordinate space (1140 × 1154) */
+  .arrows { position: absolute; left:0; right:0; top: 42px; height: 1154px; z-index: 1; pointer-events: none; }
+  .arrows svg { width: 100%; height: 100%; display: block; }
+
+  /* axis rails — ordered / unordered */
+  .axis { position: absolute; z-index: 2; font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; font-weight: 600; color: var(--stone-400); }
+  .axis.un { left: 4px; top: 556px; }
+  .axis.or { right: 4px; top: 556px; text-align: right; }
+
+  /* DOMAIN NODES — solid backed cards, the protected reading layer */
+  .node {
+    position: absolute; z-index: 4; width: 266px; background: var(--stone-50);
+    border: 2px solid var(--stone-900); padding: 14px 16px 15px 16px;
+  }
+  .node .nx { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone-400); font-weight: 600; }
+  .node .nn { font-weight: 700; font-size: 39px; line-height: 0.86; letter-spacing: -0.025em; color: var(--stone-900); margin: 7px 0 8px; }
+  .node .nv { font-family:'IBM Plex Mono',monospace; font-size: 11.5px; letter-spacing: 0.02em; color: var(--teal-d); font-weight: 600; }
+  .node .np { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.03em; color: var(--stone-500); margin-top: 4px; }
+
+  .node.tl { left: 20px; top: 78px; }
+  .node.tr { right: 20px; top: 78px; text-align: right; }
+  .node.bl { left: 20px; bottom: 30px; }
+  .node.br { right: 20px; bottom: 30px; text-align: right; }
+  .node.tr .nv, .node.br .nv { margin-left: auto; }
+
+  /* DISORDER hub — center, distinct (filled dark) */
+  .hub {
+    position: absolute; z-index: 4; left: 50%; top: 619px; transform: translate(-50%,-50%);
+    width: 184px; background: var(--stone-950); border: 2px solid var(--stone-900);
+    padding: 12px 14px 14px; text-align: center;
+  }
+  .hub .nx { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-400); font-weight: 600; }
+  .hub .nn { font-weight: 700; font-size: 28px; line-height: 0.9; letter-spacing: -0.02em; color: var(--stone-50); margin: 6px 0 5px; }
+  .hub .np { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.03em; color: var(--stone-400); }
+
+  /* MOVE LABELS riding the arrows — solid backing so no line crosses the text */
+  .mv { position: absolute; z-index: 3; }
+  .mv .mt { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; color: var(--teal-d); background: var(--stone-50); padding: 1px 6px 2px 0; }
+  .mv .mb { font-size: 13px; line-height: 1.3; color: var(--stone-700); margin-top: 4px; }
+  .mv .mb span { background: var(--stone-50); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 1px 0; }
+  .mv .mb b { color: var(--stone-900); font-weight: 600; }
+  .mv.r { text-align: right; }
+  .mv.r .mt { padding: 1px 0 2px 6px; }
+  .mv.c { text-align: center; }
+
+  /* FOOTER takeaway */
+  .foot { position: relative; z-index: 5; margin-top: 17px; display: grid; grid-template-columns: 92px 1fr; gap: 22px; align-items: start; }
+  .foot .tag { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal-d); font-weight: 600; line-height: 1.5; padding-top: 3px; }
+  .foot .b { font-size: 17px; line-height: 1.4; color: var(--stone-700); letter-spacing: -0.005em; }
+  .foot .b b { color: var(--stone-900); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="flow-diagram"
+     data-reference="muller-brockmann-rhythm"
+     data-encoding="domain transitions → directional arrows">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the dynamics</div>
+      <div class="meta" data-source="creator">Dave Snowden · 1999</div>
+    </div>
+    <div class="right">
+      <div>domains are doors, not rooms</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/ · Welsh</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="head">
+    <div class="ttl" data-critical="title">Nothing<br>stays put.</div>
+    <div class="sub">
+      <div class="k">six named moves between five domains</div>
+      <div class="s" data-critical="body">A situation rarely sits in one domain. It <b>moves</b>, and the skill is to move with it on purpose.</div>
+    </div>
+  </div>
+
+  <!-- ===== DIAGRAM ===== -->
+  <div class="diagram" data-encoding="canonical map · ordered right / unordered left · arrows = the six transitions">
+    <div class="secrow"><span>the circulation</span><span class="ord">five domains · six moves</span></div>
+
+    <!-- ARROW FIELD (decorative, behind labels) -->
+    <div class="arrows" aria-hidden="true">
+      <svg viewBox="0 0 1140 1154" preserveAspectRatio="none">
+        <defs>
+          <marker id="ah" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="6.4" markerHeight="6.4" orient="auto-start-reverse">
+            <path d="M0,0 L12,6 L0,12 L3.6,6 z" fill="#0E7490"/>
+          </marker>
+          <marker id="ahd" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L12,6 L0,12 L3.6,6 z" fill="#0a566b"/>
+          </marker>
+        </defs>
+
+        <!-- ===== TOP EDGE: Complex(TL) <-> Complicated(TR) ===== -->
+        <!-- EXPLOIT: Complex -> Complicated, straight, left to right (upper track) -->
+        <path d="M 290 208 H 846" fill="none" stroke="#0E7490" stroke-width="3" marker-end="url(#ah)"/>
+        <!-- DISRUPT: Complicated -> Complex, dashed return, right to left (lower track) -->
+        <path d="M 850 303 H 294" fill="none" stroke="#0a566b" stroke-width="2.5" stroke-dasharray="9 6" marker-end="url(#ahd)"/>
+
+        <!-- ===== SPLIT: Disorder -> out. four short outward arrows from the hub edges ===== -->
+        <g stroke="#0E7490" stroke-width="3" fill="none">
+          <path d="M 565 533 L 506 463" marker-end="url(#ah)"/>   <!-- toward Complex -->
+          <path d="M 695 533 L 754 463" marker-end="url(#ah)"/>   <!-- toward Complicated -->
+          <path d="M 565 621 L 506 691" marker-end="url(#ah)"/>   <!-- toward Chaotic -->
+          <path d="M 695 621 L 754 691" marker-end="url(#ah)"/>   <!-- toward Clear -->
+        </g>
+
+        <!-- ===== DIVE: ordered -> Chaotic, on purpose. bold diagonal from the right gutter into Chaotic ===== -->
+        <path d="M 904 656 C 740 760, 470 880, 304 992" fill="none" stroke="#0E7490" stroke-width="3.5" stroke-dasharray="1.5 8" stroke-linecap="round" marker-end="url(#ah)"/>
+
+        <!-- ===== BOTTOM EDGE: Chaotic(BL) <-> Clear(BR) ===== -->
+        <!-- IMPOSE: Chaotic -> Clear, recovery, left to right (upper track) -->
+        <path d="M 290 945 H 846" fill="none" stroke="#0E7490" stroke-width="3" marker-end="url(#ah)"/>
+        <!-- COLLAPSE: Clear -> Chaotic, THE CLIFF, heavy, right to left (lower track, dips) -->
+        <path d="M 850 1010 C 690 1072, 470 1072, 294 1018" fill="none" stroke="#0E7490" stroke-width="5.5" marker-end="url(#ah)"/>
+      </svg>
+    </div>
+
+    <!-- DOMAIN NODES (data-critical reading layer) -->
+    <div class="node tl" data-source="domain-complex">
+      <div class="nx">unordered · top-left</div>
+      <div class="nn" data-critical="title">Complex</div>
+      <div class="nv" data-critical="body">probe · sense · respond</div>
+      <div class="np" data-critical="body">clear only in hindsight</div>
+    </div>
+    <div class="node tr" data-source="domain-complicated">
+      <div class="nx">ordered · top-right</div>
+      <div class="nn" data-critical="title">Complicated</div>
+      <div class="nv" data-critical="body">sense · analyze · respond</div>
+      <div class="np" data-critical="body">knowable by expertise</div>
+    </div>
+    <div class="node bl" data-source="domain-chaotic">
+      <div class="nx">unordered · bottom-left</div>
+      <div class="nn" data-critical="title">Chaotic</div>
+      <div class="nv" data-critical="body">act · sense · respond</div>
+      <div class="np" data-critical="body">no cause to act on yet</div>
+    </div>
+    <div class="node br" data-source="domain-clear">
+      <div class="nx">ordered · bottom-right</div>
+      <div class="nn" data-critical="title">Clear</div>
+      <div class="nv" data-critical="body">sense · categorize · respond</div>
+      <div class="np" data-critical="body">obvious, repeatable</div>
+    </div>
+
+    <!-- DISORDER hub -->
+    <div class="hub" data-source="domain-disorder">
+      <div class="nx">the center</div>
+      <div class="nn" data-critical="title">Disorder</div>
+      <div class="np" data-critical="body">which domain am I in?</div>
+    </div>
+
+    <!-- MOVE LABELS — each rides its own arrow; the solid backing knocks the line out behind the text -->
+    <!-- EXPLOIT — rides the upper top track -->
+    <div class="mv c" style="left: 50%; transform: translateX(-50%); top: 232px; width: 360px;">
+      <div class="mt" data-critical="body">Exploit · Complex → Complicated</div>
+      <div class="mb" data-critical="body"><span>A pattern holds; constraints <b>harden</b>; hand it to the experts.</span></div>
+    </div>
+
+    <!-- DISRUPT — rides the lower top track -->
+    <div class="mv c" style="left: 50%; transform: translateX(-50%); top: 327px; width: 372px;">
+      <div class="mt" data-critical="body">Disrupt · Complicated → Complex</div>
+      <div class="mb" data-critical="body"><span>Constraints break; the expert answer stops working; <b>probe again</b>.</span></div>
+    </div>
+
+    <!-- SPLIT — left-center gutter, right-aligned toward the hub -->
+    <div class="mv r" style="left: 26px; top: 568px; width: 240px;">
+      <div class="mt" data-critical="body">Split · Disorder → out</div>
+      <div class="mb" data-critical="body"><span>From the center, break the problem up and send each part to <b>its domain</b>.</span></div>
+    </div>
+
+    <!-- DIVE — right-center gutter, left-aligned; rides the start of the diagonal -->
+    <div class="mv" style="right: 26px; top: 568px; width: 244px;">
+      <div class="mt" data-critical="body">Dive · ordered → Chaotic, on purpose</div>
+      <div class="mb" data-critical="body"><span>Push a stuck system into chaos to <b>force something new</b>, then catch it.</span></div>
+    </div>
+
+    <!-- IMPOSE — rides the upper bottom track -->
+    <div class="mv c" style="left: 50%; transform: translateX(-50%); top: 925px; width: 340px;">
+      <div class="mt" data-critical="body">Impose · Chaotic → Clear</div>
+      <div class="mb" data-critical="body"><span>Act to stop the bleeding, <b>set a rule</b>, and hold it.</span></div>
+    </div>
+
+    <!-- COLLAPSE — rides the lower bottom track (the cliff) -->
+    <div class="mv c" style="left: 50%; transform: translateX(-50%); top: 1022px; width: 380px;">
+      <div class="mt" data-critical="body">Collapse · Clear → Chaotic — the cliff</div>
+      <div class="mb" data-critical="body"><span>Run the old rule while the world changes and the floor <b>drops</b>.</span></div>
+    </div>
+  </div>
+
+  <!-- FOOTER takeaway -->
+  <div class="foot">
+    <div class="tag" data-critical="body">the reading</div>
+    <div class="b" data-critical="body">Best practice fits the domain you're in <b>now</b>, not the one you were in last week. Re-sense often; the map is a snapshot of a moving thing.</div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="reference">Snowden, 1999 · the new dynamics of strategy</div>
+    <div><b>Cynefin</b> · domains are doors, not rooms</div>
+  </div>
+
+</div>
+</body>
+</html>

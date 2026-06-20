@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Sense-making, not sorting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt: #143C8C;   /* single accent — where attention lands */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 9; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 22px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* ===== HERO — the dominant typographic line ===== */
+  .hero {
+    position: absolute; z-index: 6;
+    left: 60px; right: 60px; top: 156px;
+  }
+  .hero h1 {
+    font-weight: 700; font-size: 112px; line-height: 0.86; letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  /* the one earned colour: "sense-making" carries the accent */
+  .hero h1 .acc { color: var(--cobalt); }
+  /* the negated half is set in outline/quiet so the eye prefers the accent */
+  .hero h1 .neg { color: var(--stone-400); font-weight: 600; }
+
+  /* ===== the hinge — a quiet mono label on a rule, between hero and field ===== */
+  .hinge {
+    position: absolute; z-index: 6; left: 60px; right: 60px; top: 568px;
+    display: flex; align-items: center; gap: 16px;
+    border-top: 1.5px solid var(--stone-300); padding-top: 10px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.24em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-500);
+  }
+  .hinge .l, .hinge .r { white-space: nowrap; }
+  .hinge .sp { flex: 1; }
+  .hinge .r { color: var(--cobalt); }
+
+  /* ===== THE TWO MASSES — SORTING vs SENSING ===== */
+  /* a single field that holds both blocks, hard seam between them */
+  .field {
+    position: absolute;
+    left: 60px; right: 60px; top: 624px; height: 816px;
+    overflow: hidden;
+    border: 2.5px solid var(--stone-900);
+  }
+  .col { position: absolute; top: 0; bottom: 0; padding: 40px 42px; }
+
+  /* LEFT — SORTING: heavy, dark, the model imposed. */
+  .col.sorting {
+    left: 0; width: 570px;
+    background: var(--stone-950); color: var(--stone-50);
+  }
+  /* RIGHT — SENSING: open, light, the pattern allowed to surface. */
+  .col.sensing {
+    left: 570px; right: 0;
+    background: var(--stone-50); color: var(--stone-900);
+  }
+  /* the seam — one hard vertical rule where the two ways meet */
+  .seam {
+    position: absolute; left: 570px; width: 3px; top: 0; bottom: 0;
+    transform: translateX(-1.5px); background: var(--stone-900); z-index: 5;
+  }
+
+  /* column headers */
+  .kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.26em;
+    text-transform: uppercase; font-weight: 600;
+  }
+  .colname {
+    font-weight: 700; font-size: 64px; line-height: 0.86; letter-spacing: -0.03em;
+    margin-top: 16px;
+  }
+  .col.sorting .kicker { color: var(--stone-400); }
+  .col.sorting .colname { color: var(--stone-50); }
+  .col.sensing .kicker { color: var(--cobalt); }
+  .col.sensing .colname { color: var(--stone-900); }
+
+  /* the one-line gloss under each name */
+  .gloss { font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.04em; margin-top: 14px; }
+  .col.sorting .gloss { color: rgba(250,250,249,0.66); }
+  .col.sensing .gloss { color: var(--stone-500); }
+
+  /* the paragraph body */
+  .copy { font-size: 19px; line-height: 1.5; max-width: 24ch; }
+  .col.sorting .copy { color: rgba(250,250,249,0.82); }
+  .col.sensing .copy { color: var(--stone-700); }
+  .col.sensing .copy b { color: var(--cobalt); font-weight: 600; }
+  .col.sorting .copy b { color: var(--stone-50); font-weight: 600; }
+
+  /* position header block near top, copy lower — generous gap between */
+  .col .head-block { position: absolute; left: 42px; right: 42px; top: 40px; }
+  .col .copy { position: absolute; left: 42px; right: 42px; bottom: 178px; }
+
+  /* ===== the diagram glyphs at the foot of each column ===== */
+  /* SORTING: a filled-in 2×2 — every cell already stamped. The grid eats the data. */
+  .grid2 {
+    position: absolute; left: 42px; bottom: 44px;
+    width: 108px; height: 108px;
+    border: 2px solid var(--stone-400);
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 0;
+  }
+  .grid2 .cell { border: 1px solid var(--stone-700); display:flex; align-items:center; justify-content:center; }
+  /* every box pre-filled with the same mark — categories fixed in advance */
+  .grid2 .cell::after {
+    content: "×"; font-family:'IBM Plex Mono',monospace; font-size: 26px; font-weight: 500;
+    color: var(--stone-500); line-height: 1;
+  }
+  .glyph-cap {
+    position: absolute; bottom: 44px; left: 166px; max-width: 16ch;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    line-height: 1.5;
+  }
+  .col.sorting .glyph-cap { color: rgba(250,250,249,0.55); }
+
+  /* SENSING: an empty field with one cobalt mark — the pattern that showed itself. */
+  .openfield {
+    position: absolute; left: 42px; bottom: 44px;
+    width: 108px; height: 108px;
+    border: 2px solid var(--stone-300);
+  }
+  /* a single emerging point, off-centre, the only fixed thing — and it is provisional */
+  .openfield .pt {
+    position: absolute; left: 64px; top: 40px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--cobalt);
+  }
+  /* the provisional ring — drawn after, dashed, not a wall */
+  .openfield .ring {
+    position: absolute; left: 40px; top: 16px;
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 1.5px dashed var(--cobalt);
+  }
+  .col.sensing .glyph-cap { color: var(--stone-500); }
+
+  /* ===== MIDDLE LINE — the pivot, sits in the empty band above the masses ===== */
+  /* placed as a thin rule + line in the gap between hero and field would crowd;
+     instead it runs just below the field, full width, as the argument's hinge. */
+  .middle {
+    position: absolute; left: 60px; right: 60px; top: 1470px;
+    display: flex; gap: 26px; align-items: baseline;
+    border-top: 2.5px solid var(--stone-900); padding-top: 18px;
+  }
+  .middle .num {
+    font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 600; color: var(--stone-500); white-space: nowrap;
+    padding-top: 4px;
+  }
+  .middle .mtext { font-size: 23px; line-height: 1.38; letter-spacing: -0.01em; color: var(--stone-900); max-width: 64ch; }
+  .middle .mtext b { color: var(--cobalt); font-weight: 600; }
+
+  /* ===== FOOTER — the closing warning ===== */
+  .foot {
+    position: absolute; left: 60px; right: 60px; bottom: 92px;
+    font-size: 16px; line-height: 1.5; color: var(--stone-700);
+    max-width: 78ch;
+  }
+  .foot b { color: var(--stone-900); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="basel-hofmann"
+     data-reference="ruder-typographic-function"
+     data-genre="typographic"
+     data-encoding="sorting → dark mass + filled grid · sensing → open field + single accent mark">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · how to use it</div>
+      <div class="meta" data-source="creator">Snowden, 1999</div>
+    </div>
+    <div class="right">
+      <div>the data shapes the model, not the reverse</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero" data-critical="title">
+    <h1>A <span class="acc">sense-making</span><br>frame, <span class="neg">not&nbsp;a</span><br><span class="neg">sorting box.</span></h1>
+  </div>
+
+  <!-- the hinge between the two ways -->
+  <div class="hinge" aria-hidden="true">
+    <span class="l">two ways to use the same frame</span>
+    <span class="sp"></span>
+    <span class="r">only one of them is Cynefin</span>
+  </div>
+
+  <!-- THE TWO MASSES -->
+  <div class="field">
+
+    <!-- LEFT — SORTING -->
+    <div class="col sorting" data-source="categorization">
+      <div class="head-block">
+        <div class="kicker">A — Sorting</div>
+        <div class="colname">SORTING</div>
+        <div class="gloss">the model shapes the data</div>
+      </div>
+      <div class="copy" data-critical="body">
+        You bring the boxes. Data gets filed into categories fixed in advance.
+        <b>Fast, repeatable, and blind to whatever has no slot.</b>
+      </div>
+      <!-- glyph: a 2×2 already filled in -->
+      <div class="grid2" aria-hidden="true">
+        <div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div>
+      </div>
+      <div class="glyph-cap">every cell stamped<br>before you look</div>
+    </div>
+
+    <!-- RIGHT — SENSING -->
+    <div class="col sensing" data-source="sense-making">
+      <div class="head-block">
+        <div class="kicker">B — Sensing</div>
+        <div class="colname">SENSING</div>
+        <div class="gloss">the data shapes the model</div>
+      </div>
+      <div class="copy" data-critical="body">
+        You bring attention. The pattern shows itself first; the category comes after,
+        and stays <b>provisional</b>. Slower, and honest about what you don't yet know.
+      </div>
+      <!-- glyph: open field, one emerging mark + a provisional ring -->
+      <div class="openfield" aria-hidden="true">
+        <div class="ring"></div>
+        <div class="pt"></div>
+      </div>
+      <div class="glyph-cap">one mark surfaces<br>the line drawn after</div>
+    </div>
+
+    <div class="seam" aria-hidden="true"></div>
+  </div>
+
+  <!-- MIDDLE LINE -->
+  <div class="middle" data-critical="body">
+    <div class="num">the test</div>
+    <div class="mtext">
+      A 2×2 you fill in is a sorting box. Cynefin earns its place only when
+      <b>the situation, not the diagram, picks the domain.</b>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot" data-critical="body">
+    Use it backwards — choose the domain you'd prefer, then gather evidence to fit — and it becomes
+    <b>the bias it was built to expose.</b>
+  </div>
+
+  <div class="colophon">
+    <div>after Hofmann &amp; Ruder · figure, ground, function</div>
+    <div><b>Sense first. Sort never.</b></div>
+  </div>
+
+</div>
+</body>
+</html>
