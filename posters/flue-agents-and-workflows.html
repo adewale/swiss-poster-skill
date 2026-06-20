@@ -87,9 +87,9 @@
 
   <div class="head">
     <h1>Agents <span class="b">&amp;</span> Workflows.</h1>
-    <div class="sub">They aren't opposites. An <b>Agent</b> lets the model guide the loop; a <b>Workflow</b> is your code guiding an
-      agent from an input to a finished result. A Workflow runs an Agent; an Agent spawns its declared <b>sub-agents</b> as task
-      sessions — and both execute on the <b>same harness</b>, whose loop is <b>Pi</b>.</div>
+    <div class="sub">They aren't opposites — they invert control. A <b>Workflow</b> is <b>code that calls a model</b>; an
+      <b>Agent</b> is <b>a model that calls your code</b>. A Workflow runs an Agent; an Agent spawns its declared <b>sub-agents</b>
+      as task sessions — all on the <b>same harness</b>, whose loop is <b>Pi</b>.</div>
   </div>
 
   <div class="grid">
@@ -108,7 +108,7 @@
         <!-- WORKFLOW -->
         <rect x="150" y="8" width="300" height="92" fill="#fafaf9" stroke="#1c1917" stroke-width="2"/>
         <text x="300" y="44" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="26" fill="#0057D8">WORKFLOW</text>
-        <text x="300" y="66" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#44403c">your code guides the agent</text>
+        <text x="300" y="66" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#44403c">code that calls a model</text>
         <text x="300" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716c">one run → a typed result</text>
 
         <!-- WORKFLOW -> AGENT -->
@@ -118,7 +118,7 @@
         <!-- AGENT -->
         <rect x="120" y="152" width="300" height="106" fill="#fafaf9" stroke="#1c1917" stroke-width="2"/>
         <text x="270" y="190" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="26" fill="#0057D8">AGENT</text>
-        <text x="270" y="212" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#44403c">the model guides the loop</text>
+        <text x="270" y="212" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#44403c">a model that calls your code</text>
         <text x="270" y="230" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#78716c">keeps context across conversations &amp; events</text>
 
         <!-- message into AGENT -->
@@ -188,6 +188,7 @@
         <div class="fnnote">No <span class="m">run</span>/<span class="m">defineWorkflow</span> export: a Workflow is a file whose <span class="m">run(ctx)</span> the runtime
           invokes. <span class="m">init</span> is a method on that <span class="m">FlueContext</span> — <span class="m">init(agent) → FlueHarness</span> — so a Workflow boots an Agent,
           then <span class="m">session().prompt()</span>.</div>
+        <div class="fnnote"><b style="color:var(--stone-700)">Caveat:</b> <span class="m">AgentProfileSchema</span> types <span class="m">model?: string | false</span> — an agent can be configured without a model. The abstraction is model-driven; the requirement isn't absolute.</div>
       </div>
     </div>
   </div>
