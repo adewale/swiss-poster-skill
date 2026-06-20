@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Sandbox · Where the agent works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 20;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 12;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ─────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 12;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 132px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 12;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 27px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    max-width: 56ch;
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── STAGE — the hero isometric box ────────────────────────────── */
+  .stage {
+    position: relative;
+    width: 1132px;
+    height: 980px;
+    z-index: 8;
+  }
+  .stage svg { display: block; width: 100%; height: 100%; }
+
+  /* dock labels (mono, tracked caps) positioned over the stage */
+  .dock {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    z-index: 11;
+  }
+  .dock .dk {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+  }
+  .dock .dn {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    margin-top: 3px;
+  }
+  .dock .dd {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.34;
+    color: var(--stone-500);
+    margin-top: 4px;
+    max-width: 22ch;
+  }
+  .dock.r { text-align: right; }
+  .dock.r .dd { margin-left: auto; }
+
+  /* tier legend bottom-left over stage */
+  .tierkey {
+    position: absolute;
+    z-index: 11;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .tierkey .row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .tierkey .sw { width: 26px; height: 14px; border: 1.5px solid var(--stone-900); flex: 0 0 auto; }
+  .tierkey .sw.v { background: var(--stone-50); }
+  .tierkey .sw.l { background: rgba(0,122,255,0.18); }
+  .tierkey .sw.r { background: var(--blue); border-color: var(--blue); }
+  .tierkey .lab b {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--stone-900);
+  }
+  .tierkey .lab span {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px; color: var(--stone-500); margin-left: 8px;
+  }
+
+  /* ── RULE LINE ─────────────────────────────────────────────────── */
+  .rule {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 96px;
+    z-index: 12;
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 28px;
+  }
+  .rule .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+  }
+  .rule .big b { font-weight: 700; }
+  .rule .big em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .rule .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    text-align: right;
+    flex: 0 0 auto;
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 12;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the secure execution boundary</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field plate</div>
+      <div class="meta">where the agent works</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">The Sandbox</span>
+    <span class="tag">
+      <span class="big">Where the agent works</span>
+      <span class="small">filesystem · shell · isolation</span>
+    </span>
+  </div>
+  <div class="deck">
+    <div class="deck-big">A secure environment where the agent <b>runs tools, modifies files, and completes real work</b> — the filesystem and command boundary around it.</div>
+    <div class="deck-count">Three tiers<br>Virtual · Local · Remote</div>
+  </div>
+
+  <!-- STAGE -->
+  <div class="stage">
+    <svg viewBox="0 0 1132 980" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <pattern id="floorgrid" width="34" height="20" patternUnits="userSpaceOnUse"
+          patternTransform="skewX(-30)">
+          <rect width="34" height="20" fill="none"/>
+          <path d="M0 0 H34 M0 0 V20" stroke="rgba(250,250,249,0.28)" stroke-width="1"/>
+        </pattern>
+      </defs>
+
+      <!-- ========= GIANT ISOMETRIC CRATE ========= -->
+      <!-- Geometry built around centre x=566 -->
+
+      <!-- ground shadow plate (flat, no blur) -->
+      <polygon points="566,930 196,718 566,506 936,718"
+               fill="rgba(28,25,23,0.05)"/>
+
+      <!-- ---- OUTER SHELL : the open crate (back walls) ---- -->
+      <polygon points="196,275 566,63 566,506 196,718" fill="#f5f5f4" stroke="#1c1917" stroke-width="2.5"/>
+      <polygon points="936,275 566,63 566,506 936,718" fill="#e7e5e4" stroke="#1c1917" stroke-width="2.5"/>
+
+      <!-- INTERIOR FLOOR — Remote tier = full blue field -->
+      <polygon points="566,506 256,328 566,150 876,328" fill="#007AFF"/>
+      <polygon points="566,506 256,328 566,150 876,328" fill="url(#floorgrid)"/>
+      <polygon points="566,506 256,328 566,150 876,328" fill="none" stroke="#0c0a09" stroke-width="2"/>
+
+      <!-- LOCAL tier — nested mid panel (translucent stone over blue) -->
+      <polygon points="566,470 326,332 566,194 806,332"
+               fill="rgba(250,250,249,0.55)" stroke="#0c0a09" stroke-width="1.5"/>
+
+      <!-- VIRTUAL tier — innermost panel (default lightweight, stone) -->
+      <polygon points="566,430 396,332 566,234 736,332"
+               fill="#fafaf9" stroke="#0c0a09" stroke-width="1.5"/>
+      <circle cx="566" cy="332" r="4" fill="#0057D8"/>
+      <text x="566" y="320" text-anchor="middle" font-family="'IBM Plex Mono', monospace"
+            font-weight="700" font-size="13" letter-spacing="2" fill="#1c1917">VIRTUAL</text>
+
+      <!-- ---- INNER WALL FACES ---- -->
+      <polygon points="256,328 566,150 566,506 256,684" fill="rgba(28,25,23,0.04)" stroke="#d6d3d1" stroke-width="1"/>
+      <polygon points="876,328 566,150 566,506 876,684" fill="rgba(28,25,23,0.07)" stroke="#d6d3d1" stroke-width="1"/>
+
+      <!-- ===== AGENT AT WORK — inside the box ===== -->
+
+      <!-- MODEL CORE : a hard isometric cube -->
+      <g>
+        <polygon points="566,228 650,276 566,324 482,276" fill="#007AFF" stroke="#0c0a09" stroke-width="2"/>
+        <polygon points="482,276 566,324 566,420 482,372" fill="#0057D8" stroke="#0c0a09" stroke-width="2"/>
+        <polygon points="650,276 566,324 566,420 650,372" fill="#004BB8" stroke="#0c0a09" stroke-width="2"/>
+      </g>
+      <text x="566" y="362" text-anchor="middle" font-family="'IBM Plex Mono', monospace"
+            font-size="14" font-weight="700" fill="#fafaf9" letter-spacing="1">MODEL</text>
+      <text x="566" y="381" text-anchor="middle" font-family="'IBM Plex Mono', monospace"
+            font-size="10.5" font-weight="500" fill="rgba(250,250,249,0.92)" letter-spacing="0.3">claude-sonnet-4-6</text>
+
+      <!-- connective flow lines model -> fs / shell -->
+      <g stroke="#0057D8" stroke-width="2" stroke-dasharray="3 6" fill="none" opacity="0.9">
+        <line x1="500" y1="408" x2="416" y2="452"/>
+        <line x1="632" y1="408" x2="716" y2="452"/>
+      </g>
+
+      <!-- FILESYSTEM stack — isometric slabs on the left floor (FlueFs) -->
+      <g stroke="#0c0a09" stroke-width="1.8">
+        <polygon points="386,452 456,492 386,532 316,492" fill="#fafaf9"/>
+        <polygon points="316,492 386,532 386,552 316,512" fill="#e7e5e4"/>
+        <polygon points="456,492 386,532 386,552 456,512" fill="#d6d3d1"/>
+
+        <polygon points="386,486 456,526 386,566 316,526" fill="#fafaf9"/>
+        <polygon points="316,526 386,566 386,586 316,546" fill="#e7e5e4"/>
+        <polygon points="456,526 386,566 386,586 456,546" fill="#d6d3d1"/>
+
+        <polygon points="386,520 456,560 386,600 316,560" fill="#fafaf9"/>
+        <polygon points="316,560 386,600 386,620 316,580" fill="#e7e5e4"/>
+        <polygon points="456,560 386,600 386,620 456,580" fill="#d6d3d1"/>
+      </g>
+      <polygon points="386,452 414,468 414,474 386,458" fill="#007AFF"/>
+
+      <!-- SHELL prompt panel — hard isometric plate on the right floor -->
+      <g>
+        <polygon points="746,448 858,512 746,576 634,512" fill="#0c0a09" stroke="#0c0a09" stroke-width="2"/>
+        <g transform="translate(694,500) skewY(30)">
+          <text x="0" y="0" font-family="'IBM Plex Mono', monospace" font-size="13" font-weight="700" fill="#4DA3FF">$</text>
+          <text x="16" y="0" font-family="'IBM Plex Mono', monospace" font-size="13" font-weight="500" fill="#fafaf9">bash run</text>
+          <rect x="104" y="-11" width="9" height="14" fill="#4DA3FF"/>
+        </g>
+        <g transform="translate(694,524) skewY(30)">
+          <text x="0" y="0" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="500" fill="rgba(250,250,249,0.62)">ok · 0 errors</text>
+        </g>
+      </g>
+
+      <!-- ---- FRONT WALLS (outer, lower struts — crate reads open) ---- -->
+      <polygon points="196,718 566,506 566,930 196,718" fill="#d6d3d1" stroke="#1c1917" stroke-width="2.5"/>
+      <polygon points="936,718 566,506 566,930 936,718" fill="#a8a29e" stroke="#1c1917" stroke-width="2.5"/>
+
+      <!-- top rim emphasis -->
+      <polyline points="196,275 566,63 936,275" fill="none" stroke="#0c0a09" stroke-width="2.5"/>
+
+      <!-- bolt / corner ticks (technical-drawing detail) -->
+      <g fill="#1c1917">
+        <circle cx="566" cy="63" r="4"/>
+        <circle cx="196" cy="275" r="4"/>
+        <circle cx="936" cy="275" r="4"/>
+        <circle cx="566" cy="930" r="4"/>
+      </g>
+
+      <!-- front-right wall stencil -->
+      <g transform="translate(636,648) skewY(-30)">
+        <text x="0" y="0" font-family="'IBM Plex Mono', monospace" font-size="16" font-weight="700"
+              fill="#1c1917" letter-spacing="1">SANDBOX</text>
+        <text x="0" y="22" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="500"
+              fill="#44403c" letter-spacing="0.5">isolated · auditable</text>
+      </g>
+      <!-- front-left wall stencil -->
+      <g transform="translate(300,656) skewY(30)">
+        <text x="0" y="0" font-family="'IBM Plex Mono', monospace" font-size="14" font-weight="700"
+              fill="#44403c" letter-spacing="1">REMOTE TIER</text>
+      </g>
+    </svg>
+
+    <!-- DOCK LABELS (tracked-caps mono) — what the sandbox holds / exposes -->
+    <div class="dock" style="left:6px; top:120px;">
+      <div class="dk">holds</div>
+      <div class="dn">Filesystem · FlueFs</div>
+      <div class="dd">Read, write, and track changes to files inside the boundary.</div>
+    </div>
+    <div class="dock" style="left:6px; top:300px;">
+      <div class="dk">exposes</div>
+      <div class="dn">Tools</div>
+      <div class="dd">Typed actions the agent invokes to do controlled work.</div>
+    </div>
+
+    <div class="dock r" style="right:6px; top:120px;">
+      <div class="dk">exposes</div>
+      <div class="dn">Shell</div>
+      <div class="dd">A command line for the agent to execute real programs.</div>
+    </div>
+    <div class="dock r" style="right:6px; top:300px;">
+      <div class="dk">loads</div>
+      <div class="dn">Skills</div>
+      <div class="dd">Packaged expertise pulled in on demand for the task.</div>
+    </div>
+
+    <!-- TIER LEGEND -->
+    <div class="tierkey" style="left:2px; bottom:18px;">
+      <div class="row">
+        <span class="sw v"></span>
+        <span class="lab"><b>Virtual</b><span>default · in-memory · just-bash</span></span>
+      </div>
+      <div class="row">
+        <span class="sw l"></span>
+        <span class="lab"><b>Local</b><span>local() · host fs + shell · trusted dev/CI</span></span>
+      </div>
+      <div class="row">
+        <span class="sw r"></span>
+        <span class="lab"><b>Remote</b><span>provider container · Daytona / Cloudflare · untrusted work</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RULE LINE -->
+  <div class="rule">
+    <div class="big">Choose the <b>narrowest sandbox</b> that supports the task — <em>nest outward only when the work demands a real toolchain.</em></div>
+    <div class="stamp">Virtual → Local → Remote</div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The secure environment · one boundary, three tiers</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

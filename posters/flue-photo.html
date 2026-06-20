@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Channel (photomontage)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:#fafaf9; --stone-100:#f5f5f4; --stone-200:#e7e5e4; --stone-300:#d6d3d1;
+    --stone-400:#a8a29e; --stone-500:#78716c; --stone-700:#44403c; --stone-900:#1c1917; --stone-950:#0c0a09;
+    --blue:#007AFF; --blue-2:#0057D8; --blue-lt:#4DA3FF;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body {
+    width:1260px; height:1800px; background:var(--stone-50); color:var(--stone-900);
+    font-family:'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  .poster { position:relative; width:1260px; height:1800px; overflow:hidden; }
+
+  /* ── DUOTONE PHOTO — the dominant element ── */
+  .photo { position:absolute; inset:0; overflow:hidden; background:var(--stone-900); }
+  .photo img {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:46% 20%;
+    filter:grayscale(1) contrast(1.16) brightness(1.05);
+  }
+  .photo .tint { position:absolute; inset:0; background:var(--blue); mix-blend-mode:color; opacity:0.85; }
+  .photo .deepen { position:absolute; inset:0; background:var(--blue-2); mix-blend-mode:multiply; opacity:0.16; }
+  /* soft top scrim to protect the title on the sky */
+  .photo .scrim {
+    position:absolute; left:0; right:0; top:0; height:430px;
+    background:linear-gradient(180deg, rgba(250,250,249,0.78) 0%, rgba(250,250,249,0.30) 55%, rgba(250,250,249,0) 100%);
+  }
+
+  /* Corners */
+  .corner { position:absolute; width:22px; height:22px; border:2px solid var(--stone-900); z-index:30; }
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0;border-color:var(--stone-50)}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0;border-color:var(--stone-50)}
+
+  /* Topbar */
+  .topbar {
+    position:absolute; top:40px; left:56px; right:56px; z-index:20;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.22em;
+    text-transform:uppercase; font-weight:600; color:var(--stone-900);
+  }
+  .topbar .meta { color:var(--stone-700); margin-top:4px; font-weight:400; }
+  .topbar .right { text-align:right; }
+
+  /* Title lockup */
+  .title { position:absolute; top:86px; left:56px; z-index:20; display:flex; align-items:center; gap:22px; }
+  .mark { display:grid; grid-template-columns:repeat(6,1fr); grid-template-rows:repeat(6,1fr);
+          background:var(--blue); width:96px; height:96px; }
+  .mark i { background:var(--stone-50); display:block; }
+  .title .word { font-weight:700; font-size:150px; line-height:0.8; letter-spacing:-0.05em; color:var(--stone-900); }
+  .tagline {
+    position:absolute; top:208px; left:56px; z-index:20;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.26em;
+    text-transform:uppercase; font-weight:600; color:var(--blue-2);
+  }
+  .tagline .sub { display:block; color:var(--stone-700); font-weight:400; letter-spacing:0.2em; margin-top:6px; }
+
+  /* Vertical annotation pointing at the chimney */
+  .annot { position:absolute; z-index:20; }
+  .annot.flue { top:600px; right:92px; text-align:right; }
+  .annot .k {
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.24em;
+    text-transform:uppercase; font-weight:700; color:var(--blue-2);
+  }
+  .annot .d {
+    font-family:'IBM Plex Sans', sans-serif; font-size:14px; line-height:1.38; color:var(--stone-900);
+    margin-top:6px; max-width:236px; margin-left:auto;
+  }
+  .annot .d b { color:var(--blue-2); font-weight:700; }
+  .annot .rule { width:120px; height:2px; background:var(--blue); margin:10px 0 0 auto; }
+
+  /* ── BOTTOM DARK BAND — the message ── */
+  .band {
+    position:absolute; left:0; right:0; bottom:0; height:452px; z-index:15;
+    background:var(--stone-950); color:var(--stone-50);
+    padding:34px 56px 26px 56px; display:flex; flex-direction:column;
+  }
+  .band .eyebrow {
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.24em; text-transform:uppercase;
+    font-weight:600; color:var(--blue-lt); border-top:2px solid var(--blue); padding-top:10px;
+    display:flex; justify-content:space-between;
+  }
+  .band .head {
+    font-family:'IBM Plex Sans', sans-serif; font-weight:300; font-size:52px; line-height:1.0;
+    letter-spacing:-0.03em; margin-top:18px; color:var(--stone-50);
+  }
+  .band .head b { font-weight:700; }
+  .band .head .blue { color:var(--blue-lt); }
+  .band .body {
+    font-family:'IBM Plex Sans', sans-serif; font-size:17px; line-height:1.45; color:rgba(250,250,249,0.82);
+    margin-top:16px; max-width:74ch;
+  }
+  .band .body b { color:var(--stone-50); font-weight:600; }
+  .band .parts {
+    margin-top:auto; display:flex; gap:0; border-top:1px solid rgba(250,250,249,0.18); padding-top:12px;
+  }
+  .band .parts .p { flex:1; padding-right:14px; }
+  .band .parts .p .pn {
+    font-family:'IBM Plex Sans', sans-serif; font-weight:700; font-size:16px; letter-spacing:-0.01em; color:var(--stone-50);
+  }
+  .band .parts .p .pd {
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--blue-lt); margin-top:5px;
+  }
+  .band .foot {
+    margin-top:16px; display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase;
+    color:rgba(250,250,249,0.55); border-top:1px solid rgba(250,250,249,0.14); padding-top:10px;
+  }
+  .band .foot b { color:var(--stone-50); }
+  .credit { font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.1em;
+            color:rgba(250,250,249,0.45); text-transform:none; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- PHOTO -->
+  <div class="photo">
+    <img src="flue-chimney.jpg" alt="A tall brick factory flue rising into the sky">
+    <div class="tint"></div>
+    <div class="deepen"></div>
+    <div class="scrim"></div>
+  </div>
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the channel between your model and the world</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">flue · noun · a duct that carries the flow</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+  </div>
+  <div class="tagline">The harness your model runs on
+    <span class="sub">a model reasons · the harness gives it reach</span>
+  </div>
+
+  <!-- CHIMNEY ANNOTATION -->
+  <div class="annot flue">
+    <div class="k">↑ the flue</div>
+    <div class="d">A flue carries what rises through it. Flue carries your model's <b>reasoning</b> out into the world.</div>
+    <div class="rule"></div>
+  </div>
+
+  <!-- BOTTOM BAND -->
+  <div class="band">
+    <div class="eyebrow"><span>What the harness does</span><span>not another sdk</span></div>
+    <div class="head">The model <b>reasons.</b> The <span class="blue">harness</span> gives it<br>tools, memory, a sandbox, and a loop.</div>
+    <div class="body">
+      You hand an agent <b>a task — not a script —</b> and it runs on Flue: calling tools, loading skills,
+      working in a sandbox, keeping state across turns, and <b>recovering</b> when things fail.
+    </div>
+    <div class="parts">
+      <div class="p"><div class="pn">Model</div><div class="pd">reasons</div></div>
+      <div class="p"><div class="pn">Tools</div><div class="pd">typed actions</div></div>
+      <div class="p"><div class="pn">Skills</div><div class="pd">SKILL.md</div></div>
+      <div class="p"><div class="pn">Sandbox</div><div class="pd">fs + shell</div></div>
+      <div class="p"><div class="pn">Instructions</div><div class="pd">the goal</div></div>
+    </div>
+    <div class="foot">
+      <span class="credit">Photo: “Briggs Factory chimney” · Crusier · CC BY-SA 3.0 · Wikimedia Commons</span>
+      <span>withastro / <b>Flue</b></span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

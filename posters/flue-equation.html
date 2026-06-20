@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent = Model + Harness · Flue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── EQUATION lockup — the title is the equation, type-as-image ───── */
+  .eqwrap {
+    position: relative;
+    z-index: 4;
+    margin-top: 8px;
+  }
+  .eqlab {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 10px;
+    margin-bottom: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .eqlab .r { color: var(--stone-500); font-weight: 500; }
+
+  /* AGENT — mega, flush left, bleeds slightly */
+  .mega {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    line-height: 0.78;
+    letter-spacing: -0.055em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .row-agent {
+    display: flex;
+    align-items: flex-start;
+    gap: 26px;
+    margin-top: 6px;
+  }
+  .row-agent .agent {
+    font-size: 268px;
+    margin-left: -14px;
+  }
+  .row-agent .side {
+    margin-left: auto;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 22px;
+    text-align: right;
+  }
+  .row-agent .side .glyphline { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
+  .row-agent .side .mark { width: 70px; height: 70px; }
+  .row-agent .side .lead {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .row-agent .side .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  /* The "=" hero operator, giant blue, its own line */
+  .eqop {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    color: var(--blue);
+    line-height: 0.7;
+  }
+  .row-eq {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+  .row-eq .equals { font-size: 150px; margin-left: -6px; }
+  .row-eq .modelword {
+    font-size: 168px;
+    color: var(--stone-900);
+  }
+  .row-eq .plus {
+    font-size: 134px;
+    color: var(--blue);
+    font-weight: 300;
+  }
+
+  /* HARNESS — the hero mass on a dark field, bleeds off the right edge */
+  .harness-band {
+    position: relative;
+    background: var(--stone-950);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 64px 22px 64px;
+    margin-top: 8px;
+    overflow: hidden;
+    z-index: 3;
+  }
+  .harness-band .hk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-lt);
+    margin-bottom: 2px;
+  }
+  .harness-band .harness {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 224px;
+    line-height: 0.8;
+    letter-spacing: -0.055em;
+    color: var(--stone-50);
+    white-space: nowrap;
+    margin-left: -10px;
+    /* bleed off the right edge */
+    margin-right: -120px;
+  }
+
+  /* ── EXPANSION — terms defined in small type ─────────────────────── */
+  .terms {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 26px;
+    border-top: 1.5px solid var(--stone-900);
+  }
+  .term {
+    padding: 16px 28px 16px 0;
+    border-right: 1px solid var(--stone-200);
+  }
+  .term:nth-child(2) { padding-left: 28px; border-right: 0; }
+  .term .tk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 8px;
+  }
+  .term .tn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+    margin-bottom: 7px;
+  }
+  .term .td {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--stone-700);
+    max-width: 50ch;
+  }
+  .term .td b { color: var(--stone-900); font-weight: 600; }
+
+  /* Harness parts strip — what the harness supplies */
+  .parts {
+    position: relative;
+    z-index: 4;
+    margin-top: 22px;
+  }
+  .parts-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--blue);
+    padding-top: 9px;
+  }
+  .parts-head .t {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+  }
+  .parts-head .t b { font-weight: 700; }
+  .parts-head .d {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+  }
+  .parts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 14px;
+  }
+  .pcell {
+    border-top: 1.5px solid var(--stone-900);
+    border-right: 1px solid var(--stone-200);
+    padding: 12px 20px 14px 0;
+  }
+  .pcell:nth-child(3n) { border-right: 0; padding-right: 0; }
+  .pcell .pk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--blue-2);
+    letter-spacing: 0.04em;
+    margin-bottom: 7px;
+  }
+  .pcell .pn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.025em;
+    color: var(--stone-900);
+    margin-bottom: 5px;
+  }
+  .pcell .pd {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.36;
+    color: var(--stone-500);
+  }
+  .pcell .pd b { color: var(--stone-700); font-weight: 600; }
+
+  /* ── SYNTHESIS line ─────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 80px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.36;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 13px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the one-line definition of an agent</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">a harness you program, not another sdk</div>
+    </div>
+  </div>
+
+  <!-- EQUATION — the title is the equation -->
+  <div class="eqwrap">
+    <div class="eqlab">
+      <span>The whole, as one line</span>
+      <span class="r">solve for what makes it act</span>
+    </div>
+
+    <div class="row-agent">
+      <h1 class="mega agent">Agent</h1>
+      <div class="side">
+        <div class="glyphline">
+          <span class="lead">withastro&nbsp;/&nbsp;flue</span>
+          <span class="mark">
+            <i style="grid-column:4;grid-row:2"></i>
+            <i style="grid-column:3;grid-row:3"></i>
+            <i style="grid-column:4;grid-row:4"></i>
+            <i style="grid-column:3;grid-row:5"></i>
+          </span>
+        </div>
+        <div class="sub">you give a task,<br>not a series of steps</div>
+      </div>
+    </div>
+
+    <div class="row-eq">
+      <span class="eqop equals">=</span>
+      <span class="mega modelword">Model</span>
+      <span class="eqop plus">+</span>
+    </div>
+  </div>
+
+  <!-- HARNESS — hero mass, dark field, bleeds off the right edge -->
+  <div class="harness-band">
+    <div class="hk">the part that turns a model into an agent</div>
+    <div class="harness">Harness</div>
+  </div>
+
+  <!-- EXPANSION — define the two terms -->
+  <section class="terms">
+    <div class="term">
+      <div class="tk">the reasoning</div>
+      <div class="tn">Model</div>
+      <div class="td">The LLM that <b>thinks over the task</b> and decides the next move — e.g. <b>anthropic/claude-sonnet-4-6</b>. On its own it can reason, but it cannot act.</div>
+    </div>
+    <div class="term">
+      <div class="tk">the running</div>
+      <div class="tn">Harness</div>
+      <div class="td">Context, tools, a sandbox, skills, sessions, and <b>a loop to run on</b> — so the model can <b>act, remember, and recover.</b></div>
+    </div>
+  </section>
+
+  <!-- HARNESS PARTS -->
+  <section class="parts">
+    <div class="parts-head">
+      <div class="t">What the <b>harness</b> supplies</div>
+      <div class="d">a harness you program</div>
+    </div>
+    <div class="parts-grid">
+      <div class="pcell">
+        <div class="pk">context</div>
+        <div class="pn">Context</div>
+        <div class="pd">The task and the facts the model needs, <b>assembled for the turn.</b></div>
+      </div>
+      <div class="pcell">
+        <div class="pk">tools[]</div>
+        <div class="pn">Tools</div>
+        <div class="pd">Typed actions that reach your APIs and <b>make real changes.</b></div>
+      </div>
+      <div class="pcell">
+        <div class="pk">sandbox()</div>
+        <div class="pn">Sandbox</div>
+        <div class="pd">An isolated place to <b>run code and edit files</b> safely.</div>
+      </div>
+      <div class="pcell">
+        <div class="pk">skills</div>
+        <div class="pn">Skills</div>
+        <div class="pd">Packaged expertise the agent <b>loads on demand.</b></div>
+      </div>
+      <div class="pcell">
+        <div class="pk">sessions</div>
+        <div class="pn">Memory</div>
+        <div class="pd">Sessions that let it <b>remember across turns and runs.</b></div>
+      </div>
+      <div class="pcell">
+        <div class="pk">while(...)</div>
+        <div class="pn">The Loop</div>
+        <div class="pd">The cycle that lets it <b>act, observe, and recover.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    A <b>model</b> reasons. A <b>harness</b> gives it a place to act, a memory to keep, and a loop to run on.
+    <em>Solve the equation and you get an agent.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Agent = Model + Harness</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
