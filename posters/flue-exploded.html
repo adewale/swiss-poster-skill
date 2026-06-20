@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Whole Stack, Included</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 8;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 6;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* TITLE lockup */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 16px;
+    z-index: 6;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* DECK / headline */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 12px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 6;
+  }
+  .deck .head {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 78px;
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    text-transform: uppercase;
+  }
+  .deck .head em { font-style: normal; color: var(--blue-2); }
+  .deck .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.34;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 33ch;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 28px;
+    padding-bottom: 6px;
+  }
+  .deck .sub b { font-weight: 700; color: var(--stone-900); }
+
+  /* STAGE — exploded isometric drawing */
+  .stage {
+    position: absolute;
+    left: 0; right: 0;
+    top: 470px;
+    height: 1180px;
+    z-index: 4;
+  }
+  .stage svg { display: block; width: 100%; height: 100%; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 6;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+
+  /* SVG text classes */
+  .s-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.01em; }
+  .s-role { font-family:'IBM Plex Mono',monospace; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; }
+  .s-item { font-family:'IBM Plex Mono',monospace; font-weight:500; letter-spacing:0.01em; }
+  .s-idx  { font-family:'IBM Plex Mono',monospace; font-weight:600; letter-spacing:0.16em; }
+  .s-lead-lab { font-family:'IBM Plex Mono',monospace; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the universal agent architecture</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · exploded view</div>
+      <div class="meta">four layers, one runtime</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">Batteries Included</span>
+      <span class="small">the complete agent runtime, assembled</span>
+    </span>
+  </div>
+
+  <!-- DECK / HEADLINE -->
+  <div class="deck">
+    <div class="head">The whole<br>stack, <em>included.</em></div>
+    <div class="sub">Four layers ship as one integrated runtime — <b>model, harness, sandbox, filesystem</b>. You don't assemble it yourself.</div>
+  </div>
+
+  <!-- EXPLODED ISOMETRIC STAGE -->
+  <div class="stage">
+    <svg viewBox="0 0 1132 1180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <!--
+        Isometric basis. Each slab is a parallelogram (top face) extruded down
+        by a fixed depth to a darker front + side face. Slabs are floated apart
+        along the vertical axis. Registration / leader lines run down the spine.
+        Order top→bottom: Model · Harness · Sandbox · Filesystem.
+        data-encoding mappings:
+      -->
+      <g data-encoding="architecture layer → iso slab"></g>
+      <g data-encoding="layer emphasis (model) → blue tint"></g>
+      <g data-encoding="assembly relation → vertical registration line"></g>
+
+      <!-- ============ REGISTRATION SPINE (sent behind, demoted texture) ============ -->
+      <g stroke="#a8a29e" stroke-width="1.4" stroke-dasharray="2 7" fill="none" opacity="0.85">
+        <line x1="372" y1="40"  x2="372" y2="1100"/>
+        <line x1="760" y1="40"  x2="760" y2="1100"/>
+      </g>
+
+      <!-- registration tick marks along the spine -->
+      <g stroke="#78716c" stroke-width="1.4" opacity="0.7">
+        <line x1="366" y1="40"  x2="378" y2="40"/>
+        <line x1="754" y1="40"  x2="766" y2="40"/>
+        <line x1="366" y1="1100" x2="378" y2="1100"/>
+        <line x1="754" y1="1100" x2="766" y2="1100"/>
+      </g>
+
+      <!--
+        SLAB GEOMETRY (one reusable shape, translated per layer).
+        Top face parallelogram points (relative): we draw absolute per slab.
+        iso skew: dx along width = +0/ ; dy for depth.
+        Plate width 560, top-face half-height ~118, extrude depth 56.
+      -->
+
+      <!-- ================= SLAB 1 — MODEL (blue emphasis, top) ================= -->
+      <g>
+        <!-- front face -->
+        <polygon points="286,300 846,300 846,356 286,356" fill="#0057D8"/>
+        <!-- right side face -->
+        <polygon points="846,300 1006,220 1006,276 846,356" fill="#004099"/>
+        <!-- top face -->
+        <polygon points="286,300 446,220 1006,220 846,300" fill="#007AFF"/>
+        <!-- top-face inner inscribe line -->
+        <polygon points="312,296 460,222 992,222 844,296" fill="none" stroke="#4DA3FF" stroke-width="1" opacity="0.55"/>
+        <!-- index on top face (skewed about its own origin to sit on the iso plane) -->
+        <text class="s-idx" fill="#fafaf9" font-size="20" opacity="0.92" transform="translate(488,272) skewY(-26.57)">L1</text>
+        <!-- name on front face -->
+        <text class="s-name" x="306" y="345" fill="#fafaf9" font-size="46">MODEL</text>
+        <!-- role on front face -->
+        <text class="s-role" x="520" y="324" fill="#bcd9ff" font-size="12">the reasoning core</text>
+        <!-- contents (mono) on front face -->
+        <text class="s-item" x="520" y="347" fill="#fafaf9" font-size="14.5">tokens · tools · prompts</text>
+      </g>
+
+      <!-- ================= SLAB 2 — HARNESS (stone) ================= -->
+      <g>
+        <polygon points="286,520 846,520 846,576 286,576" fill="#d6d3d1"/>
+        <polygon points="846,520 1006,440 1006,496 846,576" fill="#a8a29e"/>
+        <polygon points="286,520 446,440 1006,440 846,520" fill="#e7e5e4"/>
+        <polygon points="312,516 460,442 992,442 844,516" fill="none" stroke="#a8a29e" stroke-width="1" opacity="0.7"/>
+        <text class="s-idx" fill="#78716c" font-size="20" transform="translate(488,492) skewY(-26.57)">L2</text>
+        <text class="s-name" x="306" y="565" fill="#1c1917" font-size="46">HARNESS</text>
+        <text class="s-role" x="540" y="544" fill="#0057D8" font-size="12">the agent loop</text>
+        <text class="s-item" x="540" y="567" fill="#1c1917" font-size="14.5">skills · memory · sessions</text>
+      </g>
+
+      <!-- ================= SLAB 3 — SANDBOX (stone) ================= -->
+      <g>
+        <polygon points="286,740 846,740 846,796 286,796" fill="#d6d3d1"/>
+        <polygon points="846,740 1006,660 1006,716 846,796" fill="#a8a29e"/>
+        <polygon points="286,740 446,660 1006,660 846,740" fill="#e7e5e4"/>
+        <polygon points="312,736 460,662 992,662 844,736" fill="none" stroke="#a8a29e" stroke-width="1" opacity="0.7"/>
+        <text class="s-idx" fill="#78716c" font-size="20" transform="translate(488,712) skewY(-26.57)">L3</text>
+        <text class="s-name" x="306" y="785" fill="#1c1917" font-size="46">SANDBOX</text>
+        <text class="s-role" x="540" y="764" fill="#0057D8" font-size="12">isolated execution</text>
+        <text class="s-item" x="540" y="787" fill="#1c1917" font-size="14.5">bash · security · network</text>
+      </g>
+
+      <!-- ================= SLAB 4 — FILESYSTEM (stone, base) ================= -->
+      <g>
+        <polygon points="286,960 846,960 846,1016 286,1016" fill="#d6d3d1"/>
+        <polygon points="846,960 1006,880 1006,936 846,1016" fill="#a8a29e"/>
+        <polygon points="286,960 446,880 1006,880 846,960" fill="#e7e5e4"/>
+        <polygon points="312,956 460,882 992,882 844,956" fill="none" stroke="#a8a29e" stroke-width="1" opacity="0.7"/>
+        <text class="s-idx" fill="#78716c" font-size="20" transform="translate(488,932) skewY(-26.57)">L4</text>
+        <text class="s-name" x="306" y="1005" fill="#1c1917" font-size="46">FILESYSTEM</text>
+        <text class="s-role" x="586" y="984" fill="#0057D8" font-size="12">the workspace</text>
+        <text class="s-item" x="586" y="1007" fill="#1c1917" font-size="14.5">read · write · grep · glob</text>
+      </g>
+
+      <!-- ============ ASSEMBLY ARROWS — slabs snap together ============ -->
+      <g stroke="#0057D8" stroke-width="2.2" fill="none" opacity="0.9">
+        <!-- between L1 and L2 -->
+        <path d="M566,402 L566,452 M558,442 L566,454 L574,442"/>
+        <!-- between L2 and L3 -->
+        <path d="M566,622 L566,672 M558,662 L566,674 L574,662"/>
+        <!-- between L3 and L4 -->
+        <path d="M566,842 L566,892 M558,882 L566,894 L574,882"/>
+      </g>
+
+      <!-- ============ ASSEMBLED THUMBNAIL (right) — layers as one unit ============ -->
+      <g transform="translate(0,0)">
+        <!-- bracket joining the four layers into one -->
+        <path d="M1052,300 h22 v716 h-22" fill="none" stroke="#1c1917" stroke-width="2.4"/>
+        <line x1="1074" y1="658" x2="1102" y2="658" stroke="#1c1917" stroke-width="2.4"/>
+        <text class="s-lead-lab" x="1112" y="600" fill="#1c1917" font-size="15"
+              transform="rotate(90 1112 600)">= ONE AGENT</text>
+
+        <!-- mini assembled stack: 4 thin compressed slabs touching -->
+        <g transform="translate(40,1030)">
+          <!-- L4 base -->
+          <polygon points="0,108 132,108 170,86 38,86" fill="#e7e5e4"/>
+          <polygon points="0,108 132,108 132,120 0,120" fill="#d6d3d1"/>
+          <polygon points="132,108 170,86 170,98 132,120" fill="#a8a29e"/>
+          <!-- L3 -->
+          <polygon points="0,90 132,90 170,68 38,68" fill="#e7e5e4"/>
+          <polygon points="0,90 132,90 132,102 0,102" fill="#d6d3d1"/>
+          <polygon points="132,90 170,68 170,80 132,102" fill="#a8a29e"/>
+          <!-- L2 -->
+          <polygon points="0,72 132,72 170,50 38,50" fill="#e7e5e4"/>
+          <polygon points="0,72 132,72 132,84 0,84" fill="#d6d3d1"/>
+          <polygon points="132,72 170,50 170,62 132,84" fill="#a8a29e"/>
+          <!-- L1 top (blue) -->
+          <polygon points="0,54 132,54 170,32 38,32" fill="#007AFF"/>
+          <polygon points="0,54 132,54 132,66 0,66" fill="#0057D8"/>
+          <polygon points="132,54 170,32 170,44 132,66" fill="#004099"/>
+        </g>
+      </g>
+
+      <!-- ============ LEFT EDGE LABELS — stack axis ============ -->
+      <g>
+        <text class="s-lead-lab" x="150" y="312" fill="#78716c" font-size="12"
+              transform="rotate(-90 150 312)">CORE</text>
+        <text class="s-lead-lab" x="150" y="1010" fill="#78716c" font-size="12"
+              transform="rotate(-90 150 1010)">BASE</text>
+        <!-- thin axis line -->
+        <line x1="180" y1="240" x2="180" y2="1030" stroke="#a8a29e" stroke-width="1.4"/>
+        <path d="M174,250 L180,238 L186,250" fill="none" stroke="#a8a29e" stroke-width="1.4"/>
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- BASELINE STRIP — the assembled line -->
+  <div style="position:absolute; left:64px; right:64px; bottom:74px; z-index:6;
+              border-top:1px dotted var(--stone-300); padding-top:13px;
+              display:flex; justify-content:space-between; align-items:baseline;">
+    <div style="font-family:'IBM Plex Sans',sans-serif; font-weight:300; font-size:22px;
+                letter-spacing:-0.015em; color:var(--stone-900); max-width:74ch;">
+      A complete, integrated agent runtime out of the box —
+      <b style="font-weight:700;">model, harness, sandbox, and filesystem</b>,
+      <em style="font-style:italic; color:var(--blue-2); font-weight:500;">snapped together as one.</em>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Four layers · one assembled agent runtime</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

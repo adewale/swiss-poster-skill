@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — A task, not a script</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand — the one accent hue */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 9;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE lockup ─────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── DECK / HEADLINE ──────────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 12px;
+    margin-bottom: 20px;
+  }
+  .deck .head {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 62px;
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    color: var(--stone-900);
+  }
+  .deck .head em { font-style: italic; font-weight: 300; color: var(--blue-2); }
+  .deck .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 38ch;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 40px;
+    padding-bottom: 4px;
+  }
+  .deck .sub b { font-weight: 700; color: var(--stone-900); }
+
+  /* ── DIAGRAM STAGE — the funnel / fan-out is the hero ─────────────── */
+  .stage {
+    position: relative;
+    z-index: 4;
+    height: 1196px;
+    margin-left: -64px;
+    margin-right: -64px;
+    overflow: hidden;
+  }
+  .stage svg { display: block; width: 1260px; height: 1196px; }
+
+  /* annotation chip, you-wrote-only-the-top-line */
+  .anno {
+    position: absolute;
+    z-index: 6;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    line-height: 1.5;
+  }
+  .anno b { color: var(--blue-2); font-weight: 700; }
+  .anno .rule { display:block; width: 44px; height: 2px; background: var(--blue); margin: 7px 0; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 8;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="data-diagram-poster"
+     data-reference="muller-brockmann-rhythm"
+     data-encoding="one goal → many self-chosen steps → one result">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">one goal in, many steps out</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field guide</div>
+      <div class="meta">autonomy, end to end</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark" aria-hidden="true">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">hand it a goal, not a procedure</span>
+    </span>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="deck">
+    <div class="head" data-critical="title">A task, <em>not a script.</em></div>
+    <div class="sub" data-critical="body">You write <b>one line</b>. The agent figures out the rest &mdash; and runs every step itself.</div>
+  </div>
+
+  <!-- ── THE FUNNEL / FAN-OUT ─────────────────────────────────────── -->
+  <div class="stage">
+    <svg viewBox="0 0 1260 1196" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--stone-400)"/>
+        </marker>
+        <marker id="arwB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--blue)"/>
+        </marker>
+      </defs>
+
+      <!-- ===================== EDGES (drawn first, behind nodes) ===================== -->
+      <g fill="none" stroke="var(--stone-300)" stroke-width="2">
+        <!-- TASK (630,128) -> reason core (630,250) : the only blue spine segment -->
+        <path d="M630,150 L630,236" stroke="var(--blue)" stroke-width="3" marker-end="url(#arwB)"/>
+
+        <!-- reason core (630,290) fans to tier-2 (4 nodes y=400) -->
+        <path d="M540,316 C 420,348 320,360 240,376" marker-end="url(#arw)"/>
+        <path d="M580,322 C 520,352 500,360 470,374" marker-end="url(#arw)"/>
+        <path d="M680,322 C 740,352 760,360 790,374" marker-end="url(#arw)"/>
+        <path d="M720,316 C 840,348 940,360 1020,376" marker-end="url(#arw)"/>
+
+        <!-- tier-2 -> tier-3 (y=560), widening -->
+        <path d="M210,432 C 170,478 150,500 138,536" marker-end="url(#arw)"/>
+        <path d="M250,432 C 280,480 300,506 330,536" marker-end="url(#arw)"/>
+        <path d="M455,432 C 440,480 430,506 420,536" marker-end="url(#arw)"/>
+        <path d="M490,432 C 540,480 580,506 612,536" marker-end="url(#arw)"/>
+        <path d="M790,432 C 740,480 700,506 668,536" marker-end="url(#arw)"/>
+        <path d="M820,432 C 850,480 870,506 892,536" marker-end="url(#arw)"/>
+        <path d="M1015,432 C 1000,480 990,506 976,536" marker-end="url(#arw)"/>
+        <path d="M1050,432 C 1090,480 1110,506 1128,536" marker-end="url(#arw)"/>
+
+        <!-- the loop: observe -> retry feeding back up (blue dashed) -->
+        <path d="M892,592 C 980,576 1010,520 968,452" stroke="var(--blue)" stroke-width="2" stroke-dasharray="3 6" marker-end="url(#arwB)"/>
+        <path d="M420,592 C 360,580 340,520 372,452" stroke="var(--blue)" stroke-width="2" stroke-dasharray="3 6" marker-end="url(#arwB)"/>
+
+        <!-- tier-3 -> tier-4 (y=720) -->
+        <path d="M138,592 C 150,640 170,672 210,706" marker-end="url(#arw)"/>
+        <path d="M330,592 C 330,642 330,676 330,706" marker-end="url(#arw)"/>
+        <path d="M420,592 C 430,642 450,676 488,706" marker-end="url(#arw)"/>
+        <path d="M612,592 C 600,642 580,676 548,706" marker-end="url(#arw)"/>
+        <path d="M668,592 C 680,642 700,676 730,706" marker-end="url(#arw)"/>
+        <path d="M892,592 C 880,640 862,672 828,706" marker-end="url(#arw)"/>
+        <path d="M976,592 C 980,642 990,676 1010,706" marker-end="url(#arw)"/>
+        <path d="M1128,592 C 1120,642 1110,676 1092,706" marker-end="url(#arw)"/>
+
+        <!-- tier-4 -> tier-5 (y=872) -->
+        <path d="M225,748 C 250,800 290,832 360,864" marker-end="url(#arw)"/>
+        <path d="M330,748 C 360,802 410,836 470,866" marker-end="url(#arw)"/>
+        <path d="M520,748 C 530,802 540,836 552,864" marker-end="url(#arw)"/>
+        <path d="M740,748 C 720,802 700,836 672,864" marker-end="url(#arw)"/>
+        <path d="M820,748 C 800,802 780,836 752,864" marker-end="url(#arw)"/>
+        <path d="M1020,748 C 990,802 940,836 870,866" marker-end="url(#arw)"/>
+        <path d="M1090,748 C 1050,800 1000,832 920,864" marker-end="url(#arw)"/>
+
+        <!-- tier-5 (converging) -> tier-6 narrow (y=1000) -->
+        <path d="M380,896 C 430,940 480,962 560,984" marker-end="url(#arw)"/>
+        <path d="M560,896 C 580,942 595,966 612,984" marker-end="url(#arw)"/>
+        <path d="M700,896 C 690,942 680,966 668,984" marker-end="url(#arw)"/>
+        <path d="M900,896 C 850,940 800,962 720,984" marker-end="url(#arw)"/>
+
+        <!-- converge -> RESULT (630,1118) -->
+        <path d="M610,1024 C 600,1062 600,1078 622,1096" stroke="var(--blue)" stroke-width="3" marker-end="url(#arwB)"/>
+        <path d="M670,1024 C 680,1062 670,1078 644,1096" stroke="var(--blue)" stroke-width="3" marker-end="url(#arwB)"/>
+      </g>
+
+      <!-- ===================== NODES ===================== -->
+      <!-- TASK : the single plain-language input -->
+      <g>
+        <rect x="330" y="74" width="600" height="56" rx="2" fill="var(--stone-950)"/>
+        <text x="352" y="98" font-family="'IBM Plex Mono', monospace" font-size="12" letter-spacing="2" font-weight="600" fill="var(--blue-lt)">TASK</text>
+        <text x="352" y="118" font-family="'IBM Plex Sans', sans-serif" font-size="20" font-weight="500" fill="var(--stone-50)">&ldquo;triage the open issues and open a PR&rdquo;</text>
+        <text x="908" y="111" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="11" letter-spacing="1" fill="var(--stone-400)">1 line</text>
+      </g>
+
+      <!-- REASON CORE : the loop seed -->
+      <g>
+        <rect x="528" y="250" width="204" height="42" rx="2" fill="var(--blue)"/>
+        <text x="630" y="276" text-anchor="middle" font-family="'IBM Plex Sans', sans-serif" font-size="17" font-weight="700" fill="var(--stone-50)">reason &rarr; plan</text>
+      </g>
+
+      <!-- TIER 2 (4) -->
+      <g font-family="'IBM Plex Sans', sans-serif" font-size="14.5" font-weight="600">
+        <g><rect x="150" y="376" width="150" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="225" y="401" text-anchor="middle" fill="var(--stone-900)">read the repo</text></g>
+        <g><rect x="392" y="376" width="138" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="461" y="401" text-anchor="middle" fill="var(--stone-900)">list issues</text></g>
+        <g><rect x="722" y="376" width="160" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="802" y="401" text-anchor="middle" fill="var(--stone-900)">pick a tool</text></g>
+        <g><rect x="948" y="376" width="170" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="1033" y="401" text-anchor="middle" fill="var(--stone-900)">grep the code</text></g>
+      </g>
+
+      <!-- TIER 3 (8) — widest fan -->
+      <g font-family="'IBM Plex Sans', sans-serif" font-size="14" font-weight="600">
+        <g><rect x="66" y="536" width="144" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="138" y="561" text-anchor="middle" fill="var(--stone-900)">classify bug</text></g>
+        <g><rect x="262" y="536" width="136" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="330" y="561" text-anchor="middle" fill="var(--stone-900)">label issue</text></g>
+        <g><rect x="356" y="536" width="128" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="420" y="561" text-anchor="middle" fill="var(--stone-900)">edit file</text></g>
+        <g><rect x="540" y="536" width="144" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="612" y="561" text-anchor="middle" fill="var(--stone-900)">write a test</text></g>
+        <g><rect x="596" y="536" width="144" height="40" rx="2" fill="var(--blue)"/><text x="668" y="561" text-anchor="middle" fill="var(--stone-50)" font-weight="700">run tests</text></g>
+        <g><rect x="820" y="536" width="144" height="40" rx="2" fill="var(--blue)"/><text x="892" y="561" text-anchor="middle" fill="var(--stone-50)" font-weight="700">observe</text></g>
+        <g><rect x="904" y="536" width="144" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="976" y="561" text-anchor="middle" fill="var(--stone-900)">read logs</text></g>
+        <g><rect x="1056" y="536" width="144" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="1128" y="561" text-anchor="middle" fill="var(--stone-900)">re-plan</text></g>
+      </g>
+
+      <!-- TIER 4 (8) -->
+      <g font-family="'IBM Plex Sans', sans-serif" font-size="14" font-weight="600">
+        <g><rect x="150" y="706" width="150" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="225" y="731" text-anchor="middle" fill="var(--stone-900)">reproduce</text></g>
+        <g><rect x="262" y="706" width="136" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="330" y="731" text-anchor="middle" fill="var(--stone-900)">patch</text></g>
+        <g><rect x="448" y="706" width="144" height="40" rx="2" fill="var(--blue)"/><text x="520" y="731" text-anchor="middle" fill="var(--stone-50)" font-weight="700">retry</text></g>
+        <g><rect x="660" y="706" width="160" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="740" y="731" text-anchor="middle" fill="var(--stone-900)">commit</text></g>
+        <g><rect x="948" y="706" width="144" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="1020" y="731" text-anchor="middle" fill="var(--stone-900)">push branch</text></g>
+      </g>
+
+      <!-- TIER 5 (converging, 4) -->
+      <g font-family="'IBM Plex Sans', sans-serif" font-size="14" font-weight="600">
+        <g><rect x="306" y="864" width="148" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="380" y="889" text-anchor="middle" fill="var(--stone-900)">verify green</text></g>
+        <g><rect x="486" y="864" width="148" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="560" y="889" text-anchor="middle" fill="var(--stone-900)">draft PR</text></g>
+        <g><rect x="626" y="864" width="148" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="700" y="889" text-anchor="middle" fill="var(--stone-900)">summarize</text></g>
+        <g><rect x="826" y="864" width="148" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="900" y="889" text-anchor="middle" fill="var(--stone-900)">link issues</text></g>
+      </g>
+
+      <!-- TIER 6 (2, narrowing) -->
+      <g font-family="'IBM Plex Sans', sans-serif" font-size="14" font-weight="600">
+        <g><rect x="486" y="984" width="148" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="560" y="1009" text-anchor="middle" fill="var(--stone-900)">open the PR</text></g>
+        <g><rect x="626" y="984" width="148" height="40" rx="2" fill="var(--stone-100)" stroke="var(--stone-300)" stroke-width="1.5"/><text x="700" y="1009" text-anchor="middle" fill="var(--stone-900)">report back</text></g>
+      </g>
+
+      <!-- RESULT -->
+      <g>
+        <rect x="546" y="1096" width="168" height="60" rx="2" fill="var(--stone-950)"/>
+        <text x="630" y="1124" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="11" letter-spacing="2.5" font-weight="600" fill="var(--blue-lt)">RESULT</text>
+        <text x="630" y="1146" text-anchor="middle" font-family="'IBM Plex Sans', sans-serif" font-size="24" font-weight="700" fill="var(--stone-50)">done</text>
+      </g>
+    </svg>
+
+    <!-- ANNOTATIONS -->
+    <div class="anno" style="top:6px; left:64px; max-width: 200px;">
+      You write this<span class="rule"></span><b>one task &middot; in plain words</b>
+    </div>
+    <div class="anno" style="top:330px; right:60px; max-width: 210px; text-align:right;">
+      <b>Flue writes everything below</b><span class="rule" style="margin-left:auto;"></span>it expands the goal into all the work &mdash; choosing tools, acting, observing, recovering
+    </div>
+    <div class="anno" style="top:548px; left:64px; max-width: 150px;">
+      <b>the loop</b><span class="rule"></span>reason &rarr; act &rarr; observe, repeated
+    </div>
+    <div class="anno" style="bottom:18px; right:60px; max-width: 200px; text-align:right;">
+      <b>one result &middot; out</b><span class="rule" style="margin-left:auto;"></span>many self-chosen steps converge
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>One goal in &middot; many steps &middot; one result &mdash; the agent runs the loop itself</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

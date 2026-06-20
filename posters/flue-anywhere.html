@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — One agent. Every runtime.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand — the one accent */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ───────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 116px; height: 116px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 166px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── HEADLINE DECK ───────────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 14px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 4;
+  }
+  .deck .lede {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--stone-900);
+  }
+  .deck .lede em { font-style: normal; color: var(--blue-2); }
+  .deck .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.34;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    text-align: right;
+    flex: 0 0 360px;
+    padding-left: 28px;
+    padding-bottom: 6px;
+  }
+  .deck .sub b { font-weight: 700; color: var(--stone-900); }
+
+  /* ── HUB-AND-SPOKE MAP — the hero ────────────────────────────────── */
+  .map {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    height: 1010px;
+    border: 1.5px solid var(--stone-900);
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(0deg, var(--stone-100) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(90deg, var(--stone-100) 0 1px, transparent 1px 56px),
+      var(--stone-50);
+  }
+  .map .platemark {
+    position: absolute;
+    top: 14px; left: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    z-index: 8;
+  }
+  .map .platemark b { color: var(--blue-2); }
+  .map .platemark2 {
+    position: absolute;
+    top: 14px; right: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    z-index: 8;
+  }
+  .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* ── EQUATION / SAMENESS STRIP ───────────────────────────────────── */
+  .equation {
+    background: var(--blue);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 16px 64px 17px 64px;
+    margin-top: 22px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .equation .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.85);
+    margin-bottom: 7px;
+  }
+  .equation .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 33px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--stone-50);
+  }
+  .equation .eq .op { color: rgba(250,250,249,0.6); font-weight: 300; }
+  .equation .right-note {
+    text-align: right;
+    flex: 0 0 auto;
+  }
+  .equation .right-note .n1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--stone-50);
+  }
+  .equation .right-note .n2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(250,250,249,0.85);
+    margin-top: 5px;
+  }
+
+  /* ── SYNTHESIS LINE ──────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 70px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.34;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 13px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">write the agent once</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · deployment map</div>
+      <div class="meta">typescript · run it anywhere</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark" aria-hidden="true">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">one definition · six runtimes</span>
+    </span>
+  </div>
+
+  <!-- HEADLINE DECK -->
+  <div class="deck" data-critical="title">
+    <div class="lede">One agent.<br><em>Every runtime.</em></div>
+    <div class="sub">The <b>same</b> Flue agent — unchanged — deploys to every environment. Write it once; the runtime is just where it lands.</div>
+  </div>
+
+  <!-- HUB-AND-SPOKE MAP -->
+  <section class="map" data-reference="muller-brockmann-rhythm" data-encoding="one agent → identical token on every spoke" aria-hidden="true">
+    <div class="platemark">Hub <b>·</b> Six ports</div>
+    <div class="platemark2">same agent travels every spoke</div>
+
+    <!-- W=1132 (1260 - 128 padding), H=1010 -->
+    <svg viewBox="0 0 1132 1010" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <!-- the travelling token: the Flue glyph dots, simplified, on a chip -->
+        <g id="token">
+          <rect x="-15" y="-15" width="30" height="30" fill="var(--stone-50)" stroke="var(--blue)" stroke-width="2"/>
+          <rect x="2.5" y="-11" width="5" height="5" fill="var(--blue)"/>
+          <rect x="-2.5" y="-3.5" width="5" height="5" fill="var(--blue)"/>
+          <rect x="2.5" y="4" width="5" height="5" fill="var(--blue)"/>
+          <rect x="-7.5" y="-3.5" width="5" height="5" fill="var(--blue)"/>
+        </g>
+      </defs>
+
+      <!-- ===== SPOKES (straight radial rails) ===== -->
+      <!-- hub center: 566,505 ; stations on a ring -->
+      <g stroke="var(--blue)" stroke-width="2.5">
+        <line x1="566" y1="505" x2="226"  y2="172"/>
+        <line x1="566" y1="505" x2="906"  y2="172"/>
+        <line x1="566" y1="505" x2="1012" y2="505"/>
+        <line x1="566" y1="505" x2="906"  y2="838"/>
+        <line x1="566" y1="505" x2="226"  y2="838"/>
+        <line x1="566" y1="505" x2="120"  y2="505"/>
+      </g>
+
+      <!-- travelling token repeated mid-spoke: SAME agent on every rail -->
+      <use href="#token" x="396"  y="338.5"/>
+      <use href="#token" x="736"  y="338.5"/>
+      <use href="#token" x="789"  y="505"/>
+      <use href="#token" x="736"  y="671.5"/>
+      <use href="#token" x="396"  y="671.5"/>
+      <use href="#token" x="343"  y="505"/>
+
+      <!-- ===== STATIONS / PORTS (terminal boxes) ===== -->
+      <!-- each: box + tick label + caption. width 196, height 92 -->
+      <!-- 1: Node.js (top-left) -->
+      <g transform="translate(226,172)">
+        <rect x="-98" y="-46" width="196" height="92" fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="2"/>
+        <rect x="-98" y="-46" width="10" height="92" fill="var(--blue)"/>
+        <text x="-76" y="-16" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="27" letter-spacing="-0.02em" fill="var(--stone-900)">Node.js</text>
+        <text x="-76" y="9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="0.12em" fill="var(--blue-2)">PORT 01</text>
+        <text x="-76" y="29" font-family="'IBM Plex Sans',sans-serif" font-size="13.5" fill="var(--stone-500)">the default server runtime</text>
+      </g>
+      <!-- 2: Cloudflare Workers (top-right) -->
+      <g transform="translate(906,172)">
+        <rect x="-98" y="-46" width="196" height="92" fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="2"/>
+        <rect x="-98" y="-46" width="10" height="92" fill="var(--blue)"/>
+        <text x="-76" y="-20" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="23" letter-spacing="-0.02em" fill="var(--stone-900)">Cloudflare</text>
+        <text x="-76" y="3" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="23" letter-spacing="-0.02em" fill="var(--stone-900)">Workers</text>
+        <text x="-76" y="29" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="0.12em" fill="var(--blue-2)">PORT 02 · edge</text>
+      </g>
+      <!-- 3: Render (right) -->
+      <g transform="translate(1012,505)">
+        <rect x="-98" y="-46" width="196" height="92" fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="2"/>
+        <rect x="-98" y="-46" width="10" height="92" fill="var(--blue)"/>
+        <text x="-76" y="-16" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="27" letter-spacing="-0.02em" fill="var(--stone-900)">Render</text>
+        <text x="-76" y="9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="0.12em" fill="var(--blue-2)">PORT 03</text>
+        <text x="-76" y="29" font-family="'IBM Plex Sans',sans-serif" font-size="13.5" fill="var(--stone-500)">managed cloud host</text>
+      </g>
+      <!-- 4: GitLab CI/CD (bottom-right) -->
+      <g transform="translate(906,838)">
+        <rect x="-98" y="-46" width="196" height="92" fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="2"/>
+        <rect x="-98" y="-46" width="10" height="92" fill="var(--blue)"/>
+        <text x="-76" y="-16" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="27" letter-spacing="-0.02em" fill="var(--stone-900)">GitLab</text>
+        <text x="-76" y="9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="0.12em" fill="var(--blue-2)">PORT 04 · CI/CD</text>
+        <text x="-76" y="29" font-family="'IBM Plex Sans',sans-serif" font-size="13.5" fill="var(--stone-500)">pipeline job runner</text>
+      </g>
+      <!-- 5: GitHub Actions (bottom-left) -->
+      <g transform="translate(226,838)">
+        <rect x="-98" y="-46" width="196" height="92" fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="2"/>
+        <rect x="-98" y="-46" width="10" height="92" fill="var(--blue)"/>
+        <text x="-76" y="-16" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="27" letter-spacing="-0.02em" fill="var(--stone-900)">GitHub</text>
+        <text x="-76" y="9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="0.12em" fill="var(--blue-2)">PORT 05 · Actions</text>
+        <text x="-76" y="29" font-family="'IBM Plex Sans',sans-serif" font-size="13.5" fill="var(--stone-500)">workflow runner</text>
+      </g>
+      <!-- 6: Daytona (left) -->
+      <g transform="translate(120,505)">
+        <rect x="-98" y="-46" width="196" height="92" fill="var(--stone-50)" stroke="var(--stone-900)" stroke-width="2"/>
+        <rect x="-98" y="-46" width="10" height="92" fill="var(--blue)"/>
+        <text x="-76" y="-16" font-family="'IBM Plex Sans',sans-serif" font-weight="700" font-size="27" letter-spacing="-0.02em" fill="var(--stone-900)">Daytona</text>
+        <text x="-76" y="9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="0.12em" fill="var(--blue-2)">PORT 06</text>
+        <text x="-76" y="29" font-family="'IBM Plex Sans',sans-serif" font-size="13.5" fill="var(--stone-500)">dev sandbox host</text>
+      </g>
+
+      <!-- ===== HUB (central core node = the one agent) ===== -->
+      <circle cx="566" cy="505" r="120" fill="var(--blue)"/>
+      <circle cx="566" cy="505" r="120" fill="none" stroke="var(--stone-900)" stroke-width="2"/>
+      <!-- glyph mark inside hub, scaled from the 6x6 grid (cell ~17) -->
+      <g transform="translate(566,505)">
+        <rect x="8.5"   y="-42.5" width="17" height="17" fill="var(--stone-50)"/>
+        <rect x="-8.5"  y="-25.5" width="17" height="17" fill="var(--stone-50)"/>
+        <rect x="8.5"   y="-8.5"  width="17" height="17" fill="var(--stone-50)"/>
+        <rect x="-8.5"  y="8.5"   width="17" height="17" fill="var(--stone-50)"/>
+      </g>
+      <text x="566" y="568" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-weight="600" font-size="14" letter-spacing="0.14em" fill="var(--stone-50)">ONE AGENT</text>
+    </svg>
+  </section>
+
+  <!-- SAMENESS STRIP -->
+  <section class="equation">
+    <div>
+      <div class="lab">The identical agent, on every spoke</div>
+      <div class="eq">Define&nbsp;once <span class="op">→</span> Build <span class="op">→</span> Deploy&nbsp;to&nbsp;any&nbsp;port</div>
+    </div>
+    <div class="right-note">
+      <div class="n1">Portability is the point.</div>
+      <div class="n2">no rewrite · no fork · no port-specific build</div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth" data-critical="body">
+    One Flue agent at the hub; six runtime ports at the spoke ends — <b>Node.js, Cloudflare&nbsp;Workers, GitHub&nbsp;Actions, GitLab&nbsp;CI/CD, Daytona, and Render.</b>
+    <em>Write the agent once, then run it anywhere it needs to live.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>One agent · six runtimes · zero rewrites</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

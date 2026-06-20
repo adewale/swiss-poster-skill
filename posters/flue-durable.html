@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — It remembers. It recovers.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ───────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 110px; height: 110px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-950);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-950);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── HEADLINE / DECK ─────────────────────────────────────────────── */
+  .headline {
+    border-top: 4px solid var(--stone-950);
+    padding-top: 14px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 4;
+  }
+  .headline .h {
+    font-family: 'Barlow Condensed', 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 0.84;
+    letter-spacing: -0.02em;
+    color: var(--stone-950);
+    text-transform: none;
+  }
+  .headline .h em { font-style: normal; color: var(--blue-2); }
+  .headline .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 40ch;
+    text-align: right;
+    padding-bottom: 6px;
+  }
+  .headline .sub b { font-weight: 700; color: var(--stone-950); }
+
+  /* ── TAPE / TIMELINE HERO ────────────────────────────────────────── */
+  .tape-wrap {
+    position: relative;
+    z-index: 4;
+    background: var(--stone-950);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 30px 64px 36px 64px;
+    margin-bottom: 24px;
+  }
+  .tape-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .tape-head .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-lt);
+  }
+  .tape-head .lab .dim { color: rgba(250,250,249,0.55); }
+  .tape-head .right {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(250,250,249,0.55);
+  }
+  .tape-svg { display: block; width: 100%; height: auto; }
+
+  /* ── EVENTS LEGEND BELOW TAPE ────────────────────────────────────── */
+  .legend {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 0;
+    margin-bottom: 24px;
+  }
+  .legend .cell {
+    border-top: 1.5px solid var(--stone-950);
+    border-right: 1px solid var(--stone-200);
+    padding: 14px 22px 14px 0;
+  }
+  .legend .cell:nth-child(3n) { border-right: 0; padding-right: 0; }
+  .legend .cell .tk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 8px;
+  }
+  .legend .cell .nm {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+    color: var(--stone-950);
+    margin-bottom: 6px;
+  }
+  .legend .cell .dc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.38;
+    color: var(--stone-500);
+  }
+  .legend .cell .dc b { color: var(--stone-700); font-weight: 600; }
+
+  /* ── THREE PILLAR PLATE ──────────────────────────────────────────── */
+  .pillars {
+    position: relative;
+    z-index: 4;
+    border-top: 4px solid var(--blue);
+    padding-top: 0;
+  }
+  .pillar {
+    display: grid;
+    grid-template-columns: 124px 1fr 270px;
+    align-items: stretch;
+    border-bottom: 1.5px solid var(--stone-950);
+  }
+  .pillar .idx {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 78px;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: var(--stone-300);
+    padding: 16px 0 12px 0;
+    user-select: none;
+  }
+  .pillar .mid { padding: 16px 26px 16px 4px; }
+  .pillar .mid .name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--stone-950);
+  }
+  .pillar .mid .role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-top: 8px;
+  }
+  .pillar .mid .desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.36;
+    color: var(--stone-700);
+    margin-top: 7px;
+    max-width: 56ch;
+  }
+  .pillar .mid .desc b { color: var(--stone-950); font-weight: 600; }
+  .pillar .carrier {
+    border-left: 1.5px solid var(--stone-200);
+    padding: 16px 0 16px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pillar .carrier .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--blue-2);
+    font-weight: 600;
+  }
+  .pillar .carrier .v {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--stone-950);
+    letter-spacing: -0.01em;
+    margin-top: 5px;
+  }
+  .pillar .carrier .note {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--stone-500);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+
+  /* ── SYNTHESIS line ──────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 90px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.34;
+    letter-spacing: -0.015em;
+    color: var(--stone-950);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">durable · stateful · recovers</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · session tape</div>
+      <div class="meta">one run, across time</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">durable agents that keep going</span>
+    </span>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="headline">
+    <div class="h">It remembers.<br><em>It recovers.</em></div>
+    <div class="sub">One durable session, running over time. State <b>persists</b> across turns and events, long history is <b>compacted</b> into memory, and a crash is just a point the agent <b>resumes</b> from.</div>
+  </div>
+
+  <!-- TAPE / TIMELINE HERO -->
+  <section class="tape-wrap">
+    <div class="tape-head">
+      <div class="lab">The session tape <span class="dim">— task begin → goal reached</span></div>
+      <div class="right">ticks = turns / steps</div>
+    </div>
+
+    <svg class="tape-svg" viewBox="0 0 1132 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A horizontal session timeline: task begins, context grows, history is compacted into memory, a crash occurs, the agent recovers and resumes, the run spans conversations and events, and the goal is reached.">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4DA3FF"/>
+        </marker>
+      </defs>
+
+      <!-- baseline rules -->
+      <!-- main tape track at y=180 -->
+      <!-- pre-crash segment -->
+      <line x1="40" y1="180" x2="690" y2="180" stroke="#4DA3FF" stroke-width="4"/>
+      <!-- crash break: dashed bridge the agent spans -->
+      <line x1="690" y1="180" x2="790" y2="180" stroke="rgba(250,250,249,0.30)" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+      <!-- recover arc bridging the break -->
+      <path d="M690,180 C715,118 765,118 790,180" fill="none" stroke="#4DA3FF" stroke-width="3" stroke-dasharray="7 6"/>
+      <!-- post-recover segment, arrow to goal -->
+      <line x1="790" y1="180" x2="1086" y2="180" stroke="#4DA3FF" stroke-width="4" marker-end="url(#arrow)"/>
+
+      <!-- minor ticks (turns / steps) -->
+      <g stroke="rgba(250,250,249,0.32)" stroke-width="2">
+        <line x1="40"  y1="170" x2="40"  y2="190"/>
+        <line x1="100" y1="172" x2="100" y2="188"/>
+        <line x1="160" y1="172" x2="160" y2="188"/>
+        <line x1="220" y1="172" x2="220" y2="188"/>
+        <line x1="280" y1="172" x2="280" y2="188"/>
+        <line x1="340" y1="172" x2="340" y2="188"/>
+        <line x1="400" y1="172" x2="400" y2="188"/>
+        <line x1="460" y1="172" x2="460" y2="188"/>
+        <line x1="520" y1="172" x2="520" y2="188"/>
+        <line x1="580" y1="172" x2="580" y2="188"/>
+        <line x1="640" y1="172" x2="640" y2="188"/>
+        <line x1="850" y1="172" x2="850" y2="188"/>
+        <line x1="910" y1="172" x2="910" y2="188"/>
+        <line x1="970" y1="172" x2="970" y2="188"/>
+        <line x1="1030" y1="172" x2="1030" y2="188"/>
+      </g>
+
+      <!-- conversation / event spans (under the track) -->
+      <g font-family="'IBM Plex Mono', monospace" font-size="11" letter-spacing="1" fill="rgba(250,250,249,0.55)">
+        <line x1="40"  y1="240" x2="300" y2="240" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <line x1="40"  y1="234" x2="40"  y2="246" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <line x1="300" y1="234" x2="300" y2="246" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <text x="48" y="262">CONVERSATION #1</text>
+
+        <line x1="320" y1="240" x2="640" y2="240" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <line x1="320" y1="234" x2="320" y2="246" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <line x1="640" y1="234" x2="640" y2="246" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <text x="328" y="262">SCHEDULED EVENT</text>
+
+        <line x1="810" y1="240" x2="1086" y2="240" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <line x1="810" y1="234" x2="810" y2="246" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <line x1="1086" y1="234" x2="1086" y2="246" stroke="rgba(250,250,249,0.30)" stroke-width="1.5"/>
+        <text x="818" y="262">CONVERSATION #2</text>
+      </g>
+      <text x="40" y="296" font-family="'IBM Plex Mono', monospace" font-size="10.5" letter-spacing="2" fill="rgba(250,250,249,0.40)">SPANS MANY CONVERSATIONS &amp; EVENTS — STATE CARRIES ACROSS ALL OF THEM</text>
+
+      <!-- NODE: task begins -->
+      <circle cx="40" cy="180" r="9" fill="#fafaf9"/>
+      <circle cx="40" cy="180" r="9" fill="none" stroke="#007AFF" stroke-width="3"/>
+      <line x1="40" y1="171" x2="40" y2="92" stroke="rgba(250,250,249,0.30)" stroke-width="1"/>
+      <text x="40" y="80" text-anchor="start" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5" fill="#fafaf9">TASK BEGINS</text>
+      <text x="40" y="62" text-anchor="start" font-family="'IBM Plex Mono', monospace" font-size="10" letter-spacing="1.5" fill="rgba(250,250,249,0.55)">goal, not a script</text>
+
+      <!-- context grows: wedge under early track -->
+      <path d="M40,180 L300,180 L300,150 Z" fill="rgba(77,163,255,0.22)"/>
+      <text x="170" y="138" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10.5" letter-spacing="1.5" fill="#4DA3FF">CONTEXT GROWS</text>
+
+      <!-- NODE: compaction -->
+      <circle cx="340" cy="180" r="9" fill="#007AFF"/>
+      <line x1="340" y1="171" x2="340" y2="116" stroke="rgba(250,250,249,0.30)" stroke-width="1"/>
+      <text x="340" y="104" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5" fill="#fafaf9">COMPACTION</text>
+      <text x="340" y="86" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" letter-spacing="1" fill="rgba(250,250,249,0.55)">history folded → memory</text>
+      <!-- fold glyph: long bars collapsing to one -->
+      <g stroke="#4DA3FF" stroke-width="2">
+        <line x1="318" y1="150" x2="362" y2="150"/>
+        <line x1="324" y1="142" x2="356" y2="142"/>
+        <line x1="332" y1="134" x2="348" y2="134"/>
+      </g>
+
+      <!-- NODE: crash / failure -->
+      <line x1="690" y1="171" x2="690" y2="116" stroke="rgba(250,250,249,0.30)" stroke-width="1"/>
+      <text x="690" y="104" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5" fill="#fafaf9">CRASH</text>
+      <text x="690" y="86" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" letter-spacing="1" fill="rgba(250,250,249,0.55)">process fails — state survives</text>
+      <!-- break mark: hollow square with slash -->
+      <rect x="681" y="171" width="18" height="18" fill="#0c0a09" stroke="#4DA3FF" stroke-width="2.5"/>
+      <line x1="683" y1="189" x2="697" y2="171" stroke="#4DA3FF" stroke-width="2.5"/>
+
+      <!-- RECOVER label over the arc -->
+      <text x="740" y="108" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5" fill="#4DA3FF">RECOVER &amp; RESUME</text>
+      <text x="740" y="126" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" letter-spacing="1" fill="rgba(250,250,249,0.55)">picks up where it left off</text>
+
+      <!-- NODE: resumes (post-crash anchor) -->
+      <circle cx="790" cy="180" r="9" fill="#fafaf9"/>
+      <circle cx="790" cy="180" r="9" fill="none" stroke="#007AFF" stroke-width="3"/>
+
+      <!-- NODE: goal reached -->
+      <circle cx="1086" cy="180" r="11" fill="#007AFF"/>
+      <circle cx="1086" cy="180" r="4" fill="#fafaf9"/>
+      <line x1="1086" y1="167" x2="1086" y2="92" stroke="rgba(250,250,249,0.30)" stroke-width="1"/>
+      <text x="1086" y="80" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5" fill="#fafaf9">GOAL REACHED</text>
+      <text x="1086" y="62" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="10" letter-spacing="1.5" fill="rgba(250,250,249,0.55)">unbroken in outcome</text>
+    </svg>
+  </section>
+
+  <!-- LEGEND: the three moments along the tape -->
+  <section class="legend">
+    <div class="cell">
+      <div class="tk">turn → turn → turn</div>
+      <div class="nm">Persist</div>
+      <div class="dc">A session keeps its <b>state across every turn</b>, so the agent never starts the conversation over.</div>
+    </div>
+    <div class="cell">
+      <div class="tk">long history → memory</div>
+      <div class="nm">Compact</div>
+      <div class="dc">When context grows large it is <b>folded into memory</b> — the agent stays oriented instead of forgetting.</div>
+    </div>
+    <div class="cell">
+      <div class="tk">crash → resume</div>
+      <div class="nm">Recover</div>
+      <div class="dc">After a failure the run <b>resumes from saved state</b>, bridging the break rather than restarting.</div>
+    </div>
+  </section>
+
+  <!-- THREE PILLARS -->
+  <section class="pillars">
+    <div class="pillar">
+      <div class="idx">01</div>
+      <div class="mid">
+        <div class="name">Stateful sessions</div>
+        <div class="role">memory that lasts the run</div>
+        <div class="desc">Each session carries its working state forward — across turns, across conversations, and across the events that wake the agent. It works <b>autonomously toward one goal</b> without losing the thread.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">session:</div>
+        <div class="v">persisted</div>
+        <div class="note">turns &amp; events, one thread</div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="idx">02</div>
+      <div class="mid">
+        <div class="name">Compacted context</div>
+        <div class="role">long history, kept usable</div>
+        <div class="desc">As the conversation grows past what fits, older history is <b>compacted into durable memory.</b> The agent keeps the salient facts and decisions, so a long task does not mean a forgotten one.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">context:</div>
+        <div class="v">compacted</div>
+        <div class="note">folded, not dropped</div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="idx">03</div>
+      <div class="mid">
+        <div class="name">Crash recovery</div>
+        <div class="role">resume, never restart</div>
+        <div class="desc">If the process fails mid-run, the saved state outlives it. The agent <b>resumes from where it stopped</b> — the timeline shows a break, but the outcome stays unbroken.</div>
+      </div>
+      <div class="carrier">
+        <div class="k">adapter:</div>
+        <div class="v">@flue/postgres</div>
+        <div class="note">durable persistence</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    State that <b>persists</b>, history that gets <b>compacted</b> into memory, and a run that <b>recovers</b> after a crash.
+    <em>One durable session, working toward the goal — across time, conversations, and failures.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>One session · across time · unbroken in outcome</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The model is a slot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand — sole accent */
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE lockup ──────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-950);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-950);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── DECK / HEADLINE ───────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-950);
+    padding-top: 12px;
+    margin-bottom: 20px;
+  }
+  .deck .head {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 78px;
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+    color: var(--stone-950);
+  }
+  .deck .head em { font-style: normal; color: var(--blue-2); }
+  .deck .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 36ch;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 30px;
+    padding-bottom: 6px;
+  }
+  .deck .sub b { font-weight: 700; color: var(--stone-950); }
+
+  /* ── HERO STAGE — the socket/adapter ───────────────────────────── */
+  .stage {
+    position: relative;
+    z-index: 3;
+    height: 818px;
+    margin: 0 -64px 0 -64px;
+    background: var(--stone-100);
+    border-top: 1.5px solid var(--stone-950);
+    border-bottom: 1.5px solid var(--stone-950);
+    overflow: hidden;
+  }
+  .stage svg { display: block; width: 1260px; height: 818px; }
+
+  /* ── BOTTOM: harness ledger ────────────────────────────────────── */
+  .ledger {
+    position: relative;
+    z-index: 4;
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+  .ledger .cell {
+    border-top: 1.5px solid var(--stone-950);
+    border-right: 1px solid var(--stone-200);
+    padding: 12px 16px 4px 0;
+  }
+  .ledger .cell:last-child { border-right: 0; }
+  .ledger .cell .ck {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 7px;
+  }
+  .ledger .cell .cn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+    color: var(--stone-950);
+    margin-bottom: 5px;
+  }
+  .ledger .cell .cd {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.34;
+    color: var(--stone-500);
+    padding-right: 8px;
+  }
+  .ledger .cell .cd b { color: var(--stone-700); font-weight: 600; }
+
+  /* ── SYNTHESIS ─────────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 78px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.34;
+    letter-spacing: -0.015em;
+    color: var(--stone-950);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 13px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .synth .pin {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-style: normal;
+    color: var(--blue-2);
+    font-size: 20px;
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">the model is a swappable part</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field guide</div>
+      <div class="meta">harness in, model out</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+
+  <!-- DECK / HEADLINE -->
+  <div class="deck">
+    <div class="head">The model<br>is a <em>slot.</em></div>
+    <div class="sub">You choose the reasoning core and plug it in. The <b>harness</b> around it — tools, skills, sandbox, memory, the loop — stays the same.</div>
+  </div>
+
+  <!-- HERO STAGE -->
+  <div class="stage" aria-label="A model chip plugging into the harness socket, surrounded by fixed harness modules">
+    <svg viewBox="0 0 1260 818" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <style>
+          .lab  { font-family:'IBM Plex Mono', monospace; font-weight:600; }
+          .modn { font-family:'IBM Plex Sans', sans-serif; font-weight:700; }
+        </style>
+      </defs>
+
+      <!-- wiring: harness modules wire INTO the socket frame, not the chip -->
+      <g stroke="var(--blue)" stroke-width="2.5" fill="none" opacity="0.55" stroke-linecap="round">
+        <!-- top-left: tools -->
+        <path d="M 250 196 L 250 300 L 470 300 L 470 360"/>
+        <!-- top-right: skills -->
+        <path d="M 1010 196 L 1010 300 L 790 300 L 790 360"/>
+        <!-- bottom-left: sandbox -->
+        <path d="M 250 622 L 250 520 L 470 520 L 470 460"/>
+        <!-- bottom-right: sessions/memory -->
+        <path d="M 1010 622 L 1010 520 L 790 520 L 790 460"/>
+        <!-- left: the loop, full wrap -->
+        <path d="M 150 409 L 360 409"/>
+      </g>
+      <!-- wire junction dots on the socket frame -->
+      <g fill="var(--blue)">
+        <circle cx="470" cy="360" r="5"/>
+        <circle cx="790" cy="360" r="5"/>
+        <circle cx="470" cy="460" r="5"/>
+        <circle cx="790" cy="460" r="5"/>
+        <circle cx="360" cy="409" r="5"/>
+      </g>
+
+      <!-- HARNESS MODULES — fixed, identical treatment, stone outline -->
+      <!-- Tools -->
+      <g>
+        <rect x="120" y="120" width="260" height="76" fill="var(--stone-50)" stroke="var(--stone-950)" stroke-width="2"/>
+        <text x="138" y="153" class="modn" font-size="30" fill="var(--stone-950)">Tools</text>
+        <text x="138" y="178" class="lab" font-size="13" fill="var(--stone-500)" letter-spacing="0.5">TYPED ACTIONS</text>
+      </g>
+      <!-- Skills -->
+      <g>
+        <rect x="880" y="120" width="260" height="76" fill="var(--stone-50)" stroke="var(--stone-950)" stroke-width="2"/>
+        <text x="898" y="153" class="modn" font-size="30" fill="var(--stone-950)">Skills</text>
+        <text x="898" y="178" class="lab" font-size="13" fill="var(--stone-500)" letter-spacing="0.5">LOADED EXPERTISE</text>
+      </g>
+      <!-- Sandbox -->
+      <g>
+        <rect x="120" y="622" width="260" height="76" fill="var(--stone-50)" stroke="var(--stone-950)" stroke-width="2"/>
+        <text x="138" y="655" class="modn" font-size="30" fill="var(--stone-950)">Sandbox</text>
+        <text x="138" y="680" class="lab" font-size="13" fill="var(--stone-500)" letter-spacing="0.5">ISOLATED EXECUTION</text>
+      </g>
+      <!-- Sessions / Memory -->
+      <g>
+        <rect x="880" y="622" width="260" height="76" fill="var(--stone-50)" stroke="var(--stone-950)" stroke-width="2"/>
+        <text x="898" y="650" class="modn" font-size="28" fill="var(--stone-950)">Sessions</text>
+        <text x="898" y="680" class="lab" font-size="13" fill="var(--stone-500)" letter-spacing="0.5">MEMORY &amp; STATE</text>
+      </g>
+
+      <!-- THE LOOP — a ring that belongs to the harness, wrapping the socket -->
+      <g>
+        <ellipse cx="630" cy="409" rx="318" ry="262" fill="none" stroke="var(--stone-300)" stroke-width="2" stroke-dasharray="3 9"/>
+        <!-- loop arrowhead suggesting circulation -->
+        <path d="M 318 386 L 312 409 L 336 405 Z" fill="var(--stone-400)"/>
+        <text x="312" y="135" class="lab" font-size="13" fill="var(--stone-500)" letter-spacing="2" text-anchor="middle" transform="rotate(0)">THE&#160;LOOP&#160;·&#160;THINK&#160;→&#160;ACT&#160;→&#160;OBSERVE</text>
+      </g>
+
+      <!-- ════ THE SOCKET FRAME (harness side) ════ -->
+      <!-- socket body -->
+      <rect x="360" y="285" width="540" height="248" fill="var(--stone-50)" stroke="var(--stone-950)" stroke-width="3"/>
+      <!-- socket header bar -->
+      <rect x="360" y="285" width="540" height="44" fill="var(--stone-950)"/>
+      <text x="384" y="315" class="lab" font-size="15" fill="var(--stone-50)" letter-spacing="3">MODEL&#160;SOCKET</text>
+      <text x="876" y="315" class="lab" font-size="13" fill="var(--stone-400)" letter-spacing="2" text-anchor="end">HARNESS&#160;SIDE</text>
+
+      <!-- socket receptacle (the slot the chip drops into) -->
+      <rect x="396" y="392" width="468" height="118" fill="var(--stone-200)" stroke="var(--stone-950)" stroke-width="2"/>
+      <!-- receptacle pin contacts (engaged side, lit blue) -->
+      <g fill="var(--blue)">
+        <rect x="430" y="392" width="9" height="26"/>
+        <rect x="466" y="392" width="9" height="26"/>
+        <rect x="502" y="392" width="9" height="26"/>
+        <rect x="538" y="392" width="9" height="26"/>
+        <rect x="574" y="392" width="9" height="26"/>
+        <rect x="610" y="392" width="9" height="26"/>
+        <rect x="646" y="392" width="9" height="26"/>
+        <rect x="682" y="392" width="9" height="26"/>
+        <rect x="718" y="392" width="9" height="26"/>
+        <rect x="754" y="392" width="9" height="26"/>
+        <rect x="790" y="392" width="9" height="26"/>
+        <rect x="826" y="392" width="9" height="26"/>
+      </g>
+
+      <!-- ════ THE MODEL CHIP / CARTRIDGE (plugging IN) ════ -->
+      <!-- chip pins descending into the receptacle -->
+      <g fill="var(--blue-2)">
+        <rect x="430" y="362" width="9" height="32"/>
+        <rect x="466" y="362" width="9" height="32"/>
+        <rect x="502" y="362" width="9" height="32"/>
+        <rect x="538" y="362" width="9" height="32"/>
+        <rect x="574" y="362" width="9" height="32"/>
+        <rect x="610" y="362" width="9" height="32"/>
+        <rect x="646" y="362" width="9" height="32"/>
+        <rect x="682" y="362" width="9" height="32"/>
+        <rect x="718" y="362" width="9" height="32"/>
+        <rect x="754" y="362" width="9" height="32"/>
+        <rect x="790" y="362" width="9" height="32"/>
+        <rect x="826" y="362" width="9" height="32"/>
+      </g>
+      <!-- chip body — the hero, solid blue cartridge -->
+      <rect x="396" y="346" width="468" height="34" fill="var(--blue)" stroke="var(--blue-2)" stroke-width="2"/>
+      <!-- chip notch / grip -->
+      <rect x="600" y="346" width="60" height="9" fill="var(--blue-2)"/>
+      <text x="630" y="370" class="modn" font-size="20" fill="var(--stone-50)" text-anchor="middle" letter-spacing="-0.3">anthropic / claude-sonnet-4-6</text>
+
+      <!-- ENGAGE callout -->
+      <text x="630" y="486" class="lab" font-size="14" fill="var(--blue-2)" text-anchor="middle" letter-spacing="3">PINS&#160;ENGAGED</text>
+
+      <!-- ════ SWAP MOTIF — alternate ghost slot ════ -->
+      <!-- swap arrow lifting the chip out -->
+      <g stroke="var(--blue)" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M 940 363 C 1020 363, 1060 300, 1095 250"/>
+      </g>
+      <path d="M 1100 268 L 1097 240 L 1075 258 Z" fill="var(--blue)"/>
+
+      <!-- ghost / empty alternate cartridge -->
+      <g>
+        <rect x="980" y="208" width="220" height="34" fill="none" stroke="var(--blue)" stroke-width="2" stroke-dasharray="6 6"/>
+        <g fill="var(--blue)" opacity="0.45">
+          <rect x="1004" y="242" width="7" height="22"/>
+          <rect x="1032" y="242" width="7" height="22"/>
+          <rect x="1060" y="242" width="7" height="22"/>
+          <rect x="1088" y="242" width="7" height="22"/>
+          <rect x="1116" y="242" width="7" height="22"/>
+          <rect x="1144" y="242" width="7" height="22"/>
+          <rect x="1172" y="242" width="7" height="22"/>
+        </g>
+        <text x="1090" y="231" class="lab" font-size="14" fill="var(--blue-2)" text-anchor="middle" letter-spacing="2">provider / model</text>
+      </g>
+
+      <!-- second ghost slot, low, abstract -->
+      <g opacity="0.8">
+        <rect x="62" y="350" width="200" height="30" fill="none" stroke="var(--stone-400)" stroke-width="2" stroke-dasharray="5 6"/>
+        <text x="162" y="370" class="lab" font-size="13" fill="var(--stone-500)" text-anchor="middle" letter-spacing="2">model</text>
+        <g fill="var(--stone-400)">
+          <rect x="86" y="380" width="6" height="16"/>
+          <rect x="110" y="380" width="6" height="16"/>
+          <rect x="134" y="380" width="6" height="16"/>
+          <rect x="158" y="380" width="6" height="16"/>
+          <rect x="182" y="380" width="6" height="16"/>
+          <rect x="206" y="380" width="6" height="16"/>
+          <rect x="230" y="380" width="6" height="16"/>
+        </g>
+      </g>
+
+      <!-- SWAP label -->
+      <text x="1090" y="190" class="lab" font-size="15" fill="var(--blue-2)" text-anchor="middle" letter-spacing="3">SWAP</text>
+    </svg>
+  </div>
+
+  <!-- HARNESS LEDGER -->
+  <div class="ledger">
+    <div class="cell">
+      <div class="ck">tools:</div>
+      <div class="cn">Tools</div>
+      <div class="cd">Typed actions that reach <b>your APIs</b> — wired to the socket.</div>
+    </div>
+    <div class="cell">
+      <div class="ck">skills:</div>
+      <div class="cn">Skills</div>
+      <div class="cd">Packaged expertise the agent <b>loads on demand.</b></div>
+    </div>
+    <div class="cell">
+      <div class="ck">sandbox:</div>
+      <div class="cn">Sandbox</div>
+      <div class="cd">An <b>isolated</b> place to run code and edit files.</div>
+    </div>
+    <div class="cell">
+      <div class="ck">sessions:</div>
+      <div class="cn">Memory</div>
+      <div class="cd">Sessions that carry <b>state</b> across runs.</div>
+    </div>
+    <div class="cell">
+      <div class="ck">loop:</div>
+      <div class="cn">The Loop</div>
+      <div class="cd">Think, act, observe — the engine that <b>keeps going.</b></div>
+    </div>
+  </div>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    The harness is <b>durable and model-agnostic.</b> Plug in <span class="pin">anthropic/claude-sonnet-4-6</span>,
+    or swap the reasoning core for another — <em>everything wired around the socket stays exactly where it is.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>One socket · any model · the same harness</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

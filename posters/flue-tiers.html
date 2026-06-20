@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Choose the narrowest sandbox · Three Tiers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ───────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 132px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── DECK / HEADLINE ─────────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 14px;
+    margin-bottom: 22px;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+    max-width: 22ch;
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── THE LADDER — hero ───────────────────────────────────────────── */
+  .ladder {
+    position: relative;
+    z-index: 4;
+    margin-bottom: 20px;
+  }
+  .ladder-svg { display: block; width: 100%; height: auto; }
+
+  /* ── TIER DETAIL ROWS ────────────────────────────────────────────── */
+  .tiers { position: relative; z-index: 4; }
+  .trow {
+    display: grid;
+    grid-template-columns: 60px 230px 1fr 248px;
+    align-items: stretch;
+    border-top: 1.5px solid var(--stone-900);
+  }
+  .trow:last-child { border-bottom: 1.5px solid var(--stone-900); }
+  .trow .step {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--blue-2);
+    padding: 16px 0 0 0;
+    letter-spacing: 0.04em;
+  }
+  .trow .nm { padding: 14px 22px 14px 0; }
+  .trow .nm .name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+  }
+  .trow .nm .call {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-top: 9px;
+    letter-spacing: -0.01em;
+  }
+  .trow .gl {
+    padding: 16px 26px 16px 4px;
+    border-left: 1.5px solid var(--stone-200);
+    padding-left: 24px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .trow .gl .role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    margin-bottom: 7px;
+  }
+  .trow .gl .desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16.5px;
+    line-height: 1.34;
+    color: var(--stone-700);
+  }
+  .trow .gl .desc b { color: var(--stone-900); font-weight: 600; }
+  .trow .use {
+    border-left: 1.5px solid var(--stone-200);
+    padding: 16px 0 16px 22px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .trow .use .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    font-weight: 600;
+  }
+  .trow .use .v {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.32;
+    color: var(--stone-900);
+    font-weight: 500;
+    margin-top: 6px;
+  }
+
+  /* ── RULE STRIP — full bleed blue ────────────────────────────────── */
+  .rule {
+    background: var(--blue);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 18px 64px 20px 64px;
+    margin-top: 22px;
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 30px;
+  }
+  .rule .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(250,250,249,0.85);
+    flex: 0 0 auto;
+    align-self: center;
+  }
+  .rule .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--stone-50);
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">graduated sandbox security</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field guide</div>
+      <div class="meta">where the agent does real work</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">filesystem &amp; shell, safely contained</span>
+    </span>
+  </div>
+
+  <!-- DECK -->
+  <div class="deck">
+    <div class="deck-big">Choose the <b>narrowest</b><br>sandbox.</div>
+    <div class="deck-count">Three tiers<br>Virtual · Local · Remote<br>low → high isolation</div>
+  </div>
+
+  <!-- THE LADDER -->
+  <section class="ladder">
+    <svg class="ladder-svg" viewBox="0 0 1132 540" role="img" aria-label="A stepped ladder of three sandbox tiers ascending left to right: Virtual, Local, Remote.">
+      <defs>
+        <!-- arrowhead for the climb axis -->
+        <marker id="ah" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto">
+          <path d="M0 0 L8 4 L0 8 Z" fill="#1c1917"/>
+        </marker>
+      </defs>
+
+      <!-- baseline -->
+      <line x1="0" y1="512" x2="1132" y2="512" stroke="#1c1917" stroke-width="1.5"/>
+
+      <!-- ===== STEP 1 · VIRTUAL (lowest) ============================= -->
+      <g>
+        <rect x="0" y="384" width="356" height="128" fill="none" stroke="#1c1917" stroke-width="1.5"/>
+        <!-- containment glyph: single light shell -->
+        <rect x="32" y="416" width="80" height="64" fill="none" stroke="#0057D8" stroke-width="2"/>
+        <!-- in-memory dashes -->
+        <line x1="46" y1="436" x2="98" y2="436" stroke="#0057D8" stroke-width="2" stroke-dasharray="6 5" opacity="0.55"/>
+        <line x1="46" y1="448" x2="98" y2="448" stroke="#0057D8" stroke-width="2" stroke-dasharray="6 5" opacity="0.55"/>
+        <line x1="46" y1="460" x2="86" y2="460" stroke="#0057D8" stroke-width="2" stroke-dasharray="6 5" opacity="0.55"/>
+        <text x="150" y="438" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="600" letter-spacing="2" fill="#0057D8">STEP 01</text>
+        <text x="150" y="478" font-family="'IBM Plex Sans',sans-serif" font-size="52" font-weight="700" letter-spacing="-2" fill="#1c1917">Virtual</text>
+        <!-- default tag -->
+        <rect x="0" y="350" width="118" height="26" fill="#007AFF"/>
+        <text x="13" y="368" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" letter-spacing="2" fill="#fafaf9">DEFAULT</text>
+      </g>
+
+      <!-- ===== STEP 2 · LOCAL (middle) =============================== -->
+      <g>
+        <rect x="388" y="256" width="356" height="256" fill="none" stroke="#1c1917" stroke-width="1.5"/>
+        <!-- containment glyph: nested shells -->
+        <rect x="420" y="300" width="96" height="76" fill="none" stroke="#0057D8" stroke-width="2"/>
+        <rect x="434" y="314" width="68" height="48" fill="none" stroke="#0057D8" stroke-width="2" opacity="0.6"/>
+        <!-- host link line (direct to machine) -->
+        <line x1="468" y1="376" x2="468" y2="404" stroke="#0057D8" stroke-width="2"/>
+        <circle cx="468" cy="408" r="4" fill="#0057D8"/>
+        <text x="540" y="318" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="600" letter-spacing="2" fill="#0057D8">STEP 02</text>
+        <text x="540" y="360" font-family="'IBM Plex Sans',sans-serif" font-size="52" font-weight="700" letter-spacing="-2" fill="#1c1917">Local</text>
+      </g>
+
+      <!-- ===== STEP 3 · REMOTE (highest) ============================= -->
+      <g>
+        <rect x="776" y="80" width="356" height="432" fill="none" stroke="#1c1917" stroke-width="1.5"/>
+        <!-- containment glyph: nested shells + lock -->
+        <rect x="808" y="128" width="118" height="92" fill="none" stroke="#0057D8" stroke-width="2.5"/>
+        <rect x="824" y="144" width="86" height="60" fill="none" stroke="#0057D8" stroke-width="2" opacity="0.7"/>
+        <rect x="840" y="160" width="54" height="28" fill="none" stroke="#0057D8" stroke-width="2" opacity="0.45"/>
+        <!-- lock motif -->
+        <rect x="855" y="186" width="24" height="20" rx="2" fill="#0057D8"/>
+        <path d="M860 186 v-7 a7 7 0 0 1 14 0 v7" fill="none" stroke="#0057D8" stroke-width="2.5"/>
+        <text x="948" y="142" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="600" letter-spacing="2" fill="#0057D8">STEP 03</text>
+        <text x="948" y="184" font-family="'IBM Plex Sans',sans-serif" font-size="52" font-weight="700" letter-spacing="-2" fill="#1c1917">Remote</text>
+        <text x="948" y="212" font-family="'IBM Plex Sans',sans-serif" font-size="16" font-weight="400" fill="#78716c">provider-managed</text>
+      </g>
+
+      <!-- ===== CLIMB AXIS (ascending diagonal) ====================== -->
+      <line x1="60" y1="392" x2="1024" y2="92" stroke="#1c1917" stroke-width="2" marker-end="url(#ah)"/>
+      <text x="60" y="372" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="600" letter-spacing="3" fill="#1c1917">ISOLATION · CAPABILITY · WEIGHT</text>
+      <text x="688" y="60" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="600" letter-spacing="2" fill="#0057D8" text-anchor="start">MORE CONTAINMENT &#8594;</text>
+
+      <!-- ===== "narrowest that fits" marker ========================= -->
+      <g>
+        <polygon points="178,304 168,284 188,284" fill="#007AFF"/>
+        <line x1="178" y1="284" x2="178" y2="270" stroke="#007AFF" stroke-width="2"/>
+        <text x="178" y="262" font-family="'IBM Plex Sans',sans-serif" font-size="17" font-weight="700" letter-spacing="-0.3" fill="#0057D8" text-anchor="middle">pick the narrowest tier that fits the task</text>
+      </g>
+    </svg>
+  </section>
+
+  <!-- TIER DETAIL ROWS -->
+  <section class="tiers">
+    <div class="trow">
+      <div class="step">01</div>
+      <div class="nm">
+        <div class="name">Virtual</div>
+        <div class="call">sandbox: virtual()</div>
+      </div>
+      <div class="gl">
+        <div class="role">lightweight · in-memory · just-bash</div>
+        <div class="desc">An ephemeral shell with <b>no host access</b> — the default. Nothing the agent runs touches a real disk or machine.</div>
+      </div>
+      <div class="use">
+        <div class="k">use when</div>
+        <div class="v">Most agents. Scripted steps that never need a real toolchain.</div>
+      </div>
+    </div>
+
+    <div class="trow">
+      <div class="step">02</div>
+      <div class="nm">
+        <div class="name">Local</div>
+        <div class="call">sandbox: local()</div>
+      </div>
+      <div class="gl">
+        <div class="role">host filesystem + shell · direct</div>
+        <div class="desc">Runs <b>against your machine</b>: real files, real commands, full speed. The trust you grant is the host itself.</div>
+      </div>
+      <div class="use">
+        <div class="k">use when</div>
+        <div class="v">Trusted dev &amp; CI on code you own and control.</div>
+      </div>
+    </div>
+
+    <div class="trow">
+      <div class="step">03</div>
+      <div class="nm">
+        <div class="name">Remote</div>
+        <div class="call">sandbox: remote()</div>
+      </div>
+      <div class="gl">
+        <div class="role">provider-managed isolated container</div>
+        <div class="desc">A <b>fully isolated Linux box</b> (Daytona, Cloudflare Sandbox) — a real toolchain walled off from everything you own.</div>
+      </div>
+      <div class="use">
+        <div class="k">use when</div>
+        <div class="v">Untrusted work that still needs a genuine environment.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RULE STRIP -->
+  <section class="rule">
+    <div class="lab">The guiding rule</div>
+    <div class="big">Grant only the reach the work demands — climb one step, never two.</div>
+  </section>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Three sandbox tiers · one decision</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

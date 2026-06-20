@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Skills · Expertise, Loaded on Demand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE lockup ─────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 110px; height: 110px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 158px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── DECK / HEADLINE ───────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 14px;
+    margin-bottom: 22px;
+  }
+  .headline {
+    font-family: 'Barlow Condensed', 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 92px;
+    line-height: 0.84;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    text-transform: none;
+  }
+  .headline em { font-style: normal; color: var(--blue-2); }
+  .deck .deck-right {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 17.5px;
+    line-height: 1.4;
+    color: var(--stone-700);
+    max-width: 33ch;
+    text-align: left;
+    flex: 0 0 auto;
+    padding-left: 30px;
+    padding-bottom: 6px;
+  }
+  .deck .deck-right b { font-weight: 700; color: var(--stone-900); }
+  .deck .deck-right .lab {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 7px;
+  }
+
+  /* ── STAGE — the filing stack + task ───────────────────────────── */
+  .stage {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 0;
+    align-items: start;
+  }
+
+  /* LEFT — the task that pulls a skill open */
+  .task {
+    border: 1.5px solid var(--stone-900);
+    background: var(--stone-100);
+    padding: 18px 18px 20px 18px;
+    position: relative;
+  }
+  .task .tk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 12px;
+  }
+  .task .tw {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    margin-bottom: 14px;
+  }
+  .task .tq {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--stone-700);
+    border-left: 2px solid var(--blue);
+    padding-left: 12px;
+  }
+  .task .tq b { color: var(--stone-950); font-weight: 600; }
+  .task .matchlab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--stone-500);
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dotted var(--stone-300);
+  }
+  .task .matchlab b { color: var(--blue-2); font-weight: 700; }
+
+  /* The pull-arrow connecting task → opened skill */
+  .pull {
+    position: relative;
+  }
+  .pull-svg { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 5; }
+
+  /* RIGHT — the skill stack */
+  .stack {
+    padding-left: 60px;
+    position: relative;
+  }
+  .stack .always {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    margin-bottom: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .stack .always b { color: var(--blue-2); font-weight: 700; }
+
+  /* A collapsed skill card — just the title row */
+  .card {
+    border: 1.5px solid var(--stone-900);
+    background: var(--stone-50);
+    margin-bottom: 9px;
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    align-items: center;
+    padding: 11px 16px 11px 0;
+  }
+  .card .fold {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--stone-400);
+  }
+  .card .nm {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+  }
+  .card .nm .ext { color: var(--stone-400); font-weight: 400; }
+  .card .ds {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: var(--stone-500);
+    text-align: right;
+    padding-left: 22px;
+    max-width: 46ch;
+    line-height: 1.25;
+  }
+
+  /* The ONE expanded card */
+  .card.open {
+    border: 1.5px solid var(--blue);
+    background: var(--stone-50);
+    display: block;
+    padding: 0;
+    margin-bottom: 9px;
+    box-shadow: 6px 6px 0 0 rgba(0,122,255,0.13);
+  }
+  .card.open .head {
+    background: var(--blue);
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    align-items: center;
+    padding: 13px 16px 13px 0;
+  }
+  .card.open .head .fold { color: rgba(250,250,249,0.9); }
+  .card.open .head .nm { color: var(--stone-50); font-size: 18px; }
+  .card.open .head .nm .ext { color: rgba(250,250,249,0.6); }
+  .card.open .head .ds {
+    color: rgba(250,250,249,0.95);
+    font-weight: 500;
+  }
+  .card.open .body { padding: 16px 22px 18px 46px; }
+  .card.open .body .bk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .card.open .body .bk span { color: var(--stone-400); font-weight: 500; }
+  .card.open .body .step {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 0;
+    padding: 7px 0;
+    border-top: 1px solid var(--stone-200);
+    align-items: baseline;
+  }
+  .card.open .body .step:first-of-type { border-top: 0; }
+  .card.open .body .step .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue-2);
+  }
+  .card.open .body .step .t {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--stone-700);
+  }
+  .card.open .body .step .t b { color: var(--stone-950); font-weight: 600; }
+
+  /* ── MECHANISM strip ───────────────────────────────────────────── */
+  .mech {
+    margin-top: 28px;
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1.5px solid var(--stone-900);
+  }
+  .mech .cell { padding: 18px 24px 20px 24px; }
+  .mech .cell:first-child { border-right: 1.5px solid var(--stone-900); }
+  .mech .cell .ck {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 9px;
+  }
+  .mech .cell .cn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 0.96;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    margin-bottom: 9px;
+  }
+  .mech .cell .cd {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.42;
+    color: var(--stone-700);
+    max-width: 50ch;
+  }
+  .mech .cell .cd b { color: var(--stone-950); font-weight: 600; }
+  .mech .cell.lead { background: var(--blue); }
+  .mech .cell.lead .ck { color: rgba(250,250,249,0.85); }
+  .mech .cell.lead .cn { color: var(--stone-50); }
+  .mech .cell.lead .cd { color: rgba(250,250,249,0.95); }
+  .mech .cell.lead .cd b { color: var(--stone-50); }
+
+  /* ── SYNTHESIS line ─────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 88px;
+    z-index: 4;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.36;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">skills — packaged expertise</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field guide</div>
+      <div class="meta">progressive disclosure</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Skills</span>
+    <span class="tag">
+      <span class="big">Expertise as a File</span>
+      <span class="small">one SKILL.md · loaded only when it fits</span>
+    </span>
+  </div>
+
+  <!-- DECK / HEADLINE -->
+  <div class="deck">
+    <div class="headline">Expertise,<br>loaded <em>on demand.</em></div>
+    <div class="deck-right">
+      <span class="lab">What a skill is</span>
+      A skill is <b>packaged know-how</b> written in a <b>SKILL.md</b> file. Its name and one-line description stay in view; the full body is pulled into context only when the task calls for it.
+    </div>
+  </div>
+
+  <!-- STAGE -->
+  <section class="stage">
+
+    <!-- LEFT: the task that triggers the open -->
+    <div class="pull">
+      <div class="task">
+        <div class="tk">Incoming task</div>
+        <div class="tw">Style this page like a Swiss poster.</div>
+        <div class="tq">"Make the landing page a <b>poster-style layout</b> — extreme type scale, one accent, hard figure / ground."</div>
+        <div class="matchlab">Description match &rarr; <b>pull open swiss-poster</b></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: the skill stack -->
+    <div class="stack">
+      <div class="always"><span>Always in view: <b>name + description</b></span><span>body: on demand</span></div>
+
+      <!-- collapsed -->
+      <div class="card">
+        <div class="fold">
+          <svg width="13" height="13" viewBox="0 0 13 13"><path d="M3 4 L6.5 8 L10 4" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-90 6.5 6.5)"/></svg>
+        </div>
+        <div class="nm">deep-research<span class="ext">.md</span></div>
+        <div class="ds">Fan-out web search, verify claims, write a cited report.</div>
+      </div>
+
+      <div class="card">
+        <div class="fold">
+          <svg width="13" height="13" viewBox="0 0 13 13"><path d="M3 4 L6.5 8 L10 4" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-90 6.5 6.5)"/></svg>
+        </div>
+        <div class="nm">code-review<span class="ext">.md</span></div>
+        <div class="ds">Review the diff for correctness bugs and cleanups.</div>
+      </div>
+
+      <!-- THE OPEN ONE -->
+      <div class="card open">
+        <div class="head">
+          <div class="fold">
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M3 4 L6.5 8 L10 4" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+          </div>
+          <div class="nm">swiss-poster<span class="ext">.md</span></div>
+          <div class="ds">Apply a Swiss poster design system using Tailwind CSS.</div>
+        </div>
+        <div class="body">
+          <div class="bk"><span>body loaded into context</span></div>
+          <div class="step"><div class="n">1</div><div class="t">Start from a <b>12-column grid</b>, then let key elements escape it.</div></div>
+          <div class="step"><div class="n">2</div><div class="t">Pair <b>viewport-scale display type</b> with 11px labels — aim 10&times;.</div></div>
+          <div class="step"><div class="n">3</div><div class="t">Use exactly <b>one accent hue</b>; stone scale for everything else.</div></div>
+          <div class="step"><div class="n">4</div><div class="t">Pick a historic <b>lineage</b> — Hofmann, Ruder, Geigy — by subject.</div></div>
+          <div class="step"><div class="n">5</div><div class="t">Protect the reading zone; crop graphics, never the title.</div></div>
+        </div>
+      </div>
+
+      <!-- collapsed -->
+      <div class="card">
+        <div class="fold">
+          <svg width="13" height="13" viewBox="0 0 13 13"><path d="M3 4 L6.5 8 L10 4" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-90 6.5 6.5)"/></svg>
+        </div>
+        <div class="nm">verify<span class="ext">.md</span></div>
+        <div class="ds">Run the app and observe that a change behaves correctly.</div>
+      </div>
+
+      <div class="card">
+        <div class="fold">
+          <svg width="13" height="13" viewBox="0 0 13 13"><path d="M3 4 L6.5 8 L10 4" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-90 6.5 6.5)"/></svg>
+        </div>
+        <div class="nm">claude-api<span class="ext">.md</span></div>
+        <div class="ds">Reference for model ids, params, streaming, tool use.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- the pull arrow, drawn over the stage -->
+  <svg class="pull-svg" width="1260" height="1800" style="position:absolute;left:0;top:0;z-index:5;">
+    <defs>
+      <marker id="ah" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto">
+        <path d="M1 1 L9 5.5 L1 10" fill="none" stroke="var(--blue)" stroke-width="1.8"/>
+      </marker>
+    </defs>
+    <path d="M370 980 C 410 980, 420 905, 466 905"
+          fill="none" stroke="var(--blue)" stroke-width="2.4"
+          marker-end="url(#ah)"/>
+  </svg>
+
+  <!-- MECHANISM -->
+  <section class="mech">
+    <div class="cell">
+      <div class="ck">Folded — the title row</div>
+      <div class="cn">Cheap to keep,<br>always listed.</div>
+      <div class="cd">Every skill's <b>name and one-line description</b> stay visible to the model at all times. Listing many skills costs almost nothing, so the agent stays lean.</div>
+    </div>
+    <div class="cell lead">
+      <div class="ck">Unfolded — the full body</div>
+      <div class="cn">Loaded the moment<br>it's needed.</div>
+      <div class="cd">When a task matches, the matching <b>SKILL.md body is pulled into context</b> — the instructions, examples, and rules. The agent becomes an expert exactly when it has to.</div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    Many skills <b>listed</b>, one skill <b>opened.</b> Names and descriptions stay in view; the full instructions
+    load only for the task at hand. <em>Scalable, packaged know-how — disclosed progressively.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Expertise, loaded on demand · progressive disclosure</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

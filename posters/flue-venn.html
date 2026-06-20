@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — An agent lives in the overlap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand — the one accent */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE lockup ───────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 16px;
+    z-index: 4;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 132px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-950);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-950);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── HEADLINE / DECK ────────────────────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid var(--stone-950);
+    padding-top: 14px;
+    margin-bottom: 8px;
+  }
+  .deck .head {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 66px;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--stone-950);
+  }
+  .deck .head em { font-style: normal; color: var(--blue-2); }
+  .deck .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+  .subdeck {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    max-width: 78ch;
+    margin-bottom: 6px;
+  }
+  .subdeck b { font-weight: 700; color: var(--stone-950); }
+
+  /* ── VENN STAGE ─────────────────────────────────────────────────── */
+  .stage {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 1010px;
+    margin-top: 2px;
+  }
+  .stage svg { display: block; width: 100%; height: 100%; }
+
+  /* ── FOOTER READING BAND ────────────────────────────────────────── */
+  .legend {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 96px;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1.5px solid var(--stone-950);
+  }
+  .legend .cell {
+    border-right: 1px solid var(--stone-200);
+    padding: 13px 22px 0 0;
+  }
+  .legend .cell:last-child { border-right: 0; padding-right: 0; }
+  .legend .cell .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 7px;
+  }
+  .legend .cell .n {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 27px;
+    letter-spacing: -0.03em;
+    color: var(--stone-950);
+    margin-bottom: 5px;
+  }
+  .legend .cell .d {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.34;
+    color: var(--stone-700);
+    max-width: 34ch;
+  }
+  .legend .cell .d b { color: var(--stone-950); font-weight: 600; }
+
+  /* ── SYNTHESIS LINE ─────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 64px;
+    z-index: 5;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--stone-950);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 11px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 5;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="diagram-poster"
+     data-reference="hofmann-figure-ground"
+     data-encoding="set membership → circle overlap; agency density → blue opacity stack">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">where reasoning, action &amp; memory meet</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · field diagram</div>
+      <div class="meta">the agent is the intersection</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark" aria-hidden="true">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">reasoning · action · memory, in one harness</span>
+    </span>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="deck">
+    <div class="head" data-critical="title">An agent lives in<br>the <em>overlap.</em></div>
+    <div class="count">Three sets<br>one intersection</div>
+  </div>
+  <div class="subdeck" data-critical="body">
+    A model that <b>reasons</b>, the ability to <b>act</b>, and persistent <b>memory</b> — alone, none is an
+    agent. An agent exists only where all three meet. <b>Flue</b> gives you that whole center, integrated.
+  </div>
+
+  <!-- VENN STAGE -->
+  <div class="stage" aria-hidden="false">
+    <!--
+      Geometry: three circles, centers 120° apart on a ring, equal radius.
+      C = (630, 470), ring radius rc = 200, circle radius R = 330.
+      A (REASONING)  top      : (630, 270)
+      B (ACTION)     bot-right : (803.2, 570)
+      C (MEMORY)     bot-left  : (456.8, 570)
+      Overlap density built from stacked blue at low opacity, so the
+      triple-center is the densest field.  data-encoding above.
+    -->
+    <svg viewBox="0 0 1260 1010" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="Three-circle Venn diagram: Reasoning, Action and Memory overlapping. An agent exists only at the center where all three meet.">
+      <defs>
+        <clipPath id="cA"><circle cx="630"  cy="270" r="330"/></clipPath>
+        <clipPath id="cB"><circle cx="803.2" cy="570" r="330"/></clipPath>
+        <clipPath id="cC"><circle cx="456.8" cy="570" r="330"/></clipPath>
+      </defs>
+
+      <!-- base circle fills: very light blue wash per set -->
+      <circle cx="630"   cy="270" r="330" fill="#007AFF" fill-opacity="0.10"/>
+      <circle cx="803.2" cy="570" r="330" fill="#007AFF" fill-opacity="0.10"/>
+      <circle cx="456.8" cy="570" r="330" fill="#007AFF" fill-opacity="0.10"/>
+
+      <!-- pairwise lenses: A∩B, A∩C, B∩C  (clip one circle by another) -->
+      <g clip-path="url(#cA)">
+        <circle cx="803.2" cy="570" r="330" fill="#007AFF" fill-opacity="0.18"/> <!-- A∩B -->
+        <circle cx="456.8" cy="570" r="330" fill="#007AFF" fill-opacity="0.18"/> <!-- A∩C -->
+      </g>
+      <g clip-path="url(#cB)">
+        <circle cx="456.8" cy="570" r="330" fill="#007AFF" fill-opacity="0.18"/> <!-- B∩C -->
+      </g>
+
+      <!-- triple center hero: solid blue where all three clips intersect -->
+      <g clip-path="url(#cA)">
+        <g clip-path="url(#cB)">
+          <circle cx="456.8" cy="570" r="330" fill="#007AFF" fill-opacity="1"/>
+        </g>
+      </g>
+
+      <!-- circle outlines on top, drawn last so edges stay crisp -->
+      <g fill="none" stroke="#1c1917" stroke-width="2.5">
+        <circle cx="630"   cy="270" r="330"/>
+        <circle cx="803.2" cy="570" r="330"/>
+        <circle cx="456.8" cy="570" r="330"/>
+      </g>
+
+      <!-- ── SET LABELS (on quiet single-membership fields) ────────── -->
+      <!-- A · REASONING (top) -->
+      <g font-family="'IBM Plex Sans', sans-serif" text-anchor="middle">
+        <text x="630" y="122" font-size="14" font-family="'IBM Plex Mono', monospace"
+              letter-spacing="3.4" fill="#0057D8" font-weight="600">SET A · THE MODEL</text>
+        <text x="630" y="172" font-size="44" font-weight="700" letter-spacing="-1.6" fill="#1c1917">REASONING</text>
+        <text x="630" y="202" font-size="16" font-weight="400" fill="#44403c">picks the next action</text>
+      </g>
+
+      <!-- B · ACTION (lower right) -->
+      <g font-family="'IBM Plex Sans', sans-serif" text-anchor="middle">
+        <text x="960" y="688" font-size="14" font-family="'IBM Plex Mono', monospace"
+              letter-spacing="3.4" fill="#0057D8" font-weight="600">SET B · TOOLS + SANDBOX</text>
+        <text x="960" y="738" font-size="44" font-weight="700" letter-spacing="-1.6" fill="#1c1917">ACTION</text>
+        <text x="960" y="767" font-size="16" font-weight="400" fill="#44403c">typed actions, secure fs + shell</text>
+      </g>
+
+      <!-- C · MEMORY (lower left) -->
+      <g font-family="'IBM Plex Sans', sans-serif" text-anchor="middle">
+        <text x="300" y="688" font-size="14" font-family="'IBM Plex Mono', monospace"
+              letter-spacing="3.4" fill="#0057D8" font-weight="600">SET C · SESSIONS</text>
+        <text x="300" y="738" font-size="44" font-weight="700" letter-spacing="-1.6" fill="#1c1917">MEMORY</text>
+        <text x="300" y="767" font-size="16" font-weight="400" fill="#44403c">state across turns &amp; events</text>
+      </g>
+
+      <!-- ── PAIRWISE OVERLAP LABELS (light, on the lens fields) ───── -->
+      <!-- A∩B  (upper right lens) -->
+      <g font-family="'IBM Plex Mono', monospace" text-anchor="middle" fill="#0057D8" font-weight="600">
+        <text x="775" y="358" font-size="12.5" letter-spacing="0.6">reason + act</text>
+        <text x="775" y="377" font-size="11" letter-spacing="0.4" fill="#44403c" font-weight="500">a tool call, but no recall</text>
+      </g>
+      <!-- A∩C  (upper left lens) -->
+      <g font-family="'IBM Plex Mono', monospace" text-anchor="middle" fill="#0057D8" font-weight="600">
+        <text x="485" y="358" font-size="12.5" letter-spacing="0.6">reason + recall</text>
+        <text x="485" y="377" font-size="11" letter-spacing="0.4" fill="#44403c" font-weight="500">thinks, but cannot act</text>
+      </g>
+      <!-- B∩C  (bottom lens) -->
+      <g font-family="'IBM Plex Mono', monospace" text-anchor="middle" font-weight="600">
+        <text x="630" y="690" font-size="12.5" letter-spacing="0.6" fill="#0057D8">act + recall</text>
+        <text x="630" y="709" font-size="11" letter-spacing="0.4" fill="#44403c" font-weight="500">a script, but no judgment</text>
+      </g>
+
+      <!-- ── TRIPLE CENTER HERO LABEL (reversed out of solid blue) ─── -->
+      <g text-anchor="middle">
+        <text x="630" y="448" font-family="'IBM Plex Mono', monospace" font-size="13"
+              letter-spacing="3.2" fill="#fafaf9" fill-opacity="0.92" font-weight="600">ALL THREE MEET</text>
+        <text x="630" y="498" font-family="'IBM Plex Sans', sans-serif" font-size="46"
+              font-weight="700" letter-spacing="-1.8" fill="#fafaf9">AN AGENT</text>
+        <text x="630" y="540" font-family="'IBM Plex Sans', sans-serif" font-size="34"
+              font-weight="700" letter-spacing="-1.2" fill="#fafaf9" fill-opacity="0.96">Flue</text>
+      </g>
+
+      <!-- pointer marks from single sets toward the dense center: subtle quiet ticks -->
+      <g stroke="#a8a29e" stroke-width="1.2" stroke-dasharray="2 5" opacity="0.7">
+        <line x1="630" y1="214" x2="630" y2="252"/>
+        <line x1="948" y1="612" x2="912" y2="600"/>
+        <line x1="312" y1="612" x2="348" y2="600"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- LEGEND — three sets explained on a quiet band -->
+  <div class="legend">
+    <div class="cell">
+      <div class="k">Set A — the model</div>
+      <div class="n">Reasoning</div>
+      <div class="d">The LLM that thinks over the task and <b>picks the next action</b>. Swappable, provider-agnostic.</div>
+    </div>
+    <div class="cell">
+      <div class="k">Set B — tools + sandbox</div>
+      <div class="n">Action</div>
+      <div class="d">Typed tools plus a <b>secure sandbox</b> — a real fs and shell where the agent does the work.</div>
+    </div>
+    <div class="cell">
+      <div class="k">Set C — sessions</div>
+      <div class="n">Memory</div>
+      <div class="d">Persistent <b>state across turns and events</b>, so the loop continues with full context.</div>
+    </div>
+  </div>
+
+  <!-- SYNTHESIS -->
+  <div class="synth" data-critical="body">
+    Tools alone, a model alone, or storage alone is <b>not an agent</b>.
+    The agent is the whole intersection — <em>and Flue hands you that center, integrated, in one harness.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The agent is the intersection · reasoning ∩ action ∩ memory</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
