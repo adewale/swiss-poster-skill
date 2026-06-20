@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Text as Territory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --red:   #C8102E;   /* single accent — Swiss red */
+    --red-d: #8f0a20;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 56px 28px 56px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 60; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 18px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE row */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 14px; }
+  .head .title { font-weight: 700; font-size: 84px; line-height: 0.84; letter-spacing: -0.045em; max-width: 760px; }
+  .head .thesis { text-align: right; max-width: 360px; padding-bottom: 6px; }
+  .head .thesis .big { font-size: 18px; font-weight: 500; line-height: 1.26; letter-spacing: -0.01em; color: var(--stone-700); }
+  .head .thesis .big b { color: var(--red-d); font-weight: 700; }
+  .head .thesis .sub { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); margin-top: 8px; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 7px; margin-bottom: 10px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* FIELD — the 2x2 text-as-territory */
+  .field {
+    position: relative; width: 1148px; height: 1372px; border: 2.5px solid var(--stone-900);
+    background: var(--stone-50); overflow: hidden;
+  }
+  .field canvas { position:absolute; inset:0; width:1148px; height:1372px; z-index:1; }
+
+  /* cross-axis rules (red accent) */
+  .axis-v { position:absolute; top:0; bottom:0; left:50%; width:2px; background:var(--red); z-index:6; transform:translateX(-1px); }
+  .axis-h { position:absolute; left:0; right:0; top:50%; height:2px; background:var(--red); z-index:6; transform:translateY(-1px); }
+
+  /* side / top rails */
+  .rail {
+    position:absolute; z-index:7; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:0.34em; text-transform:uppercase; font-weight:600; color:var(--stone-500);
+    background:var(--stone-50); padding:3px 7px;
+  }
+  .rail.un { top:14px; left:50%; transform:translateX(-50%) translateX(-300px); }
+  .rail.or { top:14px; left:50%; transform:translateX(-50%) translateX(300px); }
+  .rail.un b, .rail.or b { color:var(--stone-900); font-weight:700; }
+
+  /* domain name plates — solid stone, data-critical, above texture */
+  .plate {
+    position:absolute; z-index:20; background:var(--stone-50);
+    border:1.5px solid var(--stone-900); padding:13px 16px 14px 16px;
+    max-width: 380px;
+  }
+  .plate .pn { font-weight:700; font-size:46px; line-height:0.9; letter-spacing:-0.03em; color:var(--red); }
+  .plate .pv { font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; margin-top:8px; font-weight:600; color:var(--stone-700); }
+  .plate .pp { font-size:12.5px; line-height:1.32; margin-top:7px; color:var(--stone-700); max-width:32ch; }
+  .plate.tl { top:26px; left:26px; }
+  .plate.tr { top:26px; right:26px; text-align:right; }
+  .plate.tr .pp { margin-left:auto; }
+  .plate.bl { bottom:26px; left:26px; }
+  .plate.br { bottom:26px; right:26px; text-align:right; }
+  .plate.br .pp { margin-left:auto; }
+
+  /* per-quadrant order tag on the plate */
+  .plate .tag { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; font-weight:600; color:var(--stone-50); background:var(--stone-900); padding:2px 7px; margin-bottom:9px; }
+  .plate.tr .tag, .plate.br .tag { background:var(--stone-700); }
+
+  /* DISORDER mark at the crossing */
+  .disorder {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:30;
+    width:132px; height:132px; border:2px solid var(--red);
+    background:var(--stone-50); display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .disorder span { font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; color:var(--red); line-height:1.15; }
+
+  /* FOOTER */
+  .foot { display:grid; grid-template-columns: 1fr; gap:0; margin-top:13px; }
+  .foot .c { font-size:15px; line-height:1.42; color:var(--stone-700); border-left:2px solid var(--red); padding-left:16px; max-width: 1000px; }
+  .foot .c b { color:var(--stone-900); font-weight:600; }
+
+  .colophon {
+    position:absolute; left:56px; right:56px; bottom:26px;
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--stone-500); display:flex; justify-content:space-between;
+    border-top:1px solid var(--stone-300); padding-top:9px;
+  }
+  .colophon b { color:var(--stone-900); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="weingart-new-wave"
+     data-genre="typographic-field"
+     data-encoding="domain order → typographic order; right ordered / left unordered"
+     data-reference="snowden-cynefin-1999"
+     data-source="four-domain-paragraphs">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · text as territory</div>
+      <div class="meta" data-source="creator">Snowden, 1999</div>
+    </div>
+    <div class="right">
+      <div>order on the right, disorder on the left</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="title" data-critical="title">Read it close,<br>or stand back.</div>
+    <div class="thesis" data-critical="body">
+      <div class="big">The setting carries the meaning. Lines hold rank where the world is <b>ordered</b> and break where it is not.</div>
+      <div class="sub">type as image · hierarchy intact</div>
+    </div>
+  </div>
+
+  <div class="seclabel"><span>The map in the typesetting</span><span class="sp"></span><span>4 domains · 1 center</span></div>
+
+  <!-- FIELD -->
+  <div class="field" data-encoding="typographic order level per domain: clear=justified, complicated=tight, complex=wander, chaotic=shatter">
+    <canvas id="terr" aria-hidden="true"></canvas>
+
+    <div class="axis-v" aria-hidden="true"></div>
+    <div class="axis-h" aria-hidden="true"></div>
+
+    <div class="rail un" aria-hidden="true">Un<b>ordered</b></div>
+    <div class="rail or" aria-hidden="true"><b>Ordered</b></div>
+
+    <!-- COMPLEX (TL, unordered) -->
+    <div class="plate tl" data-source="domain-complex">
+      <span class="tag">probe → sense → respond</span>
+      <div class="pn" data-critical="title">Complex</div>
+      <div class="pv">emergent practice</div>
+      <div class="pp">Cause and effect cohere only in hindsight. Run safe-to-fail probes; amplify what works.</div>
+    </div>
+
+    <!-- COMPLICATED (TR, ordered) -->
+    <div class="plate tr" data-source="domain-complicated">
+      <span class="tag">sense → analyse → respond</span>
+      <div class="pn" data-critical="title">Complicated</div>
+      <div class="pv">good practice</div>
+      <div class="pp">A right answer exists but is not obvious. Analysis uncovers it; weigh the experts and decide.</div>
+    </div>
+
+    <!-- CHAOTIC (BL, unordered) -->
+    <div class="plate bl" data-source="domain-chaotic">
+      <span class="tag">act → sense → respond</span>
+      <div class="pn" data-critical="title">Chaotic</div>
+      <div class="pv">novel practice</div>
+      <div class="pp">No cause and effect to act on in time. Act to make order, then move toward the complex.</div>
+    </div>
+
+    <!-- CLEAR (BR, ordered) -->
+    <div class="plate br" data-source="domain-clear">
+      <span class="tag">sense → categorize → respond</span>
+      <div class="pn" data-critical="title">Clear</div>
+      <div class="pv">best practice</div>
+      <div class="pp">Cause and effect are visible and hold over time. Sort to a known category, apply the rule.</div>
+    </div>
+
+    <!-- DISORDER center -->
+    <div class="disorder" data-source="domain-disorder"><span data-critical="title">Dis&shy;order</span></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      Up close, four paragraphs. From across the room, four domains — the type lies flat where the world is
+      <b>ordered</b> and breaks rank where it is not. <b>The setting is the argument.</b>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div>after Weingart · type as image, hierarchy intact</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================================
+   TEXT AS TERRITORY — the four domain paragraphs typeset as a 2x2 field.
+   Each quadrant gets a TYPOGRAPHIC ORDER LEVEL; the gradient of disorder from
+   the ordered right column to the unordered left column is the image.
+   Synchronous, runs during parse. Canvas at 2x backing for crisp microtype.
+   ========================================================================== */
+(function () {
+  var CSS_W = 1148, CSS_H = 1372;
+  var canvas = document.getElementById('terr');
+  var DPR = 2;
+  canvas.width  = CSS_W * DPR;
+  canvas.height = CSS_H * DPR;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  var INK_900 = '#1c1917';
+  var INK_700 = '#44403c';
+  var INK_500 = '#78716c';
+  var RED     = '#C8102E';
+
+  // The four real paragraphs (verbatim fill text).
+  var P = {
+    complex: "The domain of emergence. Cause and effect cohere only in hindsight; you cannot deduce the outcome in advance. Probe with safe-to-fail experiments, sense the patterns that form, amplify what works and dampen what does not. Stop demanding a business case for the unknown and let the situation show you its shape.",
+    complicated: "The domain of experts. A right answer exists but is not obvious; analysis uncovers it. Sense the facts, analyse them, apply good practice. More than one answer is defensible, so weigh expert advice and decide. Two failures wait here: analysis that never ends, and experts so sure of the known answer they wave away a better one they did not think of.",
+    chaotic: "The domain of the novel. No cause and effect you can act on in time. Act to make order, sense where stability forms, then move toward the complex. Do something. The danger is staying in command once the crisis passes, when the room is finally ready to learn.",
+    clear: "The domain of the obvious. Cause and effect are visible to everyone and hold over time. Sense the situation, sort it to a known category, apply the established rule. Best practice works because the same input has reliably given the same output and will again. The one danger is complacency: the rule outlives the world it was written for and no one notices the day it stops being true."
+  };
+
+  // Tokenize a paragraph into words, repeated enough to overfill a quadrant.
+  function wordStream(text, reps) {
+    var base = text.split(/\s+/);
+    var out = [];
+    for (var r = 0; r < reps; r++) {
+      for (var i = 0; i < base.length; i++) out.push(base[i]);
+      out.push('·'); // a middot between repeats so the loop reads as deliberate
+    }
+    return out;
+  }
+
+  // Seeded PRNG so the disorder is programmatic and reproducible.
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Quadrant geometry. Inset from the red cross and the borders so text sits
+  // clear of the plates (which carry the readable names).
+  var MIDX = CSS_W / 2, MIDY = CSS_H / 2;
+  var PAD = 30;
+
+  // Each quad has a reserved corner for its plate; we still fill the whole
+  // quad with microtype and let the plate's solid stone field mask it.
+  var quads = {
+    complex:     { x0: PAD,        y0: PAD,        x1: MIDX - 16, y1: MIDY - 16 }, // TL
+    complicated: { x0: MIDX + 16,  y0: PAD,        x1: CSS_W-PAD, y1: MIDY - 16 }, // TR
+    chaotic:     { x0: PAD,        y0: MIDY + 16,  x1: MIDX - 16, y1: CSS_H-PAD }, // BL
+    clear:       { x0: MIDX + 16,  y0: MIDY + 16,  x1: CSS_W-PAD, y1: CSS_H-PAD }  // BR
+  };
+
+  // ---- Generic justified/flowed microtype setter with an "order" controller.
+  // cfg.disorder in [0..1]; controls baseline jitter, per-word rotation,
+  // size variance, horizontal drift, and (at the top) fragmentation/overlap.
+  function setQuad(name, q, cfg) {
+    var rng = mulberry32(cfg.seed);
+    var words = wordStream(P[name], cfg.reps);
+    var fontPx = cfg.fontPx;
+    var lead = cfg.lead;             // baseline step
+    var colX0 = q.x0, colX1 = q.x1;
+    var colW = colX1 - colX0;
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'left';
+
+    var wi = 0;                       // word index into stream (wraps)
+    var y = q.y0 + fontPx;
+    var lineIndex = 0;
+
+    function nextWord() { var w = words[wi % words.length]; wi++; return w; }
+    function spaceW(sz) { ctx.font = '400 ' + sz + 'px "IBM Plex Mono", monospace'; return ctx.measureText(' ').width; }
+
+    while (y < q.y1) {
+      // ---- build one line of words to (roughly) fill the column width ----
+      var lineWords = [];
+      var sz = fontPx;
+      if (cfg.sizeVar) sz = fontPx * (1 + (rng() - 0.5) * 2 * cfg.sizeVar);
+      ctx.font = '400 ' + sz + 'px "IBM Plex Mono", monospace';
+      var sp = ctx.measureText(' ').width;
+      var widths = [];
+      var natural = 0;
+      while (true) {
+        var w = nextWord();
+        var ww = ctx.measureText(w).width;
+        // stop if adding this word would clearly overflow
+        if (lineWords.length && (natural + sp + ww) > colW) { wi--; break; }
+        lineWords.push(w); widths.push(ww);
+        natural += (lineWords.length > 1 ? sp : 0) + ww;
+        if (lineWords.length > 60) break;
+      }
+      if (!lineWords.length) { var w2 = nextWord(); lineWords.push(w2); widths.push(ctx.measureText(w2).width); natural = widths[0]; }
+
+      // ---- justification: distribute slack across gaps (ordered) ----
+      var gaps = Math.max(1, lineWords.length - 1);
+      var slack = colW - natural;
+      var extra = 0;
+      var justify = cfg.justify && lineWords.length > 1 && slack > 0 && slack < colW * 0.5;
+      if (justify) extra = slack / gaps;
+
+      // ---- per-line disorder: vertical jitter + slight whole-line rotation
+      var lineJ = cfg.lineJitter ? (rng() - 0.5) * 2 * cfg.lineJitter : 0;
+      var lineRot = cfg.lineRot ? (rng() - 0.5) * 2 * cfg.lineRot : 0;
+      var bend = cfg.bend ? (rng() - 0.5) * 2 * cfg.bend : 0; // per-line arc amplitude (px over the line)
+
+      // anchor for whole-line rotation
+      var ax = colX0, ay = y + lineJ;
+
+      ctx.save();
+      if (lineRot) { ctx.translate(ax, ay); ctx.rotate(lineRot); ctx.translate(-ax, -ay); }
+
+      // ---- lay the words ----
+      var penX = colX0;
+      var frac = lineIndex / cfg.estLines; // 0 at top of quad → 1 at bottom
+      for (var k = 0; k < lineWords.length; k++) {
+        var word = lineWords[k];
+        var ww2 = widths[k];
+
+        // size per word (chaotic varies hard)
+        var wsz = sz;
+        if (cfg.wordSizeVar) wsz = sz * (1 + (rng() - 0.5) * 2 * cfg.wordSizeVar);
+        ctx.font = '400 ' + wsz + 'px "IBM Plex Mono", monospace';
+
+        // ink: ordered quads stay dark + uniform (reads as a crisp combed
+        // block from across the room); disordered quads scatter lighter (reads
+        // cloudy/broken). cfg.lightBias in [0..1] raises the share of pale ink.
+        var lb = cfg.lightBias || 0;
+        var ir = rng();
+        if (cfg.redChance && rng() < cfg.redChance) ctx.fillStyle = RED;
+        else if (ir < lb * 0.55) ctx.fillStyle = INK_500;
+        else if (ir < lb * 0.55 + 0.30) ctx.fillStyle = INK_700;
+        else ctx.fillStyle = INK_900;
+
+        // per-word vertical drift + horizontal drift
+        var dy = cfg.wordJitterY ? (rng() - 0.5) * 2 * cfg.wordJitterY : 0;
+        var dx = cfg.wordJitterX ? (rng() - 0.5) * 2 * cfg.wordJitterX : 0;
+        // arc/bend across the line
+        var t = (lineWords.length > 1) ? (penX - colX0) / colW : 0;
+        var arc = bend * Math.sin(t * Math.PI);
+
+        // per-word rotation (shatter)
+        var wr = cfg.wordRot ? (rng() - 0.5) * 2 * cfg.wordRot : 0;
+
+        // chaotic: occasional torn shard pushed off-grid / off-edge
+        var tear = 0, tearY = 0, tearRot = 0;
+        if (cfg.tearChance && rng() < cfg.tearChance) {
+          tear = (rng() - 0.5) * 2 * cfg.tearMag;
+          tearY = (rng() - 0.5) * 2 * cfg.tearMag * 0.7;
+          tearRot = (rng() - 0.5) * 0.9;
+        }
+
+        var gx = penX + dx + tear;
+        var gy = y + dy + arc + tearY;
+
+        if (wr || tearRot) {
+          ctx.save();
+          ctx.translate(gx, gy);
+          ctx.rotate(wr + tearRot);
+          ctx.fillText(word, 0, 0);
+          ctx.restore();
+        } else {
+          ctx.fillText(word, gx, gy);
+        }
+
+        penX += ww2 + sp + (justify ? extra : (cfg.looseGap ? sp * cfg.looseGap : 0));
+      }
+      ctx.restore();
+
+      // advance baseline; chaotic compresses/overlaps some lines
+      var step = lead;
+      if (cfg.leadVar) step = lead * (1 + (rng() - 0.5) * 2 * cfg.leadVar);
+      if (cfg.overlapChance && rng() < cfg.overlapChance) step *= cfg.overlapFactor;
+      y += step;
+      lineIndex++;
+    }
+  }
+
+  // estimate lines per quad for the top→bottom frac (rough is fine)
+  function estLines(q, lead) { return Math.max(1, (q.y1 - q.y0) / lead); }
+
+  // ===================== ORDER LEVELS (right→left gradient) =================
+
+  // CLEAR (BR, ordered) — perfectly justified, even leading, strict grid. Calm.
+  // Darkest, most uniform ink so the right column reads as a crisp combed block.
+  setQuad('clear', quads.clear, {
+    seed: 101, reps: 6, fontPx: 8.6, lead: 11.7, estLines: estLines(quads.clear, 11.7),
+    justify: true, lightBias: 0.05,
+    lineJitter: 0, lineRot: 0, bend: 0,
+    wordJitterX: 0, wordJitterY: 0, wordRot: 0,
+    sizeVar: 0, wordSizeVar: 0, leadVar: 0,
+    redChance: 0, overlapChance: 0
+  });
+
+  // COMPLICATED (TR, ordered) — neat, aligned, denser/tighter. Orderly, readable.
+  setQuad('complicated', quads.complicated, {
+    seed: 202, reps: 6, fontPx: 8.2, lead: 10.4, estLines: estLines(quads.complicated, 10.4),
+    justify: true, lightBias: 0.10,
+    lineJitter: 0.25, lineRot: 0, bend: 0,
+    wordJitterX: 0, wordJitterY: 0.25, wordRot: 0,
+    sizeVar: 0, wordSizeVar: 0, leadVar: 0.02,
+    redChance: 0, overlapChance: 0
+  });
+
+  // COMPLEX (TL, unordered) — baselines wander, slight rotation, words drift,
+  // a few lines bend. Readable but restless. Lighter, broken rhythm so the
+  // left column reads cloudier than the right from a distance.
+  setQuad('complex', quads.complex, {
+    seed: 303, reps: 6, fontPx: 8.6, lead: 14.2, estLines: estLines(quads.complex, 14.2),
+    justify: false, looseGap: 0.45, lightBias: 0.55,
+    lineJitter: 3.6, lineRot: 0.026, bend: 7,
+    wordJitterX: 2.0, wordJitterY: 2.6, wordRot: 0.03,
+    sizeVar: 0.06, wordSizeVar: 0.08, leadVar: 0.22,
+    redChance: 0.012, overlapChance: 0.06, overlapFactor: 0.84
+  });
+
+  // CHAOTIC (BL, unordered) — rank breaks down: lines rotated, fragmented,
+  // overlapping shards, varied sizes, words torn off the edge. Text-as-noise,
+  // but it is still the real paragraph. Lightest, no surviving horizontal comb.
+  setQuad('chaotic', quads.chaotic, {
+    seed: 404, reps: 7, fontPx: 8.8, lead: 15.5, estLines: estLines(quads.chaotic, 15.5),
+    justify: false, looseGap: 0.8, lightBias: 0.7,
+    lineJitter: 6.5, lineRot: 0.12, bend: 11,
+    wordJitterX: 6, wordJitterY: 6, wordRot: 0.2,
+    sizeVar: 0.2, wordSizeVar: 0.3, leadVar: 0.45,
+    redChance: 0.018,
+    overlapChance: 0.32, overlapFactor: 0.5,
+    tearChance: 0.13, tearMag: 52
+  });
+
+  // Compute/step note in microtype-scale mono, bottom-left interior corner of CLEAR
+  // (the calm quad), recording the real method. Tiny, stone-500.
+  ctx.save();
+  ctx.font = '500 8px "IBM Plex Mono", monospace';
+  ctx.fillStyle = INK_500;
+  ctx.textAlign = 'right';
+  ctx.fillText('order level: justify → tighten → wander → shatter · seeded mulberry32 · 2× backing', CSS_W - PAD, CSS_H - PAD + 18);
+  ctx.restore();
+})();
+</script>
+</body>
+</html>
