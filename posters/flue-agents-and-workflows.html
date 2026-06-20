@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Flue — Agents & Workflows · one harness</title>
+<title>Flue — Agents, Workflows & the harness you own</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
     font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
-  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 56px 26px}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:40px 56px 24px}
 
   .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
   .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
@@ -29,50 +29,59 @@
   .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
   .topbar .r{text-align:right}
 
-  .head{margin-top:20px}
+  .head{margin-top:24px}
+  .head .eye{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--blue-2);font-weight:600}
   .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
-    font-size:80px;line-height:.86;letter-spacing:-.01em;color:var(--stone-900)}
+    font-size:92px;line-height:.85;letter-spacing:-.015em;color:var(--stone-900);margin-top:8px}
   .head h1 .b{color:var(--blue-2)}
-  .head .sub{margin-top:10px;font-size:17.5px;line-height:1.42;color:var(--stone-700);max-width:104ch}
-  .head .sub b{color:var(--stone-900);font-weight:600}
-
-  .grid{display:grid;grid-template-columns:600px 1fr;gap:30px;margin-top:22px}
-  svg.arch{display:block;width:100%;height:auto}
-  .cap{margin-top:12px;font-size:13px;line-height:1.42;color:var(--stone-700)} .cap b{color:var(--stone-900);font-weight:600}
-  .cap .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--blue-2)}
-  .fnnote{margin-top:12px;font-size:11.5px;line-height:1.4;color:var(--stone-500);border-top:1px dotted var(--stone-300);padding-top:8px}
-  .fnnote .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-700)}
+  .head .deck{margin-top:14px;font-size:18px;line-height:1.44;color:var(--stone-700);max-width:106ch}
+  .head .deck b{color:var(--stone-900);font-weight:600}
 
   .sech{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
-    font-weight:600;color:var(--blue-2);border-bottom:2px solid var(--stone-900);padding-bottom:7px;margin-bottom:11px;
+    font-weight:600;color:var(--blue-2);border-bottom:2px solid var(--stone-900);padding-bottom:7px;
     display:flex;justify-content:space-between}
   .sech span{color:var(--stone-400);font-weight:400}
-  .panel{margin-bottom:22px}
-  .ptext{font-size:14.5px;line-height:1.46;color:var(--stone-900)} .ptext b{font-weight:600}
-  .ptext .m{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--blue-2)}
 
-  .shared{font-size:14px;line-height:1.4;color:var(--stone-700);margin-bottom:12px}
-  .shared b{color:var(--stone-900);font-weight:600}
-  .shared .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue-2)}
-  .drow{padding:9px 0;border-top:1px solid var(--stone-200)}
-  .drow .dk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500);margin-bottom:4px}
-  .drow .dv{font-size:13.5px;line-height:1.32;color:var(--stone-900);display:flex;gap:8px}
-  .drow .dv .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.06em;width:30px;flex:none;padding-top:2px}
-  .drow .dv.a .lab{color:var(--blue-2)} .drow .dv.w .lab{color:var(--stone-900)}
-  .drow .dv .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--stone-700)}
+  /* dial */
+  .dial{margin-top:24px}
+  svg.spec{display:block;width:100%;height:auto;margin-top:12px}
+  .dcap{margin-top:8px;font-size:13.5px;line-height:1.4;color:var(--stone-700)} .dcap b{color:var(--stone-900)}
+  .dcap .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue-2)}
 
-  .base{position:absolute;left:56px;right:56px;bottom:80px;background:var(--stone-950);color:var(--stone-50);padding:18px 26px 20px}
-  .base .bh{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(250,250,249,.22);padding-bottom:10px}
-  .base .bh .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue-lt);font-weight:600}
-  .base .bh .ph{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:30px;line-height:1;color:var(--stone-50)}
-  .base .bh .ph b{color:var(--blue-lt)}
-  .base .vgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:13px}
-  .base .vitem .vt{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:18px;line-height:1.04;color:var(--blue-lt)}
-  .base .vitem .vd{font-size:13px;line-height:1.4;color:rgba(250,250,249,.86);margin-top:5px}
-  .base .vitem .vd b{color:var(--stone-50);font-weight:600}
-  .base .vitem .vd .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--blue-lt)}
+  /* two columns */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:24px}
+  .drow{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--stone-200)}
+  .drow .dk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--stone-500);width:118px;flex:none;padding-top:3px}
+  .drow .dv{font-size:13.5px;line-height:1.3;color:var(--stone-900);flex:1}
+  .drow .dv .wf{color:var(--stone-700)} .drow .dv .agt{color:var(--blue-2);font-weight:600}
+  .drow .dv .sep{color:var(--stone-400);margin:0 6px}
+  .drow .dv .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px}
 
-  .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
+  .own .o{padding:9px 0;border-bottom:1px solid var(--stone-200)}
+  .own .o:last-child{border-bottom:0}
+  .own .ot{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:17px;color:var(--stone-900);line-height:1.04}
+  .own .ot b{color:var(--blue-2)}
+  .own .od{font-size:13px;line-height:1.36;color:var(--stone-700);margin-top:3px}
+  .own .od .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--blue-2)}
+
+  .incode{margin-top:22px}
+  .ccols{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:12px}
+  .clabel{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--stone-500);margin-bottom:6px}
+  .clabel b{color:var(--blue-2)}
+  .code2{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.55;color:var(--stone-900);
+    background:var(--stone-100);border-left:3px solid var(--blue);padding:11px 13px;white-space:pre;overflow:hidden;margin:0}
+  .code2 .kw{color:var(--blue-2)} .code2 .fn{color:var(--blue-2);font-weight:600} .code2 .c{color:var(--stone-400);font-style:italic}
+
+  /* skeptic band */
+  .band{position:absolute;left:56px;right:56px;bottom:80px;background:var(--stone-950);color:var(--stone-50);padding:22px 28px}
+  .band .q{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:34px;line-height:.98;color:var(--stone-50)}
+  .band .q b{color:var(--blue-lt)}
+  .band .a{font-size:16px;line-height:1.5;color:rgba(250,250,249,.9);margin-top:12px;max-width:104ch}
+  .band .a b{color:var(--stone-50);font-weight:600}
+  .band .tl{margin-top:13px;border-top:1px solid rgba(250,250,249,.2);padding-top:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--blue-lt)}
+
+  .colo{position:absolute;left:56px;right:56px;bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;
     font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
   .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
     background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
@@ -86,133 +95,119 @@
   <span class="corner bl"></span><span class="corner br"></span>
 
   <div class="topbar">
-    <div>Flue · The Agent Harness Framework<div class="meta">how the two primitives fit together</div></div>
-    <div class="r">withastro / flue<div class="meta">one harness · powered by pi</div></div>
+    <div>Flue · The Agent Harness Framework<div class="meta">agents, workflows & the harness you own</div></div>
+    <div class="r">withastro / flue<div class="meta">agent = model + harness</div></div>
   </div>
 
   <div class="head">
-    <h1>Agents <span class="b">&amp;</span> Workflows.</h1>
-    <div class="sub">They aren't opposites — they invert control. A <b>Workflow</b> is <b>code that calls a model</b>; an
-      <b>Agent</b> is <b>a model that calls your code</b>. Both run the <b>same harness</b> (loop: <b>Pi</b>), so you
-      <b>dial autonomy per task</b> — script what you know, hand the rest to the model, and wrap one inside the other.</div>
+    <div class="eye">Agent = Model + Harness</div>
+    <h1>If you're not the model,<br>you're the <span class="b">harness.</span></h1>
+    <div class="deck">The model reasons. The <b>harness</b> is everything around it — tools, skills, a sandbox, sessions, the loop.
+      Most teams rebuild that scaffolding for every agent. <b>Flue makes the harness the framework</b>, and lets you choose how
+      much the model drives it: <b>Agents</b> and <b>Workflows</b> are two settings on the same dial.</div>
   </div>
 
-  <div class="grid">
-    <!-- LEFT: composition diagram -->
+  <!-- THE DIAL -->
+  <div class="dial">
+    <div class="sech">One harness · two ways to drive it <span>who decides what happens next?</span></div>
+    <svg class="spec" viewBox="0 0 1148 252" aria-label="control dial from workflow to agent over a constant harness">
+      <!-- end labels -->
+      <text x="150" y="40" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="30" fill="#0057D8">WORKFLOW</text>
+      <text x="150" y="124" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#44403c">your code decides</text>
+      <text x="150" y="142" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716c">code that calls a model · LLM optional</text>
+
+      <text x="998" y="40" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="30" fill="#0057D8">AGENT</text>
+      <text x="998" y="124" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#44403c">the model decides</text>
+      <text x="998" y="142" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716c">a model that calls your code · every turn</text>
+
+      <!-- track -->
+      <line x1="172" y1="78" x2="976" y2="78" stroke="#d6d3d1" stroke-width="6"/>
+      <circle cx="172" cy="78" r="14" fill="#0c0a09"/>
+      <circle cx="976" cy="78" r="18" fill="#007AFF"/>
+      <!-- knob -->
+      <text x="574" y="44" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="2" fill="#0057D8">YOU CHOOSE · PER TASK</text>
+      <circle cx="574" cy="78" r="19" fill="#fafaf9" stroke="#0057D8" stroke-width="3"/>
+      <text x="574" y="85" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="22" fill="#0057D8">⇆</text>
+
+      <!-- connectors to harness -->
+      <g stroke="#a8a29e" stroke-width="1.5" stroke-dasharray="3 4">
+        <line x1="172" y1="92" x2="172" y2="168"/><line x1="574" y1="97" x2="574" y2="168"/><line x1="976" y1="96" x2="976" y2="168"/>
+      </g>
+
+      <!-- harness bar -->
+      <rect x="40" y="170" width="1068" height="64" fill="#007AFF"/>
+      <text x="64" y="200" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="24" fill="#fafaf9">THE HARNESS</text>
+      <text x="64" y="221" font-family="IBM Plex Mono,monospace" font-size="12.5" fill="#fafaf9">tools · skills · sandbox · sessions · durable runs · loop: Pi</text>
+      <text x="1084" y="208" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#cfe4ff">constant the whole way</text>
+    </svg>
+    <div class="dcap"><b>Agents and Workflows are the same harness, driven differently.</b> Slide the model toward your code
+      (a Workflow returns a typed result; an Agent runs a persistent loop and can spawn declared sub-agents). The harness — and
+      <span class="m">Pi</span>, the loop it's built on — never changes.</div>
+  </div>
+
+  <!-- TWO COLUMNS -->
+  <div class="cols">
     <div>
-      <svg class="arch" viewBox="0 0 600 662" aria-label="how Agents, Workflows, the harness and Pi compose">
-        <defs>
-          <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-            <path d="M0,0 L9,4.5 L0,9 z" fill="#44403c"/>
-          </marker>
-          <marker id="ahl" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-            <path d="M0,0 L9,4.5 L0,9 z" fill="#a8a29e"/>
-          </marker>
-        </defs>
-
-        <!-- WORKFLOW -->
-        <rect x="150" y="8" width="300" height="92" fill="#fafaf9" stroke="#1c1917" stroke-width="2"/>
-        <text x="300" y="44" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="26" fill="#0057D8">WORKFLOW</text>
-        <text x="300" y="66" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#44403c">code that calls a model</text>
-        <text x="300" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716c">one run → a typed result</text>
-
-        <!-- WORKFLOW -> AGENT -->
-        <line x1="300" y1="100" x2="300" y2="150" stroke="#44403c" stroke-width="2" marker-end="url(#ah)"/>
-        <text x="312" y="128" font-family="IBM Plex Mono,monospace" font-size="10" fill="#0057D8">ctx.init(agent) → harness</text>
-
-        <!-- AGENT -->
-        <rect x="120" y="152" width="300" height="106" fill="#fafaf9" stroke="#1c1917" stroke-width="2"/>
-        <text x="270" y="190" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="26" fill="#0057D8">AGENT</text>
-        <text x="270" y="212" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#44403c">a model that calls your code</text>
-        <text x="270" y="230" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#78716c">keeps context across conversations &amp; events</text>
-
-        <!-- message into AGENT -->
-        <line x1="44" y1="205" x2="118" y2="205" stroke="#44403c" stroke-width="2" marker-end="url(#ah)"/>
-        <text x="44" y="196" font-family="IBM Plex Mono,monospace" font-size="9" fill="#78716c">message · channel</text>
-
-        <!-- AGENT -> SUBAGENTS -->
-        <line x1="420" y1="205" x2="452" y2="205" stroke="#44403c" stroke-width="2" marker-end="url(#ah)"/>
-        <rect x="454" y="172" width="120" height="66" fill="#f5f5f4" stroke="#a8a29e" stroke-width="1.5"/>
-        <text x="514" y="200" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="15" fill="#1c1917">SUB-AGENTS</text>
-        <text x="514" y="220" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8.5" fill="#78716c">task sessions</text>
-
-        <!-- AGENT -> HARNESS -->
-        <line x1="270" y1="258" x2="270" y2="312" stroke="#44403c" stroke-width="2" marker-end="url(#ah)"/>
-        <text x="282" y="289" font-family="IBM Plex Mono,monospace" font-size="10" fill="#44403c">runs on</text>
-
-        <!-- HARNESS -->
-        <rect x="40" y="314" width="520" height="150" fill="#007AFF"/>
-        <text x="60" y="356" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="30" fill="#fafaf9">THE HARNESS</text>
-        <text x="60" y="380" font-family="IBM Plex Mono,monospace" font-size="12" fill="#cfe4ff">turns a model into an agent</text>
-        <text x="60" y="418" font-family="IBM Plex Sans,sans-serif" font-size="15" fill="#fafaf9">sessions · tools · skills · instructions</text>
-        <text x="60" y="442" font-family="IBM Plex Sans,sans-serif" font-size="15" fill="#fafaf9">filesystem · secure sandbox · durable streams</text>
-
-        <!-- HARNESS -> PI -->
-        <line x1="270" y1="464" x2="270" y2="516" stroke="#44403c" stroke-width="2" marker-end="url(#ah)"/>
-        <text x="282" y="493" font-family="IBM Plex Mono,monospace" font-size="10" fill="#44403c">powered by</text>
-
-        <!-- PI -->
-        <rect x="40" y="518" width="520" height="120" fill="#0c0a09"/>
-        <text x="60" y="560" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="30" fill="#fafaf9">PI</text>
-        <text x="60" y="586" font-family="IBM Plex Mono,monospace" font-size="12" fill="#cfe4ff">the agent loop — reason → act → observe</text>
-        <text x="60" y="610" font-family="IBM Plex Mono,monospace" font-size="10" fill="#a8a29e">@mariozechner/pi-agent-core · the harness behind OpenClaw</text>
-      </svg>
-      <div class="cap">A <b>sub-agent</b> is an agent nested in another's <span class="m">subagents[]</span> — same shape, but no
-        durability of its own and checked for cycles. The parent calls a <b>declared</b> one by spawning a <b>task session</b>;
-        depth is bounded (<span class="m">TaskDepthExceededError</span>).</div>
+      <div class="sech" style="margin-bottom:6px">What changes as you slide <span>workflow ↔ agent</span></div>
+      <div class="drow"><div class="dk">Decides next</div><div class="dv"><span class="wf">your code</span><span class="sep">→</span><span class="agt">the model</span></div></div>
+      <div class="drow"><div class="dk">LLM calls</div><div class="dv"><span class="wf">optional — only when you prompt</span><span class="sep">→</span><span class="agt">every turn</span></div></div>
+      <div class="drow"><div class="dk">Output</div><div class="dv"><span class="wf">a finite, typed result</span><span class="sep">→</span><span class="agt">an open-ended session</span></div></div>
+      <div class="drow"><div class="dk">Persistence</div><div class="dv"><span class="wf">a run, by <span class="m">runId</span></span><span class="sep">→</span><span class="agt">resumes across events</span></div></div>
+      <div class="drow"><div class="dk">Sub-agents</div><div class="dv"><span class="wf">—</span><span class="sep">→</span><span class="agt">spawns declared ones</span></div></div>
     </div>
 
-    <!-- RIGHT -->
     <div>
-      <div class="panel">
-        <div class="sech">What Pi contributes <span>the engine</span></div>
-        <div class="ptext">Flue's loop <b>is</b> Pi — the agent harness behind OpenClaw, packaged as <span class="m">@mariozechner/pi-agent-core</span>.
-          Pi runs the <b>reason → act → observe</b> cycle and the tool calls that let an agent act on its own. Flue keeps that engine and
-          builds the rest around it: <b>Durable Streams</b> for state, a <b>Sandbox API</b>, channels, and the Agents/Workflows model — so the
-          same agent deploys to any runtime.</div>
-      </div>
-
-      <div class="panel">
-        <div class="sech">What stays the same <span>the harness, invariant</span></div>
-        <div class="shared">One <span class="m">createAgent()</span> defines the agent both use. <b>Model, tools, skills, instructions, and sandbox are identical</b>
-          whether the model drives it or your code does.</div>
-
-        <div class="sech" style="margin-top:14px">What changes by driver <span>agent · workflow</span></div>
-        <div class="drow"><div class="dk">Who guides the loop</div>
-          <div class="dv a"><span class="lab">AGT</span><span>the model picks each next step</span></div>
-          <div class="dv w"><span class="lab">WF</span><span>your TypeScript picks the steps</span></div></div>
-        <div class="drow"><div class="dk">Session</div>
-          <div class="dv a"><span class="lab">AGT</span><span>one persistent <span class="m">"default"</span> — spans conversations &amp; events</span></div>
-          <div class="dv w"><span class="lab">WF</span><span>opened inside the run, dropped after the result</span></div></div>
-        <div class="drow"><div class="dk">Persistence</div>
-          <div class="dv a"><span class="lab">AGT</span><span>a persistent session — resumes from its event stream</span></div>
-          <div class="dv w"><span class="lab">WF</span><span>a run record keyed by <span class="m">runId</span> — inspect it later</span></div></div>
-        <div class="drow"><div class="dk">How it ends</div>
-          <div class="dv a"><span class="lab">AGT</span><span>it doesn't — waits for the next message</span></div>
-          <div class="dv w"><span class="lab">WF</span><span>completes and returns <span class="m">response.data</span></span></div></div>
-        <div class="fnnote">No <span class="m">run</span>/<span class="m">defineWorkflow</span> export: a Workflow is a file whose <span class="m">run(ctx)</span> the runtime
-          invokes. <span class="m">init</span> is a method on that <span class="m">FlueContext</span> — <span class="m">init(agent) → FlueHarness</span> — so a Workflow boots an Agent,
-          then <span class="m">session().prompt()</span>.</div>
-        <div class="fnnote"><b style="color:var(--stone-700)">Caveat:</b> <span class="m">AgentProfileSchema</span> types <span class="m">model?: string | false</span> — an agent can be configured without a model. The abstraction is model-driven; the requirement isn't absolute.</div>
+      <div class="sech" style="margin-bottom:6px">What you own <span>the harness</span></div>
+      <div class="own">
+        <div class="o"><div class="ot">Same agent, <b>four backends</b></div>
+          <div class="od"><span class="m">just-bash</span> (free, in-memory) · <span class="m">local</span> · Daytona · Cloudflare — swap per target, no rewrite, any model.</div></div>
+        <div class="o"><div class="ot">Logic in <b>Markdown</b></div>
+          <div class="od">Skills + <span class="m">AGENTS.md</span> carry the know-how; ~15–50 lines of TypeScript wire it up.</div></div>
+        <div class="o"><div class="ot">Typed &amp; <b>sandboxed</b></div>
+          <div class="od">Structured outputs that run safely across environments — past "can it answer" to "can it run."</div></div>
+        <div class="o"><div class="ot">Built on <b>Pi</b></div>
+          <div class="od">The loop behind OpenClaw. Dogfooded triaging Astro's own repo for two months before it had a name.</div></div>
       </div>
     </div>
   </div>
 
-  <div class="base">
-    <div class="bh"><span class="lab">Why it matters</span><span class="ph">Control is a <b>dial</b>, not a fork.</span></div>
-    <div class="vgrid">
-      <div class="vitem"><div class="vt">Autonomy per task</div>
-        <div class="vd">Keep the parts you know <b>deterministic</b> — a Workflow returns a typed result with a replayable <span class="m">runId</span>. Give the open-ended parts to an <b>Agent</b>. One project, not two frameworks.</div></div>
-      <div class="vitem"><div class="vt">Write the harness once</div>
-        <div class="vd">The same <b>tools, skills, sandbox, and model</b> back both. Promoting a step from scripted to autonomous — or pinning it back down — needs <b>no rewrite</b>.</div></div>
-      <div class="vitem"><div class="vt">Guardrails around autonomy</div>
-        <div class="vd">A Workflow drives an Agent for the fuzzy step, then resumes as typed, recoverable code — a <b>predictable shell around an unpredictable core</b>. That's what ships to production.</div></div>
+  <!-- IN CODE -->
+  <div class="incode">
+    <div class="sech">The same harness, two files <span>init → session → prompt</span></div>
+    <div class="ccols">
+      <div>
+        <div class="clabel"><b>Workflow</b> — your code calls the model</div>
+        <pre class="code2"><span class="c">// src/workflows/triage.ts</span>
+<span class="kw">export async function</span> <span class="fn">run</span>({ init, payload }) {
+  <span class="kw">const</span> s = <span class="kw">await</span> (<span class="kw">await</span> <span class="fn">init</span>(agent)).<span class="fn">session</span>();
+  <span class="kw">const</span> r = <span class="kw">await</span> s.<span class="fn">prompt</span>(payload, { result });
+  <span class="kw">return</span> r.data;            <span class="c">// typed · finite</span>
+}</pre>
+      </div>
+      <div>
+        <div class="clabel"><b>Agent</b> — the model calls your code</div>
+        <pre class="code2"><span class="c">// src/agents/triage.ts</span>
+<span class="kw">export default</span> <span class="fn">createAgent</span>(() => ({
+  model, tools, skills,
+  sandbox: <span class="fn">local</span>(),
+  instructions,            <span class="c">// the model drives</span>
+}));</pre>
+      </div>
     </div>
+  </div>
+
+  <!-- SKEPTIC BAND -->
+  <div class="band">
+    <div class="q">“Why not just have the model <b>generate the boilerplate?</b>”</div>
+    <div class="a">Because the boilerplate was never the hard part — <b>the harness is.</b> A sandbox that's a primitive (not glue you
+      rewrite per backend), runs that <b>resume after a crash</b>, typed results you can test, one agent that deploys anywhere.
+      That's the layer you'd rebuild for every agent and get subtly wrong — and the less code you write, the less there is to break.</div>
+    <div class="tl">If you're not the model, you're the harness — so own a good one.</div>
   </div>
 
   <div class="colo">
-    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from the runtime source on GitHub · APIs evolve
-      <div class="src">Source: withastro/flue · packages/runtime/src {agent-definition, harness, types, runtime/flue-app, runtime/handle-agent} · loop: @mariozechner/pi-agent-core</div></div>
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Mechanics read from withastro/flue source · framing from public reception · beta, APIs evolve
+      <div class="src">Source: packages/runtime/src (agent-definition, harness, types, runtime/*) · loop: @mariozechner/pi-agent-core · reception: HN 47988501, blog.cloudflare.com/agents-platform-flue-sdk</div></div>
     <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
   </div>
 
