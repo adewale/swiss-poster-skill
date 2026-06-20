@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue vs Project Think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 64px 28px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:30}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  /* Title lockup */
+  .head{margin-top:40px;display:flex;align-items:center;gap:30px}
+  .mark{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);
+    background:var(--blue);width:90px;height:90px;flex:none}
+  .mark i{background:var(--stone-50);display:block}
+  .lock{display:flex;align-items:baseline;gap:26px;line-height:.9}
+  .lock .a{font-weight:700;font-size:124px;letter-spacing:-.04em;color:var(--blue-2)}
+  .lock .vs{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:22px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--stone-400)}
+  .lock .b{font-weight:700;font-size:124px;letter-spacing:-.04em;color:var(--stone-900)}
+  .sub{margin-top:26px;font-size:20px;line-height:1.45;color:var(--stone-700);max-width:64ch}
+  .sub b{color:var(--stone-900);font-weight:600}
+
+  .shared{margin-top:30px;border-top:2px solid var(--stone-900);border-bottom:1px solid var(--stone-300);
+    padding:15px 0;display:flex;justify-content:space-between;align-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--stone-700)}
+  .shared b{color:var(--blue-2)}
+
+  /* Comparison grid */
+  .cmp{margin-top:34px;display:grid;grid-template-columns:176px 1fr 1fr}
+  .cmp>div{padding:24px 20px}
+  .hl{}
+  .hf{background:var(--blue);color:var(--stone-50);padding:24px 20px}
+  .ht{background:var(--stone-900);color:var(--stone-50);padding:24px 20px}
+  .hf .nm,.ht .nm{font-weight:700;font-size:36px;letter-spacing:-.02em;line-height:1}
+  .hf .tg,.ht .tg{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    margin-top:9px;opacity:.85}
+  .lab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--stone-500);text-align:right;border-top:1px solid var(--stone-300);display:flex;align-items:center;justify-content:flex-end}
+  .vf{background:rgba(0,122,255,.055);border-top:1px solid var(--stone-300);border-left:2px solid var(--blue)}
+  .vt{background:var(--stone-100);border-top:1px solid var(--stone-300);border-left:1px solid var(--stone-300)}
+  .vf .t,.vt .t{font-size:17px;line-height:1.4;color:var(--stone-900)}
+  .vf .t b{color:var(--blue-2)}
+  .mono{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.01em;color:var(--stone-700)}
+
+  /* Synthesis band */
+  .synth{margin-top:40px;background:var(--blue);color:var(--stone-50);padding:32px 34px;
+    display:flex;gap:30px;align-items:flex-start}
+  .synth .big{font-weight:300;font-size:32px;line-height:1.2;letter-spacing:-.01em;flex:1}
+  .synth .big b{font-weight:700}
+  .synth .note{width:300px;flex:none;border-left:1px solid rgba(250,250,249,.35);padding-left:24px;
+    font-size:14.5px;line-height:1.45;color:rgba(250,250,249,.9)}
+  .synth .note b{color:var(--stone-50);font-weight:600}
+
+  .colo{position:absolute;left:64px;right:64px;bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9.5px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework
+      <div class="meta">two harnesses · opposite bets</div></div>
+    <div class="r">withastro / flue · comparison
+      <div class="meta">portable framework vs platform runtime</div></div>
+  </div>
+
+  <div class="head">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="lock">
+      <span class="a">Flue</span><span class="vs">versus</span><span class="b">Think</span>
+    </span>
+  </div>
+  <div class="sub">Two ways to give a model a harness. <b>Flue</b> bets on a portable framework you run anywhere;
+    <b>Cloudflare's Project&nbsp;Think</b> bets on a durable runtime you live inside. Here is where they part.</div>
+
+  <div class="shared">
+    <span>Both agree — <b>Agent = Model + Harness</b></span>
+    <span>they disagree on <b>where the harness lives</b></span>
+  </div>
+
+  <div class="cmp">
+    <!-- header row -->
+    <div class="hl"></div>
+    <div class="hf"><div class="nm">Flue</div><div class="tg">withastro · apache-2.0 · runtime-agnostic</div></div>
+    <div class="ht"><div class="nm">Project Think</div><div class="tg">cloudflare · preview · platform-native</div></div>
+
+    <!-- rows -->
+    <div class="lab">Core bet</div>
+    <div class="vf"><div class="t"><b>Runtime-agnostic harness.</b> Write the agent once, deploy it anywhere.</div></div>
+    <div class="vt"><div class="t">Cloudflare-native runtime. Durability comes <i>from</i> the platform.</div></div>
+
+    <div class="lab">Runs on</div>
+    <div class="vf"><div class="t"><span class="mono">Node · Cloudflare · GitHub&nbsp;Actions · GitLab&nbsp;CI/CD · Daytona · Render</span></div></div>
+    <div class="vt"><div class="t"><span class="mono">Cloudflare — Durable&nbsp;Objects + Workers</span></div></div>
+
+    <div class="lab">Durability</div>
+    <div class="vf"><div class="t">Harness + adapters <span class="mono">(@flue/postgres)</span> on any host.</div></div>
+    <div class="vt"><div class="t">Actor model: Durable Objects, hibernation, SQLite, Alarms.</div></div>
+
+    <div class="lab">Memory</div>
+    <div class="vf"><div class="t">Sessions + context compaction.</div></div>
+    <div class="vt"><div class="t">Relational conversation tree — branch / fork by <span class="mono">parent_id</span>.</div></div>
+
+    <div class="lab">Agent shape</div>
+    <div class="vf"><div class="t">Headless, file-driven — logic in <b>Markdown</b> <span class="mono">(skills, AGENTS.md)</span>; model-agnostic.</div></div>
+    <div class="vt"><div class="t">Opinionated <span class="mono">Think</span> base class; LLMs via Workers&nbsp;AI.</div></div>
+
+    <div class="lab">Sandbox</div>
+    <div class="vf"><div class="t">Tiered — <span class="mono">Virtual · Local · Remote</span>.</div></div>
+    <div class="vt"><div class="t">Dynamic Workers; full-OS sandboxes.</div></div>
+
+    <div class="lab">Origin</div>
+    <div class="vf"><div class="t">The Astro team · open, Apache-2.0.</div></div>
+    <div class="vt"><div class="t">Cloudflare · experimental preview.</div></div>
+  </div>
+
+  <div class="synth">
+    <div class="big">Think gives you <b>world-class durability — if you live on Cloudflare.</b>
+      Flue runs <b>the same agent anywhere.</b></div>
+    <div class="note">Telling detail: <b>Cloudflare is just one of Flue's deploy targets</b> — you can run a Flue
+      agent on Cloudflare without adopting Think at all.</div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>A positioning map · not affiliated with Cloudflare
+      <div class="src">Sources: blog.cloudflare.com/project-think · github.com/withastro/flue</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+</div>
+</body>
+</html>
