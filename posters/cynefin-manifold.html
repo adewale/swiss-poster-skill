@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Cusp Catastrophe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — the cusp curve + the fold edges */
+    --cobalt-d: #0f2c66;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 40; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 18px;
+    position: relative; z-index: 30;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* TITLE block */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 34px; margin-bottom: 14px; position: relative; z-index: 30; }
+  .head .title { font-weight: 700; font-size: 52px; line-height: 0.9; letter-spacing: -0.025em; max-width: 760px; color: var(--stone-900); }
+  .head .title b { color: var(--cobalt); font-weight: 700; }
+  .head .eq {
+    text-align: right; font-family: 'IBM Plex Mono', monospace; padding-bottom: 6px; white-space: nowrap;
+  }
+  .head .eq .big { font-size: 26px; font-weight: 600; letter-spacing: 0.01em; color: var(--cobalt); }
+  .head .eq .sub { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); margin-top: 8px; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 12px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+    position: relative; z-index: 30;
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* HERO — the computed manifold */
+  .hero {
+    position: relative; height: 1132px; border: 2.5px solid var(--stone-900);
+    background: var(--stone-50); overflow: hidden;
+  }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+
+  /* axis / structure labels floating over the canvas (decorative, low z) */
+  .axislab {
+    position: absolute; z-index: 6; font-family:'IBM Plex Mono',monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; color: var(--stone-500);
+  }
+
+  /* solid stone field cards carrying the critical microtype */
+  .card {
+    position: absolute; z-index: 20; background: var(--stone-50);
+    border: 1.5px solid var(--stone-900); padding: 13px 16px 14px 16px;
+  }
+  .card .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); font-weight: 600; }
+  .card .v { font-size: 14px; line-height: 1.32; color: var(--stone-900); margin-top: 5px; max-width: 30ch; }
+  .card .v b { font-weight: 600; }
+  .card.mono .v { font-family:'IBM Plex Mono',monospace; font-size: 13px; letter-spacing: 0.01em; }
+
+  /* state read-outs anchored on the two regions */
+  .state {
+    position: absolute; z-index: 18; background: var(--stone-950); color: var(--stone-50);
+    padding: 11px 15px 12px 15px;
+  }
+  .state .n { font-weight: 700; font-size: 22px; letter-spacing: -0.02em; line-height: 0.95; }
+  .state .d { font-family:'IBM Plex Mono',monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-400); margin-top: 6px; }
+  .state .roots { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.04em; color: var(--cobalt); margin-top: 7px; font-weight: 500; }
+  .state.clear { color: var(--stone-50); }
+
+  /* legend strip */
+  .legend {
+    position: absolute; z-index: 20; left: 0; bottom: 0; right: 0;
+    display: flex; gap: 26px; align-items: center;
+    background: var(--stone-50); border-top: 1.5px solid var(--stone-900);
+    padding: 9px 18px; font-family:'IBM Plex Mono',monospace; font-size: 11px;
+    letter-spacing: 0.11em; text-transform: uppercase; color: var(--stone-500);
+  }
+  .legend .it { display:flex; align-items:center; gap:8px; }
+  .legend .sw { width: 22px; height: 0; border-top: 2px solid var(--stone-700); opacity: 0.55; }
+  .legend .sw.cob { border-top: 2.5px solid var(--cobalt); opacity: 1; }
+  .legend .sw.dot { width: 9px; height: 9px; border: 0; background: var(--cobalt); }
+  .legend .r { margin-left: auto; color: var(--stone-700); font-weight: 500; }
+
+  /* BODY + FOOTER */
+  .foot {
+    display: grid; grid-template-columns: 1.18fr 1fr; gap: 34px; margin-top: 14px; align-items: start;
+    position: relative; z-index: 30;
+  }
+  .foot .body { font-size: 15px; line-height: 1.46; color: var(--stone-700); }
+  .foot .body b { color: var(--stone-900); font-weight: 600; }
+  .foot .body .c { color: var(--cobalt); font-weight: 600; }
+  .foot .take { border-left: 2.5px solid var(--cobalt); padding-left: 16px; font-size: 15px; line-height: 1.44; color: var(--stone-700); }
+  .foot .take b { color: var(--stone-900); font-weight: 600; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px; z-index: 30;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="computational"
+     data-encoding="cusp equilibrium manifold + bifurcation set"
+     data-reference="thom-1972-catastrophe-theory"
+     data-source="x^3 + a*x + b = 0 ; fold 4a^3 + 27b^2 = 0">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the cusp catastrophe</div>
+      <div class="meta" data-source="subject">the fold, as a surface</div>
+    </div>
+    <div class="right">
+      <div>x³ + a·x + b = 0</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="title" data-critical="title">The fold isn't a metaphor.<br>It's a surface with an <b>overhang.</b></div>
+    <div class="eq" aria-hidden="true">
+      <div class="big">x³ + a·x + b = 0</div>
+      <div class="sub">equilibria of V = ¼x⁴ + ½a·x² + b·x</div>
+    </div>
+  </div>
+
+  <div class="seclabel"><span>The equilibrium surface</span><span class="sp"></span><span>René Thom · 1972</span></div>
+
+  <!-- HERO: computed cusp manifold -->
+  <div class="hero" data-encoding="(x,a)→b=−(x³+a·x) projected oblique · pleat + overhang emerge">
+    <canvas id="cusp" aria-hidden="true"></canvas>
+
+    <div class="axislab" style="left:18px; top:14px;" aria-hidden="true">response surface x ↑</div>
+    <div class="axislab" style="right:18px; bottom:64px; text-align:right;" aria-hidden="true">control plane (a, b)</div>
+
+    <!-- the two stable states, anchored in the open upper-left, pointing at the overhang -->
+    <div class="state" id="stateUpper" style="left:64px; top:208px;" data-source="upper-sheet">
+      <div class="n" data-critical="title">two states</div>
+      <div class="d">inside the cusp · the overhang</div>
+      <div class="roots">x³ + a·x + b = 0 → 3 roots</div>
+    </div>
+
+    <!-- single-valued region, on the flat tongue lower-right -->
+    <div class="state clear" id="stateClear" style="right:70px; bottom:236px;" data-source="single-sheet">
+      <div class="n" data-critical="title">one state</div>
+      <div class="d">outside the cusp · the flat sheet</div>
+      <div class="roots">x³ + a·x + b = 0 → 1 root</div>
+    </div>
+
+    <!-- microtype cards on solid stone -->
+    <div class="card mono" style="left:120px; bottom:190px;" data-source="microtype">
+      <div class="k">the equilibria</div>
+      <div class="v" data-critical="body">equilibria where x³ + a·x + b = 0</div>
+    </div>
+    <div class="card mono" style="right:118px; top:118px;" data-source="microtype">
+      <div class="k">the fold set</div>
+      <div class="v" data-critical="body">fold set: 4a³ + 27b² = 0</div>
+    </div>
+    <div class="card" style="left:50%; top:560px; transform:translateX(-50%);" data-source="microtype">
+      <div class="k">why it jumps</div>
+      <div class="v" data-critical="body"><b>the overhang = two stable states</b></div>
+    </div>
+
+    <div class="legend" aria-hidden="true">
+      <div class="it"><span class="sw"></span> equilibrium mesh</div>
+      <div class="it"><span class="sw cob"></span> fold edge (double root)</div>
+      <div class="it"><span class="sw dot"></span> cusp point</div>
+      <div class="r">grid 71 × 71 · b = −(x³ + a·x)</div>
+    </div>
+  </div>
+
+  <!-- BODY + TAKEAWAY -->
+  <div class="foot">
+    <div class="body" data-critical="body">
+      René Thom's cusp: a smooth control plane below, a pleated response surface above. Inside the cusp
+      the system has <b>two stable states</b>; push past the edge and it jumps to the other — <b>no middle,
+      no warning.</b> That jump is <span class="c">Clear falling into Chaos.</span>
+    </div>
+    <div class="take" data-critical="cta">
+      On the flat part you can edge along, adjusting as you go. Over the fold there is no edging — the state
+      you were in stops existing and you drop to the only one left.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="attribution">René Thom · catastrophe theory · 1972</div>
+    <div><b>Cynefin</b> · the fold</div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     THE COMPUTATION — synchronous, runs during parse, before load.
+     Cusp catastrophe equilibrium surface {(a,b,x): x³+a·x+b=0},
+     parametrised by (x,a) so it is single-valued: b = −(x³ + a·x).
+     Projected with a fixed oblique camera; the pleat + overhang
+     appear automatically where the control point has 3 x-roots.
+     ============================================================ -->
+<script>
+(function () {
+  var cv = document.getElementById('cusp');
+  var host = cv.parentNode;
+  var CSSW = host.clientWidth, CSSH = host.clientHeight;
+  var DPR = 2;
+  cv.width = CSSW * DPR;
+  cv.height = CSSH * DPR;
+  var ctx = cv.getContext('2d');
+  ctx.scale(DPR, DPR);
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  // ---- parameter ranges (spec) ----
+  var X_MIN = -2.2, X_MAX = 2.2;     // sheet coordinate (the response, x)
+  var A_MIN = -3.0, A_MAX = 0.8;     // control axis a
+  var NX = 70, NA = 70;              // mesh resolution -> 71 x 71 nodes
+
+  // surface point -> b (single-valued in (x,a)):  b = −(x³ + a·x)
+  function bOf(a, x) { return -(x*x*x + a*x); }
+
+  // ---- the camera: a true oblique 3-D view ----
+  // Lay the control plane (a,b) on the ground and lift the response x as height.
+  // Ground axes are scaled so a, b, x are comparable (b naturally spans ±12).
+  // Rotate the ground by a yaw, then pitch the whole thing toward the viewer.
+  // Where one control point (a,b) carries three x-values, those heights stack at
+  // the same ground spot and the upper sheet laps OVER the lower one — the overhang.
+  var SB = 0.42, SA = 1.0, SX = 1.45;          // axis scales: b, a, x
+  var YAW = 17 * Math.PI / 180;                 // ground rotation
+  var PITCH = 63 * Math.PI / 180;               // tilt toward viewer
+  var cosY = Math.cos(YAW), sinY = Math.sin(YAW);
+  var cosP = Math.cos(PITCH), sinP = Math.sin(PITCH);
+
+  // (a,b,x) -> [screenX_world, screenY_world, depth]
+  function cam(a, b, x) {
+    var gx = b * SB, gy = a * SA, gz = x * SX;   // ground b→gx, ground a→gy(depth), x→up
+    var rx = gx * cosY - gy * sinY;              // yaw about the up axis
+    var ry = gx * sinY + gy * cosY;              // (depth after yaw)
+    var sX = rx;
+    var sY = -(gz * cosP) + ry * sinP;           // pitch: height + receding depth lift
+    var dz =  gz * sinP + ry * cosP;             // depth for painter ordering
+    return [sX, sY, dz];
+  }
+
+  // ---- auto-fit so the whole figure fills the hero ----
+  var mnx = Infinity, mxx = -Infinity, mny = Infinity, mxy = -Infinity;
+  function acc(p) {
+    if (p[0] < mnx) mnx = p[0]; if (p[0] > mxx) mxx = p[0];
+    if (p[1] < mny) mny = p[1]; if (p[1] > mxy) mxy = p[1];
+  }
+  var i, j, x, a, b;
+  for (i = 0; i <= NX; i++) {
+    x = X_MIN + (X_MAX - X_MIN) * i / NX;
+    for (j = 0; j <= NA; j++) {
+      a = A_MIN + (A_MAX - A_MIN) * j / NA;
+      acc(cam(a, bOf(a, x), x));
+    }
+  }
+  // fold edge lift: double root at a=−3x², b=2x³  (silhouette of the pleat)
+  for (i = 0; i <= 240; i++) {
+    x = X_MIN + (X_MAX - X_MIN) * i / 240;
+    a = -3*x*x; if (a < A_MIN) continue;
+    acc(cam(a, 2*x*x*x, x));
+  }
+
+  var spanX = mxx - mnx, spanY = mxy - mny;
+  var BOXW = CSSW - 130, BOXH = CSSH - 130;
+  var scale = Math.min(BOXW / spanX, BOXH / spanY);
+  var midX = (mnx + mxx) / 2, midY = (mny + mxy) / 2;
+  var cx = CSSW / 2 - scale * midX;
+  var cy = CSSH / 2 - scale * midY;
+
+  // (a,b,x) -> pixel [px, py, depth]
+  function P(a, b, x) {
+    var p = cam(a, b, x);
+    return [cx + scale * p[0], cy + scale * p[1], p[2]];
+  }
+
+  // discriminant of x³+a·x+b : <0 => three real roots (inside the cusp/overhang)
+  function disc(a, b) { return (b*b)/4 + (a*a*a)/27; }
+
+  // ---------- 1. the equilibrium mesh (stone) ----------
+  // Collect every mesh segment with its mid-depth, then paint FAR→NEAR so the
+  // near sheet of the overhang draws over the far one (painter's algorithm) and
+  // the pleat reads as a solid pleated surface, not a flat grid of crossings.
+  // Segments over the overhang (control point has 3 roots) get darker ink for depth.
+  var segs = [];
+  function addSeg(p0, p1, over) {
+    segs.push([p0[0], p0[1], p1[0], p1[1], (p0[2] + p1[2]) * 0.5, over]);
+  }
+  // iso-lines of constant a (vary x) — these curves fold back through the pleat
+  for (j = 0; j <= NA; j++) {
+    a = A_MIN + (A_MAX - A_MIN) * j / NA;
+    var pp = null, xprev = 0;
+    for (i = 0; i <= NX; i++) {
+      x = X_MIN + (X_MAX - X_MIN) * i / NX;
+      var p = P(a, bOf(a, x), x);
+      if (pp !== null) {
+        var bm = bOf(a, (x + xprev) / 2);
+        addSeg(pp, p, disc(a, bm) < 0);
+      }
+      pp = p; xprev = x;
+    }
+  }
+  // iso-lines of constant x (vary a) — the warp threads across the sheet
+  for (i = 0; i <= NX; i++) {
+    x = X_MIN + (X_MAX - X_MIN) * i / NX;
+    var qq = null;
+    for (j = 0; j <= NA; j++) {
+      a = A_MIN + (A_MAX - A_MIN) * j / NA;
+      var q = P(a, bOf(a, x), x);
+      if (qq !== null) {
+        var am = A_MIN + (A_MAX - A_MIN) * (j - 0.5) / NA;
+        addSeg(qq, q, disc(am, bOf(am, x)) < 0);
+      }
+      qq = q;
+    }
+  }
+  // depth range, for a near→far fade (atmospheric depth on top of the painter sort)
+  var dMin = Infinity, dMax = -Infinity;
+  for (var s0 = 0; s0 < segs.length; s0++) {
+    if (segs[s0][4] < dMin) dMin = segs[s0][4];
+    if (segs[s0][4] > dMax) dMax = segs[s0][4];
+  }
+  // paint far → near; nearer threads are darker so the pleat reads dimensionally
+  segs.sort(function (s1, s2) { return s1[4] - s2[4]; });
+  for (var s = 0; s < segs.length; s++) {
+    var sg = segs[s];
+    var near = (sg[4] - dMin) / (dMax - dMin);   // 0 far … 1 near
+    if (sg[5]) {
+      // over the overhang: stone-900 ink, stronger, near→far 0.66→0.34
+      ctx.strokeStyle = 'rgba(28,25,23,' + (0.34 + 0.32 * near).toFixed(3) + ')';
+      ctx.lineWidth = 0.8;
+    } else {
+      // single sheet: stone-700, lighter, near→far 0.42→0.20
+      ctx.strokeStyle = 'rgba(68,64,60,' + (0.20 + 0.22 * near).toFixed(3) + ')';
+      ctx.lineWidth = 0.6;
+    }
+    ctx.beginPath();
+    ctx.moveTo(sg[0], sg[1]);
+    ctx.lineTo(sg[2], sg[3]);
+    ctx.stroke();
+  }
+
+  // helper: build the fold-edge curve as a point list (a=−3x², b=2x³, lifted to x)
+  function foldEdgePts(loX, hiX, n) {
+    var out = [];
+    for (var k = 0; k <= n; k++) {
+      var xx = loX + (hiX - loX) * k / n;
+      var aa = -3*xx*xx; if (aa < A_MIN) continue;
+      out.push(P(aa, 2*xx*xx*xx, xx));
+    }
+    return out;
+  }
+
+  // ---------- 2. shade the overhang (cobalt wash between the two fold lips) ----------
+  // The pleat's two silhouette edges bound the doubled-over region. Filling it a
+  // whisper of cobalt makes the shelf read as one folded surface, not a wire X.
+  var lipUpper = foldEdgePts(0.0001, X_MAX, 200);   // x>0 lip
+  var lipLower = foldEdgePts(X_MIN, -0.0001, 200);  // x<0 lip
+  ctx.beginPath();
+  ctx.moveTo(lipUpper[0][0], lipUpper[0][1]);
+  for (i = 1; i < lipUpper.length; i++) ctx.lineTo(lipUpper[i][0], lipUpper[i][1]);
+  for (i = lipLower.length - 1; i >= 0; i--) ctx.lineTo(lipLower[i][0], lipLower[i][1]);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(20,60,140,0.07)';
+  ctx.fill();
+
+  // ---------- 3. the bifurcation set on the control plane (cobalt, the cusp) ----------
+  // the curve where 4a³+27b²=0 : a=−3t², b=2t³, projected at x=0 (the floor).
+  // dashed pillars first, so they tuck under the bold cusp curve.
+  ctx.save();
+  ctx.setLineDash([2.5, 5]);
+  ctx.strokeStyle = 'rgba(20,60,140,0.28)';
+  ctx.lineWidth = 1.0;
+  for (i = 0; i <= 8; i++) {
+    x = X_MIN + (X_MAX - X_MIN) * i / 8;
+    a = -3*x*x; if (a < A_MIN) continue;
+    b = 2*x*x*x;
+    var top = P(a, b, x), floor = P(a, b, 0);
+    ctx.beginPath(); ctx.moveTo(top[0], top[1]); ctx.lineTo(floor[0], floor[1]); ctx.stroke();
+  }
+  ctx.restore();
+
+  // the cusp curve itself — bold cobalt on the floor
+  ctx.strokeStyle = 'rgba(20,60,140,0.78)';
+  ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  var started = false;
+  for (i = 0; i <= 280; i++) {
+    var t = -1.2 + 2.4 * i / 280;
+    a = -3*t*t; b = 2*t*t*t;
+    if (a < A_MIN) continue;
+    var bp = P(a, b, 0);
+    if (!started) { ctx.moveTo(bp[0], bp[1]); started = true; }
+    else ctx.lineTo(bp[0], bp[1]);
+  }
+  ctx.stroke();
+
+  // ---------- 4. the fold edges on the surface (cobalt, the overhang lips) ----------
+  function strokePts(pts, w) {
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k][0], pts[k][1]);
+    ctx.strokeStyle = '#143C8C';
+    ctx.lineWidth = w;
+    ctx.stroke();
+  }
+  strokePts(lipUpper, 2.8);
+  strokePts(lipLower, 2.8);
+
+  // ---------- 5. the cusp point (a=b=0, x=0) marked on the floor ----------
+  var cuspFloor = P(0, 0, 0);
+  ctx.fillStyle = '#143C8C';
+  ctx.beginPath();
+  ctx.arc(cuspFloor[0], cuspFloor[1], 4.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#143C8C';
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.arc(cuspFloor[0], cuspFloor[1], 9.5, 0, Math.PI * 2);
+  ctx.stroke();
+  // leader + label for the cusp point (placed down-left into open floor)
+  ctx.strokeStyle = 'rgba(20,60,140,0.55)';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.moveTo(cuspFloor[0] - 9, cuspFloor[1] + 7);
+  ctx.lineTo(cuspFloor[0] - 64, cuspFloor[1] + 40);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(20,60,140,0.95)';
+  ctx.font = "600 11px 'IBM Plex Mono', monospace";
+  ctx.textAlign = 'right';
+  ctx.fillText('cusp point · a = b = 0', cuspFloor[0] - 68, cuspFloor[1] + 44);
+  ctx.textAlign = 'left';
+
+  // ---------- 6. leaders: tie each state label to the part of the surface it names ----------
+  // thin cobalt rule + small node, computed from real surface points so they always land right.
+  function leader(fromX, fromY, surfA, surfB, surfX) {
+    var tgt = P(surfA, surfB, surfX);
+    ctx.strokeStyle = 'rgba(20,60,140,0.50)';
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.moveTo(fromX, fromY);
+    ctx.lineTo(tgt[0], tgt[1]);
+    ctx.stroke();
+    ctx.fillStyle = '#143C8C';
+    ctx.beginPath();
+    ctx.arc(tgt[0], tgt[1], 2.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // "two states" card (upper-left) -> a point on the overhang's upper sheet
+  leader(214, 246, -1.55, bOf(-1.55, 1.35), 1.35);
+  // "one state" card (lower-right) -> a point well out on the flat single-valued sheet
+  leader(CSSW - 218, CSSH - 264, 0.55, bOf(0.55, -1.7), -1.7);
+
+  // ---------- 7. record the cusp screen position for layout auditing ----------
+  var poster = document.querySelector('.poster');
+  poster.setAttribute('data-cusp-screen', Math.round(cuspFloor[0]) + ',' + Math.round(cuspFloor[1]));
+})();
+</script>
+</body>
+</html>
