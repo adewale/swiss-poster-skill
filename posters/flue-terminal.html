@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Harness Framework · Terminal Session</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-700: #44403c;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-950);
+    color: var(--stone-300);
+    font-family: 'IBM Plex Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    background: var(--stone-950);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* faint scanline / screen texture, demoted to texture */
+  .poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(12,10,9,0) 0px,
+      rgba(12,10,9,0) 2px,
+      rgba(0,0,0,0.18) 3px,
+      rgba(0,0,0,0.18) 4px
+    );
+    opacity: 0.5;
+  }
+
+  /* ── WINDOW / TITLE BAR — carries the series topbar ─────────────── */
+  .winbar {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: stretch;
+    background: var(--stone-900);
+    border-bottom: 1px solid var(--stone-800);
+    position: relative;
+    z-index: 4;
+    height: 64px;
+  }
+  .winbar .dots {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 20px;
+    border-right: 1px solid var(--stone-800);
+  }
+  .winbar .dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 1.5px solid var(--stone-600);
+    display: block;
+  }
+  /* the active light = the one accent */
+  .winbar .dots span.live { background: var(--blue); border-color: var(--blue); }
+
+  .winbar .glyph {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    border-right: 1px solid var(--stone-800);
+  }
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+    width: 26px; height: 26px;
+  }
+  .mark i { background: var(--stone-950); display: block; }
+  .winbar .glyph .id {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--stone-200);
+  }
+  .winbar .glyph .id b { color: var(--blue-lt); font-weight: 600; }
+
+  .winbar .tab {
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--stone-200);
+    background: var(--stone-950);
+    border-right: 1px solid var(--stone-800);
+    border-top: 2px solid var(--blue);
+  }
+  .winbar .tab .x { color: var(--stone-600); margin-left: 14px; }
+  .winbar .crumb {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding: 0 22px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+  }
+  .winbar .crumb b { color: var(--stone-300); font-weight: 600; }
+
+  /* ── TERMINAL BODY ──────────────────────────────────────────────── */
+  .screen {
+    flex: 1 1 auto;
+    padding: 26px 40px 18px 40px;
+    position: relative;
+    z-index: 3;
+    overflow: hidden;
+  }
+  .line {
+    font-size: 16.5px;
+    line-height: 1.62;
+    white-space: pre-wrap;
+    color: var(--stone-400);
+    letter-spacing: -0.005em;
+  }
+  .prompt { color: var(--blue); font-weight: 600; }
+  .cmd    { color: var(--stone-100); font-weight: 500; }
+  .kw     { color: var(--blue-lt); font-weight: 600; }
+  .str    { color: var(--stone-200); }
+  .dim    { color: var(--stone-600); }
+  .stone3 { color: var(--stone-300); }
+  .val    { color: var(--blue-lt); }
+  .ok     { color: var(--blue-lt); font-weight: 600; }
+  .tag    { color: var(--blue-lt); font-weight: 600; }
+  .muttag { color: var(--stone-500); font-weight: 600; }
+  .ts     { color: var(--stone-600); }
+
+  .blank { height: 13px; }
+
+  .banner {
+    color: var(--blue);
+    font-size: 16.5px;
+    line-height: 1.18;
+    white-space: pre;
+    font-weight: 600;
+    margin: 2px 0 6px 0;
+  }
+
+  /* ASCII architecture box */
+  .diagram {
+    white-space: pre;
+    font-size: 15px;
+    line-height: 1.32;
+    color: var(--stone-400);
+    margin: 10px 0 6px 0;
+  }
+  .diagram .b { color: var(--blue-lt); }
+  .diagram .h { color: var(--stone-200); font-weight: 600; }
+  .diagram .d { color: var(--stone-600); }
+
+  /* caret */
+  .caret {
+    display: inline-block;
+    width: 11px;
+    height: 19px;
+    background: var(--blue);
+    vertical-align: -3px;
+    margin-left: 4px;
+    animation: blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ── STATUS / FOOTER BAR (tmux/vim idiom) ──────────────────────── */
+  .statusbar {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: stretch;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    position: relative;
+    z-index: 5;
+    height: 40px;
+  }
+  .statusbar .seg {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+  }
+  .statusbar .mode {
+    background: var(--blue);
+    color: var(--stone-950);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .statusbar .mid {
+    flex: 1 1 auto;
+    background: var(--stone-900);
+    color: var(--stone-400);
+    border-top: 1px solid var(--stone-800);
+    justify-content: flex-start;
+    gap: 26px;
+  }
+  .statusbar .mid b { color: var(--stone-200); font-weight: 600; }
+  .statusbar .mid .sep { color: var(--stone-700); }
+  .statusbar .right {
+    background: var(--blue-2);
+    color: var(--stone-50);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  .statusbar .right b { font-weight: 700; }
+
+  /* colophon strip — below status bar */
+  .colophon {
+    flex: 0 0 auto;
+    height: 34px;
+    background: var(--stone-950);
+    border-top: 1px solid var(--stone-800);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-600);
+    position: relative;
+    z-index: 5;
+  }
+  .colophon b { color: var(--stone-300); font-weight: 700; }
+  .colophon .blue { color: var(--blue-lt); }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- WINDOW / TITLE BAR -->
+  <div class="winbar">
+    <div class="dots">
+      <span class="live"></span><span></span><span></span>
+    </div>
+    <div class="glyph">
+      <span class="mark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <span class="id">withastro&nbsp;/&nbsp;<b>flue</b></span>
+    </div>
+    <div class="tab">~/my-agent — flue run <span class="x">×</span></div>
+    <div class="crumb">Flue&nbsp;·&nbsp;<b>The&nbsp;Agent&nbsp;Harness&nbsp;Framework</b></div>
+  </div>
+
+  <!-- TERMINAL BODY -->
+  <div class="screen">
+
+    <div class="line"><span class="dim"># Not another SDK. Build autonomous agents &amp; powerful AI</span></div>
+    <div class="line"><span class="dim"># workflows with Flue's programmable TypeScript harness.</span></div>
+    <div class="blank"></div>
+
+    <div class="line"><span class="prompt">$</span> <span class="kw">npx</span> <span class="cmd">@flue/cli create</span> <span class="str">my-agent</span></div>
+    <div class="line"><span class="dim">  scaffolding</span> <span class="val">@flue/runtime</span> <span class="dim">·</span> <span class="val">@flue/cli</span> <span class="dim">·</span> <span class="val">@flue/sdk</span> <span class="dim">·</span> <span class="val">@flue/postgres</span></div>
+    <div class="line"><span class="dim">  language </span><span class="stone3">TypeScript</span><span class="dim">   license </span><span class="stone3">Apache-2.0</span><span class="dim">   ✓ ready</span></div>
+    <div class="blank"></div>
+
+    <div class="line"><span class="prompt">$</span> <span class="cmd">flue run</span> <span class="str">"triage the open issues, fix the failing test, open a PR"</span></div>
+    <div class="blank"></div>
+
+    <div class="line"><span class="dim">  agent = </span><span class="kw">model</span><span class="dim"> + </span><span class="kw">harness</span><span class="dim">   ·   you give it a </span><span class="val">task</span><span class="dim">, not a script</span></div>
+    <div class="line"><span class="ts">  00:00.02 </span><span class="muttag">[boot]</span>    <span class="stone3">model </span><span class="val">anthropic/claude-sonnet-4-6</span></div>
+    <div class="line"><span class="ts">  00:00.09 </span><span class="muttag">[boot]</span>    <span class="stone3">sandbox tier </span><span class="val">Local</span><span class="dim"> · bash + fs · network: scoped</span></div>
+    <div class="line"><span class="ts">  00:00.14 </span><span class="muttag">[boot]</span>    <span class="stone3">loaded skill </span><span class="val">SKILL.md</span><span class="dim"> · tools: typed actions · mcp: 2 servers</span></div>
+    <div class="line"><span class="ts">  00:00.21 </span><span class="muttag">[boot]</span>    <span class="stone3">session </span><span class="val">triage-2026</span><span class="dim"> opened · memory restored</span></div>
+    <div class="blank"></div>
+
+    <!-- THE LOOP -->
+    <div class="line"><span class="dim">  ── loop ── </span><span class="tag">reason</span> <span class="dim">→</span> <span class="tag">act</span> <span class="dim">→</span> <span class="tag">observe</span> <span class="dim">─── repeat until done ───</span></div>
+    <div class="line"><span class="ts">  00:01.6  </span><span class="tag">[reason]</span>  <span class="stone3">plan: read failing test, locate cause, patch, verify</span></div>
+    <div class="line"><span class="ts">  00:02.0  </span><span class="tag">[act]</span>     <span class="stone3">tool </span><span class="val">grep</span><span class="dim">(</span><span class="str">"FAIL"</span><span class="dim">, ./test)  →  2 matches</span></div>
+    <div class="line"><span class="ts">  00:02.4  </span><span class="tag">[observe]</span> <span class="stone3">parser.spec.ts:41 — expected token, got EOF</span></div>
+    <div class="line"><span class="ts">  00:03.1  </span><span class="tag">[reason]</span>  <span class="stone3">off-by-one in tokenizer; need a sandbox to run it</span></div>
+    <div class="line"><span class="ts">  00:03.3  </span><span class="muttag">[sandbox]</span> <span class="stone3">spin-up </span><span class="val">Local()</span><span class="dim"> · isolated fs+shell ........ </span><span class="ok">up 240ms</span></div>
+    <div class="line"><span class="ts">  00:04.0  </span><span class="tag">[act]</span>     <span class="stone3">tool </span><span class="val">write</span><span class="dim">(</span><span class="str">src/tokenizer.ts</span><span class="dim">)  ·  +3 −1</span></div>
+    <div class="line"><span class="ts">  00:05.2  </span><span class="tag">[act]</span>     <span class="stone3">bash </span><span class="val">$ pnpm test</span><span class="dim"> ........................ </span><span class="ok">passed</span></div>
+    <div class="line"><span class="ts">  00:05.9  </span><span class="tag">[observe]</span> <span class="stone3">18/18 green · recovered from prior failure</span></div>
+    <div class="line"><span class="ts">  00:06.4  </span><span class="tag">[act]</span>     <span class="stone3">tool </span><span class="val">github.open_pr</span><span class="dim">(</span><span class="str">"fix: tokenizer EOF"</span><span class="dim">) → #284</span></div>
+    <div class="line"><span class="ts">  00:06.8  </span><span class="muttag">[session]</span> <span class="stone3">saved </span><span class="val">triage-2026</span><span class="dim"> · compacted 41k → 6k tokens</span></div>
+    <div class="blank"></div>
+
+    <!-- ASCII DIAGRAM: Universal Agent Architecture -->
+    <div class="line"><span class="prompt">$</span> <span class="cmd">flue inspect</span> <span class="kw">--layers</span></div>
+    <div class="diagram">  <span class="d">┌──────────────────────────────────────────────────────────────┐</span>
+  <span class="d">│</span>  <span class="h">MODEL</span>      <span class="d">reasons · picks the next action</span>                  <span class="d">│</span>
+  <span class="d">│</span>             <span class="b">tokens   ·   tools   ·   prompts</span>                 <span class="d">│</span>
+  <span class="d">├──────────────────────────────────────────────────────────────┤</span>
+  <span class="d">│</span>  <span class="h">HARNESS</span>    <span class="d">context · loop · recovery</span>                        <span class="d">│</span>
+  <span class="d">│</span>             <span class="b">skills   ·   memory  ·   sessions</span>                <span class="d">│</span>
+  <span class="d">├──────────────────────────────────────────────────────────────┤</span>
+  <span class="d">│</span>  <span class="h">SANDBOX</span>    <span class="d">where it does real work</span>                          <span class="d">│</span>
+  <span class="d">│</span>             <span class="b">bash     ·   security ·   network</span>                <span class="d">│</span>
+  <span class="d">├──────────────────────────────────────────────────────────────┤</span>
+  <span class="d">│</span>  <span class="h">FILESYSTEM</span> <span class="d">durable state</span>                                    <span class="d">│</span>
+  <span class="d">│</span>             <span class="b">read     ·   write    ·   grep    ·   glob</span>       <span class="d">│</span>
+  <span class="d">└───────────────────────────────┬──────────────────────────────┘</span>
+                                  <span class="d">│</span>
+        <span class="d">deploy ▸</span> <span class="b">node</span> <span class="d">·</span> <span class="b">cf workers</span> <span class="d">·</span> <span class="b">gh actions</span> <span class="d">·</span> <span class="b">gitlab ci</span> <span class="d">·</span> <span class="b">render</span></div>
+    <div class="blank"></div>
+
+    <div class="line"><span class="ts">  00:07.0  </span><span class="ok">[done]</span>    <span class="stone3">task complete · PR </span><span class="val">#284</span><span class="dim"> opened · </span><span class="ok">success</span><span class="dim"> · 1 cycle, 6.8s</span></div>
+    <div class="blank"></div>
+
+    <div class="line"><span class="prompt">$</span> <span class="cmd">flue run</span> <span class="caret"></span></div>
+
+  </div>
+
+  <!-- STATUS BAR (tmux/vim idiom) -->
+  <div class="statusbar">
+    <div class="seg mode">RUN</div>
+    <div class="seg mid">
+      <span>session <b>triage-2026</b></span>
+      <span class="sep">│</span>
+      <span>loop <b>reason→act→observe</b></span>
+      <span class="sep">│</span>
+      <span>sandbox <b>local</b></span>
+      <span class="sep">│</span>
+      <span><b>0</b> errors</span>
+    </div>
+    <div class="seg right">withastro&nbsp;/&nbsp;<b>flue</b></div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>A model, equipped &amp; directed — then left to run the loop on its own</div>
+    <div><span class="blue">Apache-2.0</span> · TypeScript · withastro&nbsp;/&nbsp;<b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Not another SDK · The program is the poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-950);
+    color: var(--stone-200);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    background: var(--stone-950);
+    padding: 42px 64px 30px 64px;
+  }
+
+  /* registration corners */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-700);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-300);
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar b { color: var(--blue-lt); font-weight: 600; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-950); display: block; }
+
+  /* ── HEADLINE LOCKUP ─────────────────────────────────── */
+  .head {
+    display: flex;
+    align-items: flex-end;
+    gap: 26px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 4;
+  }
+  .head .mark { width: 86px; height: 86px; margin-bottom: 8px; }
+  .head .lede { flex: 1 1 auto; }
+  .head .kick {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-lt);
+    margin-bottom: 12px;
+  }
+  .head h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 104px;
+    line-height: 0.84;
+    letter-spacing: -0.05em;
+    color: var(--stone-50);
+  }
+  .head h1 em {
+    font-style: normal;
+    color: var(--blue-lt);
+  }
+  .head .sub {
+    margin-left: auto;
+    text-align: right;
+    align-self: flex-end;
+    padding-bottom: 6px;
+    flex: 0 0 auto;
+  }
+  .head .sub .big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 26px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--stone-200);
+  }
+  .head .sub .big b { font-weight: 700; color: var(--stone-50); }
+
+  .rule {
+    border-top: 3px solid var(--blue);
+    margin: 18px 0 22px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 9px;
+    position: relative;
+    z-index: 4;
+  }
+  .rule .l {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 21px;
+    letter-spacing: -0.01em;
+    color: var(--stone-300);
+    max-width: 70ch;
+  }
+  .rule .l b { font-weight: 700; color: var(--stone-50); }
+  .rule .l span { color: var(--blue-lt); font-weight: 500; }
+  .rule .r {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    flex: 0 0 auto;
+    padding-left: 26px;
+    text-align: right;
+  }
+
+  /* ── THE EDITOR — dominant element ───────────────────── */
+  .editor {
+    position: relative;
+    z-index: 4;
+    background: var(--stone-900);
+    border: 1px solid var(--stone-800);
+    /* room for annotations on the right */
+  }
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 38px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--stone-800);
+    background: var(--stone-950);
+  }
+  .chrome .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--stone-700); flex: 0 0 auto; }
+  .chrome .dot.live { background: var(--blue); }
+  .chrome .file {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--stone-400);
+    margin-left: 14px;
+  }
+  .chrome .file b { color: var(--stone-100); font-weight: 600; }
+  .chrome .tab {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+  }
+  .chrome .tab b { color: var(--blue-lt); }
+
+  /* code grid: gutter | code | annotation margin */
+  .codewrap {
+    display: grid;
+    grid-template-columns: 64px 1fr 250px;
+    position: relative;
+  }
+  .gutter {
+    border-right: 1px solid var(--stone-800);
+    padding: 22px 0 22px 0;
+    text-align: right;
+    user-select: none;
+  }
+  .gutter .ln {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    line-height: 30px;
+    color: var(--stone-700);
+    padding-right: 16px;
+    font-weight: 400;
+  }
+  .code {
+    padding: 22px 20px 22px 26px;
+    overflow: hidden;
+  }
+  .code pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    line-height: 30px;
+    color: var(--stone-200);
+    white-space: pre;
+    tab-size: 2;
+  }
+  /* syntax — monochrome blue theme, single hue + stone */
+  .kw   { color: var(--blue-lt); font-weight: 600; }   /* keywords */
+  .fn   { color: var(--blue-lt); font-weight: 500; }   /* calls / methods */
+  .str  { color: var(--stone-300); }                    /* strings / values */
+  .com  { color: var(--stone-500); font-style: italic; }/* comments */
+  .pun  { color: var(--stone-400); }                    /* punctuation */
+  .id   { color: var(--stone-100); }                    /* identifiers */
+  .num  { color: var(--stone-300); }                    /* numbers */
+
+  /* annotation margin */
+  .notes {
+    position: relative;
+    border-left: 1px solid var(--stone-800);
+  }
+  .note {
+    position: absolute;
+    left: 0;
+    width: 250px;
+    padding-left: 22px;
+    box-sizing: border-box;
+  }
+  /* leader line that crosses into the code area */
+  .note .lead {
+    position: absolute;
+    top: 14px;
+    left: -1px;
+    width: 14px;
+    height: 1px;
+    background: var(--blue);
+  }
+  .note .lead::before {
+    content: "";
+    position: absolute;
+    left: -1px; top: -2.5px;
+    width: 5px; height: 5px;
+    background: var(--blue);
+    border-radius: 50%;
+  }
+  .note .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--blue-lt);
+    margin-bottom: 4px;
+  }
+  .note .t {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--stone-100);
+  }
+  .note .d {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.32;
+    color: var(--stone-400);
+    margin-top: 5px;
+  }
+
+  /* ── LOOP STRIP ──────────────────────────────────────── */
+  .loop {
+    position: relative;
+    z-index: 4;
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 248px 1fr;
+    border: 1px solid var(--stone-800);
+    border-left: 3px solid var(--blue);
+  }
+  .loop .lh {
+    padding: 20px 24px;
+    border-right: 1px solid var(--stone-800);
+    background: var(--stone-900);
+  }
+  .loop .lh .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    color: var(--stone-50);
+  }
+  .loop .lh .eq span { color: var(--blue-lt); }
+  .loop .lh .eq .op { color: var(--stone-600); font-weight: 300; }
+  .loop .lh .cap {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    margin-top: 12px;
+  }
+  .loop .lr {
+    display: flex;
+    align-items: center;
+    padding: 20px 26px;
+    gap: 0;
+  }
+  .loop .step {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 27px;
+    letter-spacing: -0.03em;
+    color: var(--stone-100);
+  }
+  .loop .arr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 24px;
+    color: var(--blue);
+    padding: 0 18px;
+    font-weight: 400;
+  }
+  .loop .lr .tail {
+    margin-left: auto;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--stone-400);
+    text-align: right;
+    max-width: 22ch;
+    line-height: 1.25;
+  }
+  .loop .lr .tail b { color: var(--blue-lt); font-weight: 600; }
+
+  /* ── PACKAGE FOOTNOTE ROW ────────────────────────────── */
+  .pkgs {
+    position: relative;
+    z-index: 4;
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px dotted var(--stone-800);
+    padding-top: 13px;
+  }
+  .pkgs .set { display: flex; gap: 30px; }
+  .pkgs .pk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue-lt);
+    letter-spacing: -0.01em;
+  }
+  .pkgs .pk em {
+    display: block;
+    font-style: normal;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--stone-500);
+    letter-spacing: 0;
+    margin-top: 3px;
+  }
+  .pkgs .lic {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-800);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-200); font-weight: 700; }
+  .colophon .blue { color: var(--blue-lt); }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">typescript · one file, one agent</div>
+    </div>
+    <div class="right">
+      <div>withastro / <b>flue</b></div>
+      <div class="meta">the program is the poster</div>
+    </div>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="head">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <div class="lede">
+      <div class="kick">read it like code, because it is</div>
+      <h1>Not<br>another <em>SDK.</em></h1>
+    </div>
+    <div class="sub">
+      <div class="big">A harness<br>you <b>program.</b></div>
+    </div>
+  </div>
+
+  <div class="rule">
+    <div class="l">An agent is a <b>model</b> plus a <b>harness</b> — give it tools, a skill, a sandbox, a session, and a <span>task in plain words.</span></div>
+    <div class="r">agent.ts<br>illustrative</div>
+  </div>
+
+  <!-- THE EDITOR -->
+  <div class="editor">
+    <div class="chrome">
+      <span class="dot live"></span><span class="dot"></span><span class="dot"></span>
+      <span class="file">src / <b>agent.ts</b></span>
+      <span class="tab">@flue/runtime · <b>node</b></span>
+    </div>
+
+    <div class="codewrap">
+      <!-- gutter -->
+      <div class="gutter">
+        <div class="ln">01</div><div class="ln">02</div><div class="ln">03</div>
+        <div class="ln">04</div><div class="ln">05</div><div class="ln">06</div>
+        <div class="ln">07</div><div class="ln">08</div><div class="ln">09</div>
+        <div class="ln">10</div><div class="ln">11</div><div class="ln">12</div>
+        <div class="ln">13</div><div class="ln">14</div><div class="ln">15</div>
+        <div class="ln">16</div><div class="ln">17</div><div class="ln">18</div>
+        <div class="ln">19</div><div class="ln">20</div><div class="ln">21</div>
+        <div class="ln">22</div><div class="ln">23</div><div class="ln">24</div>
+        <div class="ln">25</div><div class="ln">26</div><div class="ln">27</div>
+        <div class="ln">28</div><div class="ln">29</div><div class="ln">30</div>
+      </div>
+
+      <!-- code -->
+      <div class="code"><pre><span class="kw">import</span> <span class="pun">{</span> <span class="id">Agent</span><span class="pun">,</span> <span class="id">Model</span><span class="pun">,</span> <span class="id">tool</span><span class="pun">,</span> <span class="id">skill</span><span class="pun">,</span> <span class="id">sandbox</span> <span class="pun">}</span>
+  <span class="kw">from</span> <span class="str">"@flue/runtime"</span><span class="pun">;</span>
+<span class="kw">import</span> <span class="pun">{</span> <span class="id">z</span> <span class="pun">}</span> <span class="kw">from</span> <span class="str">"zod"</span><span class="pun">;</span>
+
+<span class="com">// the model reasons over the goal and picks each action</span>
+<span class="kw">const</span> <span class="id">model</span> <span class="pun">=</span> <span class="fn">Model</span><span class="pun">(</span><span class="str">"anthropic/claude-sonnet-4-6"</span><span class="pun">);</span>
+
+<span class="com">// typed tools — the only way the agent touches the world</span>
+<span class="kw">const</span> <span class="id">openPR</span> <span class="pun">=</span> <span class="fn">tool</span><span class="pun">(</span><span class="pun">{</span>
+  <span class="id">name</span><span class="pun">:</span> <span class="str">"open_pull_request"</span><span class="pun">,</span>
+  <span class="id">input</span><span class="pun">:</span> <span class="id">z</span><span class="pun">.</span><span class="fn">object</span><span class="pun">(</span><span class="pun">{</span> <span class="id">title</span><span class="pun">:</span> <span class="id">z</span><span class="pun">.</span><span class="fn">string</span><span class="pun">(),</span> <span class="id">body</span><span class="pun">:</span> <span class="id">z</span><span class="pun">.</span><span class="fn">string</span><span class="pun">()</span> <span class="pun">}),</span>
+  <span class="id">run</span><span class="pun">:</span> <span class="kw">async</span> <span class="pun">(</span><span class="id">i</span><span class="pun">)</span> <span class="pun">=&gt;</span> <span class="kw">await</span> <span class="id">gh</span><span class="pun">.</span><span class="fn">pulls</span><span class="pun">(</span><span class="id">i</span><span class="pun">),</span>
+<span class="pun">});</span>
+
+<span class="com">// give the agent equipment, expertise, and a safe place to work</span>
+<span class="kw">const</span> <span class="id">agent</span> <span class="pun">=</span> <span class="kw">new</span> <span class="fn">Agent</span><span class="pun">(</span><span class="pun">{</span>
+  <span class="id">model</span><span class="pun">,</span>
+  <span class="id">tools</span><span class="pun">:</span> <span class="pun">[</span><span class="id">openPR</span><span class="pun">,</span> <span class="id">readFile</span><span class="pun">,</span> <span class="id">runTests</span><span class="pun">],</span>
+  <span class="id">skills</span><span class="pun">:</span> <span class="pun">[</span><span class="fn">skill</span><span class="pun">(</span><span class="str">"./skills/review/SKILL.md"</span><span class="pun">)],</span>
+  <span class="id">sandbox</span><span class="pun">:</span> <span class="fn">sandbox</span><span class="pun">(</span><span class="pun">{</span> <span class="id">tier</span><span class="pun">:</span> <span class="str">"local"</span><span class="pun">,</span> <span class="id">fs</span><span class="pun">:</span> <span class="kw">true</span><span class="pun">,</span> <span class="id">shell</span><span class="pun">:</span> <span class="kw">true</span> <span class="pun">}),</span>
+<span class="pun">});</span>
+
+<span class="com">// a named session carries state &amp; memory across turns</span>
+<span class="kw">const</span> <span class="id">session</span> <span class="pun">=</span> <span class="kw">await</span> <span class="id">agent</span><span class="pun">.</span><span class="fn">session</span><span class="pun">(</span><span class="str">"triage-1842"</span><span class="pun">);</span>
+
+<span class="com">// hand it a goal, not a script — then let the loop run</span>
+<span class="kw">await</span> <span class="id">session</span><span class="pun">.</span><span class="fn">run</span><span class="pun">(</span><span class="str">`Find the failing test on this branch,</span>
+<span class="str">  fix the cause, and open a pull request.`</span><span class="pun">);</span></pre></div>
+
+      <!-- annotation margin -->
+      <div class="notes">
+        <!-- line 06 → model -->
+        <div class="note" style="top:150px">
+          <span class="lead"></span>
+          <div class="k">reasons</div>
+          <div class="t">The model reasons</div>
+          <div class="d">Thinks over the task, decides the next action. Swappable.</div>
+        </div>
+        <!-- line 09–13 → typed tools -->
+        <div class="note" style="top:250px">
+          <span class="lead"></span>
+          <div class="k">typed tools</div>
+          <div class="t">Typed actions</div>
+          <div class="d">The only way the agent touches your systems — schema-checked.</div>
+        </div>
+        <!-- line 19 → skill -->
+        <div class="note" style="top:540px">
+          <span class="lead"></span>
+          <div class="k">SKILL.md</div>
+          <div class="t">Packaged expertise</div>
+          <div class="d">Domain know-how, loaded on demand.</div>
+        </div>
+        <!-- line 20 → sandbox -->
+        <div class="note" style="top:630px">
+          <span class="lead"></span>
+          <div class="k">sandbox</div>
+          <div class="t">A secure sandbox</div>
+          <div class="d">Real fs + shell, isolated. Virtual · Local · Remote.</div>
+        </div>
+        <!-- line 24 → session -->
+        <div class="note" style="top:720px">
+          <span class="lead"></span>
+          <div class="k">session</div>
+          <div class="t">State across turns</div>
+          <div class="d">Named memory, with automatic compaction.</div>
+        </div>
+        <!-- line 27 → task -->
+        <div class="note" style="top:810px">
+          <span class="lead"></span>
+          <div class="k">.run()</div>
+          <div class="t">A task, not a script</div>
+          <div class="d">State the outcome in plain words; trust the loop to finish.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOOP STRIP -->
+  <div class="loop">
+    <div class="lh">
+      <div class="eq">Agent <span class="op">=</span><br>Model <span class="op">+</span><br><span>Harness</span></div>
+      <div class="cap">the whole, in one line</div>
+    </div>
+    <div class="lr">
+      <span class="step">Reason</span>
+      <span class="arr">&rarr;</span>
+      <span class="step">Act</span>
+      <span class="arr">&rarr;</span>
+      <span class="step">Observe</span>
+      <span class="tail">The harness runs the loop, supplies context &amp; the <b>trigger.</b></span>
+    </div>
+  </div>
+
+  <!-- PACKAGES -->
+  <div class="pkgs">
+    <div class="set">
+      <div class="pk">@flue/runtime<em>harness · sessions · tools · sandbox</em></div>
+      <div class="pk">@flue/cli<em>run it from the terminal</em></div>
+      <div class="pk">@flue/sdk<em>embed it anywhere</em></div>
+      <div class="pk">@flue/postgres<em>durable state</em></div>
+    </div>
+    <div class="lic">Apache-2.0</div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The program is the poster · build autonomous agents &amp; ai workflows</div>
+    <div>withastro / <b class="blue">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

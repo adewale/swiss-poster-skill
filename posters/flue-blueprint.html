@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Universal Agent Architecture · Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+    --blue-lt:   #4DA3FF;   /* lighter — accents on dark */
+    --field:     #0048B5;   /* blueprint ground — deep flat Flue blue */
+    --ink:       #fafaf9;   /* all line / type ink, white */
+    --ink-70:    rgba(250,250,249,0.72);
+    --ink-45:    rgba(250,250,249,0.46);
+    --ink-28:    rgba(250,250,249,0.28);
+    --ink-14:    rgba(250,250,249,0.14);
+    --ink-10:    rgba(250,250,249,0.10);
+    --ink-06:    rgba(250,250,249,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--field);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    background: var(--field);
+    padding: 46px 64px 30px 64px;
+  }
+
+  /* ── Graph-paper grid hairlines across the whole field ─────────────── */
+  .gridfield {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(0deg,  var(--ink-06) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, var(--ink-06) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(0deg,  var(--ink-10) 0 1px, transparent 1px 140px),
+      repeating-linear-gradient(90deg, var(--ink-10) 0 1px, transparent 1px 140px);
+  }
+  /* The drawing border — double rule like a real sheet */
+  .sheetborder {
+    position: absolute;
+    inset: 22px;
+    border: 1px solid var(--ink-45);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .sheetborder::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid var(--ink-28);
+  }
+
+  /* Registration / crop marks at the corners */
+  .reg {
+    position: absolute;
+    width: 30px; height: 30px;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .reg::before, .reg::after {
+    content: "";
+    position: absolute;
+    background: var(--ink-70);
+  }
+  .reg::before { left: 0; right: 0; top: 50%; height: 1px; transform: translateY(-0.5px); }
+  .reg::after  { top: 0; bottom: 0; left: 50%; width: 1px; transform: translateX(-0.5px); }
+  .reg.tl { top: 40px; left: 40px; }
+  .reg.tr { top: 40px; right: 40px; }
+  .reg.bl { bottom: 40px; left: 40px; }
+  .reg.br { bottom: 40px; right: 40px; }
+
+  /* ── TOPBAR — series identity, drafting voice ─────────────────────── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink);
+    position: relative;
+    z-index: 4;
+    margin-bottom: 22px;
+  }
+  .topbar .meta { color: var(--ink-45); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark — same 6x6 grid, inverted for the field */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    border: 1px solid var(--ink-45);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--ink); display: block; }
+
+  /* ── TITLE LOCKUP ─────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    z-index: 4;
+    margin-bottom: 14px;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--ink-45);
+    margin-top: 6px;
+  }
+
+  /* ── DECK / headline in drafting voice ────────────────────────────── */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1.5px solid var(--ink-70);
+    padding-top: 12px;
+    margin-bottom: 26px;
+    position: relative;
+    z-index: 4;
+  }
+  .deck .deck-big {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 33ch;
+  }
+  .deck .deck-big b { font-weight: 700; }
+  .deck .deck-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    font-weight: 500;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.7;
+  }
+
+  /* ── THE SCHEMATIC — exploded sectioned assembly ──────────────────── */
+  .schematic {
+    position: relative;
+    z-index: 3;
+    margin: 0 6px;
+    height: 940px;
+  }
+
+  /* The stack of four layer plates, exploded vertically */
+  .stack {
+    position: absolute;
+    left: 132px;
+    right: 296px;
+    top: 8px;
+  }
+  .plate {
+    position: relative;
+    border: 1.5px solid var(--ink-70);
+    background: var(--ink-06);
+    height: 168px;
+    margin-bottom: 52px;     /* the exploded gap */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 30px;
+  }
+  .plate:last-child { margin-bottom: 0; }
+
+  /* faint inner construction rule, like a section hatch boundary */
+  .plate::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 1px;
+    background: var(--ink-10);
+  }
+  /* corner ticks on each plate */
+  .ptick {
+    position: absolute;
+    width: 12px; height: 12px;
+    border: 1px solid var(--ink-45);
+  }
+  .ptick.a { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .ptick.b { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+  .ptick.c { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+  .ptick.d { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+  .plate .pname {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .plate .prole {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink-70);
+    margin-top: 8px;
+  }
+  /* contents annotation — small parts list inside the plate, right side */
+  .plate .pcontents {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink-70);
+    line-height: 1.85;
+  }
+  .plate .pcontents b { color: var(--ink); font-weight: 600; }
+
+  /* dimension line running down the left, spanning the whole assembly */
+  .dimline {
+    position: absolute;
+    left: 92px;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: var(--ink-45);
+    z-index: 3;
+  }
+  .dimline::before, .dimline::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    width: 9px; height: 9px;
+    border-left: 1px solid var(--ink-70);
+  }
+  /* arrowheads top & bottom of the dimension line */
+  .dimarrow {
+    position: absolute;
+    left: -4.5px;
+    width: 0; height: 0;
+    border-left: 4.5px solid transparent;
+    border-right: 4.5px solid transparent;
+  }
+  .dimarrow.top { top: 8px; border-bottom: 8px solid var(--ink-70); }
+  .dimarrow.bot { bottom: 0; border-top: 8px solid var(--ink-70); }
+  .dimcap {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: rotate(-90deg);
+    transform-origin: left center;
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+  }
+
+  /* tick extension lines from each plate to the dimension line */
+  .dimtick {
+    position: absolute;
+    left: 92px;
+    width: 40px;
+    height: 1px;
+    background: var(--ink-28);
+    z-index: 2;
+  }
+
+  /* ── Leader lines + callout numbers on the right ──────────────────── */
+  .callout {
+    position: absolute;
+    right: 0;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    z-index: 4;
+  }
+  .callout .lead {
+    height: 1px;
+    background: var(--ink-45);
+    flex: 1 1 auto;
+    position: relative;
+  }
+  .callout .lead::before {  /* small node where the leader meets the plate */
+    content: "";
+    position: absolute;
+    left: 0; top: -2.5px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .callout .num {
+    flex: 0 0 auto;
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-left: 10px;
+  }
+
+  /* ── LEGEND of callouts (lower-left of schematic zone) ─────────────── */
+  .legend {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 118px;
+    z-index: 4;
+  }
+  .legend .lh {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    border-bottom: 1px solid var(--ink-28);
+    padding-bottom: 7px;
+    margin-bottom: 12px;
+  }
+  .legend .li {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 18px;
+  }
+  .legend .li .n {
+    flex: 0 0 auto;
+    width: 22px; height: 22px;
+    border: 1px solid var(--ink-70);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 600;
+    color: var(--ink);
+  }
+  .legend .li .lt {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .legend .li .lt span {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 400;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    margin-top: 3px;
+  }
+
+  /* ── THE LOOP — small process detail, drawn as a cycle note ────────── */
+  .loop {
+    position: relative;
+    z-index: 4;
+    border-top: 1.5px solid var(--ink-70);
+    padding-top: 14px;
+    margin: 0 6px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .loop .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    font-weight: 500;
+    flex: 0 0 auto;
+    line-height: 1.5;
+  }
+  .loop .lab b { color: var(--ink); font-weight: 600; display: block; font-size: 13px; }
+  .loop .cyc {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .loop .cyc .op {
+    font-weight: 300;
+    color: var(--ink-45);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+  }
+  .loop .ret {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    margin-left: auto;
+    text-align: right;
+    flex: 0 0 auto;
+  }
+
+  /* ── TITLE BLOCK — lower right, drafting style ────────────────────── */
+  .titleblock {
+    position: absolute;
+    right: 30px;
+    bottom: 64px;
+    width: 470px;
+    border: 1.5px solid var(--ink-70);
+    z-index: 5;
+    background: var(--field);
+  }
+  .tb-row { display: flex; border-bottom: 1px solid var(--ink-28); }
+  .tb-row:last-child { border-bottom: 0; }
+  .tb-cell {
+    padding: 9px 12px;
+    border-right: 1px solid var(--ink-28);
+  }
+  .tb-cell:last-child { border-right: 0; }
+  .tb-k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    margin-bottom: 4px;
+  }
+  .tb-v {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .tb-title { flex: 1 1 auto; }
+  .tb-title .tb-v { font-family: 'IBM Plex Sans', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; }
+  .tb-proj .tb-v { font-size: 22px; letter-spacing: 0.02em; }
+  .tb-third { flex: 1 1 0; }
+  .tb-glyph {
+    flex: 0 0 auto;
+    width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--ink-28);
+  }
+  .tb-glyph .mark { width: 42px; height: 42px; }
+
+  /* ── COLOPHON ─────────────────────────────────────────────────────── */
+  .colophon {
+    position: absolute;
+    left: 64px;
+    right: 540px;
+    bottom: 38px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    border-top: 1px solid var(--ink-28);
+    padding-top: 10px;
+    z-index: 4;
+    line-height: 1.8;
+  }
+  .colophon b { color: var(--ink); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="gridfield"></div>
+  <div class="sheetborder"></div>
+
+  <span class="reg tl"></span>
+  <span class="reg tr"></span>
+  <span class="reg bl"></span>
+  <span class="reg br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">a harness you program — typescript · apache-2.0</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · drawing no. UAA-01</div>
+      <div class="meta">universal agent architecture</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">A Harness You Program</span>
+      <span class="small">not another sdk — agent = model + harness</span>
+    </span>
+  </div>
+
+  <div class="deck">
+    <div class="deck-big">The agent, drawn to scale: a <b>model</b> that reasons, set inside a <b>harness</b> that gives it context, tools, and a loop.</div>
+    <div class="deck-tag">Sectioned assembly<br>four layers · exploded view<br>① — ④ keyed below</div>
+  </div>
+
+  <!-- SCHEMATIC -->
+  <section class="schematic">
+
+    <!-- Legend, far left -->
+    <div class="legend">
+      <div class="lh">Key</div>
+      <div class="li"><span class="n">1</span><span class="lt">Model<span>reasons · acts</span></span></div>
+      <div class="li"><span class="n">2</span><span class="lt">Harness<span>context · loop</span></span></div>
+      <div class="li"><span class="n">3</span><span class="lt">Sandbox<span>isolated work</span></span></div>
+      <div class="li"><span class="n">4</span><span class="lt">Filesystem<span>real artifacts</span></span></div>
+    </div>
+
+    <!-- Overall dimension line spanning the assembly -->
+    <div class="dimline">
+      <span class="dimarrow top"></span>
+      <span class="dimarrow bot"></span>
+      <span class="dimcap">overall stack · one agent</span>
+    </div>
+
+    <!-- tick extensions to each plate centre -->
+    <div class="dimtick" style="top:92px"></div>
+    <div class="dimtick" style="top:312px"></div>
+    <div class="dimtick" style="top:532px"></div>
+    <div class="dimtick" style="top:752px"></div>
+
+    <!-- The exploded stack -->
+    <div class="stack">
+
+      <div class="plate">
+        <span class="ptick a"></span><span class="ptick b"></span>
+        <span class="ptick c"></span><span class="ptick d"></span>
+        <div class="pname">Model</div>
+        <div class="prole">the reasoning core</div>
+        <div class="pcontents">
+          <b>tokens</b><br>tools<br>prompts
+        </div>
+      </div>
+
+      <div class="plate">
+        <span class="ptick a"></span><span class="ptick b"></span>
+        <span class="ptick c"></span><span class="ptick d"></span>
+        <div class="pname">Harness</div>
+        <div class="prole">the programmable shell</div>
+        <div class="pcontents">
+          <b>skills</b><br>memory<br>sessions
+        </div>
+      </div>
+
+      <div class="plate">
+        <span class="ptick a"></span><span class="ptick b"></span>
+        <span class="ptick c"></span><span class="ptick d"></span>
+        <div class="pname">Sandbox</div>
+        <div class="prole">isolated execution</div>
+        <div class="pcontents">
+          <b>bash</b><br>security<br>network
+        </div>
+      </div>
+
+      <div class="plate">
+        <span class="ptick a"></span><span class="ptick b"></span>
+        <span class="ptick c"></span><span class="ptick d"></span>
+        <div class="pname">Filesystem</div>
+        <div class="prole">where work lands</div>
+        <div class="pcontents">
+          <b>read</b> · write<br>grep · glob
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Leader lines + circled callout numbers, right side, aligned to plate centres -->
+    <div class="callout" style="top:78px"><div class="lead"></div><div class="num">1</div></div>
+    <div class="callout" style="top:298px"><div class="lead"></div><div class="num">2</div></div>
+    <div class="callout" style="top:518px"><div class="lead"></div><div class="num">3</div></div>
+    <div class="callout" style="top:738px"><div class="lead"></div><div class="num">4</div></div>
+
+  </section>
+
+  <!-- THE LOOP -->
+  <section class="loop">
+    <div class="lab">Control cycle<b>the agent runs itself</b></div>
+    <div class="cyc">
+      Reason <span class="op">&rarr;</span> Act <span class="op">&rarr;</span> Observe <span class="op">&#8635;</span>
+    </div>
+    <div class="ret">you give a task<br>not a script</div>
+  </section>
+
+  <!-- TITLE BLOCK -->
+  <div class="titleblock">
+    <div class="tb-row">
+      <div class="tb-glyph">
+        <span class="mark">
+          <i style="grid-column:4;grid-row:2"></i>
+          <i style="grid-column:3;grid-row:3"></i>
+          <i style="grid-column:4;grid-row:4"></i>
+          <i style="grid-column:3;grid-row:5"></i>
+        </span>
+      </div>
+      <div class="tb-cell tb-proj">
+        <div class="tb-k">Project</div>
+        <div class="tb-v">FLUE</div>
+      </div>
+      <div class="tb-cell tb-title">
+        <div class="tb-k">Title</div>
+        <div class="tb-v">Universal Agent Architecture</div>
+      </div>
+    </div>
+    <div class="tb-row">
+      <div class="tb-cell tb-third">
+        <div class="tb-k">Sheet</div>
+        <div class="tb-v">1 OF 1</div>
+      </div>
+      <div class="tb-cell tb-third">
+        <div class="tb-k">Scale</div>
+        <div class="tb-v">— NTS</div>
+      </div>
+      <div class="tb-cell tb-third">
+        <div class="tb-k">Rev</div>
+        <div class="tb-v">A</div>
+      </div>
+    </div>
+    <div class="tb-row">
+      <div class="tb-cell tb-third">
+        <div class="tb-k">Drawn by</div>
+        <div class="tb-v">withastro / flue</div>
+      </div>
+      <div class="tb-cell tb-third">
+        <div class="tb-k">Packages</div>
+        <div class="tb-v">runtime · cli · sdk</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    Build autonomous agents &amp; powerful ai workflows<br>
+    Deploy — node · cloudflare workers · github actions · gitlab ci · daytona · render<br>
+    withastro / <b>Flue</b> · the agent harness framework
+  </div>
+
+</div>
+</body>
+</html>

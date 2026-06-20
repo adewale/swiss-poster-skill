@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Loop · Constructivist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;   /* Flue brand */
+    --blue-2:    #0057D8;   /* darker — small accent text on light */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    background: var(--stone-50);
+  }
+
+  /* ── The constructivist field (full-bleed SVG) ──────────────────── */
+  .field {
+    position: absolute;
+    inset: 0;
+    width: 1260px;
+    height: 1800px;
+    z-index: 1;
+  }
+
+  /* ── Series furniture (set straight for legibility) ─────────────── */
+  .topbar {
+    position: absolute;
+    top: 42px; left: 64px; right: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    z-index: 8;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* Top-left lockup: glyph + framework line */
+  .brand {
+    position: absolute;
+    top: 86px; left: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 8;
+  }
+  .brand .mark { width: 46px; height: 46px; }
+  .brand .bword {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .brand .btag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    border-left: 2px solid var(--stone-900);
+    padding-left: 14px;
+    margin-left: 4px;
+  }
+
+  /* ── Kinetic display type — HUGE, on the diagonal ───────────────── */
+  .kinetic {
+    position: absolute;
+    z-index: 6;
+    pointer-events: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 0.78;
+  }
+  /* LOOP — the giant word riding the diagonal axis */
+  .kinetic.loop {
+    left: 70px;
+    top: 690px;
+    font-size: 340px;
+    color: var(--stone-950);
+    transform: rotate(-31deg);
+    transform-origin: left bottom;
+  }
+  /* AGENT — secondary, reversed out of the black wedge */
+  .kinetic.agent {
+    left: 752px;
+    top: 1196px;
+    font-size: 120px;
+    color: var(--stone-50);
+    transform: rotate(-31deg);
+    transform-origin: left bottom;
+  }
+
+  /* ── Equation, set straight, on a quiet field ───────────────────── */
+  .equation {
+    position: absolute;
+    top: 196px; right: 64px;
+    z-index: 8;
+    text-align: right;
+    max-width: 560px;
+  }
+  .equation .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 10px;
+  }
+  .equation .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    color: var(--stone-950);
+  }
+  .equation .eq .op { color: var(--blue); font-weight: 300; }
+  .equation .sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    margin-top: 16px;
+    margin-left: auto;
+    max-width: 42ch;
+  }
+  .equation .sub b { font-weight: 600; color: var(--stone-950); }
+
+  /* ── Phase ticks — Reason · Act · Observe — along the axis ──────── */
+  .phase {
+    position: absolute;
+    z-index: 8;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .phase .pn {
+    font-size: 12px;
+    color: var(--blue-2);
+  }
+  .phase .pw {
+    font-size: 19px;
+    letter-spacing: 0.04em;
+    color: var(--stone-950);
+    margin-top: 3px;
+    font-weight: 700;
+  }
+  .phase.p1 { left: 96px;  top: 1452px; }
+  .phase.p2 { left: 372px; top: 1452px; }
+  .phase.p3 { left: 648px; top: 1452px; }
+  .phase.rep {
+    left: 924px; top: 1452px;
+    color: var(--stone-500);
+  }
+  .phase.rep .pw { color: var(--stone-500); font-weight: 600; }
+
+  /* ── Core caption — Model + Harness, in a quiet block ───────────── */
+  .core {
+    position: absolute;
+    left: 64px; top: 1556px;
+    z-index: 8;
+    width: 1132px;
+    border-top: 3px solid var(--stone-950);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+  }
+  .core .lede {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.34;
+    letter-spacing: -0.015em;
+    color: var(--stone-900);
+    max-width: 70ch;
+  }
+  .core .lede b { font-weight: 700; color: var(--stone-950); }
+  .core .lede em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .core .spec {
+    flex: 0 0 auto;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .core .spec .k {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    font-weight: 600;
+  }
+  .core .spec .v {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--stone-950);
+    margin-top: 5px;
+    letter-spacing: -0.01em;
+  }
+  .core .spec .v2 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--stone-500);
+    margin-top: 5px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Colophon ───────────────────────────────────────────────────── */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 28px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 8;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- ── CONSTRUCTIVIST GEOMETRY ───────────────────────────────────
+       Embodied move: El Lissitzky "Beat the Whites with the Red Wedge"
+       — black wedge thrusting along a ~31° diagonal axis, penetrating
+       a large BLUE circle (the Model). Flue blue stands in for the
+       historic red. Bars + thin long rules carry the kinetic axis. -->
+  <svg class="field" viewBox="0 0 1260 1800" preserveAspectRatio="none"
+       data-reference="lissitzky-wedge-into-circle"
+       data-encoding="circle → Model (reasoning core); wedge+bars → harness driving the loop along diagonal axis"
+       data-lineage="constructivist-bauhaus-dynamism"
+       aria-hidden="true">
+
+    <!-- long thin rules slashing across, establishing the diagonal axis -->
+    <line x1="-40" y1="1560" x2="1320" y2="740" stroke="#0c0a09" stroke-width="2"/>
+    <line x1="-40" y1="1612" x2="1320" y2="792" stroke="#007AFF" stroke-width="2"/>
+    <line x1="120" y1="1780" x2="1120" y2="180" stroke="#0c0a09" stroke-width="1.5"/>
+
+    <!-- THE MODEL — large blue circle, the reasoning core -->
+    <circle cx="430" cy="940" r="312" fill="#007AFF"/>
+    <!-- a thin concentric blue rule, faint orbit of reasoning -->
+    <circle cx="430" cy="940" r="356" fill="none" stroke="#0057D8" stroke-width="2"/>
+
+    <!-- THE HARNESS — heavy black WEDGE thrusting into the circle
+         along the diagonal, propelling it (Lissitzky red wedge, in black) -->
+    <polygon points="1240,300 1240,360 360,1000" fill="#0c0a09"/>
+    <!-- the wedge driving point, penetrating the circle core -->
+    <polygon points="1240,300 360,1000 412,1064 1240,360" fill="#0c0a09"/>
+
+    <!-- heavy black bar — the loop's drive shaft on the axis -->
+    <polygon points="980,1112 1086,1180 612,1556 506,1488" fill="#0c0a09"/>
+    <!-- a second, blue bar offset — tension, the act stroke -->
+    <polygon points="690,1244 742,1278 470,1494 418,1460" fill="#007AFF"/>
+
+    <!-- a small system of heavy black blocks — asymmetric counterweight -->
+    <rect x="84" y="1300" width="150" height="150" fill="#0c0a09"
+          transform="rotate(-31 159 1375)"/>
+    <!-- blue square chip, off the axis, kinetic accent -->
+    <rect x="1058" y="612" width="78" height="78" fill="#007AFF"
+          transform="rotate(-31 1097 651)"/>
+
+    <!-- thrust dot at the wedge tip inside the circle (the next action) -->
+    <circle cx="430" cy="940" r="30" fill="#0c0a09"/>
+
+    <!-- a thin black rule continuing the bar past the frame edge -->
+    <line x1="506" y1="1488" x2="-60" y2="1888" stroke="#0c0a09" stroke-width="2"/>
+  </svg>
+
+  <!-- ── TOPBAR (straight) ─────────────────────────────────────────── -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">reason · act · observe</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · plate II</div>
+      <div class="meta">the loop, in motion</div>
+    </div>
+  </div>
+
+  <!-- ── BRAND LOCKUP (straight) ───────────────────────────────────── -->
+  <div class="brand">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="bword">Flue</span>
+    <span class="btag">Not another SDK</span>
+  </div>
+
+  <!-- ── EQUATION (straight, quiet field, top-right) ───────────────── -->
+  <div class="equation">
+    <div class="lab">The whole, as one line</div>
+    <div class="eq">Agent <span class="op">=</span> Model <span class="op">+</span> Harness</div>
+    <div class="sub">The <b>model reasons</b> and picks the next action. The <b>harness</b> gives it context, tools, skills, a sandbox and memory — and drives the loop.</div>
+  </div>
+
+  <!-- ── KINETIC DISPLAY TYPE ──────────────────────────────────────── -->
+  <div class="kinetic loop">LOOP</div>
+  <div class="kinetic agent">AGENT</div>
+
+  <!-- ── PHASE TICKS — Reason · Act · Observe (straight) ───────────── -->
+  <div class="phase p1"><div class="pn">01</div><div class="pw">Reason</div></div>
+  <div class="phase p2"><div class="pn">02</div><div class="pw">Act</div></div>
+  <div class="phase p3"><div class="pn">03</div><div class="pw">Observe</div></div>
+  <div class="phase rep"><div class="pn">↻</div><div class="pw">Repeat</div></div>
+
+  <!-- ── CORE CAPTION (straight, protected reading zone) ───────────── -->
+  <div class="core">
+    <div class="lede">
+      You give it a <b>task, not a script.</b> The harness gives the model a sandbox,
+      sessions and memory, then runs the loop so it can <b>act, remember, recover</b> —
+      repeating until the work is done. <em>Autonomous by construction.</em>
+    </div>
+    <div class="spec">
+      <div class="k">model:</div>
+      <div class="v">claude-sonnet-4-6</div>
+      <div class="v2">typescript · apache-2.0</div>
+    </div>
+  </div>
+
+  <!-- ── COLOPHON (straight) ───────────────────────────────────────── -->
+  <div class="colophon">
+    <div>Reason → Act → Observe · the harness drives the loop</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
