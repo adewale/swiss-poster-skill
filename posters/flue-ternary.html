@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Harness Trilemma — Flue · Think · Eve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 60px 26px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:20;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .head{margin-top:26px;position:relative;z-index:20}
+  .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:96px;line-height:.86;letter-spacing:-.01em;color:var(--stone-900)}
+  .head h1 .b{color:var(--blue-2)}
+  .head .sub{margin-top:12px;font-size:18px;line-height:1.4;color:var(--stone-700);max-width:66ch}
+  .head .sub b{color:var(--stone-900);font-weight:600}
+  .head .hint{margin-top:9px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--stone-500)}
+
+  svg#tern{position:absolute;left:0;top:0;width:1260px;height:1800px;z-index:5}
+
+  .foot{position:absolute;left:60px;right:60px;bottom:92px;z-index:20}
+  .common{display:flex;gap:16px;align-items:baseline;border-top:2px solid var(--stone-900);padding-top:11px}
+  .common .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    font-weight:600;color:var(--blue-2);white-space:nowrap}
+  .common .txt{font-size:15px;color:var(--stone-700)} .common .txt b{color:var(--stone-900);font-weight:600}
+  .closer{margin-top:12px;font-size:17px;color:var(--stone-900)} .closer b{color:var(--blue-2);font-weight:700}
+
+  .colo{position:absolute;left:60px;right:60px;bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9.5px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">the agent-harness trilemma</div></div>
+    <div class="r">withastro / flue<div class="meta">flue · project think · eve</div></div>
+  </div>
+
+  <div class="head">
+    <h1>The harness<br><span class="b">trilemma.</span></h1>
+    <div class="sub">A harness optimizes for three things at once — and trades them off. Plot Flue, Cloudflare's
+      Project&nbsp;Think and Vercel's Eve on the triangle: <b>each leans toward a different corner.</b></div>
+    <div class="hint">Nearer a corner ▸ stronger on that trait</div>
+  </div>
+
+  <svg id="tern" viewBox="0 0 1260 1800" aria-label="Ternary plot of three agent frameworks"></svg>
+
+  <div class="foot">
+    <div class="common"><span class="lab">Common ground</span>
+      <span class="txt">All three are <b>open-source TypeScript durable runtimes</b> — they just optimize for different corners.</span></div>
+    <div class="closer"><b>Flue</b> leans portability · <b>Think</b> leans platform power · <b>Eve</b> leans batteries-included.</div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>A positioning map · not affiliated with Cloudflare or Vercel
+      <div class="src">Sources: github.com/withastro/flue · blog.cloudflare.com/project-think · vercel.com/blog/introducing-eve</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var A=[630,452], B=[150,1300], C=[1110,1300];     // apex(Portability), BL(Platform), BR(Batteries)
+  function P(a,b,c){return [a*A[0]+b*B[0]+c*C[0], a*A[1]+b*B[1]+c*C[1]];}
+  function ln(p,q,cls){return '<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" class="'+cls+'"/>';}
+  var s='';
+  s+='<style>'
+    +'.grid{stroke:#d6d3d1;stroke-width:1}'
+    +'.edge{stroke:#1c1917;stroke-width:2.5;fill:none}'
+    +'.cl{font-family:Barlow Condensed,sans-serif;font-weight:700;text-transform:uppercase}'
+    +'.cwho{font-family:IBM Plex Mono,monospace;font-size:11px;letter-spacing:.16em;fill:#78716c}'
+    +'.nm{font-family:Barlow Condensed,sans-serif;font-weight:700;text-transform:uppercase}'
+    +'.who{font-family:IBM Plex Mono,monospace;font-size:11px;letter-spacing:.18em}'
+    +'.ds{font-family:IBM Plex Sans,sans-serif;font-size:13.5px;fill:#44403c}'
+    +'</style>';
+  // grid lines
+  [0.2,0.4,0.6,0.8].forEach(function(t){
+    s+=ln(P(t,1-t,0),P(t,0,1-t),'grid');   // const portability
+    s+=ln(P(1-t,t,0),P(0,t,1-t),'grid');   // const platform
+    s+=ln(P(1-t,0,t),P(0,1-t,t),'grid');   // const batteries
+  });
+  // triangle edges
+  s+='<path class="edge" d="M'+A[0]+','+A[1]+' L'+B[0]+','+B[1]+' L'+C[0]+','+C[1]+' Z"/>';
+  // corner labels
+  s+='<text class="cl" x="'+A[0]+'" y="'+(A[1]-48)+'" text-anchor="middle" font-size="32" fill="#0057D8">Portability</text>';
+  s+='<text class="cwho" x="'+A[0]+'" y="'+(A[1]-26)+'" text-anchor="middle">no lock-in · run anywhere</text>';
+  s+='<text class="cl" x="'+(B[0]-6)+'" y="'+(B[1]+44)+'" text-anchor="start" font-size="32" fill="#1c1917">Platform power</text>';
+  s+='<text class="cwho" x="'+(B[0]-6)+'" y="'+(B[1]+66)+'" text-anchor="start">deep managed durability</text>';
+  s+='<text class="cl" x="'+(C[0]+6)+'" y="'+(C[1]+44)+'" text-anchor="end" font-size="32" fill="#1c1917">Batteries-included</text>';
+  s+='<text class="cwho" x="'+(C[0]+6)+'" y="'+(C[1]+66)+'" text-anchor="end">opinionated, by default</text>';
+  // nodes: weights [portability, platform, batteries]
+  var nodes=[
+    {n:'Flue', who:'withastro', w:[0.60,0.10,0.30], blue:true,
+       ds:['Portable harness —','runs the same agent anywhere'], lab:'right'},
+    {n:'Project Think', who:'cloudflare', w:[0.15,0.60,0.25], blue:false,
+       ds:['Durable actor-model','runtime on Cloudflare'], lab:'left'},
+    {n:'Eve', who:'vercel', w:[0.10,0.40,0.50], blue:false,
+       ds:['Batteries-included,','compiled to Vercel'], lab:'rightdown'}
+  ];
+  nodes.forEach(function(o){
+    var p=P(o.w[0],o.w[1],o.w[2]); var x=p[0], y=p[1];
+    var r=o.blue?40:27; var fill=o.blue?'#007AFF':'#0c0a09';
+    var nmc=o.blue?'#0057D8':'#1c1917'; var whoc=o.blue?'#0057D8':'#78716c';
+    var anchor='start', lx=x+r+18, ty=y-8;
+    if(o.lab==='left'){anchor='end'; lx=x-r-18;}
+    if(o.lab==='rightdown'){anchor='start'; lx=x+r+18; ty=y+18;}
+    s+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+fill+'" stroke="#fafaf9" stroke-width="3"/>';
+    s+='<text class="nm" x="'+lx+'" y="'+ty+'" text-anchor="'+anchor+'" font-size="34" fill="'+nmc+'">'+o.n+'</text>';
+    s+='<text class="who" x="'+lx+'" y="'+(ty+20)+'" text-anchor="'+anchor+'" fill="'+whoc+'" style="text-transform:uppercase">'+o.who+'</text>';
+    s+='<text class="ds" x="'+lx+'" y="'+(ty+42)+'" text-anchor="'+anchor+'">'+o.ds[0]+'</text>';
+    s+='<text class="ds" x="'+lx+'" y="'+(ty+60)+'" text-anchor="'+anchor+'">'+o.ds[1]+'</text>';
+  });
+  document.getElementById('tern').innerHTML=s;
+})();
+</script>
+</body>
+</html>
