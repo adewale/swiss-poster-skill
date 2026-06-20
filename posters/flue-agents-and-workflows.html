@@ -61,11 +61,16 @@
   .drow .dv.a .lab{color:var(--blue-2)} .drow .dv.w .lab{color:var(--stone-900)}
   .drow .dv .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--stone-700)}
 
-  .base{position:absolute;left:56px;right:56px;bottom:84px;background:var(--stone-950);color:var(--stone-50);padding:20px 26px}
-  .base .h{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:30px;line-height:1;color:var(--stone-50)}
-  .base .h b{color:var(--blue-lt)}
-  .base .t{font-size:15.5px;line-height:1.46;color:rgba(250,250,249,.88);margin-top:9px;max-width:108ch} .base .t b{color:var(--stone-50);font-weight:600}
-  .base .t .m{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--blue-lt)}
+  .base{position:absolute;left:56px;right:56px;bottom:80px;background:var(--stone-950);color:var(--stone-50);padding:18px 26px 20px}
+  .base .bh{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(250,250,249,.22);padding-bottom:10px}
+  .base .bh .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue-lt);font-weight:600}
+  .base .bh .ph{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:30px;line-height:1;color:var(--stone-50)}
+  .base .bh .ph b{color:var(--blue-lt)}
+  .base .vgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:13px}
+  .base .vitem .vt{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:18px;line-height:1.04;color:var(--blue-lt)}
+  .base .vitem .vd{font-size:13px;line-height:1.4;color:rgba(250,250,249,.86);margin-top:5px}
+  .base .vitem .vd b{color:var(--stone-50);font-weight:600}
+  .base .vitem .vd .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--blue-lt)}
 
   .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
     font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
@@ -88,8 +93,8 @@
   <div class="head">
     <h1>Agents <span class="b">&amp;</span> Workflows.</h1>
     <div class="sub">They aren't opposites — they invert control. A <b>Workflow</b> is <b>code that calls a model</b>; an
-      <b>Agent</b> is <b>a model that calls your code</b>. A Workflow runs an Agent; an Agent spawns its declared <b>sub-agents</b>
-      as task sessions — all on the <b>same harness</b>, whose loop is <b>Pi</b>.</div>
+      <b>Agent</b> is <b>a model that calls your code</b>. Both run the <b>same harness</b> (loop: <b>Pi</b>), so you
+      <b>dial autonomy per task</b> — script what you know, hand the rest to the model, and wrap one inside the other.</div>
   </div>
 
   <div class="grid">
@@ -194,10 +199,15 @@
   </div>
 
   <div class="base">
-    <div class="h">Pick the <b>driver</b>, not the engine.</div>
-    <div class="t">When the next step isn't known, let the model guide an <b>Agent</b>. When the steps are known, let your code guide a
-      <b>Workflow</b> to a typed result — and that Workflow still runs an Agent underneath. The harness, and Pi beneath it, is the
-      same code in both cases; only <b>who drives</b> and <b>how the run ends</b> differ.</div>
+    <div class="bh"><span class="lab">Why it matters</span><span class="ph">Control is a <b>dial</b>, not a fork.</span></div>
+    <div class="vgrid">
+      <div class="vitem"><div class="vt">Autonomy per task</div>
+        <div class="vd">Keep the parts you know <b>deterministic</b> — a Workflow returns a typed result with a replayable <span class="m">runId</span>. Give the open-ended parts to an <b>Agent</b>. One project, not two frameworks.</div></div>
+      <div class="vitem"><div class="vt">Write the harness once</div>
+        <div class="vd">The same <b>tools, skills, sandbox, and model</b> back both. Promoting a step from scripted to autonomous — or pinning it back down — needs <b>no rewrite</b>.</div></div>
+      <div class="vitem"><div class="vt">Guardrails around autonomy</div>
+        <div class="vd">A Workflow drives an Agent for the fuzzy step, then resumes as typed, recoverable code — a <b>predictable shell around an unpredictable core</b>. That's what ships to production.</div></div>
+    </div>
   </div>
 
   <div class="colo">
