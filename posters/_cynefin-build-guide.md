@@ -78,3 +78,39 @@ mechanism.**
 
 Quality bar: a viewer reads the title, the one key idea, and the takeaway in three seconds, then the detail
 rewards a second look. The big form must carry the meaning, not decorate it.
+
+---
+
+## 4. Extended facts (for the divergent set — keep exact, don't invent past these)
+
+**History / timeline.**
+- 1999 — Dave Snowden develops Cynefin at IBM (knowledge management).
+- 2002 — the Cynefin Centre for Organisational Complexity (IBM). Snowden later founds Cognitive Edge (2005); today the Cynefin Co.
+- 2003 — Kurtz & Snowden, "The new dynamics of strategy: sense-making in a complex and complicated world," IBM Systems Journal.
+- 2007 — Snowden & Boone, "A Leader's Framework for Decision Making," Harvard Business Review (Nov 2007). This popularised the four domains.
+- ~2014 — "Simple" renamed "Obvious," then "Clear."
+- 2020 — the "St David's Day" model adds liminal (threshold) zones.
+
+**Dynamics (movement between domains).** Situations move; the domains are transient.
+- Collapse: Clear → Chaotic (the cliff) — complacency, the rule outlives its world, catastrophic fall.
+- Disorder → out: from the center, break the problem apart and assign each piece to a domain.
+- Exploit: Complex → Complicated — a pattern stabilises, constraints harden, hand it to experts.
+- Disrupt: Complicated → Complex — constraints break, the expert answer stops working, probe again.
+- Impose/recover: Chaotic → Clear (or Complex) — act to make order, then govern it.
+- Deliberate dive: push a stuck ordered system briefly into chaos to force novelty, then stabilise.
+
+**Liminal model (2020).** Boundaries are not walls. Liminal = threshold: a situation between two domains where the old method no longer fits and the new one isn't earned. Don't invent named liminal sub-domains; speak of "the liminal zone between X and Y."
+
+**A Leader's Framework (HBR 2007) — the move and the trap per domain.**
+- Clear: set the rule, delegate, communicate plainly. Trap: complacency / oversimplification (the cliff).
+- Complicated: convene experts, weigh conflicting advice, decide. Trap: analysis paralysis, or experts dismissing novel answers.
+- Complex: run safe-to-fail probes, raise interaction, let patterns emerge. Trap: demanding fact-up-front certainty; command-and-control.
+- Chaotic: act to make order, give direction, then move toward complex. Trap: staying commander after the crisis passes.
+
+**Cynefin for software (a common applied mapping).**
+- Clear: CRUD, config, known migrations — apply the standard; estimates reliable.
+- Complicated: performance, schema/architecture, integrations — expertise, more than one good answer; estimate a range.
+- Complex: new products, user behaviour, unproven design — ship small probes, iterate; size the bet, not the outcome.
+- Chaotic: outage, incident, breach — stop the bleeding first; estimate later.
+
+**Sense-making vs categorization.** Categorization: pre-made boxes, file the data into them — fast, repeatable, blind to what has no slot. Sense-making: attention first, the pattern shows itself, the category comes after and stays provisional. Cynefin is meant as sense-making; used as a fill-in 2×2 it degrades into a sorting box.

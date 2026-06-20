@@ -27,6 +27,17 @@ const POSTERS = [
   { html: 'cynefin-radial.html',                  png: 'cynefin-radial.png' },
   { html: 'cynefin-matrix-rhythm.html',           png: 'cynefin-matrix-rhythm.png' },
   { html: 'cynefin-mismatch.html',                png: 'cynefin-mismatch.png' },
+  // divergent set — new lineages, forms, and content angles
+  { html: 'cynefin-dynamics.html',                png: 'cynefin-dynamics.png' },
+  { html: 'cynefin-travel.html',                  png: 'cynefin-travel.png' },
+  { html: 'cynefin-compass.html',                 png: 'cynefin-compass.png' },
+  { html: 'cynefin-history.html',                 png: 'cynefin-history.png' },
+  { html: 'cynefin-sensemaking.html',             png: 'cynefin-sensemaking.png' },
+  { html: 'cynefin-wayfinding.html',              png: 'cynefin-wayfinding.png' },
+  { html: 'cynefin-liminal.html',                 png: 'cynefin-liminal.png' },
+  { html: 'cynefin-leader.html',                  png: 'cynefin-leader.png' },
+  { html: 'cynefin-software.html',                png: 'cynefin-software.png' },
+  { html: 'cynefin-key.html',                     png: 'cynefin-key.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name
