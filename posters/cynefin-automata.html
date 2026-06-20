@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Cellular Automata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --forest:   #1F6B45;   /* single accent — the rule's live ink */
+    --forest-d: #154d31;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 40; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    position: relative; z-index: 30;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 16px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar .right .meta { text-transform: none; letter-spacing: 0.12em; }
+
+  /* ===== TITLE ROW ===== */
+  .head {
+    position: relative; z-index: 30;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 34px;
+    border-bottom: 2.5px solid var(--stone-900); padding-bottom: 14px; margin-bottom: 16px;
+  }
+  .head .title {
+    font-weight: 700; font-size: 62px; line-height: 0.84; letter-spacing: -0.035em; color: var(--stone-900);
+    max-width: 760px;
+  }
+  .head .title .g { color: var(--forest); }
+  .head .legend {
+    text-align: right; padding-bottom: 4px; min-width: 250px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.04em; line-height: 1.7;
+    color: var(--stone-500);
+  }
+  .head .legend .row { display: flex; align-items: center; justify-content: flex-end; gap: 9px; }
+  .head .legend .sw { width: 13px; height: 13px; display: inline-block; }
+  .head .legend .sw.on { background: var(--forest); }
+  .head .legend .sw.off { background: var(--stone-50); border: 1px solid var(--stone-400); }
+  .head .legend b { color: var(--stone-900); font-weight: 600; }
+
+  /* ===== GRID OF FOUR AUTOMATA ===== */
+  .grid {
+    position: relative; z-index: 10;
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 16px; height: 1142px;
+  }
+
+  .panel {
+    position: relative; overflow: hidden;
+    border: 2.5px solid var(--stone-900);
+    background: var(--stone-50);
+    display: flex; flex-direction: column;
+  }
+  .panel .field {
+    position: relative; flex: 1; overflow: hidden; background: var(--stone-50);
+  }
+  .panel canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 11; }
+
+  /* small registration tag inside the cell field, upper-left, on its own solid chip */
+  .panel .tag {
+    position: absolute; z-index: 16; top: 0; left: 0;
+    background: var(--stone-50);
+    border-right: 2px solid var(--stone-900); border-bottom: 2px solid var(--stone-900);
+    padding: 7px 13px 7px 14px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500;
+  }
+  .panel .tag b { color: var(--forest-d); font-weight: 700; }
+
+  /* class number, big, upper-right of the field on a solid dark chip */
+  .panel .classno {
+    position: absolute; z-index: 16; top: 0; right: 0;
+    background: var(--stone-950);
+    border-left: 2px solid var(--stone-900); border-bottom: 2px solid var(--stone-900);
+    padding: 6px 13px 7px 13px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--stone-300); font-weight: 600;
+  }
+  .panel .classno b { color: var(--stone-50); font-weight: 700; }
+
+  /* ===== LABEL STRIP — solid stone, below the cells, never over them ===== */
+  .panel .label {
+    position: relative; z-index: 18; flex: 0 0 auto;
+    background: var(--stone-50);
+    border-top: 2.5px solid var(--stone-900);
+    padding: 13px 16px 14px 16px;
+  }
+  .panel .label .domain {
+    display: flex; align-items: baseline; gap: 12px;
+    font-weight: 700; letter-spacing: -0.01em;
+  }
+  .panel .label .domain .rule {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
+    font-weight: 600; color: var(--forest); text-transform: uppercase;
+  }
+  .panel .label .domain .arrow { color: var(--stone-400); font-weight: 400; font-size: 18px; }
+  .panel .label .domain .name { font-size: 27px; line-height: 1; color: var(--stone-900); }
+  .panel .label .gloss {
+    font-size: 14px; line-height: 1.34; color: var(--stone-700); margin-top: 7px; max-width: 50ch;
+  }
+  .panel .label .gloss b { color: var(--stone-900); font-weight: 600; }
+  .panel .label .gloss .prac {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500;
+  }
+
+  /* ===== FOOTER ===== */
+  .foot {
+    position: relative; z-index: 30;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 34px; margin-top: 16px; align-items: start;
+  }
+  .foot .c { font-size: 15.5px; line-height: 1.42; color: var(--stone-700); }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--forest); font-weight: 600; }
+  .foot .c.r {
+    border-left: 2px solid var(--forest); padding-left: 18px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.04em;
+    line-height: 1.55; color: var(--stone-700); text-transform: none;
+  }
+  .foot .c.r .seq { color: var(--forest); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; display:block; margin-bottom: 7px; font-size: 11px; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px; z-index: 30;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="computational"
+     data-reference="wolfram-nks-2002"
+     data-source="elementary-ca-evolution"
+     data-encoding="CA rule → class → domain">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · cellular automata</div>
+      <div class="meta" data-source="thesis">simple rules, four fates</div>
+    </div>
+    <div class="right">
+      <div>elementary CA · Wolfram classes I–IV</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- ===== TITLE ===== -->
+  <div class="head">
+    <div class="title" data-critical="title">Four rules. The same simplicity.<br><span class="g">Four destinies.</span></div>
+    <div class="legend" aria-hidden="true">
+      <div class="row"><span>cell <b>on</b> — the rule fires</span><span class="sw on"></span></div>
+      <div class="row"><span>cell <b>off</b> — the rule rests</span><span class="sw off"></span></div>
+      <div class="row" style="margin-top:6px; color:var(--stone-400)">one seed · 8-bit neighbour rule · time runs down</div>
+    </div>
+  </div>
+
+  <!-- ===== GRID: FOUR COMPUTED AUTOMATA ===== -->
+  <div class="grid">
+
+    <!-- CLEAR — Rule 222, Class I -->
+    <div class="panel">
+      <div class="field" data-encoding="rule 222 from single seed → uniform fill">
+        <canvas id="ca-clear" aria-hidden="true"></canvas>
+        <div class="tag" aria-hidden="true">rule <b>222</b> · single seed</div>
+        <div class="classno" aria-hidden="true">class <b>I</b></div>
+      </div>
+      <div class="label">
+        <div class="domain" data-critical="title">
+          <span class="rule">Rule 222</span><span class="arrow">→</span><span class="name">Clear</span>
+        </div>
+        <div class="gloss" data-critical="body">Settles to one state. <span class="prac">best practice</span></div>
+      </div>
+    </div>
+
+    <!-- COMPLICATED — Rule 90, Class II -->
+    <div class="panel">
+      <div class="field" data-encoding="rule 90 from single seed → Sierpiński triangle">
+        <canvas id="ca-complicated" aria-hidden="true"></canvas>
+        <div class="tag" aria-hidden="true">rule <b>90</b> · single seed</div>
+        <div class="classno" aria-hidden="true">class <b>II</b></div>
+      </div>
+      <div class="label">
+        <div class="domain" data-critical="title">
+          <span class="rule">Rule 90</span><span class="arrow">→</span><span class="name">Complicated</span>
+        </div>
+        <div class="gloss" data-critical="body">Nested, periodic, knowable. <span class="prac">good practice</span></div>
+      </div>
+    </div>
+
+    <!-- COMPLEX — Rule 110, Class IV -->
+    <div class="panel">
+      <div class="field" data-encoding="rule 110 from random row → interacting structures (gliders)">
+        <canvas id="ca-complex" aria-hidden="true"></canvas>
+        <div class="tag" aria-hidden="true">rule <b>110</b> · random row</div>
+        <div class="classno" aria-hidden="true">class <b>IV</b></div>
+      </div>
+      <div class="label">
+        <div class="domain" data-critical="title">
+          <span class="rule">Rule 110</span><span class="arrow">→</span><span class="name">Complex</span>
+        </div>
+        <div class="gloss" data-critical="body">Structures interact; computation lives here. <span class="prac">emergent practice</span></div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC — Rule 30, Class III -->
+    <div class="panel">
+      <div class="field" data-encoding="rule 30 from single seed → chaotic, a randomness source">
+        <canvas id="ca-chaotic" aria-hidden="true"></canvas>
+        <div class="tag" aria-hidden="true">rule <b>30</b> · single seed</div>
+        <div class="classno" aria-hidden="true">class <b>III</b></div>
+      </div>
+      <div class="label">
+        <div class="domain" data-critical="title">
+          <span class="rule">Rule 30</span><span class="arrow">→</span><span class="name">Chaotic</span>
+        </div>
+        <div class="gloss" data-critical="body">Sensitive; a source of randomness. <span class="prac">novel practice</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      <b>Stephen Wolfram</b> sorted every simple rule into four classes — <span class="g">uniform, periodic,
+      complex, chaotic</span>. They line up with the four domains. Order and disorder aren't substances;
+      they're what a rule does over time.
+    </div>
+    <div class="c r" data-critical="cta">
+      <span class="seq">same rule · four fates</span>
+      Each panel runs one 3-neighbour rule down from a seed. Read the destiny before you name the domain:
+      what the rule <i>does</i> tells you which world you are in.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="origin"><b>Wolfram</b> · classes I–IV · an analogy, not Snowden's</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+
+<!-- ============================================================= -->
+<!-- COMPUTATION: real elementary cellular automata.               -->
+<!-- A single 8-bit rule maps each cell's 3-neighbour window to a   -->
+<!-- new state; each generation is a fresh row, time running down.  -->
+<!-- Runs synchronously during parse, finishes before `load`.       -->
+<!-- Canvases are aria-hidden image layers at low z-index.          -->
+<!-- ============================================================= -->
+<script>
+(function () {
+  var FOREST = '#1F6B45';   // on-cell ink (single accent)
+  var OFF    = '#fafaf9';   // off-cell (stone-50)
+  var DPR    = 2;           // match the renderer's 2x capture for crisp squares
+
+  // ---- core elementary-CA evolver -------------------------------------
+  // rule: 0..255.  width: number of cells.  gens: generations to evolve.
+  // seedMode: 'center' (one live cell) or 'random'.  seedRNG: 0..1 fn.
+  // Draws filled squares: on = FOREST, off = OFF (left blank, field is OFF).
+  function evolveCA(canvas, opts) {
+    var rule = opts.rule, width = opts.width, gens = opts.gens;
+    var seedMode = opts.seedMode, rng = opts.rng;
+
+    var field = canvas.parentElement;
+    var cssW = field.clientWidth;
+    var cssH = field.clientHeight;
+
+    canvas.width  = Math.round(cssW * DPR);
+    canvas.height = Math.round(cssH * DPR);
+    var ctx = canvas.getContext('2d');
+
+    // cell size in device pixels so squares are crisp and fill the field.
+    var cw = canvas.width  / width;   // device px per column
+    var ch = canvas.height / gens;    // device px per generation (row)
+
+    // background = off colour, so we only need to paint live cells.
+    ctx.fillStyle = OFF;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = FOREST;
+
+    // decode the 8 rule outputs: bit n = output for neighbourhood pattern n
+    // pattern index = (left<<2 | center<<1 | right)
+    var out = new Uint8Array(8);
+    for (var n = 0; n < 8; n++) out[n] = (rule >> n) & 1;
+
+    // initial row
+    var dens = (opts.density == null) ? 0.5 : opts.density;
+    var row = new Uint8Array(width);
+    if (seedMode === 'random') {
+      for (var i = 0; i < width; i++) row[i] = rng() < dens ? 1 : 0;
+    } else {
+      row[(width >> 1)] = 1; // single central live cell
+    }
+
+    var next = new Uint8Array(width);
+
+    for (var g = 0; g < gens; g++) {
+      // paint this generation's live cells as filled squares
+      var y = Math.floor(g * ch);
+      var hh = Math.ceil(ch) + 0.5;          // +0.5 closes hairline seams
+      for (var x = 0; x < width; x++) {
+        if (row[x]) {
+          var px = Math.floor(x * cw);
+          var ww = Math.ceil(cw) + 0.5;
+          ctx.fillRect(px, y, ww, hh);
+        }
+      }
+      // evolve next row from the 3-neighbour rule (edges wrap toroidally)
+      for (var c = 0; c < width; c++) {
+        var l = row[c === 0 ? width - 1 : c - 1];
+        var m = row[c];
+        var r = row[c === width - 1 ? 0 : c + 1];
+        next[c] = out[(l << 2) | (m << 1) | r];
+      }
+      var tmp = row; row = next; next = tmp;
+    }
+  }
+
+  // ---- a small deterministic PRNG so the "random" panels are stable -----
+  // (mulberry32) — gives reproducible gliders / chaos every render.
+  function mulberry32(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // ---- run the four automata ------------------------------------------
+  // CLEAR — Rule 222, Class I: a single seed grows a solid filled triangle
+  //         that reads as uniform order (Rule 250 is too sparse from one seed).
+  evolveCA(document.getElementById('ca-clear'), {
+    rule: 222, width: 281, gens: 360, seedMode: 'center'
+  });
+
+  // COMPLICATED — Rule 90, Class II: the Sierpiński triangle (nested, periodic).
+  evolveCA(document.getElementById('ca-complicated'), {
+    rule: 90, width: 281, gens: 360, seedMode: 'center'
+  });
+
+  // COMPLEX — Rule 110, Class IV: from a SPARSE random row (~28% live) so
+  //           the localized structures (gliders) stand apart against the
+  //           periodic background and their collisions read — the edge of chaos.
+  evolveCA(document.getElementById('ca-complex'), {
+    rule: 110, width: 281, gens: 360, seedMode: 'random', density: 0.28, rng: mulberry32(7)
+  });
+
+  // CHAOTIC — Rule 30, Class III: a single seed already explodes into
+  //           structured chaos — Wolfram's randomness source.
+  evolveCA(document.getElementById('ca-chaotic'), {
+    rule: 30, width: 281, gens: 360, seedMode: 'center'
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Connection, Not Components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — the edges and nodes; connection */
+    --cobalt-d: #0e2c6a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 40; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* ===== TOPBAR ===== */
+  .topbar {
+    position: relative; z-index: 30;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 16px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar .right .meta { text-transform: none; letter-spacing: 0.1em; }
+
+  /* ===== TITLE ===== */
+  .head {
+    position: relative; z-index: 30;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 14px;
+  }
+  .head .title {
+    font-weight: 700; font-size: 51px; line-height: 0.88; letter-spacing: -0.04em; color: var(--stone-900);
+    max-width: 980px; white-space: nowrap;
+  }
+  .head .title b { color: var(--cobalt-d); font-weight: 700; }
+  .head .keynum { text-align: right; padding-bottom: 4px; flex-shrink: 0; }
+  .head .keynum .n { font-family:'IBM Plex Mono',monospace; font-size: 46px; font-weight: 600; line-height: 0.9; color: var(--cobalt-d); letter-spacing: -0.02em; }
+  .head .keynum .l { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); margin-top: 7px; }
+
+  /* ===== GRID OF GRAPHS ===== */
+  .grid {
+    position: relative; z-index: 10;
+    display: grid;
+    grid-template-columns: 404px 1fr;
+    grid-template-rows: 348px 348px 372px;
+    gap: 14px;
+    height: 1082px;
+  }
+  /* COMPLEX spans the entire right column, all three rows — the hero */
+  .cell.complex { grid-column: 2; grid-row: 1 / 4; }
+  .cell.clear        { grid-column: 1; grid-row: 1; }
+  .cell.complicated  { grid-column: 1; grid-row: 2; }
+  .cell.chaotic      { grid-column: 1; grid-row: 3; }
+
+  .cell {
+    position: relative;
+    border: 2.5px solid var(--stone-900);
+    background: var(--stone-50);
+    overflow: hidden;
+  }
+  .cell canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* panel label — sits on a solid stone field above the canvas */
+  .plabel {
+    position: absolute; left: 0; bottom: 0; z-index: 20;
+    background: var(--stone-50);
+    border-top: 2px solid var(--stone-900);
+    border-right: 2px solid var(--stone-900);
+    padding: 9px 14px 9px 13px;
+    max-width: 88%;
+  }
+  .plabel .pn { display: inline; font-family:'IBM Plex Mono',monospace; font-weight: 600; font-size: 12.5px; letter-spacing: 0.04em; color: var(--stone-900); text-transform: uppercase; }
+  .plabel .pn .em { color: var(--cobalt-d); }
+  .plabel .px { display: block; font-size: 12.5px; line-height: 1.32; color: var(--stone-700); margin-top: 5px; font-weight: 400; max-width: 46ch; }
+  .plabel .px b { color: var(--stone-900); font-weight: 600; }
+
+  /* tiny corner stat per panel — measured microtype */
+  .pstat {
+    position: absolute; right: 0; top: 0; z-index: 20;
+    background: var(--stone-50);
+    border-left: 1.5px solid var(--stone-300);
+    border-bottom: 1.5px solid var(--stone-300);
+    padding: 5px 9px 5px 10px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.06em;
+    color: var(--stone-500); text-transform: uppercase; font-weight: 500;
+  }
+  .pstat b { color: var(--cobalt-d); font-weight: 600; }
+
+  /* COMPLEX gets a larger label block */
+  .cell.complex .plabel { padding: 13px 18px 14px 17px; max-width: 70%; }
+  .cell.complex .plabel .pn { font-size: 16px; }
+  .cell.complex .plabel .px { font-size: 14px; margin-top: 7px; max-width: 42ch; }
+  .cell.complex .pstat { font-size: 11px; padding: 6px 11px 6px 12px; }
+
+  /* corner tag top-left inside complex: reads it as the dominant field */
+  .heroflag {
+    position: absolute; left: 0; top: 0; z-index: 20;
+    background: var(--cobalt); color: var(--stone-50);
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    padding: 6px 12px 6px 13px;
+  }
+
+  /* ===== FOOTER ===== */
+  .foot {
+    position: relative; z-index: 30;
+    margin-top: 16px;
+    display: grid; grid-template-columns: 1fr 322px; gap: 28px; align-items: start;
+  }
+  .foot .lead {
+    font-size: 18.5px; line-height: 1.4; color: var(--stone-700); font-weight: 400;
+  }
+  .foot .lead b { color: var(--stone-900); font-weight: 600; }
+  .foot .lead .g { color: var(--cobalt-d); font-weight: 600; }
+  .foot .side {
+    border-left: 2px solid var(--cobalt); padding-left: 16px;
+  }
+  .foot .side .row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 7px; }
+  .foot .side .row:last-child { margin-bottom: 0; }
+  .foot .side .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone-500); width: 92px; flex-shrink: 0; }
+  .foot .side .v { font-size: 13px; line-height: 1.3; color: var(--stone-900); font-weight: 500; }
+  .foot .side .v b { color: var(--cobalt-d); }
+
+  /* ===== COLOPHON ===== */
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px; z-index: 30;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="computational"
+     data-encoding="force-directed graphs of rising connectivity → domains"
+     data-reference="fruchterman-reingold-1991 · watts-strogatz-small-world"
+     data-source="cynefin · complicated=reducible vs complex=irreducible">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div>
+      <div>Cynefin · connection, not components</div>
+      <div class="meta" data-source="thesis">why complex isn't complicated</div>
+    </div>
+    <div class="right">
+      <div>force-directed · ~240 nodes</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- ===== TITLE ===== -->
+  <div class="head">
+    <div class="title" data-critical="title">Complicated you can take apart.<br><b>Complex you can't.</b></div>
+    <div class="keynum" aria-hidden="true">
+      <div class="n">4</div>
+      <div class="l">graphs · one<br>per domain</div>
+    </div>
+  </div>
+
+  <!-- ===== GRID OF COMPUTED GRAPHS ===== -->
+  <div class="grid">
+
+    <!-- CLEAR — chain -->
+    <div class="cell clear" data-source="domain-clear">
+      <canvas id="g-clear" aria-hidden="true"></canvas>
+      <div class="pstat" aria-hidden="true"><b>7</b> nodes · 6 edges</div>
+      <div class="plabel">
+        <span class="pn" data-critical="title"><span class="em">CLEAR</span> — a chain. Follow it.</span>
+      </div>
+    </div>
+
+    <!-- COMPLICATED — tree / lattice -->
+    <div class="cell complicated" data-source="domain-complicated">
+      <canvas id="g-complicated" aria-hidden="true"></canvas>
+      <div class="pstat" aria-hidden="true"><b>40</b> nodes · tree</div>
+      <div class="plabel">
+        <span class="pn" data-critical="title"><span class="em">COMPLICATED</span> — a machine.</span>
+        <span class="px" data-critical="body">Many parts, fixed couplings; an expert can trace every one.</span>
+      </div>
+    </div>
+
+    <!-- CHAOTIC — torn web -->
+    <div class="cell chaotic" data-source="domain-chaotic">
+      <canvas id="g-chaotic" aria-hidden="true"></canvas>
+      <div class="pstat" aria-hidden="true">edges <b>cut</b> · fragments</div>
+      <div class="plabel">
+        <span class="pn" data-critical="title"><span class="em">CHAOTIC</span> — the web tears.</span>
+      </div>
+    </div>
+
+    <!-- COMPLEX — the hero hairball -->
+    <div class="cell complex" data-source="domain-complex">
+      <canvas id="g-complex" aria-hidden="true"></canvas>
+      <div class="heroflag" aria-hidden="true">the hero · irreducible</div>
+      <div class="pstat" aria-hidden="true"><b>~240</b> nodes · small-world</div>
+      <div class="plabel">
+        <span class="pn" data-critical="title"><span class="em">COMPLEX</span> — a web.</span>
+        <span class="px" data-critical="body">Everything pulls on everything; <b>cut one edge and the whole shape moves.</b></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="foot">
+    <div class="lead" data-critical="body">
+      A complicated system is the <b>sum of its parts.</b> A complex one is the parts and how they
+      <span class="g">pull on each other</span> — take it apart to study it and the thing you wanted to
+      understand is gone.
+    </div>
+    <div class="side" aria-hidden="true">
+      <div class="row"><span class="k">reducible</span><span class="v">complicated · <b>take it apart, it still makes sense</b></span></div>
+      <div class="row"><span class="k">irreducible</span><span class="v">complex · <b>take it apart and it's gone</b></span></div>
+    </div>
+  </div>
+
+  <!-- ===== COLOPHON ===== -->
+  <div class="colophon">
+    <div data-source="encoding">complex adaptive systems · irreducible by design</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+
+<!-- ================================================================= -->
+<!-- COMPUTATION: four force-directed graphs, laid out synchronously   -->
+<!-- during parse so the work finishes before `load` fires. Canvas     -->
+<!-- backing store is 2× CSS size for crispness at the 2× renderer.    -->
+<!-- Fruchterman–Reingold style: O(n²) repulsion + spring attraction   -->
+<!-- along edges + light centering, integrated with velocity damping.  -->
+<!-- ================================================================= -->
+<script>
+(function () {
+  "use strict";
+
+  // ---------- deterministic PRNG (mulberry32) so the layout is stable ----------
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // ============================================================
+  // Graph builders. Each returns { n, edges:[[i,j],...] }.
+  // ============================================================
+
+  // CLEAR — a simple chain / path of ~7 nodes (follow it end to end).
+  function buildChain(n) {
+    var edges = [];
+    for (var i = 0; i < n - 1; i++) edges.push([i, i + 1]);
+    return { n: n, edges: edges };
+  }
+
+  // COMPLICATED — a structured tree (a machine): every coupling fixed and
+  // traceable. Balanced-ish branching tree, ~40 nodes.
+  function buildTree(n, rnd) {
+    var edges = [];
+    for (var i = 1; i < n; i++) {
+      // parent is an earlier node; bias toward 2–3 children for a tidy machine.
+      var parent = Math.floor((i - 1) / 2.4);
+      if (parent < 0) parent = 0;
+      edges.push([parent, i]);
+    }
+    return { n: n, edges: edges };
+  }
+
+  // COMPLEX — a dense small-world hairball (Watts–Strogatz style):
+  // a ring lattice with high clustering, plus a few rewired long-range links.
+  // Everything pulls on everything.
+  function buildSmallWorld(n, k, beta, rnd) {
+    var set = {};
+    function key(a, b) { return a < b ? a + "_" + b : b + "_" + a; }
+    function add(a, b) {
+      if (a === b) return;
+      var kk = key(a, b);
+      if (!set[kk]) set[kk] = [a, b];
+    }
+    // ring lattice: connect each node to k nearest neighbours on each side.
+    for (var i = 0; i < n; i++) {
+      for (var j = 1; j <= k; j++) {
+        add(i, (i + j) % n);
+      }
+    }
+    // rewire a fraction beta of edges to random targets → long-range shortcuts.
+    var keys = Object.keys(set);
+    for (var e = 0; e < keys.length; e++) {
+      if (rnd() < beta) {
+        var pair = set[keys[e]];
+        var a = pair[0];
+        var target = Math.floor(rnd() * n);
+        delete set[keys[e]];
+        add(a, target);
+      }
+    }
+    // a handful of extra global hubs/shortcuts so clusters bind into one tangle.
+    var extra = Math.floor(n * 0.10);
+    for (var x = 0; x < extra; x++) {
+      add(Math.floor(rnd() * n), Math.floor(rnd() * n));
+    }
+    var edges = [];
+    var kk2 = Object.keys(set);
+    for (var q = 0; q < kk2.length; q++) edges.push(set[kk2[q]]);
+    return { n: n, edges: edges };
+  }
+
+  // CHAOTIC — take the complex graph and CUT most edges so it fragments.
+  // keep only `keepFrac` of edges → the web tears, clusters fly apart.
+  function tearGraph(g, keepFrac, rnd) {
+    var edges = [];
+    for (var e = 0; e < g.edges.length; e++) {
+      if (rnd() < keepFrac) edges.push(g.edges[e]);
+    }
+    return { n: g.n, edges: edges };
+  }
+
+  // ============================================================
+  // Force-directed layout (Fruchterman–Reingold + velocity damping).
+  // O(n²) repulsion is fine at these sizes. Light centering pull keeps
+  // disconnected fragments from drifting off-canvas.
+  // ============================================================
+  function layout(g, opts) {
+    var n = g.n;
+    var W = opts.w, H = opts.h;
+    var rnd = opts.rnd;
+    var iters = opts.iters;
+    var area = W * H;
+    // ideal edge length k = C * sqrt(area / n)
+    var k = opts.kScale * Math.sqrt(area / Math.max(n, 1));
+    var kRep = k * k;          // repulsion strength ∝ k²
+    var kAttr = 1 / k;          // attraction strength ∝ 1/k
+
+    // adjacency for the per-iteration spring pass
+    var px = new Float64Array(n), py = new Float64Array(n);
+    var dx = new Float64Array(n), dy = new Float64Array(n);
+
+    // seed positions: small random cloud near centre (or along a line for chains)
+    var cx = W / 2, cy = H / 2;
+    if (opts.seedLine) {
+      // lay the chain roughly horizontally so the path is legible from the start
+      for (var s = 0; s < n; s++) {
+        px[s] = (W * 0.16) + (W * 0.68) * (s / Math.max(n - 1, 1));
+        py[s] = cy + (rnd() - 0.5) * H * 0.10;
+      }
+    } else {
+      var R0 = Math.min(W, H) * 0.30;
+      for (var s2 = 0; s2 < n; s2++) {
+        var ang = rnd() * Math.PI * 2;
+        var rr = Math.sqrt(rnd()) * R0;
+        px[s2] = cx + Math.cos(ang) * rr;
+        py[s2] = cy + Math.sin(ang) * rr;
+      }
+    }
+
+    var edges = g.edges;
+    var temp = opts.temp0 * Math.min(W, H);   // initial max displacement
+    var cool = temp / (iters + 1);
+
+    for (var it = 0; it < iters; it++) {
+      for (var z = 0; z < n; z++) { dx[z] = 0; dy[z] = 0; }
+
+      // --- repulsion: every pair pushes apart (O(n²)) ---
+      for (var a = 0; a < n; a++) {
+        var ax = px[a], ay = py[a];
+        for (var b = a + 1; b < n; b++) {
+          var ddx = ax - px[b];
+          var ddy = ay - py[b];
+          var d2 = ddx * ddx + ddy * ddy;
+          if (d2 < 1e-6) { ddx = (rnd() - 0.5) * 0.1; ddy = (rnd() - 0.5) * 0.1; d2 = ddx * ddx + ddy * ddy + 1e-6; }
+          var dist = Math.sqrt(d2);
+          var f = kRep / d2;          // FR repulsion ~ k²/d
+          var ux = ddx / dist, uy = ddy / dist;
+          var fx = ux * f, fy = uy * f;
+          dx[a] += fx; dy[a] += fy;
+          dx[b] -= fx; dy[b] -= fy;
+        }
+      }
+
+      // --- attraction: springs along edges pull endpoints together ---
+      for (var e = 0; e < edges.length; e++) {
+        var i = edges[e][0], j = edges[e][1];
+        var ex = px[i] - px[j];
+        var ey = py[i] - py[j];
+        var ed = Math.sqrt(ex * ex + ey * ey) + 1e-6;
+        var fa = (ed * ed) * kAttr;   // FR attraction ~ d²/k
+        var aux = ex / ed, auy = ey / ed;
+        var afx = aux * fa, afy = auy * fa;
+        dx[i] -= afx; dy[i] -= afy;
+        dx[j] += afx; dy[j] += afy;
+      }
+
+      // --- light centering so fragments don't escape the frame ---
+      var cstr = opts.center;
+      for (var c = 0; c < n; c++) {
+        dx[c] += (cx - px[c]) * cstr;
+        dy[c] += (cy - py[c]) * cstr;
+      }
+
+      // --- integrate with temperature-capped step (FR cooling) ---
+      for (var p = 0; p < n; p++) {
+        var len = Math.sqrt(dx[p] * dx[p] + dy[p] * dy[p]) + 1e-9;
+        var step = Math.min(len, temp);
+        px[p] += (dx[p] / len) * step;
+        py[p] += (dy[p] / len) * step;
+      }
+      temp -= cool;
+      if (temp < 0) temp = 0;
+    }
+
+    return { px: px, py: py };
+  }
+
+  // ============================================================
+  // Render a laid-out graph into a canvas (2× backing store).
+  // ============================================================
+  function draw(canvasId, g, pos, style) {
+    var canvas = document.getElementById(canvasId);
+    var box = canvas.parentElement;
+    var cssW = box.clientWidth;
+    var cssH = box.clientHeight;
+    var DPR = 2;
+    canvas.width  = Math.round(cssW * DPR);
+    canvas.height = Math.round(cssH * DPR);
+    var ctx = canvas.getContext("2d");
+    ctx.scale(DPR, DPR);
+
+    // fit the laid-out coordinates into the canvas with padding.
+    var pad = style.pad;
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (var i = 0; i < g.n; i++) {
+      if (pos.px[i] < minX) minX = pos.px[i];
+      if (pos.px[i] > maxX) maxX = pos.px[i];
+      if (pos.py[i] < minY) minY = pos.py[i];
+      if (pos.py[i] > maxY) maxY = pos.py[i];
+    }
+    var gw = Math.max(maxX - minX, 1), gh = Math.max(maxY - minY, 1);
+    var availW = cssW - pad * 2, availH = cssH - pad * 2;
+    var sc = Math.min(availW / gw, availH / gh);
+    var ox = pad + (availW - gw * sc) / 2 - minX * sc;
+    var oy = pad + (availH - gh * sc) / 2 - minY * sc;
+    function X(i) { return pos.px[i] * sc + ox; }
+    function Y(i) { return pos.py[i] * sc + oy; }
+
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    // edges
+    ctx.lineCap = "round";
+    ctx.lineWidth = style.edgeW;
+    ctx.strokeStyle = style.edgeColor;
+    if (style.edgeGlobalAlpha != null) ctx.globalAlpha = style.edgeGlobalAlpha;
+    ctx.beginPath();
+    for (var e = 0; e < g.edges.length; e++) {
+      var i2 = g.edges[e][0], j2 = g.edges[e][1];
+      ctx.moveTo(X(i2), Y(i2));
+      ctx.lineTo(X(j2), Y(j2));
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // nodes
+    ctx.fillStyle = style.nodeColor;
+    if (style.nodeGlobalAlpha != null) ctx.globalAlpha = style.nodeGlobalAlpha;
+    for (var k2 = 0; k2 < g.n; k2++) {
+      var r = style.nodeR;
+      ctx.beginPath();
+      ctx.arc(X(k2), Y(k2), r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // CLEAR chain: number the path so you can follow it end to end.
+    if (style.numberPath) {
+      ctx.fillStyle = "#fafaf9";
+      ctx.strokeStyle = style.nodeColor;
+      ctx.lineWidth = 1;
+      ctx.font = "600 10px 'IBM Plex Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      for (var p2 = 0; p2 < g.n; p2++) {
+        // small ring + index, alternating above/below to avoid the line
+        var lx = X(p2), ly = Y(p2);
+        ctx.beginPath(); ctx.arc(lx, ly, style.nodeR, 0, Math.PI * 2); ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = style.nodeColor;
+        ctx.fillText(String(p2 + 1), lx, ly + 0.5);
+        ctx.fillStyle = "#fafaf9";
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ============================================================
+  // BUILD + LAY OUT + DRAW the four graphs.
+  // ============================================================
+  var COBALT = "#143C8C";
+
+  // measure complex panel up front (largest → most iterations)
+  // ---- CLEAR (chain, 7 nodes) ----
+  (function () {
+    var rnd = mulberry32(101);
+    var g = buildChain(7);
+    var box = document.getElementById("g-clear").parentElement;
+    var pos = layout(g, {
+      w: box.clientWidth, h: box.clientHeight, rnd: rnd,
+      iters: 320, kScale: 1.7, center: 0.004, temp0: 0.10, seedLine: true
+    });
+    draw("g-clear", g, pos, {
+      pad: 40, edgeW: 2.4, edgeColor: COBALT, nodeColor: COBALT,
+      nodeR: 8.5, numberPath: true
+    });
+  })();
+
+  // ---- COMPLICATED (structured tree, 40 nodes) ----
+  (function () {
+    var rnd = mulberry32(202);
+    var g = buildTree(40, rnd);
+    var box = document.getElementById("g-complicated").parentElement;
+    var pos = layout(g, {
+      w: box.clientWidth, h: box.clientHeight, rnd: rnd,
+      iters: 420, kScale: 1.05, center: 0.012, temp0: 0.12
+    });
+    draw("g-complicated", g, pos, {
+      pad: 26, edgeW: 1.5, edgeColor: COBALT, nodeColor: COBALT,
+      nodeR: 4.6, edgeGlobalAlpha: 0.9
+    });
+  })();
+
+  // ---- COMPLEX (dense small-world hairball, ~240 nodes) — THE HERO ----
+  (function () {
+    var rnd = mulberry32(303);
+    // 240 nodes, k=5 nearest neighbours each side (high clustering),
+    // beta=0.12 rewiring → a few long-range shortcuts.
+    var g = buildSmallWorld(240, 5, 0.12, rnd);
+    var box = document.getElementById("g-complex").parentElement;
+    var pos = layout(g, {
+      w: box.clientWidth, h: box.clientHeight, rnd: rnd,
+      iters: 480, kScale: 0.55, center: 0.024, temp0: 0.10
+    });
+    draw("g-complex", g, pos, {
+      pad: 30, edgeW: 0.85, edgeColor: COBALT, nodeColor: COBALT,
+      nodeR: 2.15, edgeGlobalAlpha: 0.36, nodeGlobalAlpha: 0.9
+    });
+  })();
+
+  // ---- CHAOTIC (the complex graph, most edges cut → fragments) ----
+  (function () {
+    var rnd = mulberry32(404);
+    // rebuild the same small-world topology, then tear it.
+    var base = buildSmallWorld(240, 5, 0.12, mulberry32(303));
+    var g = tearGraph(base, 0.10, rnd);   // keep ~10% of edges
+    var box = document.getElementById("g-chaotic").parentElement;
+    var pos = layout(g, {
+      w: box.clientWidth, h: box.clientHeight, rnd: rnd,
+      iters: 360, kScale: 0.80, center: 0.0045, temp0: 0.13
+    });
+    draw("g-chaotic", g, pos, {
+      pad: 22, edgeW: 1.0, edgeColor: COBALT, nodeColor: COBALT,
+      nodeR: 2.3, edgeGlobalAlpha: 0.55, nodeGlobalAlpha: 0.8
+    });
+  })();
+
+})();
+</script>
+</body>
+</html>

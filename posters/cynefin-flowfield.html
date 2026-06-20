@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — Phase Portraits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --forest:   #2D6A4F;   /* single accent — the line of pull */
+    --forest-d: #1d4733;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 40; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    position: relative; z-index: 30;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 16px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar .right .meta { text-transform: none; letter-spacing: 0.12em; }
+
+  /* TITLE row */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 14px; position: relative; z-index: 30; }
+  .head .title { font-weight: 700; font-size: 76px; line-height: 0.84; letter-spacing: -0.035em; color: var(--stone-900); max-width: 760px; }
+  .head .title b { color: var(--forest-d); }
+  .head .thesis { text-align: right; max-width: 360px; padding-bottom: 9px; }
+  .head .thesis .big { font-size: 17px; font-weight: 500; line-height: 1.36; letter-spacing: -0.005em; color: var(--stone-700); }
+  .head .thesis .big b { color: var(--stone-900); font-weight: 600; }
+  .head .thesis .sub { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone-500); margin-top: 8px; }
+
+  .seclabel {
+    display:flex; align-items:center; gap:14px;
+    border-top: 2.5px solid var(--stone-900); padding-top: 8px; margin-bottom: 12px;
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; color: var(--stone-700);
+    position: relative; z-index: 30;
+  }
+  .seclabel .sp { flex:1; height:1px; background: var(--stone-300); }
+
+  /* ===== HERO: 2x2 grid of computed phase portraits ===== */
+  .grid {
+    position: relative; z-index: 10;
+    height: 1146px;
+    border: 2.5px solid var(--stone-900);
+    background: var(--stone-900);            /* becomes the 2.5px gridlines between panels */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 2.5px;
+    overflow: hidden;
+  }
+
+  .cell {
+    position: relative;
+    background: var(--stone-50);
+    overflow: hidden;
+  }
+  .cell canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    z-index: 11;
+  }
+  /* faint scientific framing UNDER the streamlines — axes crosshair */
+  .cell .frame { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 12; pointer-events: none; }
+
+  /* panel index tab, upper-left of each cell */
+  .cell .ix {
+    position: absolute; z-index: 16; top: 0; left: 0;
+    background: var(--stone-900);
+    padding: 7px 12px 7px 14px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--stone-50); font-weight: 500;
+  }
+  .cell .ix b { color: #6FB89A; font-weight: 600; }   /* light forest tint, same hue */
+
+  /* the field equation, upper-right of each cell, on a solid stone strip */
+  .cell .eq {
+    position: absolute; z-index: 16; top: 0; right: 0; text-align: right;
+    background: var(--stone-50);
+    border-left: 1.5px solid var(--stone-300);
+    border-bottom: 1.5px solid var(--stone-300);
+    padding: 6px 12px 6px 14px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.01em;
+    color: var(--stone-700); font-weight: 500; white-space: nowrap;
+  }
+  .cell .eq i { font-style: normal; color: var(--forest-d); }
+
+  /* panel LABEL — solid stone strip pinned to the bottom of each cell (NOT over the lines) */
+  .cell .lab {
+    position: absolute; z-index: 18; left: 0; right: 0; bottom: 0;
+    background: var(--stone-50);
+    border-top: 2.5px solid var(--stone-900);
+    padding: 12px 16px 13px 16px;
+  }
+  .cell .lab .dn {
+    font-weight: 700; font-size: 25px; line-height: 0.96; letter-spacing: -0.02em; color: var(--stone-900);
+    display: inline-block;
+  }
+  .cell .lab .shape {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; letter-spacing: 0.04em;
+    color: var(--forest-d); font-weight: 600; margin-left: 2px;
+  }
+  .cell .lab .gloss {
+    font-size: 14.5px; line-height: 1.3; color: var(--stone-700); margin-top: 6px; max-width: 46ch;
+  }
+  .cell .lab .gloss b { color: var(--stone-900); font-weight: 600; }
+
+  /* small reading tag — what the picture is doing — mono, bottom-right of the field area */
+  .cell .read {
+    position: absolute; z-index: 16; right: 14px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500;
+    background: var(--stone-50); padding: 3px 7px;
+  }
+
+  /* ===== FOOTER ===== */
+  .foot {
+    position: relative; z-index: 30;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 34px; margin-top: 16px; align-items: start;
+  }
+  .foot .c { font-size: 16px; line-height: 1.42; color: var(--stone-700); }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--forest-d); font-weight: 600; }
+  .foot .c.r {
+    border-left: 2px solid var(--forest); padding-left: 18px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em;
+    line-height: 1.5; color: var(--stone-700); text-transform: none;
+  }
+  .foot .c.r .seq { color: var(--forest-d); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; display:block; margin-bottom: 7px; font-size: 11px; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px; z-index: 30;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="computational"
+     data-reference="phase-portrait-dynamical-systems"
+     data-source="rk4-streamline-integration"
+     data-encoding="vector field → streamlines → domain phase portrait">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · phase portraits</div>
+      <div class="meta" data-source="domain">the shape of where it goes</div>
+    </div>
+    <div class="right">
+      <div>vector fields · integrated streamlines</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="title" data-critical="title">Four ways a<br>system can <b>move.</b></div>
+    <div class="thesis" data-critical="body">
+      <div class="big">Drop a marble anywhere on the field. <b>Follow where the slope pulls it.</b> Four fields, four fates.</div>
+      <div class="sub">f(x,y) → streamlines</div>
+    </div>
+  </div>
+
+  <div class="seclabel"><span>where it gets pulled, from anywhere you start</span><span class="sp"></span><span>RK4 · ~300 steps/line</span></div>
+
+  <!-- ===== HERO: four phase portraits ===== -->
+  <div class="grid">
+
+    <!-- CLEAR — stable node (sink) -->
+    <div class="cell" id="cell-clear" data-source="domain-clear"
+         data-encoding="f=(-x,-y) · stable node · all streamlines into one point">
+      <canvas aria-hidden="true"></canvas>
+      <svg class="frame" aria-hidden="true" preserveAspectRatio="none"></svg>
+      <div class="ix" aria-hidden="true">i · <b>sink</b></div>
+      <div class="eq" aria-hidden="true">ẋ = <i>−x</i> &nbsp; ẏ = <i>−y</i></div>
+      <div class="read" aria-hidden="true" style="bottom: 122px;">one fixed point · stable</div>
+      <div class="lab">
+        <span class="dn" data-critical="title">Clear</span>
+        <span class="shape" data-critical="title">· a sink</span>
+        <div class="gloss" data-critical="body">everything settles to the <b>one answer</b></div>
+      </div>
+    </div>
+
+    <!-- COMPLICATED — stable focus (inward spiral) -->
+    <div class="cell" id="cell-complicated" data-source="domain-complicated"
+         data-encoding="f=(-x-2y, 2x-y) · stable focus · streamlines spiral inward">
+      <canvas aria-hidden="true"></canvas>
+      <svg class="frame" aria-hidden="true" preserveAspectRatio="none"></svg>
+      <div class="ix" aria-hidden="true">ii · <b>focus</b></div>
+      <div class="eq" aria-hidden="true">ẋ = <i>−x−2y</i> &nbsp; ẏ = <i>2x−y</i></div>
+      <div class="read" aria-hidden="true" style="bottom: 122px;">λ = −1 ± 2i</div>
+      <div class="lab">
+        <span class="dn" data-critical="title">Complicated</span>
+        <span class="shape" data-critical="title">· a focus</span>
+        <div class="gloss" data-critical="body">it spirals in, <b>slowly, knowably</b></div>
+      </div>
+    </div>
+
+    <!-- COMPLEX — many basins (two wells + a saddle) -->
+    <div class="cell" id="cell-complex" data-source="domain-complex"
+         data-encoding="f=(y, x−x³−0.18y) · two stable foci + a saddle · basins of attraction">
+      <canvas aria-hidden="true"></canvas>
+      <svg class="frame" aria-hidden="true" preserveAspectRatio="none"></svg>
+      <div class="ix" aria-hidden="true">iii · <b>basins</b></div>
+      <div class="eq" aria-hidden="true">ẋ = <i>y</i> &nbsp; ẏ = <i>x−x³−0.18y</i></div>
+      <div class="read" aria-hidden="true" style="bottom: 122px;">two wells · one saddle</div>
+      <div class="lab">
+        <span class="dn" data-critical="title">Complex</span>
+        <span class="shape" data-critical="title">· many basins</span>
+        <div class="gloss" data-critical="body">it settles, but <b>not where you can predict</b></div>
+      </div>
+    </div>
+
+    <!-- CHAOTIC — saddle (divergence) -->
+    <div class="cell" id="cell-chaotic" data-source="domain-chaotic"
+         data-encoding="f=(x,−y) · saddle · streamlines thrown to infinity">
+      <canvas aria-hidden="true"></canvas>
+      <svg class="frame" aria-hidden="true" preserveAspectRatio="none"></svg>
+      <div class="ix" aria-hidden="true">iv · <b>saddle</b></div>
+      <div class="eq" aria-hidden="true">ẋ = <i>x</i> &nbsp; ẏ = <i>−y</i></div>
+      <div class="read" aria-hidden="true" style="bottom: 122px;">unstable · diverges</div>
+      <div class="lab">
+        <span class="dn" data-critical="title">Chaotic</span>
+        <span class="shape" data-critical="title">· a saddle</span>
+        <div class="gloss" data-critical="body">pushed off, <b>it runs</b></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="foot">
+    <div class="c" data-critical="body">
+      A phase portrait shows where a system is <b>pulled</b>, from anywhere you start. The four domains
+      are four shapes of pull: <span class="g">one sink, one slow spiral, many basins, and a saddle that
+      throws you off.</span> Read the shape, then pick the method.
+    </div>
+    <div class="c r" data-critical="cta">
+      <span class="seq">the same marble · four fields</span>
+      One field has a single low point. One winds down to it. One has several, and which you reach
+      depends on where you let go. One has none — let go and you are gone.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="origin">dynamical systems · attractors &amp; basins</div>
+    <div><b>Cynefin</b> · /kəˈnɛvɪn/</div>
+  </div>
+
+</div>
+
+<!-- ================================================================= -->
+<!-- COMPUTATION: four 2-D vector fields, each rendered as integrated   -->
+<!-- streamlines. For every cell we seed a grid of start points, push   -->
+<!-- each through RK4 with a small step for ~300 steps, and stroke the  -->
+<!-- path in forest green. Fixed points (f≈0) are marked with a dot.    -->
+<!-- Runs synchronously during parse, finishes before `load` fires.     -->
+<!-- All canvases are aria-hidden, low z-index; text sits on stone.     -->
+<!-- ================================================================= -->
+<script>
+(function () {
+  var FOREST   = '#2D6A4F';
+  var FOREST_D = '#1d4733';
+  var DPR = 2;
+
+  // ---------- shared streamline integrator ----------
+  // cfg: {
+  //   id, field(x,y,out), fixed:[{x,y,type}],   type: 'sink'|'focus'|'saddle'
+  //   xmin,xmax,ymin,ymax  (world window mapped to the cell),
+  //   seeds: {nx, ny, mode}  mode 'grid'|'ring',
+  //   h (step), steps, arrows(bool), stopR (world radius beyond which we stop),
+  //   alpha, lw
+  // }
+  function runCell(cfg) {
+    var cell   = document.getElementById(cfg.id);
+    var canvas = cell.querySelector('canvas');
+    var cssW = cell.clientWidth;
+    var cssH = cell.clientHeight;
+
+    canvas.width  = Math.round(cssW * DPR);
+    canvas.height = Math.round(cssH * DPR);
+    var ctx = canvas.getContext('2d');
+    ctx.scale(DPR, DPR);
+
+    // The label strip occupies the bottom of the cell; keep the portrait above it
+    // so the lines never run under the type. We reserve LABEL_H px at the bottom.
+    var LABEL_H = 96;
+    var padX = 30, padTop = 30, padBot = LABEL_H + 14;
+    var plotW = cssW - padX * 2;
+    var plotH = cssH - padTop - padBot;
+
+    // world → screen. We center the world window in the plot area, uniform scale.
+    var wW = cfg.xmax - cfg.xmin;
+    var wH = cfg.ymax - cfg.ymin;
+    var sc = Math.min(plotW / wW, plotH / wH);
+    var cx = padX + plotW / 2;
+    var cy = padTop + plotH / 2;
+    var wx0 = (cfg.xmin + cfg.xmax) / 2;
+    var wy0 = (cfg.ymin + cfg.ymax) / 2;
+    function toX(x) { return cx + (x - wx0) * sc; }
+    function toY(y) { return cy - (y - wy0) * sc; }   // world +y up
+
+    // ----- faint axes crosshair under the lines (scientific frame) -----
+    (function frame() {
+      var svg = cell.querySelector('.frame');
+      svg.setAttribute('viewBox', '0 0 ' + cssW + ' ' + cssH);
+      var ns = 'http://www.w3.org/2000/svg';
+      function ln(x1,y1,x2,y2,col,w,dash){
+        var l=document.createElementNS(ns,'line');
+        l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+        l.setAttribute('stroke',col);l.setAttribute('stroke-width',w);
+        if(dash)l.setAttribute('stroke-dasharray',dash);
+        svg.appendChild(l);
+      }
+      var ax0 = padX, ax1 = padX + plotW;
+      var ay0 = padTop, ay1 = padTop + plotH;
+      // axes through world origin if it is inside the window, else through center
+      var oxw = (0 >= cfg.xmin && 0 <= cfg.xmax) ? 0 : wx0;
+      var oyw = (0 >= cfg.ymin && 0 <= cfg.ymax) ? 0 : wy0;
+      ln(ax0, toY(oyw), ax1, toY(oyw), '#e0ddda', 1, '2 5');   // x-axis
+      ln(toX(oxw), ay0, toX(oxw), ay1, '#e0ddda', 1, '2 5');   // y-axis
+    })();
+
+    // ----- the field -----
+    var f = cfg.field;
+    var out = [0, 0];
+
+    // RK4 one step of size h on world point (x,y). Returns [nx,ny].
+    function rk4(x, y, h) {
+      f(x, y, out);                 var k1x = out[0], k1y = out[1];
+      f(x + 0.5*h*k1x, y + 0.5*h*k1y, out); var k2x = out[0], k2y = out[1];
+      f(x + 0.5*h*k2x, y + 0.5*h*k2y, out); var k3x = out[0], k3y = out[1];
+      f(x + h*k3x, y + h*k3y, out);         var k4x = out[0], k4y = out[1];
+      return [
+        x + (h/6) * (k1x + 2*k2x + 2*k3x + k4x),
+        y + (h/6) * (k1y + 2*k2y + 2*k3y + k4y)
+      ];
+    }
+
+    // ----- seed points -----
+    var seeds = [];
+    var sx0 = cfg.xmin, sx1 = cfg.xmax, sy0 = cfg.ymin, sy1 = cfg.ymax;
+    // inset the seed window slightly so seeds start inside the visible frame
+    var insx = (sx1 - sx0) * 0.04, insy = (sy1 - sy0) * 0.04;
+    sx0 += insx; sx1 -= insx; sy0 += insy; sy1 -= insy;
+    var nx = cfg.seeds.nx, ny = cfg.seeds.ny;
+    if (cfg.seeds.mode === 'ring') {
+      // a few concentric rings of seeds around the origin — best for node/focus,
+      // every radius launches a streamline that spirals/flows in cleanly.
+      var rings = cfg.seeds.rings;
+      for (var ri = 0; ri < rings.length; ri++) {
+        var R = rings[ri];
+        var count = cfg.seeds.perRing;
+        for (var a = 0; a < count; a++) {
+          var th = (a / count) * Math.PI * 2 + (ri * 0.13);
+          seeds.push([R * Math.cos(th), R * Math.sin(th)]);
+        }
+      }
+    } else {
+      // uniform grid of seeds spanning the window
+      for (var iy = 0; iy < ny; iy++) {
+        for (var ix = 0; ix < nx; ix++) {
+          var px = sx0 + (sx1 - sx0) * (nx === 1 ? 0.5 : ix / (nx - 1));
+          var py = sy0 + (sy1 - sy0) * (ny === 1 ? 0.5 : iy / (ny - 1));
+          seeds.push([px, py]);
+        }
+      }
+    }
+
+    // ----- integrate + draw each streamline -----
+    var h = cfg.h, STEPS = cfg.steps;
+    var stopR2 = cfg.stopR * cfg.stopR;
+    // bounds for clipping (a touch beyond the window so lines reach the edge)
+    var bxmin = cfg.xmin - wW*0.15, bxmax = cfg.xmax + wW*0.15;
+    var bymin = cfg.ymin - wH*0.15, bymax = cfg.ymax + wH*0.15;
+
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = FOREST;
+    ctx.lineWidth = cfg.lw;
+    ctx.globalAlpha = cfg.alpha;
+
+    var arrowAt = [];   // collect a few midpoints+directions for arrowheads
+
+    for (var s = 0; s < seeds.length; s++) {
+      var x = seeds[s][0], y = seeds[s][1];
+      // skip seeds that begin essentially on a fixed point (degenerate)
+      var atFixed = false;
+      for (var q = 0; q < cfg.fixed.length; q++) {
+        var dxf = x - cfg.fixed[q].x, dyf = y - cfg.fixed[q].y;
+        if (dxf*dxf + dyf*dyf < 0.012) atFixed = true;
+      }
+      if (atFixed) continue;
+
+      ctx.beginPath();
+      ctx.moveTo(toX(x), toY(y));
+      var alive = true;
+      // place arrowheads early on the path (near the rim where lines are spread),
+      // and only on every Nth seed so they stay sparse and never pile on the point.
+      var emitArrow = cfg.arrows && (s % cfg.arrowEvery === 0);
+      var arrowStep = Math.floor(STEPS * (0.06 + 0.10 * ((s * 5) % 7) / 7));
+      for (var st = 0; st < STEPS; st++) {
+        var nxt = rk4(x, y, h);
+        var nxx = nxt[0], nyy = nxt[1];
+        // stop on blow-up / leaving the field region
+        if (!isFinite(nxx) || !isFinite(nyy)) { alive = false; break; }
+        if (nxx < bxmin || nxx > bxmax || nyy < bymin || nyy > bymax) {
+          // draw the final segment to the edge then stop
+          ctx.lineTo(toX(nxx), toY(nyy));
+          x = nxx; y = nyy;
+          alive = false;
+          break;
+        }
+        if (nxx*nxx + nyy*nyy > stopR2) { ctx.lineTo(toX(nxx), toY(nyy)); x=nxx; y=nyy; alive=false; break; }
+        ctx.lineTo(toX(nxx), toY(nyy));
+        // settle: if motion is tiny we've reached an attractor — stop early
+        var mvx = nxx - x, mvy = nyy - y;
+        if (emitArrow && st === arrowStep) {
+          // skip if too close to any fixed point (keeps the point uncluttered)
+          var nearFp = false;
+          for (var fq = 0; fq < cfg.fixed.length; fq++) {
+            var ddx = x - cfg.fixed[fq].x, ddy = y - cfg.fixed[fq].y;
+            if (ddx*ddx + ddy*ddy < 0.10) nearFp = true;
+          }
+          if (!nearFp) arrowAt.push([toX(x), toY(y), nxx - x, -(nyy - y)]);
+        }
+        x = nxx; y = nyy;
+        if (mvx*mvx + mvy*mvy < 1e-7 && cfg.type !== 'saddle') break;
+      }
+      ctx.stroke();
+    }
+
+    // ----- arrowheads (small, sparse) -----
+    if (cfg.arrows) {
+      ctx.globalAlpha = Math.min(1, cfg.alpha + 0.35);
+      ctx.fillStyle = FOREST;
+      for (var ai = 0; ai < arrowAt.length; ai++) {
+        var ax = arrowAt[ai][0], ay = arrowAt[ai][1];
+        var dx = arrowAt[ai][2], dy = arrowAt[ai][3];
+        var L = Math.sqrt(dx*dx + dy*dy);
+        if (L < 1e-6) continue;
+        dx /= L; dy /= L;
+        var sz = 4.2;
+        var perpx = -dy, perpy = dx;
+        ctx.beginPath();
+        ctx.moveTo(ax + dx*sz, ay + dy*sz);
+        ctx.lineTo(ax - dx*sz*0.4 + perpx*sz*0.6, ay - dy*sz*0.4 + perpy*sz*0.6);
+        ctx.lineTo(ax - dx*sz*0.4 - perpx*sz*0.6, ay - dy*sz*0.4 - perpy*sz*0.6);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    // ----- fixed-point dots -----
+    ctx.globalAlpha = 1;
+    for (var k = 0; k < cfg.fixed.length; k++) {
+      var fp = cfg.fixed[k];
+      var fx = toX(fp.x), fy = toY(fp.y);
+      if (fp.type === 'saddle') {
+        // saddle: hollow ring in stone-900 (unstable point — nothing rests here)
+        ctx.beginPath();
+        ctx.arc(fx, fy, 5.5, 0, Math.PI * 2);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#1c1917';
+        ctx.stroke();
+      } else {
+        // stable point (sink/focus): solid dot, forest ring → the thing it pulls toward
+        ctx.beginPath();
+        ctx.arc(fx, fy, 5.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#1c1917';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(fx, fy, 9, 0, Math.PI * 2);
+        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = FOREST;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // =====================================================================
+  //  THE FOUR FIELDS
+  // =====================================================================
+
+  // i · CLEAR — stable NODE (sink): f = (−x, −y). Every line straight into 0.
+  // Seed one dense ring at the rim plus inner rings so the radial rays sweep the
+  // whole disc and converge cleanly on the single point. Larger window than the
+  // plot so the rays enter from the very edge of the frame.
+  runCell({
+    id: 'cell-clear',
+    field: function (x, y, o) { o[0] = -x; o[1] = -y; },
+    fixed: [{ x: 0, y: 0, type: 'sink' }],
+    xmin: -1.6, xmax: 1.6, ymin: -1.6, ymax: 1.6,
+    seeds: { mode: 'ring', rings: [1.95, 1.55, 1.15, 0.75], perRing: 30 },
+    h: 0.06, steps: 240, arrows: true, arrowEvery: 2, stopR: 6,
+    alpha: 0.5, lw: 0.95, type: 'sink'
+  });
+
+  // ii · COMPLICATED — stable FOCUS (spiral): f = (−x−2y, 2x−y). Spirals inward.
+  runCell({
+    id: 'cell-complicated',
+    field: function (x, y, o) { o[0] = -x - 2*y; o[1] = 2*x - y; },
+    fixed: [{ x: 0, y: 0, type: 'focus' }],
+    xmin: -1.6, xmax: 1.6, ymin: -1.6, ymax: 1.6,
+    seeds: { mode: 'ring', rings: [1.5, 1.05, 0.62], perRing: 12 },
+    h: 0.018, steps: 520, arrows: true, arrowEvery: 1, stopR: 6,
+    alpha: 0.6, lw: 0.95, type: 'focus'
+  });
+
+  // iii · COMPLEX — MANY BASINS: f = (y, x − x³ − 0.18y).
+  // unforced Duffing / double well: stable foci at (±1,0), saddle at (0,0).
+  runCell({
+    id: 'cell-complex',
+    field: function (x, y, o) { o[0] = y; o[1] = x - x*x*x - 0.18*y; },
+    fixed: [
+      { x: -1, y: 0, type: 'focus' },
+      { x:  1, y: 0, type: 'focus' },
+      { x:  0, y: 0, type: 'saddle' }
+    ],
+    xmin: -2.1, xmax: 2.1, ymin: -1.7, ymax: 1.7,
+    seeds: { mode: 'grid', nx: 20, ny: 16 },
+    h: 0.02, steps: 440, arrows: false, stopR: 7,
+    alpha: 0.46, lw: 0.85, type: 'complex'
+  });
+
+  // iv · CHAOTIC — SADDLE (divergence): f = (x, −y). Thrown off to infinity.
+  runCell({
+    id: 'cell-chaotic',
+    field: function (x, y, o) { o[0] = x; o[1] = -y; },
+    fixed: [{ x: 0, y: 0, type: 'saddle' }],
+    xmin: -1.6, xmax: 1.6, ymin: -1.6, ymax: 1.6,
+    seeds: { mode: 'grid', nx: 19, ny: 19 },
+    h: 0.02, steps: 360, arrows: true, arrowEvery: 3, stopR: 2.6,
+    alpha: 0.5, lw: 0.9, type: 'saddle'
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -38,6 +38,17 @@ const POSTERS = [
   { html: 'cynefin-leader.html',                  png: 'cynefin-leader.png' },
   { html: 'cynefin-software.html',                png: 'cynefin-software.png' },
   { html: 'cynefin-key.html',                     png: 'cynefin-key.png' },
+  // computational set — real simulations rendered to canvas
+  { html: 'cynefin-bifurcation.html',             png: 'cynefin-bifurcation.png' },
+  { html: 'cynefin-attractor.html',               png: 'cynefin-attractor.png' },
+  { html: 'cynefin-automata.html',                png: 'cynefin-automata.png' },
+  { html: 'cynefin-emergence.html',               png: 'cynefin-emergence.png' },
+  { html: 'cynefin-divergence.html',              png: 'cynefin-divergence.png' },
+  { html: 'cynefin-manifold.html',                png: 'cynefin-manifold.png' },
+  { html: 'cynefin-terrain.html',                 png: 'cynefin-terrain.png' },
+  { html: 'cynefin-network.html',                 png: 'cynefin-network.png' },
+  { html: 'cynefin-flowfield.html',               png: 'cynefin-flowfield.png' },
+  { html: 'cynefin-microtype.html',               png: 'cynefin-microtype.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name

@@ -114,3 +114,28 @@ rewards a second look. The big form must carry the meaning, not decorate it.
 - Chaotic: outage, incident, breach — stop the bleeding first; estimate later.
 
 **Sense-making vs categorization.** Categorization: pre-made boxes, file the data into them — fast, repeatable, blind to what has no slot. Sense-making: attention first, the pattern shows itself, the category comes after and stays provisional. Cynefin is meant as sense-making; used as a fill-in 2×2 it degrades into a sorting box.
+
+---
+
+## 5. Computational set — the compute/render contract + complexity-science facts
+
+These posters do not *draw* order and chaos; they **compute** them. The image is a real simulation rendered to `<canvas>`, composed inside the Swiss frame. The computation is the ambition; it must actually run and look sharp.
+
+### Render contract (follow exactly or the screenshot is blank/soft)
+- Do all simulation + drawing in a **plain inline `<script>` at the very end of `<body>`**, running **synchronously** during parse. Do **NOT** wrap it in `window.onload`/`DOMContentLoaded`/`requestAnimationFrame` — the headless renderer screenshots shortly after `load`, so the work must finish *before* `load` fires.
+- Keep total compute **under ~8 seconds** (the renderer's navigation timeout is 30s; stay well under). Pick grid sizes / iteration counts that finish fast; state them in microtype.
+- **Crispness:** the renderer captures at 2× DPR. Create the canvas backing store at 2× its CSS size — `canvas.width = cssW*2; canvas.height = cssH*2; ctx.scale(2,2)` (or draw directly in device pixels) — so the computed image is sharp, not upscaled.
+- The canvas is the **graphic image layer**: `aria-hidden="true"`, low z-index. Every `data-critical` title/body/label sits on a **solid stone field** above it (`relative z-30+`), never directly on the busy texture. Use the stone palette + **one accent** for the computation's ink; the field stays stone-50/950.
+- Verify by reading the PNG: the canvas must be visibly populated (not blank), and all critical text legible over its solid backing.
+
+### Complexity-science facts (accurate; Snowden's Cynefin draws on complexity science, so these resonate — but label any domain↔model mapping as an analogy, not Snowden's own claim)
+- **Logistic map** `xₙ₊₁ = r·xₙ·(1−xₙ)` (Robert May, 1976). Fixed point for r<3; period-doubling 3<r≲3.5699 (Feigenbaum); chaos beyond, with periodic windows (clear period-3 window near r≈3.83). The single canonical route order→chaos.
+- **Lorenz system** `ẋ=σ(y−x), ẏ=x(ρ−z)−y, ż=xy−βz`, σ=10, ρ=28, β=8/3 (Lorenz, 1963). Deterministic chaos; sensitive dependence ("butterfly effect"); the strange attractor.
+- **Elementary cellular automata / Wolfram's four classes** (I uniform, II periodic/nested, III chaotic, IV complex-localized). Rule 250→I, Rule 90→II (Sierpiński), Rule 110→IV (complex, Turing-complete), Rule 30→III (chaotic, a randomness source). The four classes echo the four domains — an analogy that holds, not Snowden's.
+- **Reaction–diffusion / Gray–Scott** `u̇=Dᵤ∇²u−uv²+F(1−u)`, `v̇=D_v∇²v+uv²−(F+k)v`; Turing patterns from near-uniform start (Turing, 1952, "the chemical basis of morphogenesis"). Emergence: pattern with no designer = Complex.
+- **Double pendulum:** chaotic; nearby initial conditions diverge (Lyapunov exponent>0). Sensitive dependence drawn as physics = the Clear→Chaotic cliff.
+- **Cusp catastrophe** (René Thom, ~1972): potential `V=¼x⁴+½a·x²+b·x`; equilibria `x³+a·x+b=0`; fold/discriminant `4a³+27b²=0`. A pleated surface with an overhang; sudden jumps, hysteresis = the fold.
+- **Edge of chaos** (Langton; Kauffman): complex computation/adaptation lives at the boundary between order and chaos = Complex.
+- **Complicated vs complex:** complicated = reducible (the sum of its parts; take it apart, it still makes sense). Complex = irreducible (the parts *and* their interactions; take it apart and the thing is gone).
+
+Microtype on these posters should be the **real equations, parameters, and step counts** — measured technical labels are authentic Geigy/scientific copy, not decoration.

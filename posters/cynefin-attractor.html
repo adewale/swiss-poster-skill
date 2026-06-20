@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cynefin — The Lorenz Attractor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0f0d0c;
+    --cobalt:   #143C8C;   /* single accent — the attractor's ink */
+    --cobalt-d: #0d2a63;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; padding: 44px 60px 28px 60px; }
+
+  .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--stone-900); z-index: 40; }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  .topbar {
+    position: relative; z-index: 30;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500; color: var(--stone-900); margin-bottom: 18px;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar .right .meta { text-transform: none; letter-spacing: 0.12em; }
+
+  /* ===== HERO: the computed attractor ===== */
+  .stage {
+    position: relative;
+    height: 1408px;
+    border: 2.5px solid var(--stone-900);
+    background: var(--stone-50);
+    overflow: hidden;
+    z-index: 10;
+  }
+  #lorenz {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    z-index: 11;
+  }
+
+  /* axis hairlines under the field, tiny scientific framing */
+  .axis { position: absolute; z-index: 12; pointer-events: none; }
+  .axis.x { left: 0; right: 0; bottom: 70px; height: 1px; background: var(--stone-300); }
+  .axis-tick {
+    position: absolute; z-index: 13; pointer-events: none;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em;
+    color: var(--stone-400);
+  }
+
+  /* top-left registration label on the stage */
+  .stage-tag {
+    position: absolute; z-index: 16; top: 18px; left: 20px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500;
+  }
+  .stage-tag b { color: var(--cobalt-d); font-weight: 600; }
+  .stage-coord {
+    position: absolute; z-index: 16; top: 18px; right: 20px; text-align: right;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--stone-500); font-weight: 500;
+  }
+
+  /* ===== TITLE PANEL — solid stone field, lower-left over the attractor's hollow ===== */
+  .panel {
+    position: absolute; z-index: 22;
+    left: 0; bottom: 92px;
+    width: 624px;
+    background: var(--stone-50);
+    border-top: 2.5px solid var(--stone-900);
+    border-right: 2.5px solid var(--stone-900);
+    padding: 26px 30px 28px 30px;
+  }
+  .panel .title {
+    font-weight: 700; font-size: 60px; line-height: 0.86; letter-spacing: -0.035em;
+    color: var(--stone-900);
+  }
+  .panel .title .b2 { color: var(--cobalt); }
+  .panel .body {
+    font-size: 16.5px; line-height: 1.42; color: var(--stone-700); margin-top: 18px;
+    max-width: 54ch;
+  }
+  .panel .body b { color: var(--stone-900); font-weight: 600; }
+  .panel .body .c { color: var(--cobalt); font-weight: 600; }
+
+  /* ===== MICROTYPE — equations on a solid stone strip, upper-right ===== */
+  .eqbox {
+    position: absolute; z-index: 22;
+    right: 0; top: 0;
+    background: var(--stone-950);
+    border-bottom: 2.5px solid var(--stone-900);
+    border-left: 2.5px solid var(--stone-900);
+    padding: 20px 24px 18px 26px;
+    text-align: right;
+  }
+  .eqbox .eqlab {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--stone-400); font-weight: 500; margin-bottom: 12px;
+  }
+  .eqbox .eq {
+    font-family: 'IBM Plex Mono', monospace; font-size: 21px; letter-spacing: 0.01em;
+    color: var(--stone-50); font-weight: 500; line-height: 1.5; white-space: nowrap;
+  }
+  .eqbox .eq .v { color: #6f93d6; } /* tint of cobalt for variables, still one hue family */
+  .eqbox .rule {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em;
+    color: var(--stone-400); font-weight: 500; margin-top: 13px;
+    border-top: 1px solid var(--stone-700); padding-top: 11px;
+  }
+  .eqbox .rule b { color: var(--stone-200); font-weight: 600; }
+
+  /* ===== FOOTER ===== */
+  .foot {
+    position: relative; z-index: 30;
+    display: grid; grid-template-columns: 1.32fr 1fr; gap: 34px; margin-top: 18px; align-items: start;
+  }
+  .foot .c { font-size: 15.5px; line-height: 1.42; color: var(--stone-700); }
+  .foot .c b { color: var(--stone-900); font-weight: 600; }
+  .foot .c .g { color: var(--cobalt); font-weight: 600; }
+  .foot .c.r {
+    border-left: 2px solid var(--cobalt); padding-left: 18px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; letter-spacing: 0.04em;
+    line-height: 1.5; color: var(--stone-700); text-transform: none;
+  }
+  .foot .c.r .seq { color: var(--cobalt); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; display:block; margin-bottom: 7px; font-size: 11px; }
+
+  .colophon {
+    position: absolute; left: 60px; right: 60px; bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--stone-500); display: flex; justify-content: space-between;
+    border-top: 1px solid var(--stone-300); padding-top: 9px; z-index: 30;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="geigy-scientific"
+     data-genre="computational"
+     data-reference="lorenz-1963"
+     data-source="rk4-integration"
+     data-encoding="Lorenz integration → strange attractor">
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>
+      <div>Cynefin · the Lorenz attractor</div>
+      <div class="meta" data-source="domain">deterministic chaos</div>
+    </div>
+    <div class="right">
+      <div>σ=10 · ρ=28 · β=8/3</div>
+      <div class="meta" data-source="pronunciation">/kəˈnɛvɪn/</div>
+    </div>
+  </div>
+
+  <!-- ===== HERO STAGE ===== -->
+  <div class="stage" data-encoding="(x,z) projection of RK4 trajectory, density as tone">
+
+    <canvas id="lorenz" aria-hidden="true"></canvas>
+
+    <div class="axis x" aria-hidden="true"></div>
+
+    <div class="stage-tag" aria-hidden="true">trajectory · <b>one orbit</b>, never repeating</div>
+    <div class="stage-coord" aria-hidden="true">projection (x , z)</div>
+
+    <!-- TITLE / BODY on solid stone, in the attractor's central hollow -->
+    <div class="panel">
+      <div class="title" data-critical="title">Every law obeyed.<br><span class="b2">Nothing predictable.</span></div>
+      <div class="body" data-critical="body">
+        The Lorenz equations are <b>fixed and exact</b>. Two paths that start a hair apart
+        end up nowhere near each other. This is the <b>Chaotic domain</b> drawn whole:
+        cause and effect are real and <span class="c">useless</span>, because you can't act
+        on a difference you can't measure.
+      </div>
+    </div>
+
+    <!-- MICROTYPE: the three equations, dark stone field -->
+    <div class="eqbox" data-critical="body" data-source="equations">
+      <div class="eqlab">the system · exact</div>
+      <div class="eq"><span class="v">ẋ</span> = σ(<span class="v">y</span> − <span class="v">x</span>)</div>
+      <div class="eq"><span class="v">ẏ</span> = <span class="v">x</span>(ρ − <span class="v">z</span>) − <span class="v">y</span></div>
+      <div class="eq"><span class="v">ż</span> = <span class="v">xy</span> − β<span class="v">z</span></div>
+      <div class="rule">RK4 · dt = 0.005 · <b>≈ 600,000 points</b></div>
+    </div>
+
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="foot">
+    <div class="c" data-critical="cta">
+      <b>Don't look for the lever.</b> In Chaos the move is to <span class="g">act first</span> —
+      make any order you can — then sense where stability forms.
+    </div>
+    <div class="c r" data-critical="body">
+      <span class="seq">act → sense → respond</span>
+      Impose order, watch what holds, then govern the part that settles. Analysis comes after the move, not before it.
+    </div>
+  </div>
+
+  <div class="colophon">
+    <div data-source="origin"><b>Edward Lorenz</b> · 1963 · the butterfly effect</div>
+    <div><b>Cynefin</b> · act → sense → respond</div>
+  </div>
+
+</div>
+
+<!-- ============================================================= -->
+<!-- COMPUTATION: synchronous RK4 integration of the Lorenz system -->
+<!-- runs during parse, finishes before `load`. aria-hidden canvas. -->
+<!-- ============================================================= -->
+<script>
+(function () {
+  var canvas = document.getElementById('lorenz');
+  var stage  = canvas.parentElement;
+
+  // CSS size of the stage interior (border-box minus 2.5px borders each side)
+  var cssW = stage.clientWidth;
+  var cssH = stage.clientHeight;
+
+  // 2x backing store for crispness at the renderer's 2x DPR.
+  var DPR = 2;
+  canvas.width  = Math.round(cssW * DPR);
+  canvas.height = Math.round(cssH * DPR);
+  var ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  // ---- Lorenz parameters (1963) ----
+  var SIGMA = 10.0, RHO = 28.0, BETA = 8.0 / 3.0;
+  var dt = 0.005;
+  var STEPS = 650000;
+  var TRANSIENT = 2000;
+
+  // ---- derivative ----
+  function dx(x, y, z) { return SIGMA * (y - x); }
+  function dy(x, y, z) { return x * (RHO - z) - y; }
+  function dz(x, y, z) { return x * y - BETA * z; }
+
+  // generic start
+  var x = 0.1, y = 0.0, z = 0.0;
+
+  // ---- fit the attractor's true (x,z) extent into the stage ----
+  // For these canonical parameters the trajectory stays within
+  // x ∈ ~[-19,19], z ∈ ~[1,47]. We fit that box (with a hair of pad)
+  // so the two lobes fill the hero edge-to-edge, uniform aspect.
+  var X_MIN = -20, X_MAX = 20;      // symmetric in x
+  var Z_MIN = 2,   Z_MAX = 48;      // z stays positive
+
+  var marginX  = 56;                // px left/right inside stage
+  var marginTop = 36;               // px top inside stage
+  var marginBot = 56;               // px bottom
+
+  var plotW = cssW - marginX * 2;
+  var plotH = cssH - marginTop - marginBot;
+
+  var sx = plotW / (X_MAX - X_MIN);
+  var sz = plotH / (Z_MAX - Z_MIN);
+  // keep aspect uniform so the butterfly isn't stretched: use the smaller scale
+  var s = Math.min(sx, sz);
+
+  // center the (x,z) box in the plot area
+  var cx = (X_MIN + X_MAX) / 2;     // 0
+  var cz = (Z_MIN + Z_MAX) / 2;     // 25
+  var originPX = marginX + plotW / 2;
+  var originPY = marginTop + plotH / 2;
+
+  function toPX(xv) { return originPX + (xv - cx) * s; }
+  // z grows upward visually (invert y); higher z -> higher on screen
+  function toPY(zv) { return originPY - (zv - cz) * s; }
+
+  // ---- ink: single cobalt. The trajectory is continuous, so draw it as
+  // thin connected filaments at low alpha. A single pass is a crisp hairline;
+  // where the orbit winds back over itself the lines stack into solid tone.
+  // Sparse outer threads stay pale, the dense lobe cores build to deep cobalt. ----
+  ctx.strokeStyle = 'rgba(20, 60, 140, 0.085)';
+  ctx.lineWidth = 0.6;        // sub-pixel in CSS units → ~1 device px at 2×
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  var px, py, prevPX = null, prevPY = null;
+  var BATCH = 4000;           // batch segments per stroke() for speed
+  var n = 0;
+  ctx.beginPath();
+
+  // RK4 integrate + draw the orbit as a continuous polyline
+  for (var i = 0; i < STEPS; i++) {
+    // RK4 step
+    var k1x = dx(x, y, z), k1y = dy(x, y, z), k1z = dz(x, y, z);
+    var x2 = x + 0.5 * dt * k1x, y2 = y + 0.5 * dt * k1y, z2 = z + 0.5 * dt * k1z;
+    var k2x = dx(x2, y2, z2), k2y = dy(x2, y2, z2), k2z = dz(x2, y2, z2);
+    var x3 = x + 0.5 * dt * k2x, y3 = y + 0.5 * dt * k2y, z3 = z + 0.5 * dt * k2z;
+    var k3x = dx(x3, y3, z3), k3y = dy(x3, y3, z3), k3z = dz(x3, y3, z3);
+    var x4 = x + dt * k3x, y4 = y + dt * k3y, z4 = z + dt * k3z;
+    var k4x = dx(x4, y4, z4), k4y = dy(x4, y4, z4), k4z = dz(x4, y4, z4);
+
+    x += (dt / 6) * (k1x + 2 * k2x + 2 * k3x + k4x);
+    y += (dt / 6) * (k1y + 2 * k2y + 2 * k3y + k4y);
+    z += (dt / 6) * (k1z + 2 * k2z + 2 * k3z + k4z);
+
+    if (i < TRANSIENT) { continue; }
+
+    px = toPX(x);
+    py = toPY(z);
+
+    if (prevPX !== null) {
+      ctx.moveTo(prevPX, prevPY);
+      ctx.lineTo(px, py);
+      n++;
+      if (n >= BATCH) { ctx.stroke(); ctx.beginPath(); n = 0; }
+    }
+    prevPX = px; prevPY = py;
+  }
+  if (n > 0) { ctx.stroke(); }
+})();
+</script>
+</body>
+</html>
