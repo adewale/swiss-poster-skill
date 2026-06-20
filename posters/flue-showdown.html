@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Showdown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-50);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0;border-color:var(--stone-900)}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0;border-color:var(--stone-900)}
+
+  /* ── ARENA ── */
+  .arena{position:absolute;top:0;left:0;width:1260px;height:1320px;overflow:hidden;background:var(--stone-950)}
+  .think-l{position:absolute;inset:0;background:var(--stone-950);
+    clip-path:polygon(0 0,100% 0,100% 39%,0 77%)}
+  .flue-l{position:absolute;inset:0;background:var(--blue);
+    clip-path:polygon(0 77%,100% 39%,100% 100%,0 100%)}
+  .seam{position:absolute;inset:0;z-index:5;pointer-events:none}
+
+  .topbar{position:absolute;top:40px;left:60px;right:60px;z-index:20;display:flex;justify-content:space-between;
+    align-items:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;
+    text-transform:uppercase;font-weight:600;color:var(--stone-50)}
+  .topbar .meta{color:var(--stone-400);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .kicker{position:absolute;top:96px;left:60px;z-index:20;font-family:'IBM Plex Mono',monospace;
+    font-size:13px;letter-spacing:.42em;text-transform:uppercase;font-weight:600;color:var(--blue-lt)}
+
+  /* THINK side */
+  .think{position:absolute;top:168px;left:60px;z-index:20;color:var(--stone-50)}
+  .think .nm{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    line-height:.82;letter-spacing:-.005em;font-size:128px}
+  .think .nm .s{display:block;color:var(--stone-400)}
+  .think .tag{margin-top:16px;max-width:560px;font-size:19px;line-height:1.35;color:var(--stone-300)}
+  .think .tag b{color:var(--stone-50);font-weight:600}
+  .think .who{margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--blue-lt)}
+
+  /* FLUE side */
+  .flue{position:absolute;left:60px;right:60px;top:852px;z-index:20;color:var(--stone-50);text-align:right}
+  .flue .nm{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    line-height:.78;letter-spacing:-.01em;font-size:300px}
+  .flue .tag{margin-top:6px;font-size:21px;line-height:1.3;color:rgba(250,250,249,.92)}
+  .flue .tag b{font-weight:700}
+  .flue .who{margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:rgba(250,250,249,.8)}
+
+  /* VS medallion */
+  .vs{position:absolute;left:556px;top:686px;z-index:30;width:150px;height:150px;border-radius:50%;
+    background:var(--stone-50);border:4px solid var(--blue);display:flex;align-items:center;justify-content:center;
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:74px;color:var(--stone-950);letter-spacing:-.02em}
+
+  /* ── TALE OF THE TAPE ── */
+  .tape{position:absolute;left:0;right:0;top:1320px;bottom:0;background:var(--stone-50);padding:26px 60px 0}
+  .tape .th{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:2px solid var(--stone-900);padding-bottom:10px}
+  .tape .th .lab{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-500)}
+  .tape .th .p1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;text-transform:uppercase;color:var(--stone-900)}
+  .tape .th .p2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;text-transform:uppercase;color:var(--blue-2)}
+
+  .row{display:grid;grid-template-columns:1fr 188px 1fr;align-items:center;
+    border-bottom:1px solid var(--stone-300);padding:14px 0}
+  .row>div{min-width:0}
+  .row .dim{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--stone-500);text-align:center}
+  .row .a{text-align:right;font-size:15.5px;line-height:1.3;color:var(--stone-700);padding-right:20px}
+  .row .b{text-align:left;font-size:15.5px;line-height:1.3;color:var(--stone-950);font-weight:600;padding-left:20px}
+  .row .b .mono,.row .a .mono{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0}
+  .row .b{border-left:2px solid var(--blue)}
+
+  .closer{margin-top:16px;display:flex;justify-content:space-between;align-items:baseline}
+  .closer .line{font-size:17px;color:var(--stone-900);max-width:78ch}
+  .closer .line b{color:var(--blue-2);font-weight:700}
+
+  .colo{position:absolute;left:60px;right:60px;bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9.5px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="arena">
+    <div class="think-l"></div>
+    <div class="flue-l"></div>
+    <svg class="seam" viewBox="0 0 1260 1320" preserveAspectRatio="none">
+      <line x1="0" y1="1016" x2="1260" y2="515" stroke="#fafaf9" stroke-width="9"/>
+      <line x1="0" y1="1034" x2="1260" y2="533" stroke="#4DA3FF" stroke-width="3"/>
+    </svg>
+  </div>
+
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">the agent-harness showdown</div></div>
+    <div class="r">withastro / flue<div class="meta">portable framework vs platform runtime</div></div>
+  </div>
+
+  <div class="kicker">Two harnesses enter · one bet wins your stack</div>
+
+  <!-- THINK -->
+  <div class="think">
+    <div class="nm">Project<span class="s">Think</span></div>
+    <div class="tag"><b>Cloudflare's durable runtime.</b> World-class persistence, isolation, and hibernation — as long as you live on Cloudflare.</div>
+    <div class="who">cloudflare · preview · platform-native</div>
+  </div>
+
+  <!-- FLUE -->
+  <div class="flue">
+    <div class="nm">Flue</div>
+    <div class="tag"><b>The portable harness.</b> Write the agent once — run the same one anywhere.</div>
+    <div class="who">withastro · apache-2.0 · runtime-agnostic</div>
+  </div>
+
+  <div class="vs">VS</div>
+
+  <!-- TALE OF THE TAPE -->
+  <div class="tape">
+    <div class="th">
+      <span class="p1">Project Think</span>
+      <span class="lab">Tale of the tape</span>
+      <span class="p2">Flue</span>
+    </div>
+
+    <div class="row">
+      <div class="a">Cloudflare only</div>
+      <div class="dim">Runs on</div>
+      <div class="b"><span class="mono">Node · CF · GH Actions · GitLab · Daytona · Render</span></div>
+    </div>
+    <div class="row">
+      <div class="a">Durable Objects + hibernation</div>
+      <div class="dim">Durable via</div>
+      <div class="b">Any host + adapters <span class="mono">(@flue/postgres)</span></div>
+    </div>
+    <div class="row">
+      <div class="a">A <span class="mono">Think</span> base class</div>
+      <div class="dim">You write</div>
+      <div class="b">Markdown — skills &amp; <span class="mono">AGENTS.md</span></div>
+    </div>
+    <div class="row">
+      <div class="a">Workers AI</div>
+      <div class="dim">The model</div>
+      <div class="b">Any model — swappable slot</div>
+    </div>
+
+    <div class="closer">
+      <div class="line">Both are <b>Model + Harness.</b> Think roots the harness in one platform; Flue carries it everywhere — and Cloudflare is just one of its stops.</div>
+    </div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>A positioning map · not affiliated with Cloudflare
+      <div class="src">Sources: blog.cloudflare.com/project-think · github.com/withastro/flue</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
