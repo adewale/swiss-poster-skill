@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Agents vs Workflows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 56px 26px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .head{margin-top:22px}
+  .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:84px;line-height:.86;letter-spacing:-.01em;color:var(--stone-900)}
+  .head h1 .b{color:var(--blue-2)}
+  .head .sub{margin-top:10px;font-size:18px;line-height:1.4;color:var(--stone-700);max-width:88ch}
+  .head .sub b{color:var(--stone-900);font-weight:600}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;margin-top:22px;border-top:2px solid var(--stone-900)}
+  .col{padding:18px 26px}
+  .col.l{border-right:2px solid var(--stone-900);background:rgba(0,122,255,.045)}
+  .col.r{background:var(--stone-100)}
+  .ch{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:46px;
+    line-height:.9;color:var(--blue-2)}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--stone-500);margin-top:6px}
+
+  svg.dia{display:block;width:100%;height:236px;margin:14px 0 4px}
+  .dcap{font-size:13px;line-height:1.34;color:var(--stone-700);text-align:center;margin-bottom:12px}
+  .dcap b{color:var(--stone-900)}
+
+  .code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.5;color:var(--stone-900);
+    background:var(--stone-50);border:1px solid var(--stone-300);border-left:3px solid var(--blue);padding:11px 13px;white-space:pre;overflow:hidden}
+  .col.r .code{background:#fff}
+  .code .kw{color:var(--blue-2)} .code .fn{color:var(--blue-2);font-weight:600}
+  .code .str{color:var(--stone-500)} .code .cm{color:var(--stone-400);font-style:italic}
+
+  .attrs{margin-top:14px}
+  .attrs .row{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--stone-200)}
+  .attrs .k{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--stone-500);width:96px;flex:none;padding-top:2px}
+  .attrs .v{font-size:14px;line-height:1.3;color:var(--stone-900);font-weight:500}
+  .attrs .v .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue-2)}
+  .usewhen{margin-top:14px;border-top:2px solid var(--blue);padding-top:9px}
+  .usewhen .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-2);font-weight:600}
+  .usewhen .t{font-size:15px;line-height:1.34;color:var(--stone-900);margin-top:4px} .usewhen .t b{font-weight:700}
+
+  .vs{position:absolute;left:609px;top:600px;z-index:20;width:62px;height:62px;border-radius:50%;
+    background:var(--stone-50);border:3px solid var(--stone-900);display:flex;align-items:center;justify-content:center;
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;color:var(--stone-900)}
+
+  .base{position:absolute;left:56px;right:56px;bottom:84px;background:var(--stone-950);color:var(--stone-50);padding:20px 24px}
+  .base .lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue-lt);font-weight:600}
+  .base .pipe{font-family:'IBM Plex Mono',monospace;font-size:16px;margin-top:8px;color:var(--stone-50)}
+  .base .pipe .b{color:var(--blue-lt);font-weight:600}
+  .base .t{font-size:15px;line-height:1.4;color:rgba(250,250,249,.86);margin-top:10px} .base .t b{color:var(--stone-50);font-weight:600}
+
+  .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">one harness · two execution primitives</div></div>
+    <div class="r">withastro / flue<div class="meta">who drives the control flow?</div></div>
+  </div>
+
+  <div class="head">
+    <h1>Agents <span class="b">vs</span> Workflows.</h1>
+    <div class="sub">Flue runs work two ways on the <b>same harness.</b> The difference is one question:
+      <b>who drives the loop — the model, or your code?</b></div>
+  </div>
+
+  <div class="cols">
+    <!-- AGENTS -->
+    <div class="col l">
+      <div class="ch">Agents</div>
+      <div class="tag">model-driven · open-ended · persistent</div>
+
+      <svg class="dia" viewBox="0 0 520 236" aria-label="the model drives a loop">
+        <g fill="none" stroke="#007AFF" stroke-width="3">
+          <path d="M260 36 A92 92 0 0 1 339 178" />
+          <path d="M339 178 A92 92 0 0 1 181 178" />
+          <path d="M181 178 A92 92 0 0 1 260 36" />
+        </g>
+        <g fill="#007AFF">
+          <path d="M345 168 l-6 18 l-14 -10 z"/>
+          <path d="M175 168 l20 4 l-6 18 z"/>
+          <path d="M250 30 l18 -4 l-2 20 z"/>
+        </g>
+        <circle cx="260" cy="118" r="46" fill="#007AFF"/>
+        <text x="260" y="113" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="22" fill="#fafaf9">MODEL</text>
+        <text x="260" y="132" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#cfe4ff" letter-spacing="1">decides next</text>
+        <g font-family="IBM Plex Mono,monospace" font-size="12" font-weight="600" fill="#1c1917" letter-spacing="1">
+          <text x="260" y="22" text-anchor="middle">REASON</text>
+          <text x="372" y="200" text-anchor="middle">ACT</text>
+          <text x="150" y="200" text-anchor="middle">OBSERVE</text>
+        </g>
+      </svg>
+      <div class="dcap"><b>The model drives</b> — reason → act → observe, looping until the task is done.</div>
+
+      <div class="code"><span class="cm">// src/agents/triage.ts</span>
+<span class="kw">export default</span> <span class="fn">createAgent</span>(() => ({
+  model: <span class="str">'anthropic/claude-sonnet-4-6'</span>,
+  tools, skills, sandbox: <span class="fn">local</span>(),
+  instructions,
+}));</div>
+
+      <div class="attrs">
+        <div class="row"><div class="k">Driver</div><div class="v">the model — the loop</div></div>
+        <div class="row"><div class="k">Shape</div><div class="v">open-ended · multi-turn</div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">messages · sessions · channels</div></div>
+        <div class="row"><div class="k">Returns</div><div class="v">a persistent, resumable session</div></div>
+      </div>
+      <div class="usewhen"><div class="lab">Use when</div>
+        <div class="t">the path <b>isn't known up front</b> — conversation, triage, evolving goals.</div></div>
+    </div>
+
+    <!-- WORKFLOWS -->
+    <div class="col r">
+      <div class="ch">Workflows</div>
+      <div class="tag">code-driven · finite · typed result</div>
+
+      <svg class="dia" viewBox="0 0 520 236" aria-label="your code drives the steps">
+        <rect x="40" y="20" width="440" height="196" fill="none" stroke="#1c1917" stroke-width="2.5"/>
+        <text x="54" y="42" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="600" fill="#1c1917">your code</text>
+        <!-- flow inside -->
+        <g font-family="IBM Plex Mono,monospace" font-size="12" fill="#1c1917">
+          <rect x="70" y="58" width="120" height="34" fill="#e7e5e4"/><text x="130" y="79" text-anchor="middle">payload</text>
+          <rect x="200" y="58" width="250" height="34" fill="#fafaf9" stroke="#d6d3d1"/><text x="325" y="79" text-anchor="middle">branch · load · log</text>
+          <rect x="70" y="106" width="380" height="34" fill="#007AFF"/><text x="260" y="127" text-anchor="middle" fill="#fafaf9" font-weight="600">session.prompt(input, { result })</text>
+          <rect x="70" y="154" width="250" height="34" fill="#fafaf9" stroke="#d6d3d1"/><text x="195" y="175" text-anchor="middle">transform</text>
+          <rect x="330" y="154" width="120" height="34" fill="#007AFF"/><text x="390" y="175" text-anchor="middle" fill="#fafaf9" font-weight="600">return data</text>
+        </g>
+        <g stroke="#78716c" stroke-width="1.5" fill="none">
+          <path d="M190 75 h10"/><path d="M325 92 v14"/><path d="M195 140 v14"/><path d="M320 171 h10"/>
+        </g>
+      </svg>
+      <div class="dcap"><b>Your code drives</b> — call <span style="font-family:'IBM Plex Mono',monospace">prompt()</span> where you choose; return a typed value.</div>
+
+      <div class="code"><span class="cm">// src/workflows/triage.ts</span>
+<span class="kw">export async function</span> <span class="fn">run</span>(
+  { init, payload }: FlueContext&lt;{ ticket: string }&gt;,
+) {
+  <span class="kw">const</span> s = <span class="kw">await</span> (<span class="kw">await</span> <span class="fn">init</span>(agent)).<span class="fn">session</span>();
+  <span class="kw">const</span> r = <span class="kw">await</span> s.<span class="fn">prompt</span>(payload.ticket, {
+    result: v.<span class="fn">object</span>({ priority: v.<span class="fn">picklist</span>([…]),
+                summary: v.<span class="fn">string</span>() }),
+  });
+  <span class="kw">return</span> r.data;        <span class="cm">// typed · finite</span>
+}</div>
+
+      <div class="attrs">
+        <div class="row"><div class="k">Driver</div><div class="v">your TypeScript</div></div>
+        <div class="row"><div class="k">Shape</div><div class="v">finite · run-to-completion</div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v"><span class="m">POST /workflows/:name → { runId }</span></div></div>
+        <div class="row"><div class="k">Returns</div><div class="v"><span class="m">response.data</span> — a typed result</div></div>
+      </div>
+      <div class="usewhen"><div class="lab">Use when</div>
+        <div class="t">the <b>steps are known</b> — pipelines, batch jobs, structured extraction.</div></div>
+    </div>
+  </div>
+  <div class="vs">vs</div>
+
+  <div class="base">
+    <div class="lab">Same harness underneath</div>
+    <div class="pipe"><span class="b">init(agent)</span> → <span class="b">harness.session()</span> → <span class="b">session.prompt(input, { result? })</span></div>
+    <div class="t">Same model, tools, skills, and sandbox. <b>An Agent lets the model decide the next step; a Workflow lets your code decide</b> — and hands back a typed result with a <span style="font-family:'IBM Plex Mono',monospace">runId</span>.</div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from the Flue docs &amp; repo · code is representative · APIs evolve
+      <div class="src">Sources: flueframework.com/docs/guide/workflows · /docs/concepts/agents · github.com/withastro/flue</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
