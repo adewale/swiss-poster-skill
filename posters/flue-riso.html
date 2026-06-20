@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Harness Framework · Riso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --paper:     #f3f1ec;   /* warm riso paper tone, built from stone */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-950);
+    color: var(--stone-900);
+    font-family: 'Barlow', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+    background: var(--paper);
+  }
+
+  /* ── PAPER GRAIN / SPECKLE — faint, across whole sheet ──────────── */
+  .grain {
+    position: absolute; inset: 0; z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.5;
+    background-image:
+      radial-gradient(rgba(28,25,23,0.5) 0.5px, transparent 0.6px),
+      radial-gradient(rgba(28,25,23,0.35) 0.5px, transparent 0.6px);
+    background-size: 7px 7px, 11px 11px;
+    background-position: 0 0, 3px 4px;
+  }
+  .grain.blue {
+    mix-blend-mode: multiply;
+    opacity: 0.16;
+    background-image:
+      radial-gradient(rgba(0,87,216,0.7) 0.6px, transparent 0.7px);
+    background-size: 9px 9px;
+    background-position: 2px 1px;
+  }
+
+  /* halftone helpers — tone is ONLY dots */
+  .ht-stone {
+    background-image: radial-gradient(var(--stone-900) 31%, transparent 33%);
+    background-size: 9px 9px;
+  }
+  .ht-blue {
+    background-image: radial-gradient(var(--blue) 31%, transparent 33%);
+    background-size: 9px 9px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 9;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 5;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+  .topbar .blue { color: var(--blue-2); }
+
+  /* Flue glyph mark — riso: blue body w/ offset stone ghost */
+  .mark {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--paper); display: block; }
+  .mark::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--stone-900);
+    transform: translate(5px, 6px);
+    z-index: -1;
+    opacity: 0.85;
+  }
+
+  /* ── TITLE LOCKUP ───────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 16px;
+    z-index: 5;
+  }
+  .title .mark { width: 104px; height: 104px; }
+  .title .word {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 168px;
+    line-height: 0.78;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  .deck .deck-big {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    line-height: 1.08;
+    max-width: 60ch;
+  }
+  .deck .deck-big b { font-weight: 700; color: var(--blue-2); }
+  .deck .deck-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+    line-height: 1.5;
+  }
+
+  /* ── HERO STAGE — the dominant graphic event ────────────────────── */
+  .stage {
+    position: relative;
+    height: 668px;
+    margin: 0 -64px 0 -64px;
+    overflow: hidden;
+    z-index: 4;
+    border-top: 1.5px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+    background: var(--paper);
+  }
+
+  /* big loop-arc subject, two registrations */
+  .loop {
+    position: absolute;
+    width: 560px; height: 560px;
+    border-radius: 50%;
+    top: 54px; left: 96px;
+  }
+  /* stone ink halftone disc */
+  .loop.ink-stone {
+    background-image: radial-gradient(var(--stone-900) 33%, transparent 35%);
+    background-size: 12px 12px;
+    -webkit-mask: radial-gradient(circle at center, #000 99.5%, transparent 100%);
+            mask: radial-gradient(circle at center, #000 99.5%, transparent 100%);
+  }
+  /* blue ink halftone disc — MISREGISTERED offset */
+  .loop.ink-blue {
+    background-image: radial-gradient(var(--blue) 33%, transparent 35%);
+    background-size: 12px 12px;
+    transform: translate(6px, 7px);
+    mix-blend-mode: multiply;
+    -webkit-mask: radial-gradient(circle at center, #000 99.5%, transparent 100%);
+            mask: radial-gradient(circle at center, #000 99.5%, transparent 100%);
+  }
+  /* punch a hole so it reads as a LOOP / ring, plus arrow gap */
+  .loop-hole {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: var(--paper);
+    top: 184px; left: 226px;
+    z-index: 3;
+    box-shadow: 0 0 0 2px var(--stone-900);
+  }
+  .loop-hole::after {
+    content: "";
+    position: absolute; inset: -2px;
+    border-radius: 50%;
+    box-shadow: 4px 5px 0 0 rgba(0,87,216,0.7);
+  }
+
+  /* the three loop-step labels riding the ring */
+  .step {
+    position: absolute;
+    z-index: 5;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.86;
+  }
+  .step .n {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: var(--blue-2);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .step .lab { font-size: 40px; color: var(--stone-900); display: block; }
+  .step.s1 { top: 150px; left: 286px; }
+  .step.s2 { top: 372px; left: 372px; }
+  .step.s3 { top: 372px; left: 150px; text-align: right; }
+
+  /* curved arrows hint inside hole */
+  .loop-cap {
+    position: absolute;
+    z-index: 6;
+    top: 300px; left: 318px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    width: 120px;
+  }
+  .loop-cap .arc {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--blue-2);
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* giant LOOP word, halftone-filled, misregistered, bleeds right edge */
+  .bigword {
+    position: absolute;
+    right: -18px;
+    top: 96px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 300px;
+    line-height: 0.74;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .bigword .ln { display: block; position: relative; }
+  /* stone halftone fill via background-clip */
+  .bigword .ln .stone {
+    color: transparent;
+    background-image: radial-gradient(var(--stone-900) 42%, transparent 45%);
+    background-size: 8px 8px;
+    -webkit-background-clip: text;
+            background-clip: text;
+    position: relative; z-index: 2;
+  }
+  /* blue offset ghost behind */
+  .bigword .ln .blue {
+    position: absolute;
+    top: 0; left: 0;
+    color: transparent;
+    background-image: radial-gradient(var(--blue) 42%, transparent 45%);
+    background-size: 8px 8px;
+    -webkit-background-clip: text;
+            background-clip: text;
+    transform: translate(7px, 6px);
+    z-index: 1;
+  }
+
+  .stage-meta {
+    position: absolute;
+    left: 30px; bottom: 22px;
+    z-index: 7;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 500;
+  }
+  .stage-meta b { color: var(--stone-900); font-weight: 700; }
+
+  /* ── EQUATION strip — flat blue field ───────────────────────────── */
+  .equation {
+    background: var(--blue);
+    color: var(--paper);
+    margin: 22px -64px 22px -64px;
+    padding: 15px 64px 17px 64px;
+    position: relative;
+    z-index: 4;
+    overflow: hidden;
+  }
+  .equation::after { /* halftone darken texture on the slab */
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,55,140,0.6) 30%, transparent 33%);
+    background-size: 9px 9px;
+    mix-blend-mode: multiply;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .equation .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(243,241,236,0.9);
+    margin-bottom: 8px;
+    position: relative; z-index: 2;
+  }
+  .equation .eq {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--paper);
+    position: relative; z-index: 2;
+  }
+  .equation .eq .op { color: rgba(243,241,236,0.6); font-weight: 400; }
+
+  /* ── LOOP STEPS — three plates ──────────────────────────────────── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1.5px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+    position: relative;
+    z-index: 4;
+  }
+  .cell {
+    padding: 14px 22px 16px 0;
+    border-right: 1px solid var(--stone-300);
+  }
+  .cell:last-child { border-right: 0; }
+  .cell .ck {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 8px;
+  }
+  .cell .cn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 46px;
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--stone-900);
+    margin-bottom: 7px;
+  }
+  .cell .cd {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.32;
+    color: var(--stone-700);
+  }
+  .cell .cd b { color: var(--stone-900); font-weight: 700; }
+
+  /* ── SYNTHESIS line ─────────────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 78px;
+    z-index: 5;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-400);
+    padding-top: 14px;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: normal; color: var(--blue-2); font-weight: 700; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-400);
+    padding-top: 9px;
+    z-index: 5;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+  .colophon .blue { color: var(--blue-2); }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="grain" aria-hidden="true"></div>
+  <div class="grain blue" aria-hidden="true"></div>
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">two-color edition · reason · act · observe</div>
+    </div>
+    <div class="right">
+      <div>withastro / <span class="blue">flue</span></div>
+      <div class="meta">give it a task, not a script</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark" aria-hidden="true">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">the model reasons · the harness loops</span>
+    </span>
+  </div>
+
+  <div class="deck">
+    <div class="deck-big">An agent is a <b>model</b> plus a <b>harness</b>. The model reasons; the harness gives it a loop.</div>
+    <div class="deck-count">Two&nbsp;inks<br>blue / stone</div>
+  </div>
+
+  <!-- HERO STAGE -->
+  <section class="stage" aria-label="The loop">
+    <!-- giant LOOP word, halftone + misregistered, behind the ring -->
+    <div class="bigword" aria-hidden="true">
+      <span class="ln">
+        <span class="blue">LOOP</span><span class="stone">LOOP</span>
+      </span>
+    </div>
+
+    <!-- the ring subject: stone disc + offset blue disc, hole punched -->
+    <div class="loop ink-stone" aria-hidden="true"></div>
+    <div class="loop ink-blue" aria-hidden="true"></div>
+    <div class="loop-hole" aria-hidden="true"></div>
+
+    <div class="loop-cap">
+      <span class="arc">↻</span>
+      run the loop
+    </div>
+
+    <div class="step s1"><span class="n">01</span><span class="lab">Reason</span></div>
+    <div class="step s2"><span class="n">02</span><span class="lab">Act</span></div>
+    <div class="step s3"><span class="n">03</span><span class="lab">Observe</span></div>
+
+    <div class="stage-meta">The harness runs the cycle until the <b>task</b> is done</div>
+  </section>
+
+  <!-- EQUATION -->
+  <section class="equation">
+    <div class="lab">The whole, as one line</div>
+    <div class="eq">Agent <span class="op">=</span> Model <span class="op">+</span> Harness</div>
+  </section>
+
+  <!-- LOOP STEPS -->
+  <section class="steps">
+    <div class="cell">
+      <div class="ck">step 01 — the model</div>
+      <div class="cn">Reason</div>
+      <div class="cd">The model reads the state and <b>decides the next move</b> — not a fixed branch, a judgment made each turn.</div>
+    </div>
+    <div class="cell">
+      <div class="ck">step 02 — the harness</div>
+      <div class="cn">Act</div>
+      <div class="cd">The harness lets it <b>call a tool</b> and make a real, controlled change to the world around it.</div>
+    </div>
+    <div class="cell">
+      <div class="ck">step 03 — the loop</div>
+      <div class="cn">Observe</div>
+      <div class="cd">The result feeds back in. The loop <b>repeats</b> until the task is finished or it asks for help.</div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <div class="synth">
+    The model supplies the reasoning; the harness supplies the loop. You hand it
+    <b>a task, not a script</b> — and <em>let it run the cycle on its own.</em>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Reason · Act · Observe — one loop, repeated</div>
+    <div>withastro / <span class="blue"><b>Flue</b></span></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  /* corner brackets */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE LOCKUP ─────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    margin-bottom: 0;
+    z-index: 4;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.78;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    text-transform: uppercase;
+  }
+  .title .word b { color: var(--blue-2); font-weight: 700; }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    padding-bottom: 12px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* deck rule under title */
+  .deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+    padding: 10px 0 11px 0;
+    margin: 14px 0 26px 0;
+  }
+  .deck .lede {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+  }
+  .deck .lede b { font-weight: 700; }
+  .deck .lede em { font-style: italic; color: var(--blue-2); font-weight: 500; }
+  .deck .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 24px;
+  }
+
+  /* ── TABLE BLOCK ──────────────────────────────────────────────── */
+  .block { position: relative; z-index: 4; margin-bottom: 30px; }
+  .block:last-of-type { margin-bottom: 0; }
+
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 0;
+  }
+  .block-head .no {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--blue-2);
+    letter-spacing: 0.04em;
+  }
+  .block-head .nm {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--stone-900);
+    line-height: 1;
+  }
+  .block-head .ct {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-top: 10px;
+  }
+  /* column-head row */
+  thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    text-align: left;
+    padding: 0 18px 7px 0;
+    border-bottom: 2px solid var(--blue);
+    vertical-align: bottom;
+  }
+  tbody td {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--stone-700);
+    text-align: left;
+    padding: 11px 18px 11px 0;
+    border-bottom: 1px solid var(--stone-200);
+    vertical-align: baseline;
+    letter-spacing: -0.005em;
+  }
+  tbody tr:last-child td { border-bottom: 1.5px solid var(--stone-900); }
+  /* first column = key, heavier + dark */
+  tbody td.key {
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  tbody td.mono-blue { color: var(--blue-2); font-weight: 500; }
+  td .dim { color: var(--stone-400); }
+
+  /* DEPLOY grid table — multi-column flat list */
+  .deploy-grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-top: 10px;
+  }
+  .deploy-grid td {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--stone-900);
+    padding: 12px 14px 12px 0;
+    border-bottom: 1px solid var(--stone-200);
+    border-top: 1px solid var(--stone-200);
+    vertical-align: baseline;
+  }
+  .deploy-grid td .ix {
+    color: var(--blue-2);
+    font-weight: 600;
+    margin-right: 12px;
+  }
+  .deploy-grid tr:last-child td { border-bottom: 1.5px solid var(--stone-900); }
+
+  /* ── FOOT / META ──────────────────────────────────────────────── */
+  .footline {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 86px;
+    z-index: 4;
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .footline .quote {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+  }
+  .footline .quote b { font-style: normal; font-weight: 700; }
+  .footline .spec {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    text-align: right;
+  }
+  .footline .spec b { color: var(--blue-2); font-weight: 600; }
+
+  /* colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">build autonomous agents &amp; ai workflows</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · reference sheet</div>
+      <div class="meta">the framework as a spec</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue<b>—</b>Reference</span>
+    <span class="tag">
+      <span class="big">Specification Sheet</span>
+      <span class="small">components · packages · deploy</span>
+    </span>
+  </div>
+
+  <div class="deck">
+    <div class="lede">The whole framework, read as one table — <b>parts</b>, <b>modules</b>, and where it <em>runs</em>.</div>
+    <div class="stamp">TypeScript<br>Apache&nbsp;2.0</div>
+  </div>
+
+  <!-- ── BLOCK A · COMPONENTS ──────────────────────────────────── -->
+  <section class="block">
+    <div class="block-head">
+      <span class="no">A</span>
+      <span class="nm">Components</span>
+      <span class="ct">seven parts · one agent</span>
+    </div>
+    <table>
+      <colgroup>
+        <col style="width:24%"><col style="width:34%"><col style="width:42%">
+      </colgroup>
+      <thead>
+        <tr><th>Component</th><th>Role</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="key">Model</td><td>reasons, picks the next action</td><td class="mono-blue">anthropic/claude-sonnet-4-6</td></tr>
+        <tr><td class="key">Tools</td><td>typed actions</td><td class="mono-blue">openPR, readFile</td></tr>
+        <tr><td class="key">Skills</td><td>packaged expertise</td><td class="mono-blue">SKILL.md</td></tr>
+        <tr><td class="key">Sandbox</td><td>fs + shell</td><td class="mono-blue">Virtual / Local / Remote</td></tr>
+        <tr><td class="key">Sessions</td><td>state across turns</td><td class="mono-blue">named + compaction</td></tr>
+        <tr><td class="key">MCP servers</td><td>external tools</td><td class="mono-blue">stdio / http</td></tr>
+        <tr><td class="key">Instructions</td><td>the goal</td><td class="mono-blue">a task, not a script</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── BLOCK B · PACKAGES ────────────────────────────────────── -->
+  <section class="block">
+    <div class="block-head">
+      <span class="no">B</span>
+      <span class="nm">Packages</span>
+      <span class="ct">four modules · one workspace</span>
+    </div>
+    <table>
+      <colgroup>
+        <col style="width:34%"><col style="width:66%">
+      </colgroup>
+      <thead>
+        <tr><th>Name</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="key">@flue/runtime</td><td>harness, sessions, tools, sandbox</td></tr>
+        <tr><td class="key">@flue/cli</td><td>build &amp; dev tooling</td></tr>
+        <tr><td class="key">@flue/sdk</td><td>consume deployed agents</td></tr>
+        <tr><td class="key">@flue/postgres</td><td>persistence adapter</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── BLOCK C · DEPLOY ──────────────────────────────────────── -->
+  <section class="block">
+    <div class="block-head">
+      <span class="no">C</span>
+      <span class="nm">Deploy</span>
+      <span class="ct">six targets · one definition</span>
+    </div>
+    <table class="deploy-grid">
+      <colgroup>
+        <col style="width:33.33%"><col style="width:33.33%"><col style="width:33.34%">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td><span class="ix">01</span>Node.js</td>
+          <td><span class="ix">02</span>Cloudflare Workers</td>
+          <td><span class="ix">03</span>GitHub Actions</td>
+        </tr>
+        <tr>
+          <td><span class="ix">04</span>GitLab CI/CD</td>
+          <td><span class="ix">05</span>Daytona</td>
+          <td><span class="ix">06</span>Render</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FOOTLINE -->
+  <div class="footline">
+    <div class="quote"><b>Flue</b> — the agent harness framework.</div>
+    <div class="spec">one definition · <b>many targets</b><br>read top to bottom</div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Reference sheet · components · packages · deploy</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

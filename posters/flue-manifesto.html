@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Not Another SDK · A Manifesto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 70px 30px 70px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 8;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* ── TOPBAR (series identity) ───────────────────────────────────── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── MASTHEAD — asymmetric sans heading, hanging ────────────────── */
+  .masthead {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    align-items: flex-end;
+    gap: 26px;
+    margin-bottom: 18px;
+  }
+  .masthead .mark { width: 92px; height: 92px; margin-bottom: 8px; }
+  .masthead .lock { line-height: 1; }
+  .masthead .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 10px;
+  }
+  .masthead .word {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 116px;
+    line-height: 0.78;
+    letter-spacing: -0.05em;
+    color: var(--stone-900);
+  }
+  .masthead .stamp {
+    margin-left: auto;
+    text-align: right;
+    align-self: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    line-height: 1.7;
+  }
+  .masthead .stamp b { color: var(--stone-900); font-weight: 600; }
+
+  /* ── THE BIG ASYMMETRIC SANS DECLARATION ────────────────────────── */
+  .declare {
+    position: relative;
+    z-index: 4;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 16px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .declare h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 70px;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--stone-900);
+    max-width: 16ch;
+  }
+  .declare h1 em {
+    font-style: normal;
+    color: var(--blue-2);
+  }
+  .declare h1 .thin {
+    font-weight: 300;
+    color: var(--stone-500);
+  }
+  .declare .side {
+    flex: 0 0 168px;
+    padding-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.65;
+    color: var(--stone-500);
+    text-align: right;
+    border-top: 2px solid var(--blue);
+    margin-top: 4px;
+    padding-top: 12px;
+  }
+  .declare .side b { color: var(--blue-2); font-weight: 600; }
+  .declare .side .sep { color: var(--stone-300); }
+
+  /* ── MANIFESTO BODY — the wall of set text ──────────────────────── */
+  .body {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 0;
+  }
+
+  /* Left margin column: thick blue rule + mono marginalia */
+  .gutter {
+    position: relative;
+    border-left: 6px solid var(--blue);
+    padding-left: 0;
+  }
+  .gutter .folio {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 168px;
+    line-height: 0.74;
+    letter-spacing: -0.06em;
+    color: var(--blue);
+    margin-left: 22px;
+    margin-top: -10px;
+    user-select: none;
+  }
+  .gutter .marg {
+    margin-left: 22px;
+    margin-top: 26px;
+    max-width: 124px;
+  }
+  .gutter .marg .ml {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.55;
+    color: var(--stone-500);
+    margin-bottom: 22px;
+  }
+  .gutter .marg .ml .h {
+    display: block;
+    color: var(--blue-2);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  .gutter .marg .ml b { color: var(--stone-900); font-weight: 600; }
+
+  /* Right column: justified serif manifesto */
+  .text {
+    padding-left: 40px;
+  }
+  .text p {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.62;
+    letter-spacing: 0.002em;
+    color: var(--stone-900);
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    max-width: 64ch;
+    margin-bottom: 17px;
+  }
+  .text p b { font-weight: 600; }
+  .text p i { font-style: italic; color: var(--stone-700); }
+
+  /* Drop-initial on the first paragraph */
+  .text p.lead { text-indent: 0; }
+  .text p.lead::first-letter {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 700;
+    float: left;
+    font-size: 116px;
+    line-height: 0.74;
+    padding: 8px 14px 0 0;
+    margin-top: 6px;
+    color: var(--blue);
+  }
+  /* Subsequent paragraphs indented, book-style */
+  .text p.run { text-indent: 1.6em; }
+
+  /* The aphorism line breaking the column */
+  .aphorism {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    border-top: 1.5px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+    padding: 16px 0 18px 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 30px;
+  }
+  .aphorism .q {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 33px;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    color: var(--stone-900);
+    max-width: 30ch;
+  }
+  .aphorism .q b { font-weight: 700; }
+  .aphorism .q em { font-style: italic; color: var(--blue-2); font-weight: 400; }
+  .aphorism .cite {
+    flex: 0 0 auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    text-align: right;
+    line-height: 1.7;
+    padding-top: 4px;
+  }
+  .aphorism .cite b { color: var(--blue-2); }
+
+  /* ── THE LOOP — mono coda, restrained ───────────────────────────── */
+  .loop {
+    position: absolute;
+    left: 70px; right: 70px;
+    bottom: 92px;
+    z-index: 4;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+  }
+  .loop .lead-mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+  }
+  .loop .cycle {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.01em;
+    color: var(--stone-900);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .loop .cycle .op { color: var(--blue); font-weight: 700; }
+  .loop .cycle .arc {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    font-weight: 600;
+  }
+
+  /* ── COLOPHON (series identity) ─────────────────────────────────── */
+  .colophon {
+    position: absolute;
+    left: 70px; right: 70px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">a typographic manifesto</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · Apache-2.0</div>
+      <div class="meta">written in typescript</div>
+    </div>
+  </div>
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="lock">
+      <span class="kicker">Not another SDK</span>
+      <span class="word">Flue</span>
+    </span>
+    <span class="stamp">
+      On the agent harness<br>
+      <b>Model + Harness</b><br>
+      a working argument
+    </span>
+  </div>
+
+  <!-- THE DECLARATION -->
+  <div class="declare">
+    <h1>An agent is a <em>model</em> <span class="thin">and</span> a harness — <em>nothing</em> less.</h1>
+    <div class="side">
+      <b>The model</b><span class="sep"> · </span>reasons<br>
+      <b>The harness</b><span class="sep"> · </span>equips<br>
+      <span class="sep">———</span><br>
+      one supplies thought,<br>
+      the other supplies<br>
+      the world to act in
+    </div>
+  </div>
+
+  <!-- MANIFESTO BODY -->
+  <div class="body">
+
+    <!-- left gutter: blue rule, folio, marginalia -->
+    <div class="gutter">
+      <div class="folio">01</div>
+      <div class="marg">
+        <div class="ml"><span class="h">The four layers</span>
+          <b>Model</b> — reasons.<br>
+          <b>Harness</b> — equips.<br>
+          <b>Sandbox</b> — contains.<br>
+          <b>Filesystem</b> — remembers.
+        </div>
+        <div class="ml"><span class="h">It is given</span>
+          context, typed tools, skills written as <b>SKILL.md</b>, and a secure sandbox of shell and files.
+        </div>
+        <div class="ml"><span class="h">It persists</span>
+          sessions and memory carry across turns and across events.
+        </div>
+      </div>
+    </div>
+
+    <!-- right column: justified serif manifesto -->
+    <div class="text">
+      <p class="lead">For a generation we wrote against the model: a script of calls, a chain of prompts, a brittle pipeline that did exactly what we said and never more. That is a software development kit. It is not an agent. An agent is something we hand a <b>task</b> rather than a procedure — and then trust to find its own way.</p>
+
+      <p class="run">The distinction is simple and absolute. A model, on its own, only reasons; it thinks across the problem and proposes the next action. To turn that proposal into work it needs a place to act, and the means to act there. The harness is that place and those means. It frames the model with context, hands it typed tools, loads the skills it needs, and opens a secure sandbox where shell and filesystem are real.</p>
+
+      <p class="run">Around this it builds what no single call can hold: <b>sessions</b> and <b>memory</b> that persist across turns and across events, so the work survives between one moment and the next. The agent does not begin again each time it is woken. It returns to what it knew.</p>
+
+      <p class="run">And it is given a <b>loop</b> to run on. The model reasons over the task; the harness lets it act; the result is observed and folded back into the reasoning — <i>reason, act, observe,</i> and again, until the goal is met. This is the whole machine. The model is the mind; the harness is everything the mind needs in order to be of any use at all.</p>
+
+      <p class="run">So we give it a goal and not a script. It acts. It remembers what it has done. When something fails it does not halt — it observes, adjusts, and recovers, working autonomously toward the end we named. That is why this is <b>not another SDK.</b> It is the harness an agent runs inside.</p>
+    </div>
+
+    <!-- aphorism breaking the page -->
+    <div class="aphorism">
+      <div class="q">You give it a <b>task</b>, not a script. It <em>acts, remembers, and recovers</em> — working on its own toward a goal.</div>
+      <div class="cite">Agent <b>=</b> Model + Harness<br>withastro / flue</div>
+    </div>
+
+  </div>
+
+  <!-- THE LOOP coda -->
+  <div class="loop">
+    <div class="lead-mono">The loop it runs on</div>
+    <div class="cycle">
+      <span>Reason</span><span class="op">→</span><span>Act</span><span class="op">→</span><span>Observe</span>
+      <span class="arc">↺ until the goal is met</span>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>A manifesto in one page · type is the image</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

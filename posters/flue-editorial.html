@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Harness Framework · Vol. 1 No. 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* ── TOPBAR (series identity) ───────────────────────────────────── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── MASTHEAD BAND — the dominant element ───────────────────────── */
+  .masthead {
+    border-top: 4px solid var(--stone-900);
+    border-bottom: 2px solid var(--stone-900);
+    padding: 9px 0 9px 0;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 4;
+  }
+  .masthead .vol {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-700);
+  }
+  .masthead .vol b { color: var(--stone-900); font-weight: 600; }
+  .masthead .vol .blue { color: var(--blue-2); font-weight: 600; }
+
+  .nameplate {
+    display: flex;
+    align-items: flex-end;
+    gap: 34px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+  }
+  .nameplate .word {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 700;
+    font-size: 280px;
+    line-height: 0.78;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+    margin: 0;
+  }
+  .nameplate .mark { width: 96px; height: 96px; margin-bottom: 34px; }
+  .nameplate .platemeta {
+    margin-left: auto;
+    text-align: right;
+    padding-bottom: 22px;
+    align-self: flex-end;
+  }
+  .nameplate .platemeta .serif-sub {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 27px;
+    letter-spacing: -0.01em;
+    color: var(--stone-700);
+    line-height: 1.1;
+  }
+  .nameplate .platemeta .monoline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    margin-top: 10px;
+  }
+
+  /* The cover-line strapline beneath the nameplate */
+  .strap {
+    border-top: 2px solid var(--stone-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 9px;
+    margin-top: 4px;
+  }
+  .strap .t {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-900);
+  }
+  .strap .r {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 400;
+  }
+
+  /* ── DOMINANT COVER LINE — blue rule system ─────────────────────── */
+  .coverline {
+    margin: 24px 0 22px 0;
+    position: relative;
+    z-index: 4;
+  }
+  .coverline .kick {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+    margin-bottom: 14px;
+  }
+  .coverline .lead {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    color: var(--stone-900);
+    max-width: 30ch;
+  }
+  .coverline .lead b { font-weight: 700; }
+  .coverline .lead em { font-style: italic; color: var(--blue-2); font-weight: 400; }
+  .coverline .bluerule {
+    height: 8px;
+    background: var(--blue);
+    margin-top: 20px;
+  }
+
+  /* ── BODY GRID — two columns: feature essay + contents ──────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 388px;
+    gap: 40px;
+    position: relative;
+    z-index: 4;
+  }
+
+  /* LEFT: feature column */
+  .feature .col-head {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    border-bottom: 1.5px solid var(--stone-900);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .feature .col-head .blue { color: var(--blue-2); }
+  .feature .dropcap {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+  }
+  .feature .dropcap::first-letter {
+    font-size: 122px;
+    line-height: 0.74;
+    float: left;
+    padding: 8px 16px 0 0;
+    color: var(--blue);
+    font-weight: 700;
+  }
+  .feature .body {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--stone-700);
+    margin-top: 16px;
+    max-width: 44ch;
+  }
+  .feature .body b { color: var(--stone-900); font-weight: 600; }
+
+  /* The Agent = equation, as a solid block (the one bold accent reused) */
+  .eqblock {
+    margin-top: 26px;
+    background: var(--stone-950);
+    color: var(--stone-50);
+    padding: 22px 26px 24px 26px;
+  }
+  .eqblock .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-400);
+    margin-bottom: 12px;
+  }
+  .eqblock .eq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--stone-50);
+  }
+  .eqblock .eq .op { color: var(--blue); font-weight: 300; padding: 0 6px; }
+  .eqblock .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--stone-400);
+    margin-top: 14px;
+  }
+  .eqblock .note b { color: var(--blue); font-weight: 600; }
+
+  /* The loop, as a mono run */
+  .loop {
+    margin-top: 22px;
+    border-top: 1.5px solid var(--stone-900);
+    padding-top: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+  .loop .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    flex: 0 0 auto;
+  }
+  .loop .seq {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+  }
+  .loop .seq .op { color: var(--blue-2); font-weight: 300; padding: 0 8px; }
+
+  /* RIGHT: contents column */
+  .contents .col-head {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    border-bottom: 4px solid var(--blue);
+    padding-bottom: 8px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .contents .col-head b { color: var(--stone-900); font-weight: 700; }
+  .toc-item {
+    display: grid;
+    grid-template-columns: 1fr 44px;
+    align-items: baseline;
+    border-bottom: 1px solid var(--stone-200);
+    padding: 13px 0 12px 0;
+  }
+  .toc-item .name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    letter-spacing: -0.03em;
+    color: var(--stone-900);
+    line-height: 1;
+  }
+  .toc-item .gloss {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-size: 13.5px;
+    font-style: italic;
+    line-height: 1.32;
+    color: var(--stone-500);
+    margin-top: 5px;
+  }
+  .toc-item .gloss b { font-style: normal; color: var(--stone-700); font-weight: 600; }
+  .toc-item .code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: var(--blue-2);
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .toc-item .folio {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--stone-300);
+    text-align: right;
+    letter-spacing: -0.02em;
+    align-self: start;
+    padding-top: 1px;
+  }
+  .toc-item.feat .folio { color: var(--blue); }
+  .toc-item.feat .name { color: var(--blue-2); }
+
+  /* ── FOOT STRIP — directed line ─────────────────────────────────── */
+  .footstrip {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 88px;
+    z-index: 4;
+    border-top: 2px solid var(--stone-900);
+    padding-top: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .footstrip .big {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: 22px;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    color: var(--stone-900);
+    max-width: 64ch;
+    line-height: 1.3;
+  }
+  .footstrip .big b { font-style: normal; font-weight: 700; }
+  .footstrip .big .blue { color: var(--blue-2); font-weight: 600; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">a design journal of autonomous agents</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">the harness quarterly</div>
+    </div>
+  </div>
+
+  <!-- MASTHEAD BAND -->
+  <div class="masthead">
+    <div class="vol">
+      <span><b>Vol. 1</b> · <b>No. 1</b> · The Agent Harness Framework</span>
+      <span class="blue">Published by withastro / flue</span>
+    </div>
+    <div class="nameplate">
+      <span class="word">Flue</span>
+      <span class="mark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <span class="platemeta">
+        <span class="serif-sub">An agent is a model,<br>and the harness around it.</span>
+        <span class="monoline">build autonomous agents &amp; ai workflows</span>
+      </span>
+    </div>
+    <div class="strap">
+      <span class="t">The Harness You Program</span>
+      <span class="r">In this issue · Model · Harness · Sandbox · Sessions · Tools · Skills</span>
+    </div>
+  </div>
+
+  <!-- DOMINANT COVER LINE -->
+  <div class="coverline">
+    <div class="kick">The Lead — On the Shape of an Agent</div>
+    <div class="lead">Not another SDK — <em>a harness</em><br>you <b>program.</b></div>
+    <div class="bluerule"></div>
+  </div>
+
+  <!-- BODY GRID -->
+  <div class="grid">
+
+    <!-- FEATURE COLUMN -->
+    <section class="feature">
+      <div class="col-head">
+        <span>The Feature</span>
+        <span class="blue">Anatomy</span>
+      </div>
+      <p class="dropcap">A harness is what turns a language model into an agent. Where a software development kit hands you call sites and asks you to wire the loop yourself, Flue gives you a structure you compose: a reasoning core, an environment for it to act in, and the instructions that point it at a goal.</p>
+      <p class="body">The model thinks; the <b>harness</b> equips it. Around the model sit a <b>sandbox</b> with its own filesystem and shell, <b>sessions</b> that carry memory across turns, the <b>tools</b> it may call, and the <b>skills</b> it loads on demand. You program the harness — not the model — and any model can take the chair.</p>
+
+      <div class="eqblock">
+        <div class="lab">The whole, in one line</div>
+        <div class="eq">Model <span class="op">+</span> Harness</div>
+        <div class="note">the reasoning core, equipped &amp; directed — <b>swap the model, keep the harness</b></div>
+      </div>
+
+      <div class="loop">
+        <div class="lab">The Loop</div>
+        <div class="seq">Reason <span class="op">→</span> Act <span class="op">→</span> Observe</div>
+      </div>
+    </section>
+
+    <!-- CONTENTS COLUMN -->
+    <section class="contents">
+      <div class="col-head">
+        <span>The <b>Contents</b></span>
+        <span>Eight Parts</span>
+      </div>
+
+      <div class="toc-item feat">
+        <div>
+          <div class="name">Model</div>
+          <div class="gloss">The reasoning core that <b>picks the next action</b> — provider-agnostic, swappable.</div>
+          <div class="code">anthropic/claude-sonnet-4-6</div>
+        </div>
+        <div class="folio">01</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Harness</div>
+          <div class="gloss">The structure you program around the model — <b>what makes it an agent.</b></div>
+        </div>
+        <div class="folio">02</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Sandbox</div>
+          <div class="gloss">An isolated workspace where real work happens.</div>
+          <div class="code">fs + shell</div>
+        </div>
+        <div class="folio">03</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Filesystem</div>
+          <div class="gloss">Files the agent reads, writes, and <b>edits in place.</b></div>
+        </div>
+        <div class="folio">04</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Sessions</div>
+          <div class="gloss">Memory that persists across turns and runs.</div>
+          <div class="code">state · memory</div>
+        </div>
+        <div class="folio">05</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Tools</div>
+          <div class="gloss">Typed actions the agent calls to reach your systems.</div>
+        </div>
+        <div class="folio">06</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Skills</div>
+          <div class="gloss">Packaged expertise the agent <b>loads on demand.</b></div>
+          <div class="code">SKILL.md</div>
+        </div>
+        <div class="folio">07</div>
+      </div>
+
+      <div class="toc-item">
+        <div>
+          <div class="name">Instructions</div>
+          <div class="gloss">A goal in plain words — <b>state the outcome, not the script.</b></div>
+        </div>
+        <div class="folio">08</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOT STRIP -->
+  <div class="footstrip">
+    <div class="big">
+      A <b>model</b> in a <b>harness</b> — equipped with tools and skills, sandboxed,
+      and <b>directed</b> — then left to run the loop on its own.
+      <span class="blue">Reason. Act. Observe.</span>
+    </div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>The Harness You Program · Vol. 1 No. 1</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

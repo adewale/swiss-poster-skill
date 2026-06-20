@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Deploy Anywhere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+    background: var(--stone-50);
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 20;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    position: relative;
+    z-index: 12;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── THE LITHOGRAPHIC SCENE ───────────────────────────────────── */
+  .scene {
+    position: absolute;
+    left: 64px; right: 64px;
+    top: 132px;
+    height: 1010px;
+    overflow: hidden;
+    z-index: 1;
+    background: var(--stone-100);
+    border: 1.5px solid var(--stone-900);
+  }
+  .scene svg { display: block; width: 100%; height: 100%; }
+
+  /* paper speckle */
+  .grain {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 5;
+    background-image:
+      radial-gradient(var(--stone-900) 0.6px, transparent 0.7px),
+      radial-gradient(var(--stone-900) 0.5px, transparent 0.6px);
+    background-size: 7px 7px, 11px 11px;
+    background-position: 0 0, 4px 6px;
+    mix-blend-mode: multiply;
+    opacity: 0.06;
+  }
+
+  /* Destination wordmark, sitting on the sky */
+  .dest {
+    position: absolute;
+    left: 54px;
+    top: 40px;
+    z-index: 8;
+    display: flex;
+    align-items: flex-end;
+    gap: 26px;
+  }
+  .dest .mark { width: 92px; height: 92px; margin-bottom: 14px; }
+  .dest .word {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 250px;
+    line-height: 0.74;
+    letter-spacing: -0.01em;
+    color: var(--stone-50);
+    text-transform: uppercase;
+    text-shadow: 5px 6px 0 var(--blue-2);
+  }
+  .dest .sub {
+    position: absolute;
+    left: 122px;
+    top: 214px;
+    font-family: 'IBM Plex Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 33px;
+    letter-spacing: 0.01em;
+    color: var(--stone-50);
+  }
+
+  /* The DEPLOY ANYWHERE banner on the route */
+  .theme-line {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 188px;
+    z-index: 9;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 46px;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;
+    text-transform: uppercase;
+    color: var(--stone-50);
+  }
+
+  /* Stops along the route, inside the scene */
+  .stop {
+    position: absolute;
+    z-index: 9;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+  }
+  .stop .dot {
+    width: 14px; height: 14px;
+    background: var(--stone-50);
+    border: 3px solid var(--blue-2);
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .stop .lab {
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: 0.06em;
+    color: var(--stone-900);
+    background: rgba(250,250,249,0.86);
+    padding: 1px 8px;
+  }
+
+  /* ── LOWER ITINERARY BAND ─────────────────────────────────────── */
+  .itin {
+    position: absolute;
+    left: 64px; right: 64px;
+    top: 1166px;
+    z-index: 12;
+  }
+  .itin-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 4px solid var(--stone-900);
+    padding-top: 11px;
+    margin-bottom: 4px;
+  }
+  .itin-head .t {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--stone-900);
+  }
+  .itin-head .t b { color: var(--blue-2); }
+  .itin-head .d {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+  }
+  .itin-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-left: 1.5px solid var(--stone-900);
+    border-top: 1.5px solid var(--stone-900);
+  }
+  .stopcard {
+    border-right: 1.5px solid var(--stone-900);
+    border-bottom: 1.5px solid var(--stone-900);
+    padding: 16px 22px 18px 20px;
+    position: relative;
+    min-height: 132px;
+  }
+  .stopcard .no {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--blue-2);
+  }
+  .stopcard .nm {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 41px;
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--stone-900);
+    margin-top: 6px;
+  }
+  .stopcard .ds {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.34;
+    color: var(--stone-700);
+    margin-top: 9px;
+    max-width: 30ch;
+  }
+  .stopcard.lead { background: var(--blue); }
+  .stopcard.lead .no { color: rgba(250,250,249,0.85); }
+  .stopcard.lead .nm { color: var(--stone-50); }
+  .stopcard.lead .ds { color: rgba(250,250,249,0.94); }
+
+  /* romantic strapline above colophon */
+  .strap {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 86px;
+    z-index: 12;
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    color: var(--stone-900);
+    border-top: 1px dotted var(--stone-300);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 30px;
+  }
+  .strap em { font-style: italic; color: var(--blue-2); }
+  .strap .lic {
+    flex: 0 0 auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .strap .lic b { color: var(--stone-900); font-weight: 700; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 12;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">agents that run autonomously toward a goal</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue · grand tour</div>
+      <div class="meta">deploy anywhere · keep your context</div>
+    </div>
+  </div>
+
+  <!-- ── THE SCENE ─────────────────────────────────────────────── -->
+  <div class="scene">
+    <svg viewBox="0 0 1132 1010" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- SKY -->
+      <rect x="0" y="0" width="1132" height="1010" fill="#e7e5e4"/>
+      <rect x="0" y="0" width="1132" height="690" fill="#d6d3d1"/>
+
+      <!-- SUNRISE rays — flat blue bands radiating from horizon focus -->
+      <g>
+        <polygon points="566,640 -260,-180 80,-260"  fill="#4DA3FF" opacity="0.35"/>
+        <polygon points="566,640 120,-260 360,-300"  fill="#4DA3FF" opacity="0.30"/>
+        <polygon points="566,640 400,-300 560,-310"  fill="#4DA3FF" opacity="0.42"/>
+        <polygon points="566,640 600,-310 760,-300"  fill="#4DA3FF" opacity="0.30"/>
+        <polygon points="566,640 800,-300 1040,-260" fill="#4DA3FF" opacity="0.35"/>
+        <polygon points="566,640 1080,-260 1420,-180" fill="#4DA3FF" opacity="0.28"/>
+      </g>
+
+      <!-- SUN — flat disc, no glow -->
+      <circle cx="566" cy="612" r="118" fill="#007AFF"/>
+      <circle cx="566" cy="612" r="118" fill="#0057D8" opacity="0.0"/>
+
+      <!-- distant ridge -->
+      <path d="M0,648 L150,600 L300,632 L470,560 L566,612 L690,548 L860,612 L1010,572 L1132,624 L1132,1010 L0,1010 Z" fill="#a8a29e"/>
+      <!-- mid hills -->
+      <path d="M0,742 L210,672 L430,738 L560,690 L720,760 L900,688 L1132,748 L1132,1010 L0,1010 Z" fill="#0057D8"/>
+      <!-- near hills -->
+      <path d="M0,860 L260,790 L520,852 L760,800 L1000,866 L1132,838 L1132,1010 L0,1010 Z" fill="#1c1917"/>
+
+      <!-- water glint band in front of sun -->
+      <g opacity="0.5">
+        <rect x="486" y="690" width="160" height="6"  fill="#4DA3FF"/>
+        <rect x="470" y="706" width="192" height="6"  fill="#4DA3FF"/>
+        <rect x="452" y="722" width="228" height="5"  fill="#4DA3FF"/>
+      </g>
+
+      <!-- THE SWEEPING ROUTE — a flat ribbon rail arcing to the horizon -->
+      <path d="M70,1004 C 250,900 250,820 470,756 C 690,694 700,656 566,628"
+            fill="none" stroke="#fafaf9" stroke-width="26" stroke-linecap="round"/>
+      <path d="M70,1004 C 250,900 250,820 470,756 C 690,694 700,656 566,628"
+            fill="none" stroke="#0057D8" stroke-width="26" stroke-linecap="round"
+            stroke-dasharray="2 40"/>
+      <path d="M70,1004 C 250,900 250,820 470,756 C 690,694 700,656 566,628"
+            fill="none" stroke="#1c1917" stroke-width="3"
+            stroke-dasharray="18 22"/>
+
+      <!-- a couple of stylized birds, flat chevrons -->
+      <path d="M250,300 q22,-16 44,0 q22,-16 44,0" fill="none" stroke="#44403c" stroke-width="4" stroke-linecap="round"/>
+      <path d="M330,250 q18,-13 36,0 q18,-13 36,0" fill="none" stroke="#44403c" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+
+    <div class="grain"></div>
+
+    <!-- DESTINATION WORDMARK -->
+    <div class="dest">
+      <span class="mark">
+        <i style="grid-column:4;grid-row:2"></i>
+        <i style="grid-column:3;grid-row:3"></i>
+        <i style="grid-column:4;grid-row:4"></i>
+        <i style="grid-column:3;grid-row:5"></i>
+      </span>
+      <span class="word">Flue</span>
+    </div>
+    <div class="sub">the long way is the same as the short way — your agent carries its context</div>
+
+    <!-- STOPS strung along the rising route -->
+    <div class="stop" style="left:96px;  bottom:24px;">
+      <span class="dot"></span><span class="lab">Node.js</span>
+    </div>
+    <div class="stop" style="left:228px; bottom:170px;">
+      <span class="dot"></span><span class="lab">Render</span>
+    </div>
+    <div class="stop" style="left:300px; bottom:288px;">
+      <span class="dot"></span><span class="lab">Daytona</span>
+    </div>
+    <div class="stop" style="left:548px; bottom:330px;">
+      <span class="dot"></span><span class="lab">GitLab CI/CD</span>
+    </div>
+
+    <!-- THEME BANNER -->
+    <div class="theme-line">Deploy Anywhere</div>
+
+    <div class="stop" style="left:706px; bottom:300px;">
+      <span class="dot"></span><span class="lab">GitHub Actions</span>
+    </div>
+    <div class="stop" style="left:740px; bottom:386px;">
+      <span class="dot"></span><span class="lab">Cloudflare Workers</span>
+    </div>
+  </div>
+
+  <!-- ── ITINERARY ────────────────────────────────────────────── -->
+  <div class="itin">
+    <div class="itin-head">
+      <div class="t">The Itinerary — <b>Six Stops, One Agent</b></div>
+      <div class="d">one definition · every runtime</div>
+    </div>
+    <div class="itin-grid">
+      <div class="stopcard lead">
+        <div class="no">Stop 01</div>
+        <div class="nm">Node.js</div>
+        <div class="ds">Set out from home ground. Run the agent on any server you already keep.</div>
+      </div>
+      <div class="stopcard">
+        <div class="no">Stop 02</div>
+        <div class="nm">Cloudflare Workers</div>
+        <div class="ds">Cross to the edge. The same agent wakes wherever your requests land.</div>
+      </div>
+      <div class="stopcard">
+        <div class="no">Stop 03</div>
+        <div class="nm">GitHub Actions</div>
+        <div class="ds">Pull in at the workflow. Let events on the repository call it into motion.</div>
+      </div>
+      <div class="stopcard">
+        <div class="no">Stop 04</div>
+        <div class="nm">GitLab CI/CD</div>
+        <div class="ds">Change lines into the pipeline. The agent rides the stages you already run.</div>
+      </div>
+      <div class="stopcard">
+        <div class="no">Stop 05</div>
+        <div class="nm">Daytona</div>
+        <div class="ds">Lay over in a clean workspace. Real, isolated execution for honest work.</div>
+      </div>
+      <div class="stopcard">
+        <div class="no">Stop 06</div>
+        <div class="nm">Render</div>
+        <div class="ds">Arrive at the managed platform. Long-running service, no station to mind.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROMANTIC STRAPLINE -->
+  <div class="strap">
+    <div>Set the goal, choose the line, and let it run — <em>the same agent, at home on every horizon,</em> remembering each conversation and event it has passed.</div>
+    <div class="lic">TypeScript<br><b>Apache-2.0</b></div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Deploy anywhere · keep your context</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

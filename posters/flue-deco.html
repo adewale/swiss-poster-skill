@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Harness Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+    background: var(--stone-50);
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── DECO HEADER RULE — symmetric, stepped ─────────────────── */
+  .deco-rule {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  .deco-rule .bar { flex: 1; height: 3px; background: var(--stone-950); }
+  .deco-rule .step {
+    display: flex; align-items: center; gap: 0;
+  }
+  .deco-rule .chev {
+    width: 0; height: 0;
+    border-style: solid;
+  }
+  .deco-rule .eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    padding: 0 6px;
+    white-space: nowrap;
+  }
+
+  /* ── MONUMENT STAGE ───────────────────────────────────────── */
+  .stage {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 930px;
+    display: flex;
+    justify-content: center;
+    margin-top: -6px;
+  }
+  .stage svg { display: block; }
+
+  /* ── TITLE BLOCK (rendered inside SVG, but tagline below) ──── */
+  .undertitle {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    margin-top: 2px;
+  }
+  .undertitle .frameline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    margin-bottom: 14px;
+  }
+  .undertitle .frameline .seg { height: 2px; width: 150px; background: var(--stone-950); }
+  .undertitle .frameline .dot { width: 9px; height: 9px; background: var(--blue); transform: rotate(45deg); }
+  .undertitle .tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 40px;
+    letter-spacing: 0.30em;
+    text-transform: uppercase;
+    color: var(--stone-950);
+    line-height: 1;
+  }
+  .undertitle .subtag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    margin-top: 14px;
+    font-weight: 500;
+  }
+
+  /* ── LOOP TRIPTYCH — Reason · Act · Observe ───────────────── */
+  .triptych {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 30px;
+    border-top: 3px solid var(--stone-950);
+    border-bottom: 3px solid var(--stone-950);
+  }
+  .triptych .cell {
+    text-align: center;
+    padding: 18px 22px 20px 22px;
+    border-right: 1.5px solid var(--stone-300);
+    position: relative;
+  }
+  .triptych .cell:last-child { border-right: 0; }
+  .triptych .cell .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    color: var(--blue-2);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .triptych .cell .h {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--stone-950);
+    line-height: 0.92;
+  }
+  .triptych .cell .p {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--stone-700);
+    margin-top: 9px;
+  }
+  .triptych .cell .p b { color: var(--stone-950); font-weight: 600; }
+
+  /* ── PROVISIONS BAND (full-bleed blue) — what the harness gives ── */
+  .provisions {
+    position: relative;
+    z-index: 4;
+    background: var(--blue);
+    color: var(--stone-50);
+    margin-left: -64px;
+    margin-right: -64px;
+    padding: 20px 64px 22px 64px;
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    align-items: center;
+    gap: 40px;
+  }
+  .provisions .lead {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 33px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 0.95;
+  }
+  .provisions .lead span {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.26em;
+    font-weight: 500;
+    color: rgba(250,250,249,0.82);
+    text-transform: uppercase;
+    margin-top: 9px;
+  }
+  .provisions .items {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .provisions .it {
+    text-align: center;
+    padding: 0 6px;
+    border-left: 1px solid rgba(250,250,249,0.32);
+  }
+  .provisions .it:first-child { border-left: 0; }
+  .provisions .it .k {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .provisions .it .d {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(250,250,249,0.82);
+    margin-top: 8px;
+    line-height: 1.3;
+  }
+
+  /* ── SYNTHESIS LINE ──────────────────────────────────────── */
+  .synth {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 88px;
+    z-index: 4;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--stone-950);
+    line-height: 1.06;
+  }
+  .synth b { font-weight: 700; }
+  .synth em { font-style: normal; color: var(--blue-2); font-weight: 700; }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">a model, given a place to work</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">reason · act · observe</div>
+    </div>
+  </div>
+
+  <!-- DECO EYEBROW RULE -->
+  <div class="deco-rule">
+    <span class="bar"></span>
+    <span class="chev" style="border-width:7px 0 7px 11px;border-color:transparent transparent transparent var(--blue);"></span>
+    <span class="eyebrow">Machine&nbsp;Age&nbsp;for&nbsp;Agents</span>
+    <span class="chev" style="border-width:7px 11px 7px 0;border-color:transparent var(--blue) transparent transparent;"></span>
+    <span class="bar"></span>
+  </div>
+
+  <!-- ── DECO MONUMENT (the flue: a stepped, symmetric machine-age tower) ── -->
+  <div class="stage">
+    <svg height="930" viewBox="0 0 1132 1010" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Flue — a stepped Art Deco industrial monument">
+      <defs>
+        <!-- mask to carve FLUE out of the tower shaft -->
+        <mask id="flueWord">
+          <rect x="0" y="0" width="1132" height="1010" fill="#fff"/>
+          <text x="566" y="566" text-anchor="middle"
+            font-family="'Barlow Condensed', sans-serif" font-weight="700"
+            font-size="172" letter-spacing="2" fill="#000">FLUE</text>
+        </mask>
+      </defs>
+
+      <!-- ===== SUNBURST / RAY FAN behind the monument (flat bands, symmetric) ===== -->
+      <g transform="translate(566,470)">
+        <!-- long thin deco rays, mirrored about the vertical axis -->
+        <g stroke="var(--stone-200)" stroke-width="3" fill="none">
+          <line x1="0" y1="0" x2="0"    y2="-470"/>
+        </g>
+        <g fill="var(--stone-200)">
+          <!-- right-side wedges -->
+          <polygon points="0,0 70,-462 30,-466"/>
+          <polygon points="0,0 168,-432 132,-444"/>
+          <polygon points="0,0 262,-378 230,-398"/>
+          <polygon points="0,0 348,-300 320,-326"/>
+          <polygon points="0,0 420,-204 398,-234"/>
+          <polygon points="0,0 470,-96 456,-128"/>
+          <!-- left-side wedges (mirror) -->
+          <polygon points="0,0 -70,-462 -30,-466"/>
+          <polygon points="0,0 -168,-432 -132,-444"/>
+          <polygon points="0,0 -262,-378 -230,-398"/>
+          <polygon points="0,0 -348,-300 -320,-326"/>
+          <polygon points="0,0 -420,-204 -398,-234"/>
+          <polygon points="0,0 -470,-96 -456,-128"/>
+        </g>
+        <!-- a few blue accent rays for machine-age optimism -->
+        <g fill="var(--blue-lt)" opacity="0.55">
+          <polygon points="0,0 12,-468 -12,-468"/>
+          <polygon points="0,0 224,-404 206,-416"/>
+          <polygon points="0,0 -224,-404 -206,-416"/>
+        </g>
+      </g>
+
+      <!-- ===== STEPPED HALO ARCS (concentric deco semicircles, flat) ===== -->
+      <g transform="translate(566,470)" fill="none">
+        <path d="M -498,0 A 498,498 0 0 1 498,0" stroke="var(--stone-950)" stroke-width="4"/>
+        <path d="M -452,0 A 452,452 0 0 1 452,0" stroke="var(--blue)" stroke-width="9"/>
+        <path d="M -416,0 A 416,416 0 0 1 416,0" stroke="var(--stone-950)" stroke-width="2"/>
+      </g>
+
+      <!-- ===== THE MONUMENT: symmetric stepped ziggurat chimney/tower ===== -->
+      <g>
+        <!-- centerline crown ornament: stepped finial -->
+        <g fill="var(--stone-950)">
+          <rect x="556" y="58"  width="20"  height="60"/>
+          <polygon points="566,30 556,62 576,62"/>
+          <rect x="540" y="118" width="52"  height="20"/>
+          <rect x="528" y="138" width="76"  height="18"/>
+        </g>
+        <!-- thin smoke/heat plume rising from the flue (deco zigzag) -->
+        <path d="M 566,30 L 552,4 L 580,-22 L 556,-50"
+              fill="none" stroke="var(--blue)" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- setback tiers (top → base), each centered & symmetric -->
+        <!-- tier 1 (cap) -->
+        <rect x="486" y="156" width="160" height="40" fill="var(--stone-950)"/>
+        <!-- tier 2 -->
+        <rect x="456" y="196" width="220" height="46" fill="var(--blue-2)"/>
+        <!-- tier 3 — main shaft top (carries the chevron crown) -->
+        <rect x="426" y="242" width="280" height="56" fill="var(--stone-950)"/>
+
+        <!-- chevron crown band across shaft top -->
+        <g fill="var(--blue-lt)">
+          <polygon points="466,298 486,270 506,298"/>
+          <polygon points="526,298 546,270 566,298"/>
+          <polygon points="586,298 606,270 626,298"/>
+          <polygon points="646,298 666,270 686,298"/>
+        </g>
+
+        <!-- MAIN SHAFT — the tall flue body, FLUE carved out via mask -->
+        <g mask="url(#flueWord)">
+          <rect x="386" y="298" width="360" height="402" fill="var(--blue)"/>
+          <!-- vertical reeding / fluting stripes inside shaft -->
+          <g fill="var(--blue-2)">
+            <rect x="404" y="298" width="10" height="402"/>
+            <rect x="430" y="298" width="10" height="402"/>
+            <rect x="456" y="298" width="10" height="402"/>
+            <rect x="666" y="298" width="10" height="402"/>
+            <rect x="692" y="298" width="10" height="402"/>
+            <rect x="718" y="298" width="10" height="402"/>
+          </g>
+        </g>
+        <!-- shaft outline frame -->
+        <rect x="386" y="298" width="360" height="402" fill="none" stroke="var(--stone-950)" stroke-width="4"/>
+
+        <!-- stepped frame brackets flanking the shaft (symmetric) -->
+        <g fill="var(--stone-950)">
+          <!-- left -->
+          <rect x="356" y="318" width="22" height="362"/>
+          <rect x="334" y="360" width="22" height="278"/>
+          <!-- right -->
+          <rect x="754" y="318" width="22" height="362"/>
+          <rect x="776" y="360" width="22" height="278"/>
+        </g>
+        <g fill="var(--blue)">
+          <rect x="356" y="318" width="22" height="40"/>
+          <rect x="356" y="640" width="22" height="40"/>
+          <rect x="754" y="318" width="22" height="40"/>
+          <rect x="754" y="640" width="22" height="40"/>
+        </g>
+
+        <!-- base setbacks (widening plinth, mirrored) -->
+        <rect x="426" y="700" width="280" height="40" fill="var(--stone-950)"/>
+        <rect x="396" y="740" width="340" height="40" fill="var(--blue-2)"/>
+        <rect x="354" y="780" width="424" height="44" fill="var(--stone-950)"/>
+        <rect x="306" y="824" width="520" height="46" fill="var(--stone-950)"/>
+
+        <!-- plinth chevron frieze -->
+        <g fill="var(--blue-lt)">
+          <polygon points="330,870 354,838 378,870"/>
+          <polygon points="408,870 432,838 456,870"/>
+          <polygon points="486,870 510,838 534,870"/>
+          <polygon points="564,870 588,838 612,870"/>
+          <polygon points="642,870 666,838 690,870"/>
+          <polygon points="720,870 744,838 768,870"/>
+        </g>
+
+        <!-- ground bar -->
+        <rect x="266" y="870" width="600" height="14" fill="var(--stone-950)"/>
+      </g>
+
+      <!-- ===== EQUATION engraved on the plinth ===== -->
+      <text x="566" y="936" text-anchor="middle"
+        font-family="'Barlow Condensed', sans-serif" font-weight="700"
+        font-size="58" letter-spacing="4" fill="var(--stone-950)">AGENT</text>
+      <text x="566" y="982" text-anchor="middle"
+        font-family="'IBM Plex Mono', monospace" font-weight="600"
+        font-size="22" letter-spacing="6" fill="var(--blue-2)">MODEL&#160;&#160;+&#160;&#160;HARNESS</text>
+    </svg>
+  </div>
+
+  <!-- ── UNDER-TITLE TAGLINE ── -->
+  <div class="undertitle">
+    <div class="frameline">
+      <span class="seg"></span>
+      <span class="dot"></span>
+      <span class="tagline">The Agent Harness Framework</span>
+      <span class="dot"></span>
+      <span class="seg"></span>
+    </div>
+    <div class="subtag">the model reasons · the harness equips · you give it a task, not a script</div>
+  </div>
+
+  <!-- ── LOOP TRIPTYCH ── -->
+  <section class="triptych">
+    <div class="cell">
+      <div class="num">I · THE LOOP</div>
+      <div class="h">Reason</div>
+      <div class="p">The model thinks over the task and <b>chooses the next action</b> on its own.</div>
+    </div>
+    <div class="cell">
+      <div class="num">II · THE LOOP</div>
+      <div class="h">Act</div>
+      <div class="p">It calls a tool or skill and <b>does real work</b> inside the sandbox.</div>
+    </div>
+    <div class="cell">
+      <div class="num">III · THE LOOP</div>
+      <div class="h">Observe</div>
+      <div class="p">It reads the result, <b>updates memory</b>, and runs the loop again.</div>
+    </div>
+  </section>
+
+  <!-- ── PROVISIONS BAND ── -->
+  <section class="provisions">
+    <div class="lead">What the<br>harness gives<span>the model brings only reasoning</span></div>
+    <div class="items">
+      <div class="it"><div class="k">Tools</div><div class="d">typed<br>actions</div></div>
+      <div class="it"><div class="k">Skills</div><div class="d">loadable<br>expertise</div></div>
+      <div class="it"><div class="k">Sandbox</div><div class="d">isolated<br>execution</div></div>
+      <div class="it"><div class="k">Memory</div><div class="d">state across<br>the loop</div></div>
+      <div class="it"><div class="k">Loop</div><div class="d">reason act<br>observe</div></div>
+    </div>
+  </section>
+
+  <!-- ── SYNTHESIS ── -->
+  <div class="synth">
+    Equip the model · sandbox the work · <em>then give it a task, not a script</em>
+  </div>
+
+  <!-- ── COLOPHON ── -->
+  <div class="colophon">
+    <div>The Agent Harness Framework</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

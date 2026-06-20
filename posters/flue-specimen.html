@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — Universal Agent Architecture · Specimen Plate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-950);
+    font-family: 'Barlow', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 96px;
+  }
+
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-950);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* ── Measured tick scale running down the left margin ───────────── */
+  .ruler {
+    position: absolute;
+    top: 152px; bottom: 92px;
+    left: 56px;
+    width: 30px;
+    z-index: 5;
+  }
+  .ruler .axis {
+    position: absolute;
+    top: 0; bottom: 0; right: 0;
+    width: 1px;
+    background: var(--stone-400);
+  }
+  .ruler .tick {
+    position: absolute;
+    right: 0;
+    height: 1px;
+    background: var(--stone-400);
+  }
+  .ruler .tick.major { width: 16px; background: var(--stone-700); }
+  .ruler .tick.minor { width: 8px; }
+  .ruler .num {
+    position: absolute;
+    right: 20px;
+    transform: translateY(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    color: var(--stone-500);
+    font-weight: 500;
+  }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-950);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* Flue glyph mark, rebuilt from the favicon grid */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── TITLE ───────────────────────────────────────────────────────── */
+  .title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    z-index: 4;
+  }
+  .title .mark { width: 96px; height: 96px; }
+  .title .word {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 130px;
+    line-height: 0.78;
+    letter-spacing: -0.02em;
+    color: var(--stone-950);
+    margin: 0;
+  }
+  .title .tag {
+    margin-left: auto;
+    text-align: right;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .title .tag .big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-950);
+  }
+  .title .tag .small {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--stone-500);
+    margin-top: 6px;
+  }
+
+  /* ── PLATE HEADER / caption ──────────────────────────────────────── */
+  .plate-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 3px solid var(--stone-950);
+    border-bottom: 1px solid var(--stone-950);
+    padding: 10px 0 9px 0;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 4;
+  }
+  .plate-head .left .ttl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 31px;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--stone-950);
+  }
+  .plate-head .left .sub {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--stone-700);
+    margin-top: 4px;
+    max-width: 64ch;
+  }
+  .plate-head .left .sub b { font-weight: 600; color: var(--stone-950); }
+  .plate-head .right {
+    text-align: right;
+    flex: 0 0 auto;
+    padding-left: 28px;
+  }
+  .plate-head .right .fig {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--blue-2);
+  }
+  .plate-head .right .figsub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    margin-top: 5px;
+  }
+
+  /* ── LOOP STRIP ──────────────────────────────────────────────────── */
+  .loop {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--stone-950);
+    position: relative;
+    z-index: 4;
+  }
+  .loop .lab {
+    flex: 0 0 auto;
+    padding: 11px 22px 11px 0;
+    border-right: 1px solid var(--stone-300);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .loop .lab .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+  }
+  .loop .lab .v {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: var(--stone-950);
+    margin-top: 2px;
+  }
+  .loop .cyc {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 11px 0 11px 22px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .loop .cyc .step {
+    font-weight: 600;
+    font-size: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stone-950);
+  }
+  .loop .cyc .arr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    color: var(--blue-2);
+    font-weight: 500;
+  }
+  .loop .eqn {
+    flex: 0 0 auto;
+    align-self: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--stone-700);
+    padding-left: 22px;
+    border-left: 1px solid var(--stone-300);
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .loop .eqn b { color: var(--blue-2); font-weight: 600; }
+
+  /* ── SPECIMEN GRID — the dominant element ────────────────────────── */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    position: relative;
+    z-index: 4;
+  }
+  .spec {
+    border-right: 1px solid var(--stone-950);
+    border-bottom: 1px solid var(--stone-950);
+    padding: 22px 26px 20px 26px;
+    position: relative;
+    min-height: 0;
+  }
+  .spec:nth-child(2n) { border-right: 0; }
+  .spec:nth-child(n+3) { border-bottom: 0; }
+
+  .spec .head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .spec .no {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--blue-2);
+  }
+  .spec .nm {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 0.84;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    color: var(--stone-950);
+    margin-top: 4px;
+  }
+  .spec .role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+    margin-top: 8px;
+  }
+
+  /* clinical capsule pictogram, top-right of each specimen */
+  .cap {
+    flex: 0 0 auto;
+    width: 96px; height: 96px;
+    position: relative;
+  }
+  .cap svg { width: 96px; height: 96px; display: block; }
+
+  .spec .desc {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.34;
+    color: var(--stone-700);
+    margin-top: 14px;
+    max-width: 46ch;
+  }
+  .spec .desc b { color: var(--stone-950); font-weight: 600; }
+
+  /* IBM Plex Mono data rows */
+  .rows {
+    margin-top: 16px;
+    border-top: 1px solid var(--stone-300);
+  }
+  .rows .r {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    align-items: baseline;
+    border-bottom: 1px dotted var(--stone-300);
+    padding: 6px 0 6px 0;
+  }
+  .rows .r .rk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+  }
+  .rows .r .rv {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--stone-950);
+    letter-spacing: -0.01em;
+  }
+  .rows .r .rv .dim { color: var(--stone-500); font-weight: 400; }
+
+  /* ── FOOT BAND — components register ─────────────────────────────── */
+  .register {
+    position: absolute;
+    left: 96px; right: 64px;
+    bottom: 92px;
+    z-index: 4;
+    border-top: 3px solid var(--blue);
+    padding-top: 11px;
+  }
+  .register .rh {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .register .rh .t {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stone-950);
+  }
+  .register .rh .d {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    font-weight: 600;
+  }
+  .reg-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+  }
+  .reg-cell {
+    border-left: 1px solid var(--stone-300);
+    padding: 0 12px;
+  }
+  .reg-cell:first-child { border-left: 0; padding-left: 0; }
+  .reg-cell .ck {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue-2);
+    font-weight: 600;
+  }
+  .reg-cell .cn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    text-transform: uppercase;
+    color: var(--stone-950);
+    margin-top: 4px;
+    line-height: 0.95;
+  }
+  .reg-cell .cd {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--stone-500);
+    margin-top: 5px;
+    line-height: 1.3;
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 96px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-950); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- MEASURED TICK SCALE -->
+  <div class="ruler" aria-hidden="true">
+    <span class="axis"></span>
+    <span class="tick major" style="top:0%"></span>      <span class="num" style="top:0%">00</span>
+    <span class="tick minor" style="top:5%"></span>
+    <span class="tick minor" style="top:10%"></span>
+    <span class="tick minor" style="top:15%"></span>
+    <span class="tick minor" style="top:20%"></span>
+    <span class="tick major" style="top:25%"></span>     <span class="num" style="top:25%">25</span>
+    <span class="tick minor" style="top:30%"></span>
+    <span class="tick minor" style="top:35%"></span>
+    <span class="tick minor" style="top:40%"></span>
+    <span class="tick minor" style="top:45%"></span>
+    <span class="tick major" style="top:50%"></span>     <span class="num" style="top:50%">50</span>
+    <span class="tick minor" style="top:55%"></span>
+    <span class="tick minor" style="top:60%"></span>
+    <span class="tick minor" style="top:65%"></span>
+    <span class="tick minor" style="top:70%"></span>
+    <span class="tick major" style="top:75%"></span>     <span class="num" style="top:75%">75</span>
+    <span class="tick minor" style="top:80%"></span>
+    <span class="tick minor" style="top:85%"></span>
+    <span class="tick minor" style="top:90%"></span>
+    <span class="tick minor" style="top:95%"></span>
+    <span class="tick major" style="top:100%"></span>    <span class="num" style="top:100%">AA</span>
+  </div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">universal agent architecture</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">typescript · apache-2.0</div>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+    <span class="tag">
+      <span class="big">The Agent Harness Framework</span>
+      <span class="small">build autonomous agents &amp; ai workflows</span>
+    </span>
+  </div>
+
+  <!-- PLATE HEADER -->
+  <div class="plate-head">
+    <div class="left">
+      <div class="ttl">The Four-Layer Agent, Mounted &amp; Measured</div>
+      <div class="sub">Not another SDK — a programmable TypeScript harness. An agent is <b>Model + Harness</b>: the model reasons and picks the next action; the harness supplies context, tools, a sandbox, and memory. You give it a <b>task, not a script.</b></div>
+    </div>
+    <div class="right">
+      <div class="fig">Plate IV — 01·02·03·04</div>
+      <div class="figsub">four specimens · one stack</div>
+    </div>
+  </div>
+
+  <!-- LOOP STRIP -->
+  <div class="loop">
+    <div class="lab">
+      <div class="k">Operating cycle</div>
+      <div class="v">The Loop</div>
+    </div>
+    <div class="cyc">
+      <span class="step">Reason</span>
+      <span class="arr">&rarr;</span>
+      <span class="step">Act</span>
+      <span class="arr">&rarr;</span>
+      <span class="step">Observe</span>
+      <span class="arr">&#8635;</span>
+    </div>
+    <div class="eqn">agent&nbsp;=&nbsp;<b>model</b>&nbsp;+&nbsp;<b>harness</b></div>
+  </div>
+
+  <!-- SPECIMEN GRID -->
+  <section class="grid2">
+
+    <!-- 01 MODEL -->
+    <div class="spec">
+      <div class="head">
+        <div>
+          <div class="no">SPM·01</div>
+          <div class="nm">Model</div>
+          <div class="role">reasoning core</div>
+        </div>
+        <div class="cap" aria-hidden="true">
+          <svg viewBox="0 0 96 96">
+            <rect x="1" y="1" width="94" height="94" fill="none" stroke="#d6d3d1" stroke-width="1"/>
+            <circle cx="48" cy="48" r="30" fill="none" stroke="#1c1917" stroke-width="2"/>
+            <circle cx="48" cy="48" r="6" fill="#007AFF"/>
+            <line x1="48" y1="18" x2="48" y2="6" stroke="#1c1917" stroke-width="2"/>
+            <line x1="48" y1="78" x2="48" y2="90" stroke="#1c1917" stroke-width="2"/>
+            <line x1="18" y1="48" x2="6" y2="48" stroke="#1c1917" stroke-width="2"/>
+            <line x1="78" y1="48" x2="90" y2="48" stroke="#1c1917" stroke-width="2"/>
+            <circle cx="48" cy="6" r="3" fill="#1c1917"/>
+            <circle cx="48" cy="90" r="3" fill="#1c1917"/>
+            <circle cx="6" cy="48" r="3" fill="#1c1917"/>
+            <circle cx="90" cy="48" r="3" fill="#1c1917"/>
+          </svg>
+        </div>
+      </div>
+      <div class="desc">The LLM that thinks over the task and <b>picks the next action.</b> Swap any model; the rest of the stack is unchanged.</div>
+      <div class="rows">
+        <div class="r"><span class="rk">model</span><span class="rv">claude-sonnet-4-6</span></div>
+        <div class="r"><span class="rk">tokens</span><span class="rv">context window <span class="dim">in / out</span></span></div>
+        <div class="r"><span class="rk">tools</span><span class="rv">callable actions</span></div>
+        <div class="r"><span class="rk">prompts</span><span class="rv">system + task</span></div>
+      </div>
+    </div>
+
+    <!-- 02 HARNESS -->
+    <div class="spec">
+      <div class="head">
+        <div>
+          <div class="no">SPM·02</div>
+          <div class="nm">Harness</div>
+          <div class="role">programmable scaffold</div>
+        </div>
+        <div class="cap" aria-hidden="true">
+          <svg viewBox="0 0 96 96">
+            <rect x="1" y="1" width="94" height="94" fill="none" stroke="#d6d3d1" stroke-width="1"/>
+            <rect x="20" y="16" width="56" height="14" fill="none" stroke="#1c1917" stroke-width="2"/>
+            <rect x="20" y="41" width="56" height="14" fill="#007AFF"/>
+            <rect x="20" y="66" width="56" height="14" fill="none" stroke="#1c1917" stroke-width="2"/>
+            <line x1="12" y1="23" x2="20" y2="23" stroke="#1c1917" stroke-width="2"/>
+            <line x1="12" y1="48" x2="20" y2="48" stroke="#1c1917" stroke-width="2"/>
+            <line x1="12" y1="73" x2="20" y2="73" stroke="#1c1917" stroke-width="2"/>
+            <line x1="12" y1="16" x2="12" y2="80" stroke="#1c1917" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="desc">The scaffold around the model: it loads <b>skills, holds memory,</b> manages sessions, and runs the cycle.</div>
+      <div class="rows">
+        <div class="r"><span class="rk">skills</span><span class="rv">SKILL.md <span class="dim">on demand</span></span></div>
+        <div class="r"><span class="rk">memory</span><span class="rv">state + compaction</span></div>
+        <div class="r"><span class="rk">sessions</span><span class="rv">resumable threads</span></div>
+        <div class="r"><span class="rk">mcp</span><span class="rv">server connectors</span></div>
+      </div>
+    </div>
+
+    <!-- 03 SANDBOX -->
+    <div class="spec">
+      <div class="head">
+        <div>
+          <div class="no">SPM·03</div>
+          <div class="nm">Sandbox</div>
+          <div class="role">secure execution</div>
+        </div>
+        <div class="cap" aria-hidden="true">
+          <svg viewBox="0 0 96 96">
+            <rect x="1" y="1" width="94" height="94" fill="none" stroke="#d6d3d1" stroke-width="1"/>
+            <rect x="22" y="22" width="52" height="52" fill="none" stroke="#1c1917" stroke-width="2"/>
+            <line x1="22" y1="36" x2="74" y2="36" stroke="#1c1917" stroke-width="2"/>
+            <text x="30" y="33" font-family="IBM Plex Mono, monospace" font-size="9" fill="#007AFF">&gt;_</text>
+            <path d="M33 50 l8 7 l-8 7" fill="none" stroke="#007AFF" stroke-width="2.5"/>
+            <line x1="48" y1="64" x2="63" y2="64" stroke="#1c1917" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="desc">An isolated environment where the agent does <b>real work</b> — runs bash and code without touching your machine.</div>
+      <div class="rows">
+        <div class="r"><span class="rk">bash</span><span class="rv">shell + processes</span></div>
+        <div class="r"><span class="rk">security</span><span class="rv">isolation policy</span></div>
+        <div class="r"><span class="rk">network</span><span class="rv">scoped access</span></div>
+        <div class="r"><span class="rk">runtime</span><span class="rv">virtual / local / remote</span></div>
+      </div>
+    </div>
+
+    <!-- 04 FILESYSTEM -->
+    <div class="spec">
+      <div class="head">
+        <div>
+          <div class="no">SPM·04</div>
+          <div class="nm">Filesystem</div>
+          <div class="role">working surface</div>
+        </div>
+        <div class="cap" aria-hidden="true">
+          <svg viewBox="0 0 96 96">
+            <rect x="1" y="1" width="94" height="94" fill="none" stroke="#d6d3d1" stroke-width="1"/>
+            <path d="M26 24 h26 l6 8 h12 v40 h-44 z" fill="none" stroke="#1c1917" stroke-width="2"/>
+            <line x1="26" y1="44" x2="70" y2="44" stroke="#1c1917" stroke-width="2"/>
+            <line x1="33" y1="54" x2="55" y2="54" stroke="#a8a29e" stroke-width="2"/>
+            <line x1="33" y1="62" x2="63" y2="62" stroke="#a8a29e" stroke-width="2"/>
+            <circle cx="60" cy="60" r="9" fill="none" stroke="#007AFF" stroke-width="2.5"/>
+            <line x1="66" y1="66" x2="74" y2="74" stroke="#007AFF" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="desc">The persistent ground the agent reads and writes — files it can <b>search and traverse</b> to ground its work.</div>
+      <div class="rows">
+        <div class="r"><span class="rk">read</span><span class="rv">open + inspect</span></div>
+        <div class="r"><span class="rk">write</span><span class="rv">create + edit</span></div>
+        <div class="r"><span class="rk">grep</span><span class="rv">content search</span></div>
+        <div class="r"><span class="rk">glob</span><span class="rv">path match</span></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- COMPONENTS REGISTER -->
+  <section class="register">
+    <div class="rh">
+      <div class="t">Components Register</div>
+      <div class="d">what the harness assembles</div>
+    </div>
+    <div class="reg-grid">
+      <div class="reg-cell">
+        <div class="ck">model</div>
+        <div class="cn">Model</div>
+        <div class="cd">claude-<br>sonnet-4-6</div>
+      </div>
+      <div class="reg-cell">
+        <div class="ck">tools</div>
+        <div class="cn">Tools</div>
+        <div class="cd">typed<br>actions</div>
+      </div>
+      <div class="reg-cell">
+        <div class="ck">skills</div>
+        <div class="cn">Skills</div>
+        <div class="cd">SKILL.md<br>packages</div>
+      </div>
+      <div class="reg-cell">
+        <div class="ck">sandbox</div>
+        <div class="cn">Sandbox</div>
+        <div class="cd">fs + shell<br>isolated</div>
+      </div>
+      <div class="reg-cell">
+        <div class="ck">sessions</div>
+        <div class="cn">Sessions</div>
+        <div class="cd">state +<br>compaction</div>
+      </div>
+      <div class="reg-cell">
+        <div class="ck">mcp</div>
+        <div class="cn">MCP</div>
+        <div class="cd">server<br>connectors</div>
+      </div>
+      <div class="reg-cell">
+        <div class="ck">instr</div>
+        <div class="cn">Instructions</div>
+        <div class="cd">a goal,<br>stated</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>Four layers · one autonomous agent · the loop runs on its own</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flue — The Agent Harness Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-700: #44403c;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --blue:      #007AFF;
+    --blue-2:    #0057D8;
+    --blue-lt:   #4DA3FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px;
+    height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster {
+    position: relative;
+    width: 1260px;
+    height: 1800px;
+    overflow: hidden;
+    padding: 42px 64px 30px 64px;
+    background: var(--stone-50);
+  }
+
+  /* corner brackets */
+  .corner {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid var(--stone-900);
+    z-index: 6;
+  }
+  .corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+
+  /* Topbar — series identity */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-900);
+    position: relative;
+    z-index: 4;
+  }
+  .topbar .meta { color: var(--stone-500); margin-top: 4px; font-weight: 400; }
+  .topbar .right { text-align: right; }
+
+  /* 6x6 glyph mark */
+  .mark {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background: var(--blue);
+    flex: 0 0 auto;
+  }
+  .mark i { background: var(--stone-50); display: block; }
+
+  /* ── THE OBJECT — single flat emblem, centered, isolated ── */
+  .stage {
+    position: absolute;
+    left: 0; right: 0;
+    top: 470px;
+    height: 880px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .stage svg { display: block; height: 880px; width: auto; }
+
+  /* ── WORDMARK lockup — sparse, direct ── */
+  .name {
+    position: absolute;
+    left: 64px;
+    top: 150px;
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    gap: 34px;
+  }
+  .name .mark { width: 116px; height: 116px; margin-bottom: 26px; }
+  .name .word {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 320px;
+    line-height: 0.74;
+    letter-spacing: -0.02em;
+    color: var(--stone-950);
+  }
+
+  /* facts — calm, few */
+  .tag {
+    position: absolute;
+    left: 64px;
+    top: 396px;
+    z-index: 5;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 38px;
+    letter-spacing: 0.02em;
+    color: var(--stone-900);
+  }
+  .tag .rule { color: var(--blue-2); }
+
+  .specimen {
+    position: absolute;
+    right: 64px;
+    top: 410px;
+    z-index: 5;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .specimen .lab {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone-500);
+  }
+  .specimen .val {
+    margin-top: 7px;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    color: var(--stone-900);
+  }
+
+  /* one short equation line, bottom — let the object carry */
+  .equation {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 150px;
+    z-index: 5;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 2px solid var(--stone-900);
+    padding-top: 22px;
+  }
+  .equation .eq {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 76px;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    color: var(--stone-950);
+  }
+  .equation .eq .op { color: var(--blue); font-weight: 700; }
+  .equation .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--stone-500);
+    text-align: right;
+    max-width: 24ch;
+    line-height: 1.7;
+  }
+
+  /* Colophon */
+  .colophon {
+    position: absolute;
+    left: 64px; right: 64px;
+    bottom: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone-500);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone-300);
+    padding-top: 9px;
+    z-index: 4;
+  }
+  .colophon b { color: var(--stone-900); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="poster"
+     data-lineage="sachplakat-object-poster"
+     data-period="1900s-1930s"
+     data-genre="object-poster"
+     data-reference="odermatt-tissi-commercial-clarity">
+
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <!-- TOPBAR — series identity -->
+  <div class="topbar">
+    <div>
+      <div>Flue · The Agent Harness Framework</div>
+      <div class="meta">not another sdk</div>
+    </div>
+    <div class="right">
+      <div>withastro / flue</div>
+      <div class="meta">typescript · apache-2.0</div>
+    </div>
+  </div>
+
+  <!-- WORDMARK -->
+  <div class="name">
+    <span class="mark">
+      <i style="grid-column:4;grid-row:2"></i>
+      <i style="grid-column:3;grid-row:3"></i>
+      <i style="grid-column:4;grid-row:4"></i>
+      <i style="grid-column:3;grid-row:5"></i>
+    </span>
+    <span class="word">Flue</span>
+  </div>
+
+  <div class="tag">The Agent Harness Framework</div>
+
+  <div class="specimen">
+    <div class="lab">Single object</div>
+    <div class="val">the harness</div>
+  </div>
+
+  <!-- THE OBJECT — one bold flat harness silhouette -->
+  <div class="stage" aria-hidden="true">
+    <svg viewBox="0 0 520 880" role="img">
+      <!--
+        A climbing / safety harness as one confident flat emblem:
+        a waist belt, two leg loops, the tie-in bridge, and a carabiner
+        clipped through it. Flat fills, Flue blue + stone-950, no detail noise.
+      -->
+
+      <!-- WAIST BELT — broad horizontal strap -->
+      <path d="M40 150
+               C 130 118, 390 118, 480 150
+               L 480 226
+               C 390 196, 130 196, 40 226 Z"
+            fill="#007AFF"/>
+      <!-- belt buckle plate -->
+      <rect x="222" y="142" width="76" height="92" rx="6" fill="#0c0a09"/>
+      <rect x="240" y="160" width="40" height="56" rx="3" fill="#fafaf9"/>
+      <rect x="240" y="184" width="40" height="9" fill="#0c0a09"/>
+
+      <!-- LEG-LOOP RISERS — straps dropping from belt to the loops -->
+      <path d="M118 224 C 96 320, 92 360, 96 404 L 150 404 C 150 356, 156 312, 174 226 Z" fill="#0057D8"/>
+      <path d="M402 224 C 424 320, 428 360, 424 404 L 370 404 C 370 356, 364 312, 346 226 Z" fill="#0057D8"/>
+
+      <!-- TIE-IN BRIDGE / belay loop region — central vertical webbing -->
+      <rect x="232" y="226" width="56" height="170" fill="#0057D8"/>
+
+      <!-- BELAY LOOP — the ring the carabiner clips through -->
+      <path d="M260 360
+               m -58 0
+               a 58 58 0 1 0 116 0
+               a 58 58 0 1 0 -116 0
+               M 260 360
+               m -30 0
+               a 30 30 0 1 1 60 0
+               a 30 30 0 1 1 -60 0 Z"
+            fill="#0c0a09" fill-rule="evenodd"/>
+
+      <!-- LEFT LEG LOOP -->
+      <path d="M150 404
+               C 70 410, 30 470, 30 552
+               C 30 648, 96 712, 184 712
+               C 250 712, 286 668, 286 612
+               L 234 612
+               C 234 642, 214 660, 184 660
+               C 128 660, 86 618, 86 552
+               C 86 500, 112 462, 168 458 Z"
+            fill="#007AFF"/>
+      <!-- left leg loop buckle -->
+      <rect x="118" y="430" width="58" height="44" rx="5" fill="#0c0a09"/>
+      <rect x="131" y="442" width="32" height="20" rx="2" fill="#fafaf9"/>
+
+      <!-- RIGHT LEG LOOP -->
+      <path d="M370 404
+               C 450 410, 490 470, 490 552
+               C 490 648, 424 712, 336 712
+               C 270 712, 234 668, 234 612
+               L 286 612
+               C 286 642, 306 660, 336 660
+               C 392 660, 434 618, 434 552
+               C 434 500, 408 462, 352 458 Z"
+            fill="#007AFF"/>
+      <!-- right leg loop buckle -->
+      <rect x="344" y="430" width="58" height="44" rx="5" fill="#0c0a09"/>
+      <rect x="357" y="442" width="32" height="20" rx="2" fill="#fafaf9"/>
+
+      <!-- CARABINER — clipped through the belay loop, hanging below -->
+      <!-- outer offset-D body -->
+      <path d="M260 420
+               C 322 430, 360 500, 360 600
+               C 360 712, 312 800, 252 800
+               C 200 800, 168 740, 168 668
+               L 214 668
+               C 214 718, 230 752, 256 752
+               C 290 752, 314 690, 314 600
+               C 314 522, 290 470, 248 462
+               Z"
+            fill="#0c0a09"/>
+      <!-- inner cutout shaping the carabiner mouth -->
+      <path d="M256 500
+               C 292 510, 312 560, 312 624
+               C 312 700, 282 758, 252 758
+               C 226 758, 210 724, 210 686
+               L 234 686
+               C 234 712, 244 730, 256 730
+               C 276 730, 288 690, 288 624
+               C 288 568, 274 532, 250 522 Z"
+            fill="#fafaf9"/>
+      <!-- gate line -->
+      <path d="M214 668 C 208 632, 214 540, 246 506"
+            stroke="#fafaf9" stroke-width="10" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- ONE SHORT LINE — the whole idea -->
+  <div class="equation">
+    <div class="eq">Model <span class="op">+</span> Harness</div>
+    <div class="note">the model reasons ·<br>the harness holds the loop</div>
+  </div>
+
+  <!-- COLOPHON -->
+  <div class="colophon">
+    <div>You give it a task, not a script</div>
+    <div>withastro / <b>Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
