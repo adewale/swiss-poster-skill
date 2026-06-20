@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inside Eve — Vercel's agent framework, dissected</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 56px 26px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .head{margin-top:22px}
+  .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:92px;line-height:.86;letter-spacing:-.01em;color:var(--stone-900)}
+  .head h1 .b{color:var(--blue-2)}
+  .head .sub{margin-top:11px;font-size:17px;line-height:1.4;color:var(--stone-700);max-width:92ch}
+  .head .sub b{color:var(--stone-900);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:560px 1fr;gap:30px;margin-top:26px}
+
+  .sech{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    font-weight:600;color:var(--blue-2);border-bottom:2px solid var(--stone-900);padding-bottom:7px;margin-bottom:12px;
+    display:flex;justify-content:space-between}
+  .sech span{color:var(--stone-400);font-weight:400}
+
+  /* file tree */
+  .tree{font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.74;color:var(--stone-900);white-space:pre}
+  .tree .g{color:var(--stone-400)}
+  .tree .d{color:var(--blue-2);font-weight:600}
+  .tree .f{color:var(--stone-900)}
+  .tree .a{color:var(--stone-500);font-size:12.5px}
+  .tree .a b{color:var(--blue-2);font-weight:600}
+  .treenote{margin-top:14px;font-size:13.5px;line-height:1.4;color:var(--stone-700)}
+  .treenote b{color:var(--stone-900)}
+
+  .api{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
+  .api .chip{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--blue-2);
+    border:1px solid var(--stone-300);background:rgba(0,122,255,.05);padding:4px 8px}
+
+  .svc{display:flex;flex-direction:column;gap:0}
+  .svc .row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--stone-200)}
+  .svc .row:last-child{border-bottom:0}
+  .svc .n{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;
+    width:172px;flex:none;color:var(--stone-900);line-height:1.06}
+  .svc .v{font-size:13px;line-height:1.34;color:var(--stone-700)}
+  .svc .v .m{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--stone-900)}
+
+  .dist .row{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--stone-200)}
+  .dist .row:last-child{border-bottom:0}
+  .dist .k{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;
+    width:150px;flex:none;color:var(--blue-2);line-height:1.06}
+  .dist .v{font-size:13px;line-height:1.34;color:var(--stone-700)}
+  .dist .v b{color:var(--stone-900);font-weight:600}
+
+  .panel{margin-bottom:22px}
+
+  .life{position:absolute;left:56px;right:56px;bottom:84px}
+  .life .sech{border-bottom:2px solid var(--stone-900)}
+  .life .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;color:var(--stone-900);margin-top:4px}
+  .life .flow .s{background:var(--stone-950);color:var(--stone-50);padding:5px 10px}
+  .life .flow .s.blue{background:var(--blue)}
+  .life .flow .ar{color:var(--blue-2);font-weight:700}
+
+  .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">field guide · a rival, dissected</div></div>
+    <div class="r">withastro / flue<div class="meta">subject: vercel / eve</div></div>
+  </div>
+
+  <div class="head">
+    <h1>Inside <span class="b">Eve.</span></h1>
+    <div class="sub">Vercel's “Next.js for agents,” read from the repo and docs. <b>The agent is a directory; Vercel is the
+      runtime.</b> Capabilities are files in conventional slots — and the framework leans on five Vercel services underneath.</div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: the directory contract -->
+    <div>
+      <div class="sech">The agent is a directory <span>agent/</span></div>
+      <div class="tree"><span class="d">agent/</span>
+<span class="g">├─ </span><span class="f">agent.ts</span>          <span class="a"><b>defineAgent({ model })</b> · runtime config</span>
+<span class="g">├─ </span><span class="f">instructions.md</span>   <span class="a">the system prompt</span>
+<span class="g">├─ </span><span class="d">tools/</span>
+<span class="g">│   └─ </span><span class="f">get_weather.ts</span> <span class="a"><b>defineTool()</b> → tool “get_weather”</span>
+<span class="g">├─ </span><span class="d">skills/</span>           <span class="a">.md playbooks, loaded on demand</span>
+<span class="g">├─ </span><span class="d">subagents/</span>        <span class="a">an agent one level down</span>
+<span class="g">├─ </span><span class="d">channels/</span>         <span class="a"><b>defineChannel()</b> · http · slack · discord</span>
+<span class="g">├─ </span><span class="d">schedules/</span>        <span class="a"><b>defineSchedule({ cron })</b></span>
+<span class="g">├─ </span><span class="d">connections/</span>      <span class="a"><b>defineMcpClientConnection()</b></span>
+<span class="g">└─ </span><span class="d">evals/</span>            <span class="a"><b>defineEval()</b> · t.check()</span></div>
+      <div class="treenote"><b>Path-derived naming:</b> <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">agent/tools/get_weather.ts</span>
+        becomes the <b>get_weather</b> tool. No registry, no wiring — the folder <i>is</i> the agent.</div>
+
+      <div style="margin-top:20px">
+        <div class="sech">Authoring API <span>eve</span></div>
+        <div class="api">
+          <span class="chip">defineAgent</span><span class="chip">defineTool</span><span class="chip">defineSkill</span>
+          <span class="chip">defineChannel</span><span class="chip">defineSchedule</span>
+          <span class="chip">defineMcpClientConnection</span><span class="chip">defineEval</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: stack + distinctive -->
+    <div>
+      <div class="panel">
+        <div class="sech">Stands on five Vercel services <span>the runtime</span></div>
+        <div class="svc">
+          <div class="row"><div class="n">Workflows</div><div class="v">Durable sessions — checkpoint, survive a crash <i>or a deploy</i>, resume where it stopped.</div></div>
+          <div class="row"><div class="n">Sandbox</div><div class="v">Isolated compute. Adapters: <span class="m">Vercel Sandbox</span> in prod · Docker / microsandbox locally.</div></div>
+          <div class="row"><div class="n">AI Gateway</div><div class="v">Model routing + provider fallbacks. OIDC, <b>no API keys</b> — e.g. <span class="m">openai/gpt-5.4-mini</span>.</div></div>
+          <div class="row"><div class="n">Connect</div><div class="v">OAuth tokens &amp; API keys for the external services an agent touches.</div></div>
+          <div class="row"><div class="n">Observability</div><div class="v">Agent Runs in the dashboard — turns, tools, tokens, timing; OTel spans export anywhere.</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="sech">What's distinctive <span>vs the field</span></div>
+        <div class="dist">
+          <div class="row"><div class="k">Durable pause</div><div class="v">A session can pause and <b>survive a deploy</b>, then resume exactly where it stopped.</div></div>
+          <div class="row"><div class="k">HITL approval</div><div class="v">Any action can require approval — it waits <b>indefinitely, consuming no compute.</b></div></div>
+          <div class="row"><div class="k">Built-in evals</div><div class="v">Scored suites, local or in CI — <span class="m">defineEval</span> with <span class="m">t.check()</span>.</div></div>
+          <div class="row"><div class="k">Subagents</div><div class="v">Just a folder under <span class="m">subagents/</span>; the parent calls it like a tool.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="life">
+    <div class="sech">From folder to running agent <span>http</span></div>
+    <div class="flow">
+      <span class="s">npx eve@latest init</span><span class="ar">▸</span>
+      <span class="s">files under agent/</span><span class="ar">▸</span>
+      <span class="s blue">vercel deploy</span><span class="ar">▸</span>
+      <span class="s">POST /eve/v1/session</span><span class="ar">▸</span>
+      <span class="s">GET /eve/v1/session/:id/stream</span><span class="ar">▸</span>
+      <span class="s">NDJSON events</span>
+    </div>
+    <div style="margin-top:11px;font-size:15px;color:var(--stone-900)">The takeaway: <b style="color:var(--blue-2)">Eve is the framework; Vercel is the runtime.</b>
+      Brilliant DX if you live on Vercel — the inverse of a portable harness.</div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from repo + docs · beta, APIs evolve · not affiliated with Vercel
+      <div class="src">Sources: vercel.com/docs/eve · vercel.com/blog/introducing-eve · github.com/vercel/eve · deepwiki.com/vercel/eve</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

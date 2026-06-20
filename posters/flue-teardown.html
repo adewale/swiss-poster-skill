@@ -115,7 +115,7 @@
         <td class="rlab">State model</td>
         <td class="flue"><div class="c">Event-sourced <b>Durable Streams</b></div></td>
         <td><div class="c">SQLite in the DO · <span class="m">setState()</span> broadcast · hibernation</div></td>
-        <td><div class="c">Checkpointed session / turn / step</div></td>
+        <td><div class="c">Checkpointed session→turn→step <span class="q">(Vercel Workflows)</span></div></td>
       </tr>
       <tr>
         <td class="rlab">Persistence</td>
@@ -127,7 +127,7 @@
         <td class="rlab">Sandbox &amp; code</td>
         <td class="flue"><div class="c"><span class="m">just-bash</span> · <span class="m">local()</span> · remote · <span class="m">cloudflareSandbox()</span></div></td>
         <td><div class="c"><span class="m">@cloudflare/shell</span> Workspace VFS + Code&nbsp;Mode</div></td>
-        <td><div class="c">Isolated VM sandbox</div></td>
+        <td><div class="c">Isolated VM — <span class="m">Vercel Sandbox</span> / Docker / microsandbox</div></td>
       </tr>
       <tr>
         <td class="rlab">Client / live</td>
@@ -139,7 +139,7 @@
         <td class="rlab">Built on</td>
         <td class="flue"><div class="c"><span class="m">just-bash</span> + own Durable Streams</div></td>
         <td><div class="c">Durable Objects + <span class="m">partyserver</span> + Hono</div></td>
-        <td><div class="c">Vercel AI SDK <span class="m">(ai)</span> + Nitro</div></td>
+        <td><div class="c">Vercel AI SDK <span class="m">(ai)</span> + Nitro + Workflows</div></td>
       </tr>
       <tr>
         <td class="rlab">Runs on</td>
