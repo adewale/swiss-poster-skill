@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inside Project Think — agents as Cloudflare infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 56px 26px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .head{margin-top:22px}
+  .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:84px;line-height:.86;letter-spacing:-.01em;color:var(--stone-900)}
+  .head h1 .b{color:var(--blue-2)}
+  .head .sub{margin-top:11px;font-size:17px;line-height:1.4;color:var(--stone-700);max-width:94ch}
+  .head .sub b{color:var(--stone-900);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:594px 1fr;gap:30px;margin-top:24px}
+
+  .sech{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    font-weight:600;color:var(--blue-2);border-bottom:2px solid var(--stone-900);padding-bottom:7px;margin-bottom:12px;
+    display:flex;justify-content:space-between}
+  .sech span{color:var(--stone-400);font-weight:400}
+
+  .code{font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.6;color:var(--stone-900);
+    background:var(--stone-100);border-left:3px solid var(--blue);padding:13px 15px;white-space:pre;overflow:hidden}
+  .code .kw{color:var(--blue-2)} .code .fn{color:var(--blue-2);font-weight:600}
+  .code .str{color:var(--stone-500)} .code .cm{color:var(--stone-400);font-style:italic}
+  .code.cfg{margin-top:11px;font-size:11.5px;line-height:1.55}
+  .note{margin-top:12px;font-size:13.5px;line-height:1.4;color:var(--stone-700)} .note b{color:var(--stone-900)}
+  .note .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue-2)}
+
+  .panel{margin-bottom:16px}
+  .lst .row{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--stone-200)}
+  .lst .row:last-child{border-bottom:0}
+  .lst .n{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--blue-2);width:150px;flex:none;line-height:1.3}
+  .lst .v{font-size:12px;line-height:1.3;color:var(--stone-700)}
+  .dist .row{display:flex;gap:12px;padding:6.5px 0;border-bottom:1px solid var(--stone-200)}
+  .dist .row:last-child{border-bottom:0}
+  .dist .k{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;width:148px;flex:none;color:var(--blue-2);line-height:1.05}
+  .dist .v{font-size:12.5px;line-height:1.3;color:var(--stone-700)} .dist .v b{color:var(--stone-900);font-weight:600}
+  .dist .v .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-900)}
+
+  .life{position:absolute;left:56px;right:56px;bottom:84px}
+  .life .sech{border-bottom:2px solid var(--stone-900)}
+  .flow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--stone-900)}
+  .flow .s{background:var(--stone-950);color:var(--stone-50);padding:5px 9px} .flow .s.blue{background:var(--blue)}
+  .flow .ar{color:var(--blue-2);font-weight:700}
+  .take{margin-top:11px;font-size:15px;color:var(--stone-900)} .take b{color:var(--blue-2);font-weight:700}
+
+  .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">field guide · a rival, dissected</div></div>
+    <div class="r">withastro / flue<div class="meta">subject: cloudflare / agents · think</div></div>
+  </div>
+
+  <div class="head">
+    <h1>Inside Project <span class="b">Think.</span></h1>
+    <div class="sub">Cloudflare's harness on its Agents SDK. <b>The agent doesn't run on infrastructure — it IS the infrastructure:</b>
+      each one is a Durable Object with its own SQLite, hibernation, and live client sync. Think is the opinionated loop on top.</div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: the code -->
+    <div>
+      <div class="sech">An agent is a Durable Object <span>extends Agent</span></div>
+      <div class="code"><span class="cm">// src/index.ts</span>
+<span class="kw">import</span> { Agent, routeAgentRequest, callable } <span class="kw">from</span> <span class="str">'agents'</span>;
+
+<span class="kw">export class</span> Triage <span class="kw">extends</span> Agent&lt;Env, State&gt; {
+  <span class="kw">@callable</span>()
+  <span class="kw">async</span> <span class="fn">assign</span>(user: string) {
+    <span class="kw">this</span>.<span class="fn">setState</span>({ ...this.state, owner: user }); <span class="cm">// SQLite + live sync</span>
+    <span class="kw">this</span>.sql`INSERT INTO log VALUES (${user})`;
+    <span class="kw">await this</span>.<span class="fn">schedule</span>(<span class="str">'0 9 * * *'</span>, <span class="str">'digest'</span>); <span class="cm">// cron, durable</span>
+  }
+}
+<span class="kw">export default</span> { fetch: (req, env) => <span class="fn">routeAgentRequest</span>(req, env) };</div>
+      <div class="code cfg"><span class="cm">// wrangler.jsonc</span>
+<span class="str">"durable_objects"</span>: { bindings: [{ name: <span class="str">"Triage"</span>, class_name: <span class="str">"Triage"</span> }] },
+<span class="str">"migrations"</span>: [{ tag: <span class="str">"v1"</span>, new_sqlite_classes: [<span class="str">"Triage"</span>] }]</div>
+      <div class="note">Skip the boilerplate loop: <b>extend Think</b> instead for an opinionated harness —
+        <span class="m">SessionManager</span>, agentic loop, stream resumption, workspace tools, <span class="m">ExtensionManifest</span>.</div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="panel">
+        <div class="sech">Four components <span>the platform</span></div>
+        <div class="lst">
+          <div class="row"><div class="n">Channels</div><div class="v">chat · voice · email · Slack · webhooks</div></div>
+          <div class="row"><div class="n">Harness</div><div class="v">Think (opinionated) — or build your own loop</div></div>
+          <div class="row"><div class="n">Runtime</div><div class="v">Agent · state · sessions · WebSockets · scheduling · fibers</div></div>
+          <div class="row"><div class="n">Tools</div><div class="v">Browser · Sandbox · AI Search · MCP · Payments</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="sech">Package family <span>cloudflare</span></div>
+        <div class="lst">
+          <div class="row"><div class="n">agents</div><div class="v">Agent · routeAgentRequest · @callable · AgentWorkflow</div></div>
+          <div class="row"><div class="n">@cloudflare/think</div><div class="v">Think · SessionManager · ExtensionManifest</div></div>
+          <div class="row"><div class="n">@cloudflare/shell</div><div class="v">Workspace VFS + sandboxed JS</div></div>
+          <div class="row"><div class="n">@cloudflare/codemode</div><div class="v">Code Mode — the LLM writes TS</div></div>
+          <div class="row"><div class="n">@cloudflare/voice</div><div class="v">STT · TTS · VAD · streaming</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="sech">What's distinctive <span>vs the field</span></div>
+        <div class="dist">
+          <div class="row"><div class="k">Agent = a DO</div><div class="v">SQLite state, <b>synced live to clients;</b> hibernates at <b>zero idle cost.</b></div></div>
+          <div class="row"><div class="k">Fibers</div><div class="v">durable execution that survives restarts &amp; deploys.</div></div>
+          <div class="row"><div class="k">Code Mode</div><div class="v">the model writes executable <span class="m">TS</span> instead of one-off tool calls.</div></div>
+          <div class="row"><div class="k">Live surface</div><div class="v">WebSocket RPC · <span class="m">useAgent</span> · voice · email · x402 · browser.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="life">
+    <div class="sech">From class to running agent <span>cloudflare only</span></div>
+    <div class="flow">
+      <span class="s">wrangler deploy</span><span class="ar">▸</span>
+      <span class="s blue">one Durable Object / agent</span><span class="ar">▸</span>
+      <span class="s">WebSocket · HTTP · email</span><span class="ar">▸</span>
+      <span class="s">hibernate ↔ wake</span><span class="ar">▸</span>
+      <span class="s">scale to millions</span>
+    </div>
+    <div class="take">The takeaway: <b>the agent IS the infrastructure.</b> Unmatched durability &amp; reach — on exactly one cloud.</div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from repo + docs · code is representative · not affiliated with Cloudflare
+      <div class="src">Sources: developers.cloudflare.com/agents · github.com/cloudflare/agents · deepwiki.com/cloudflare/agents</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>

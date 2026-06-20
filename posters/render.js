@@ -64,6 +64,8 @@ const POSTERS = [
   { html: 'flue-ternary.html',                     png: 'flue-ternary.png' },
   { html: 'flue-teardown.html',                    png: 'flue-teardown.png' },
   { html: 'eve-anatomy.html',                      png: 'eve-anatomy.png' },
+  { html: 'flue-anatomy.html',                     png: 'flue-anatomy.png' },
+  { html: 'think-anatomy.html',                    png: 'think-anatomy.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name

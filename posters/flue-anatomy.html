@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inside Flue — the portable harness, dissected</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;
+    --stone-400:#a8a29e;--stone-500:#78716c;--stone-700:#44403c;--stone-900:#1c1917;--stone-950:#0c0a09;
+    --blue:#007AFF;--blue-2:#0057D8;--blue-lt:#4DA3FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1260px;height:1800px;background:var(--stone-50);color:var(--stone-900);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .poster{position:relative;width:1260px;height:1800px;overflow:hidden;padding:42px 56px 26px}
+
+  .corner{position:absolute;width:22px;height:22px;border:2px solid var(--stone-900);z-index:40}
+  .corner.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  .corner.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  .corner.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--stone-900)}
+  .topbar .meta{color:var(--stone-500);font-weight:400;margin-top:4px}
+  .topbar .r{text-align:right}
+
+  .head{margin-top:22px}
+  .head h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:92px;line-height:.86;letter-spacing:-.01em;color:var(--stone-900)}
+  .head h1 .b{color:var(--blue-2)}
+  .head .sub{margin-top:11px;font-size:17px;line-height:1.4;color:var(--stone-700);max-width:92ch}
+  .head .sub b{color:var(--stone-900);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:594px 1fr;gap:30px;margin-top:24px}
+
+  .sech{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    font-weight:600;color:var(--blue-2);border-bottom:2px solid var(--stone-900);padding-bottom:7px;margin-bottom:12px;
+    display:flex;justify-content:space-between}
+  .sech span{color:var(--stone-400);font-weight:400}
+
+  .code{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.66;color:var(--stone-900);
+    background:var(--stone-100);border-left:3px solid var(--blue);padding:14px 16px;white-space:pre;overflow:hidden}
+  .code .kw{color:var(--blue-2)} .code .fn{color:var(--blue-2);font-weight:600}
+  .code .str{color:var(--stone-500)} .code .cm{color:var(--stone-400);font-style:italic}
+  .note{margin-top:13px;font-size:13.5px;line-height:1.4;color:var(--stone-700)} .note b{color:var(--stone-900)}
+  .note .m{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue-2)}
+
+  .panel{margin-bottom:18px}
+  .lst .row{display:flex;gap:12px;padding:6.5px 0;border-bottom:1px solid var(--stone-200)}
+  .lst .row:last-child{border-bottom:0}
+  .lst .n{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--blue-2);width:166px;flex:none;line-height:1.3}
+  .lst .v{font-size:12.5px;line-height:1.32;color:var(--stone-700)}
+  .dist .row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--stone-200)}
+  .dist .row:last-child{border-bottom:0}
+  .dist .k{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;width:150px;flex:none;color:var(--blue-2);line-height:1.05}
+  .dist .v{font-size:12.5px;line-height:1.32;color:var(--stone-700)} .dist .v b{color:var(--stone-900);font-weight:600}
+  .dist .v .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-900)}
+
+  .life{position:absolute;left:56px;right:56px;bottom:84px}
+  .life .sech{border-bottom:2px solid var(--stone-900)}
+  .runs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .runs .chip{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-900);
+    border:1px solid var(--stone-300);padding:3px 8px;background:var(--stone-100)}
+  .runs .chip.b{color:var(--stone-50);background:var(--blue);border-color:var(--blue)}
+  .flow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--stone-900)}
+  .flow .s{background:var(--stone-950);color:var(--stone-50);padding:5px 9px} .flow .s.blue{background:var(--blue)}
+  .flow .ar{color:var(--blue-2);font-weight:700}
+  .take{margin-top:11px;font-size:15px;color:var(--stone-900)} .take b{color:var(--blue-2);font-weight:700}
+
+  .colo{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--stone-500)}
+  .colo .cmk{display:inline-grid;grid-template-columns:repeat(6,2px);grid-template-rows:repeat(6,2px);
+    background:var(--blue);width:14px;height:14px;vertical-align:middle;margin-right:9px}
+  .colo .cmk i{background:var(--stone-50)}
+  .src{text-transform:none;letter-spacing:.04em;color:var(--stone-400);font-size:9px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="topbar">
+    <div>Flue · The Agent Harness Framework<div class="meta">field guide · the home team, dissected</div></div>
+    <div class="r">withastro / flue<div class="meta">subject: withastro / flue</div></div>
+  </div>
+
+  <div class="head">
+    <h1>Inside <span class="b">Flue.</span></h1>
+    <div class="sub">The harness as a first-class build target. <b>You write the agent once; you bring the runtime.</b>
+      A config object becomes an HTTP handler that deploys to a dozen targets — state is an event log, not a platform.</div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: the code -->
+    <div>
+      <div class="sech">An agent is a function <span>createAgent()</span></div>
+      <div class="code"><span class="cm">// agent/triage.ts</span>
+<span class="kw">import</span> { createAgent, local } <span class="kw">from</span> <span class="str">'@flue/runtime'</span>;
+<span class="kw">import</span> { replyToIssue } <span class="kw">from</span> <span class="str">'./tools'</span>;
+<span class="kw">import</span> triage <span class="kw">from</span> <span class="str">'./triage.md'</span> <span class="kw">with</span> { type: <span class="str">'skill'</span> };
+<span class="kw">import</span> instructions <span class="kw">from</span> <span class="str">'./agent.md'</span> <span class="kw">with</span> { type: <span class="str">'text'</span> };
+
+<span class="kw">export default</span> <span class="fn">createAgent</span>(() => ({
+  model:    <span class="str">'anthropic/claude-sonnet-4-6'</span>,  <span class="cm">// any provider</span>
+  tools:    [replyToIssue],
+  skills:   [triage],            <span class="cm">// Markdown, on demand</span>
+  sandbox:  <span class="fn">local</span>(),                <span class="cm">// or just-bash / remote</span>
+  channels: [<span class="fn">slack</span>(), <span class="fn">github</span>()],
+  instructions,
+}));</div>
+      <div class="note">Served as an HTTP route by <span class="m">AgentRouteHandler</span> — <span class="m">POST /agents/triage/:id</span>.
+        Two modes: <b>Agents</b> (open-ended) and <b>Workflows</b> — <span class="m">run()</span>, where your code guides the reasoning.</div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="panel">
+        <div class="sech">Packages <span>@flue/*</span></div>
+        <div class="lst">
+          <div class="row"><div class="n">@flue/runtime</div><div class="v">harness · sessions · routing <span style="font-family:'IBM Plex Mono',monospace">flue() / admin()</span></div></div>
+          <div class="row"><div class="n">@flue/cli</div><div class="v">dev · run · build · <span style="font-family:'IBM Plex Mono',monospace">flue add</span> blueprints</div></div>
+          <div class="row"><div class="n">@flue/sdk</div><div class="v">client over Durable Streams</div></div>
+          <div class="row"><div class="n">@flue/react</div><div class="v">useFlueAgent · useFlueWorkflow</div></div>
+          <div class="row"><div class="n">@flue/postgres</div><div class="v">persistence — PgEventStreamStore</div></div>
+          <div class="row"><div class="n">@flue/opentelemetry</div><div class="v">tracing (also Braintrust · Sentry)</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="sech">Sandbox factories <span>pick the narrowest</span></div>
+        <div class="lst">
+          <div class="row"><div class="n">just-bash</div><div class="v">virtual, in-memory — high-scale API agents</div></div>
+          <div class="row"><div class="n">local()</div><div class="v">host filesystem + shell — dev / CI</div></div>
+          <div class="row"><div class="n">cloudflareSandbox()</div><div class="v">edge execution</div></div>
+          <div class="row"><div class="n">Daytona · E2B · Vercel</div><div class="v">full Linux containers</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="sech">What's distinctive <span>vs the field</span></div>
+        <div class="dist">
+          <div class="row"><div class="k">Runtime-agnostic</div><div class="v">Agents are HTTP handlers — <b>deploy to a dozen targets.</b></div></div>
+          <div class="row"><div class="k">Event-sourced</div><div class="v"><b>Durable Streams:</b> accepted work is never lost; sessions resume; clients reconnect.</div></div>
+          <div class="row"><div class="k">BYO store</div><div class="v"><span class="m">connect()</span> → executionStore · runStore · eventStreamStore.</div></div>
+          <div class="row"><div class="k">Model-agnostic</div><div class="v">a provider-prefixed string; swap the core, keep the harness.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="life">
+    <div class="sech">Write once, deploy anywhere <span>runs on</span></div>
+    <div class="runs">
+      <span class="chip b">Node.js</span><span class="chip">Cloudflare</span><span class="chip">Docker</span><span class="chip">AWS</span>
+      <span class="chip">Vercel</span><span class="chip">Render</span><span class="chip">Railway</span><span class="chip">Fly</span>
+      <span class="chip">SST</span><span class="chip">GitHub Actions</span><span class="chip">GitLab CI</span>
+    </div>
+    <div class="flow">
+      <span class="s">flue add</span><span class="ar">▸</span><span class="s">flue dev</span><span class="ar">▸</span>
+      <span class="s blue">flue build</span><span class="ar">▸</span><span class="s">deploy anywhere</span><span class="ar">▸</span>
+      <span class="s">POST /agents/:name/:id</span><span class="ar">▸</span><span class="s">@flue/sdk stream</span>
+    </div>
+    <div class="take">The takeaway: <b>Flue is the framework; the runtime is your choice.</b> The inverse of a platform-native harness.</div>
+  </div>
+
+  <div class="colo">
+    <div><span class="cmk"><i style="grid-column:4;grid-row:2"></i><i style="grid-column:3;grid-row:3"></i><i style="grid-column:4;grid-row:4"></i><i style="grid-column:3;grid-row:5"></i></span>Read from repo + docs · code is representative · APIs evolve
+      <div class="src">Sources: flueframework.com · github.com/withastro/flue · deepwiki.com/withastro/flue</div></div>
+    <div>withastro / <b style="color:var(--stone-900)">Flue</b></div>
+  </div>
+
+</div>
+</body>
+</html>
