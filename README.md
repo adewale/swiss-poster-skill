@@ -49,24 +49,25 @@ Once installed, tell your agent to apply it:
 
 The agent will use IBM Plex Sans, the stone color palette, opacity-based hierarchy, and grid-breaking compositions with one dominant poster-scale event, edge pressure, microtype/data layers, hard fields, graphic rhythm, overlap, and bleed.
 
-## What's included
+## What gets installed vs repo-only
 
-```
-swiss-poster/
-├── SKILL.md                    # Quick reference (always loaded)
+```text
+swiss-poster/                   Installable runtime skill
+├── SKILL.md                    # Quick reference
 └── references/
     ├── design-system.md        # Full token reference, CSS variables
     ├── components.md           # Tailwind component patterns + dramatic poster archetypes
     ├── tailwind-config.md      # Paste-ready tailwind.config.js
-    ├── prompting.md            # Applying the system + 117-point checklist
+    ├── prompting.md            # Applying the system + checklist
     └── research.md             # Designer profiles, key works, source URLs
 
-evals/
-├── shared-benchmark.json       # Shared Skill Eval Harness manifest
-└── oracles/                    # Deterministic script oracles for fixture/drama checks
+evals/                          Repo-only shared harness cases, fixtures, and oracles
+docs/pr/                        Repo-only PR reports, before/after studies, and verification artifacts
+posters/                        Repo-only generated examples and source posters
+website/                        Repo-only demo site
 ```
 
-The Anti-Slop principles live in `SKILL.md`. The full catalog and deterministic detector are maintained by Paul Bakaus at [impeccable.style/slop](https://impeccable.style/slop/) — install with `npx impeccable skills install` and run `npx impeccable detect <file>` to verify.
+The style-restraint and Anti-Slop principles live in `swiss-poster/SKILL.md`. The full Anti-Slop catalog and deterministic detector are maintained by Paul Bakaus at [impeccable.style/slop](https://impeccable.style/slop/) — install with `npx impeccable skills install` and run `npx impeccable detect <file>` to verify.
 
 ## Design principles
 
