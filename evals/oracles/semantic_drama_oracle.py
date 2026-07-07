@@ -6,6 +6,7 @@ large/cropped elements must communicate the subject and must not make the
 primary reading path hard to understand.
 """
 from __future__ import annotations
+import json
 import re
 import sys
 from pathlib import Path
@@ -92,6 +93,7 @@ def main() -> int:
         return 2
     text = read_output(output_dir)
     failures = check(text)
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))
     if failures:
         print(f"FAIL semantic drama oracle: {case_id}")
         for failure in failures:

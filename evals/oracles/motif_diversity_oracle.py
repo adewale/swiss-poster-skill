@@ -234,6 +234,7 @@ def main() -> int:
             print(f"FAIL motif diversity oracle: {public_case_id}")
             print(f"- {exc}")
             return 2
+        print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": public_case_id}))
         if failures:
             print(f"FAIL motif diversity oracle: {public_case_id}")
             for f in failures:

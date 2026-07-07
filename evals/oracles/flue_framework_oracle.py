@@ -227,6 +227,7 @@ def main() -> int:
         print(f"unknown Flue oracle case id: {case_id}", file=sys.stderr)
         return 2
     failures = check(output_dir)
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))
     if failures:
         print(f"FAIL Flue Framework oracle: {case_id}")
         for failure in failures:

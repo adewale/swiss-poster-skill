@@ -303,12 +303,14 @@ def main() -> int:
     out = Path(sys.argv[1]) / "output.md"
     html_text = extract_html(out.read_text(encoding="utf-8", errors="replace"))
     if "<" not in html_text:
+        print(json.dumps({"score": 0, "max_score": 1, "case_id": "rendered-poster"}))
         print("FAIL rendered oracle: no HTML found")
         return 1
     width = int(sys.argv[2]) if len(sys.argv) == 4 else 840
     height = int(sys.argv[3]) if len(sys.argv) == 4 else 1200
     audit = audit_render(html_text, width, height)
     failures = failures_for(audit)
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": "rendered-poster"}))
     if failures:
         print("FAIL rendered poster oracle")
         for failure in failures:

@@ -94,13 +94,9 @@
       "assertions": [
         {
           "name": "detect-component-set",
-          "type": "contains_any",
-          "values": [
-            "hero",
-            "nav",
-            "cards",
-            "CTA"
-          ]
+          "type": "regex",
+          "pattern": "(?is)(grid-cols-12|text-\\[clamp\\(|overflow-(?:x-)?hidden|z-(?:10|20|30|40)|absolute|relative).{0,160}(component|section|layout|CTA|navigation|card|hero)|(?:component|section|layout|CTA|navigation|card|hero).{0,160}(grid-cols-12|text-\\[clamp\\(|overflow-(?:x-)?hidden|z-(?:10|20|30|40)|absolute|relative)",
+          "description": "Requires implementable Swiss-poster component/layout carriers instead of echoing component names."
         },
         {
           "name": "style-core",
@@ -143,10 +139,10 @@
           "name": "detect-dark-mode",
           "type": "contains_any",
           "values": [
-            "dark",
             "stone",
             "accent"
-          ]
+          ],
+          "description": "Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "style-core",
@@ -187,12 +183,9 @@
       "assertions": [
         {
           "name": "mobile-contract",
-          "type": "contains_all",
-          "values": [
-            "320",
-            "44px"
-          ],
-          "description": "Core mobile contract; scroll phrasing is covered by mobile-scroll-guard and qualitative review."
+          "type": "regex",
+          "pattern": "(?is)(min-h-\\[44px\\]|min-w-\\[44px\\]|h-11|w-11|py-3|px-4).{0,160}(overflow-x-hidden|overflow-hidden|overflow-clip|clamp\\()|(overflow-x-hidden|overflow-hidden|overflow-clip|clamp\\().{0,160}(min-h-\\[44px\\]|min-w-\\[44px\\]|h-11|w-11|py-3|px-4)",
+          "description": "Requires mobile-safe implementation carriers without prompt-echoed numeric tokens."
         },
         {
           "name": "mobile-scroll-guard",
@@ -249,9 +242,9 @@
           "type": "contains_all",
           "values": [
             "grid-cols-12",
-            "text-[clamp(",
-            "#C8102E"
-          ]
+            "text-[clamp("
+          ],
+          "description": "Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "tight-leading-contract",
@@ -279,22 +272,20 @@
           "type": "contains_any",
           "values": [
             "one accent",
-            "single accent",
-            "only accent"
+            "single accent"
           ],
-          "description": "Must explicitly constrain to one/single/only accent."
+          "description": "Must explicitly constrain to one/single/only accent. Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "mobile-boundary",
           "type": "contains_any",
           "values": [
-            "no horizontal scroll",
             "prevent 320px horizontal scroll",
             "prevents 320px horizontal scroll",
             "320px horizontal scroll",
             "overflow-x-hidden"
           ],
-          "description": "Must mention or implement 320px/no-horizontal-scroll safety."
+          "description": "Must mention or implement 320px/no-horizontal-scroll safety. Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "extreme-scale-code",
@@ -322,11 +313,10 @@
           "name": "accent-token-present",
           "type": "contains_any",
           "values": [
-            "#C8102E",
             "--poster-accent",
             "--accent"
           ],
-          "description": "Must use the Swiss red accent or a semantic accent token."
+          "description": "Must use the Swiss red accent or a semantic accent token. Prompt-echoed values removed by leakage cleanup."
         }
       ],
       "tags": [],
@@ -350,9 +340,9 @@
           "name": "avoid-swiss-country",
           "type": "contains_any",
           "values": [
-            "NO_TRIGGER",
-            "geography"
-          ]
+            "NO_TRIGGER"
+          ],
+          "description": "Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "qualitative-review",
@@ -384,9 +374,9 @@
           "name": "avoid-swiss-tax",
           "type": "contains_any",
           "values": [
-            "NO_TRIGGER",
-            "tax"
-          ]
+            "NO_TRIGGER"
+          ],
+          "description": "Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "qualitative-review",
@@ -416,12 +406,9 @@
       "assertions": [
         {
           "name": "avoid-corporate-minimal",
-          "type": "contains_any",
-          "values": [
-            "minimal",
-            "not poster",
-            "restrain"
-          ]
+          "type": "regex",
+          "pattern": "(?is)(restrain|respect the brief|do not force|avoid forcing|poster drama does not apply|tone down|subtle asymmetry)",
+          "description": "Must respect the user’s explicit non-poster/minimal boundary."
         },
         {
           "name": "qualitative-review",
@@ -540,7 +527,7 @@
             "must not cause horizontal scroll",
             "without creating horizontal page scroll",
             "Mobile sideways scroll, no",
-            "won\u2019t allow mobile sideways scroll"
+            "won’t allow mobile sideways scroll"
           ]
         },
         {
@@ -584,10 +571,10 @@
           "name": "avoid-inaccessible-touch",
           "type": "contains_any",
           "values": [
-            "44px",
             "touch",
             "accessibility"
-          ]
+          ],
+          "description": "Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "qualitative-review",
@@ -782,7 +769,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Deterministic carrier checks for dramatic Swiss poster output."
+          "description": "Deterministic carrier checks for dramatic Swiss poster output.",
+          "oracle": "strong"
         },
         {
           "name": "tailwind-grid-contract",
@@ -848,7 +836,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Deterministic carrier checks including photo-as-graphic patterns."
+          "description": "Deterministic carrier checks including photo-as-graphic patterns.",
+          "oracle": "strong"
         },
         {
           "name": "photo-treatment",
@@ -911,7 +900,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Requires semantic music/rhythm anchor and readable primary path; rejects giant arbitrary dates."
+          "description": "Requires semantic music/rhythm anchor and readable primary path; rejects giant arbitrary dates.",
+          "oracle": "strong"
         },
         {
           "name": "drama-carrier-oracle",
@@ -924,7 +914,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Keeps the existing dramatic carrier checks."
+          "description": "Keeps the existing dramatic carrier checks.",
+          "oracle": "strong"
         },
         {
           "name": "no-arbitrary-large-date",
@@ -976,7 +967,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Deterministically checks for legibility + semantic-anchor critique and corrected direction."
+          "description": "Deterministically checks for legibility + semantic-anchor critique and corrected direction.",
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1020,7 +1012,8 @@
             "pos-object-poster-archetype"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1063,7 +1056,8 @@
             "pos-route-map-archetype"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1106,7 +1100,8 @@
             "pos-data-diagram-archetype"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1149,7 +1144,8 @@
             "pos-typographic-specimen-archetype"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1192,7 +1188,8 @@
             "pos-photomontage-archetype"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1235,7 +1232,8 @@
             "pos-civic-safety-archetype"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1279,7 +1277,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Checks for protected reading-zone carriers: quiet field, critical-copy layer, separated graphic layer, contrast, and overflow safety."
+          "description": "Checks for protected reading-zone carriers: quiet field, critical-copy layer, separated graphic layer, contrast, and overflow safety.",
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1328,7 +1327,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Checks that the audit names the overlap failure and proposes quiet-field/layer/contrast fixes."
+          "description": "Checks that the audit names the overlap failure and proposes quiet-field/layer/contrast fixes.",
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1358,7 +1358,7 @@
       "id": "pos-contrast-channel-night-closure",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for an emergency transit night closure. Keep it severe and high-contrast: a black/stone split field, one Swiss red route slash or severed line, a huge 23:40 time signal, the title Night Closure, the body copy \u201cLast trains reroute via Platform 4\u201d, and a CTA \u201cCheck route changes\u201d. Optimise readability without turning it into a polite accessibility handout; the title, route fact, and CTA must be readable before the geometry is admired. Make it 320px-safe with no horizontal scroll.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for an emergency transit night closure. Keep it severe and high-contrast: a black/stone split field, one Swiss red route slash or severed line, a huge 23:40 time signal, the title Night Closure, the body copy “Last trains reroute via Platform 4”, and a CTA “Check route changes”. Optimise readability without turning it into a polite accessibility handout; the title, route fact, and CTA must be readable before the geometry is admired. Make it 320px-safe with no horizontal scroll.",
       "expected_behavior": [
         "Produce a brutal high-contrast Swiss poster that allocates contrast channels so critical text is readable while dramatic geometry remains strong."
       ],
@@ -1374,7 +1374,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Checks for contrast-channel discipline: critical annotations, separated dramatic channel, hard fields, demoted texture, z-index ordering, and overflow safety."
+          "description": "Checks for contrast-channel discipline: critical annotations, separated dramatic channel, hard fields, demoted texture, z-index ordering, and overflow safety.",
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1420,7 +1421,8 @@
             "pos-source-ledger-thread-recap"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1465,7 +1467,8 @@
             "pos-encoded-diagram-moq"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1495,7 +1498,7 @@
       "id": "pos-historical-rhythm-public-concert",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a public concert notice: Signal Quartet, Tonhalle, 12 Oct / 20:00, CTA \u201cReserve seats\u201d. Ground it in M\u00fcller-Brockmann / Musica Viva rhythm: arcs, repetition, pulse, or score-like structure should make music visible. Do not decorate the visible poster with designer names. Keep title/date/CTA readable at a glance, one Swiss red accent, a 12-column foundation, microtype, protected reading zone, and 320px/no-horizontal-scroll safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a public concert notice: Signal Quartet, Tonhalle, 12 Oct / 20:00, CTA “Reserve seats”. Ground it in Müller-Brockmann / Musica Viva rhythm: arcs, repetition, pulse, or score-like structure should make music visible. Do not decorate the visible poster with designer names. Keep title/date/CTA readable at a glance, one Swiss red accent, a 12-column foundation, microtype, protected reading zone, and 320px/no-horizontal-scroll safety.",
       "expected_behavior": [
         "Embodies a historically grounded rhythm/arcs grammar instead of name-dropping while keeping public concert facts readable."
       ],
@@ -1510,13 +1513,14 @@
             "pos-historical-rhythm-public-concert"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
           "type": "judge",
           "rubric": [
-            "M\u00fcller-Brockmann/Musica Viva influence is embodied as rhythm/arcs/repetition, not visible designer-name garnish",
+            "Müller-Brockmann/Musica Viva influence is embodied as rhythm/arcs/repetition, not visible designer-name garnish",
             "Title/date/CTA remain public-poster readable",
             "Implementation retains Swiss poster carriers and mobile safety"
           ]
@@ -1540,7 +1544,7 @@
       "id": "pos-historical-figure-ground-theatre",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a theatre piece titled \u201cBlack Square / White Room\u201d. Ground it in Armin Hofmann-style figure/ground drama: severe black/stone fields, one geometric or photographic abstraction as the subject, and strong spatial tension. Do not make a polite card layout. Keep title, date \u201cFri 21:00\u201d, and CTA \u201cBook seats\u201d readable, one Swiss red accent, 12-column foundation, microtype, contrast-channel discipline, and 320px/no-horizontal-scroll safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss-poster hero for a theatre piece titled “Black Square / White Room”. Ground it in Armin Hofmann-style figure/ground drama: severe black/stone fields, one geometric or photographic abstraction as the subject, and strong spatial tension. Do not make a polite card layout. Keep title, date “Fri 21:00”, and CTA “Book seats” readable, one Swiss red accent, 12-column foundation, microtype, contrast-channel discipline, and 320px/no-horizontal-scroll safety.",
       "expected_behavior": [
         "Embodies Hofmann-like figure/ground abstraction with readable theatre information and allocated contrast."
       ],
@@ -1555,7 +1559,8 @@
             "pos-historical-figure-ground-theatre"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1588,7 +1593,7 @@
       "files": [
         "fixtures/round10-after-image-defects/current.html"
       ],
-      "prompt": "Audit the attached \u201chistorical Swiss poster\u201d draft. It name-drops Weingart, Troxler, Hofmann, and Matter, leaks prompt-shaped metadata, uses card layout, arbitrary date decoration, fake diagram nodes, image placeholder wallpaper, and decorative microtype. Propose the corrected Tailwind direction: identify all defect classes, choose a historically grounded visual move that fits the subject, preserve a source ledger, assign image roles, encode diagrams only when marks map to facts, preserve a protected reading zone, keep one Swiss red accent, 12-column foundation, microtype, and 320px/no-horizontal-scroll safety.",
+      "prompt": "Audit the attached “historical Swiss poster” draft. It name-drops Weingart, Troxler, Hofmann, and Matter, leaks prompt-shaped metadata, uses card layout, arbitrary date decoration, fake diagram nodes, image placeholder wallpaper, and decorative microtype. Propose the corrected Tailwind direction: identify all defect classes, choose a historically grounded visual move that fits the subject, preserve a source ledger, assign image roles, encode diagrams only when marks map to facts, preserve a protected reading zone, keep one Swiss red accent, 12-column foundation, microtype, and 320px/no-horizontal-scroll safety.",
       "expected_behavior": [
         "Reject historical name-dropping/template/card/prompt-leak failures and propose concrete historically grounded correction carriers."
       ],
@@ -1603,7 +1608,8 @@
             "round10-audit-after-image-defects"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1634,7 +1640,7 @@
       "id": "pos-period-lineage-travel-photomontage",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss travel poster for an Alpine night railway: \u201cMontreux Night Rail\u201d, lake route, moonlit platform, 22:10 departure, CTA \u201cBook the lake route\u201d. Do not make it late-New-Wave black/red typographic disruption. Use a 1930s\u20131950s travel/photomontage/lithographic lineage: place/image as anchor, saturated but disciplined travel color, overprint or duotone, source-like public information, one accent, 12-column construction, readable title/date/CTA, and 320px/no-horizontal-scroll safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss travel poster for an Alpine night railway: “Montreux Night Rail”, lake route, moonlit platform, 22:10 departure, CTA “Book the lake route”. Do not make it late-New-Wave black/red typographic disruption. Use a 1930s–1950s travel/photomontage/lithographic lineage: place/image as anchor, saturated but disciplined travel color, overprint or duotone, source-like public information, one accent, 12-column construction, readable title/date/CTA, and 320px/no-horizontal-scroll safety.",
       "expected_behavior": [
         "Selects a travel/photomontage lineage rather than defaulting to late-modern typographic disruption."
       ],
@@ -1649,7 +1655,8 @@
             "pos-period-lineage-travel-photomontage"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1680,7 +1687,7 @@
       "id": "pos-palette-lineage-lake-travel",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss poster for \u201cLake Sound Ferry\u201d, a summer route between Lausanne and Vevey. Use one non-red, non-orange accent chosen from a lake/alpine travel palette, such as deep lake blue or alpine green; keep the palette disciplined but avoid the default black-white-red/orange look. Preserve Swiss poster drama through place, proportion, and image/field contrast, not red bars. Include title, route, 18:30, CTA \u201cSee departures\u201d, 12-column construction, and mobile safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for “Lake Sound Ferry”, a summer route between Lausanne and Vevey. Use one non-red, non-orange accent chosen from a lake/alpine travel palette, such as deep lake blue or alpine green; keep the palette disciplined but avoid the default black-white-red/orange look. Preserve Swiss poster drama through place, proportion, and image/field contrast, not red bars. Include title, route, 18:30, CTA “See departures”, 12-column construction, and mobile safety.",
       "expected_behavior": [
         "Uses a historically plausible non-red/orange one-accent palette appropriate to travel."
       ],
@@ -1695,7 +1702,8 @@
             "pos-palette-lineage-lake-travel"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1725,7 +1733,7 @@
       "id": "pos-object-poster-typographic-restraint",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss object poster for a single mechanical stopwatch called \u201cMinerva 55\u201d. The object/silhouette should be the anchor in Sachplakat/object-poster spirit; typography should be direct and restrained, not giant chaotic type. Include three product facts, price/date metadata, one accent, 12-column construction, readable title/CTA, and 320px safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss object poster for a single mechanical stopwatch called “Minerva 55”. The object/silhouette should be the anchor in Sachplakat/object-poster spirit; typography should be direct and restrained, not giant chaotic type. Include three product facts, price/date metadata, one accent, 12-column construction, readable title/CTA, and 320px safety.",
       "expected_behavior": [
         "Uses object-poster/Sachplakat clarity with restrained typography rather than default cropped mega-type violence."
       ],
@@ -1740,7 +1748,8 @@
             "pos-object-poster-typographic-restraint"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1770,7 +1779,7 @@
       "id": "pos-print-proportion-no-web-grid",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss exhibition poster for \u201cConcrete Forms / Kunsthaus\u201d, opening 14 May. It must feel like a proportioned print artifact, not a web dashboard: no rounded cards, no feature tiles, no soft shadows, no visible browser UI scaffolding. Use 12-column construction as hidden proportion, asymmetric margins, public-notice hierarchy, one accent, readable title/date/CTA, and 320px safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss exhibition poster for “Concrete Forms / Kunsthaus”, opening 14 May. It must feel like a proportioned print artifact, not a web dashboard: no rounded cards, no feature tiles, no soft shadows, no visible browser UI scaffolding. Use 12-column construction as hidden proportion, asymmetric margins, public-notice hierarchy, one accent, readable title/date/CTA, and 320px safety.",
       "expected_behavior": [
         "Uses grid as print proportion rather than visible web/card/dashboard scaffolding."
       ],
@@ -1785,7 +1794,8 @@
             "pos-print-proportion-no-web-grid"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1815,7 +1825,7 @@
       "id": "pos-material-process-lithographic-market",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss poster for \u201cBasel Market / Saturday\u201d. It should have a clear print-process surface: lithographic overprint, halftone, paper tone, slight misregistration, screenprint slab, or ink/grain texture. Keep texture subordinate to a readable title/date/CTA, use one accent chosen for the subject, 12-column construction, and mobile safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for “Basel Market / Saturday”. It should have a clear print-process surface: lithographic overprint, halftone, paper tone, slight misregistration, screenprint slab, or ink/grain texture. Keep texture subordinate to a readable title/date/CTA, use one accent chosen for the subject, 12-column construction, and mobile safety.",
       "expected_behavior": [
         "Adds historically grounded material/print-process texture without obscuring critical copy."
       ],
@@ -1830,7 +1840,8 @@
             "pos-material-process-lithographic-market"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1860,7 +1871,7 @@
       "id": "pos-diagram-restraint-theatre-figure-ground",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss theatre poster for \u201cThe Empty Chair\u201d, Fri 21:00, CTA \u201cBook seats\u201d. Do not use routes, network nodes, quadrants, axes, flow diagrams, or fake system marks. Use Basel/Hofmann figure-ground drama: severe fields, negative space, point-line-plane tension, one accent, 12-column construction, and readable public information.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss theatre poster for “The Empty Chair”, Fri 21:00, CTA “Book seats”. Do not use routes, network nodes, quadrants, axes, flow diagrams, or fake system marks. Use Basel/Hofmann figure-ground drama: severe fields, negative space, point-line-plane tension, one accent, 12-column construction, and readable public information.",
       "expected_behavior": [
         "Avoids default systems-diagram language for a theatre subject and uses figure-ground instead."
       ],
@@ -1875,7 +1886,8 @@
             "pos-diagram-restraint-theatre-figure-ground"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1906,7 +1918,7 @@
       "id": "pos-embodied-reference-no-visible-citation",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss poster for a Basel design lecture titled \u201cPoint / Line / Plane\u201d, Thu 19:00, CTA \u201cReserve a seat\u201d. Ground it in Hofmann/Basel figure-ground logic, but do not show designer names as visible poster copy. The historical reference may be non-visible in markup. The visible composition must embody the move through contrast, spatial tension, and abstraction. Use one accent, 12 columns, protected reading, and mobile safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for a Basel design lecture titled “Point / Line / Plane”, Thu 19:00, CTA “Reserve a seat”. Ground it in Hofmann/Basel figure-ground logic, but do not show designer names as visible poster copy. The historical reference may be non-visible in markup. The visible composition must embody the move through contrast, spatial tension, and abstraction. Use one accent, 12 columns, protected reading, and mobile safety.",
       "expected_behavior": [
         "Embodies a historical move without visible designer-name citation."
       ],
@@ -1921,7 +1933,8 @@
             "pos-embodied-reference-no-visible-citation"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1951,7 +1964,7 @@
       "id": "pos-photomontage-authorship-editorial",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss editorial photomontage poster for \u201cArchive Room 4\u201d: two image fragments, one archival document crop, and one portrait crop should feel authored through scale, crop, angle, duotone/overprint, and captions. If actual images are unavailable, code explicit image slots with semantic roles and crop/overprint treatment. Do not use photos as wallpaper or rounded cards. Include title, date, CTA, one accent, 12-column construction, and mobile safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss editorial photomontage poster for “Archive Room 4”: two image fragments, one archival document crop, and one portrait crop should feel authored through scale, crop, angle, duotone/overprint, and captions. If actual images are unavailable, code explicit image slots with semantic roles and crop/overprint treatment. Do not use photos as wallpaper or rounded cards. Include title, date, CTA, one accent, 12-column construction, and mobile safety.",
       "expected_behavior": [
         "Uses authored Matter-like photomontage with semantic image roles rather than wallpaper."
       ],
@@ -1966,7 +1979,8 @@
             "pos-photomontage-authorship-editorial"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -1996,7 +2010,7 @@
       "id": "pos-hofmann-restraint-two-contrasts",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss poster for \u201cSilence Study\u201d, a small chamber performance. Use Hofmann/Ruder restraint as drama: choose only two or three contrast axes (for example light/dark, large/small, static/dynamic), suppress unrelated effects, preserve negative space, one accent max, 12-column construction, readable title/date/CTA, and 320px safety.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss poster for “Silence Study”, a small chamber performance. Use Hofmann/Ruder restraint as drama: choose only two or three contrast axes (for example light/dark, large/small, static/dynamic), suppress unrelated effects, preserve negative space, one accent max, 12-column construction, readable title/date/CTA, and 320px safety.",
       "expected_behavior": [
         "Uses restraint and a limited contrast set instead of adding every poster effect."
       ],
@@ -2011,7 +2025,8 @@
             "pos-hofmann-restraint-two-contrasts"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -2042,7 +2057,7 @@
       "id": "pos-genre-breadth-geigy-scientific",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss scientific poster plate for \u201cEnzyme K-17 / Inhibition Study\u201d. Use a Geigy/scientific lineage: specimen or matrix layout, measured labels, formula/molecule/taxonomy, restrained analytical color, and real data-to-form mapping. Do not turn it into an event poster, tech meetup hero, route map, or black-red typographic disruption. Include title, method note, four measured facts, one accent, 12-column construction, and readable labels.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss scientific poster plate for “Enzyme K-17 / Inhibition Study”. Use a Geigy/scientific lineage: specimen or matrix layout, measured labels, formula/molecule/taxonomy, restrained analytical color, and real data-to-form mapping. Do not turn it into an event poster, tech meetup hero, route map, or black-red typographic disruption. Include title, method note, four measured facts, one accent, 12-column construction, and readable labels.",
       "expected_behavior": [
         "Expands genre breadth with a scientific/Geigy-style plate instead of the tech-event/poster default."
       ],
@@ -2057,7 +2072,8 @@
             "pos-genre-breadth-geigy-scientific"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 10
+          "timeout_s": 10,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -2088,7 +2104,7 @@
       "id": "pos-rendered-critical-text-civic-notice",
       "split": "tune",
       "kind": "style-output",
-      "prompt": "Create an implementable Tailwind/HTML Swiss civic notice poster for \u201cClean Water Vote\u201d, public vote Sunday 09:00\u201318:00, locations: School Hall / Market Square / North Pier, CTA \u201cVote Sunday\u201d. Use historically plausible civic/public-notice poster design, not web UI. The rendered poster must mark critical title/date/body/CTA with data-critical and keep them inside the canvas, readable, and unobscured. Use 12-column construction, disciplined print palette, strong poster composition, and no horizontal scroll.",
+      "prompt": "Create an implementable Tailwind/HTML Swiss civic notice poster for “Clean Water Vote”, public vote Sunday 09:00–18:00, locations: School Hall / Market Square / North Pier, CTA “Vote Sunday”. Use historically plausible civic/public-notice poster design, not web UI. The rendered poster must mark critical title/date/body/CTA with data-critical and keep them inside the canvas, readable, and unobscured. Use 12-column construction, disciplined print palette, strong poster composition, and no horizontal scroll.",
       "expected_behavior": [
         "Produces HTML whose rendered critical text can be validated for viewport bounds, obstruction, font size, and horizontal overflow."
       ],
@@ -2105,7 +2121,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 45,
-          "description": "Renders HTML in headless Chrome and validates critical text boxes are in-canvas, unobscured, readable-sized, and no horizontal overflow."
+          "description": "Renders HTML in headless Chrome and validates critical text boxes are in-canvas, unobscured, readable-sized, and no horizontal overflow.",
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -2156,7 +2173,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 60,
-          "description": "Checks Flue source fidelity, rejects web CTA leakage such as 'View Documentation', renders the poster, and pixel-audits any source-support text containing 'via CLI'."
+          "description": "Checks Flue source fidelity, rejects web CTA leakage such as 'View Documentation', renders the poster, and pixel-audits any source-support text containing 'via CLI'.",
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -2209,7 +2227,8 @@
             "round13-audit-flue-readability-cta"
           ],
           "pass_exit_code": 0,
-          "timeout_s": 20
+          "timeout_s": 20,
+          "oracle": "strong"
         },
         {
           "name": "qualitative-review",
@@ -2251,8 +2270,8 @@
           "name": "qualitative-review",
           "type": "judge",
           "rubric": [
-            "Poster composition",
-            "No horizontal scroll"
+            "Rendered visual hierarchy",
+            "Viewport containment"
           ]
         }
       ],
@@ -2511,38 +2530,36 @@
           "name": "tailwind-grid-contract",
           "type": "contains_all",
           "values": [
-            "grid",
             "grid-cols-12"
-          ]
+          ],
+          "description": "Prompt-echoed values removed by leakage cleanup."
         },
         {
           "name": "single-red-accent",
           "type": "contains_any",
           "values": [
-            "one red accent",
             "single accent",
             "only accent",
             "#C8102E"
-          ]
+          ],
+          "description": "Prompt-echoed values replaced with non-prompt alternatives."
         },
         {
           "name": "cropped-huge-type",
           "type": "contains_any",
           "values": [
-            "huge cropped type",
             "clamp(",
-            "mega type",
-            "cropped"
-          ]
+            "mega type"
+          ],
+          "description": "Prompt-echoed values replaced with non-prompt alternatives."
         },
         {
           "name": "mobile-no-scroll",
           "type": "contains_any",
           "values": [
-            "320px",
-            "no horizontal scroll",
             "overflow-x-hidden"
-          ]
+          ],
+          "description": "Prompt-echoed values replaced with non-prompt alternatives."
         },
         {
           "name": "not-svg-only",
@@ -2588,9 +2605,9 @@
           "name": "requires-12-col",
           "type": "contains_all",
           "values": [
-            "grid-cols-12",
-            "12"
-          ]
+            "grid-cols-12"
+          ],
+          "description": "Prompt-echoed values replaced with non-prompt alternatives."
         },
         {
           "name": "fixture-script-oracle",
@@ -2603,7 +2620,8 @@
           ],
           "pass_exit_code": 0,
           "timeout_s": 10,
-          "description": "Deterministic fixture-backed oracle; run benchmark with --allow-scripts."
+          "description": "Deterministic fixture-backed oracle; run benchmark with --allow-scripts.",
+          "oracle": "strong"
         },
         {
           "name": "round-3-qualitative-review",
@@ -2633,39 +2651,146 @@
       "id": "no-six-principles",
       "removed_component": "six principles",
       "expected_regressions": [
-        "Output loses scale/overlap/bleed/tension."
+        {
+          "summary": "Output loses scale/overlap/bleed/tension carriers.",
+          "cases": [
+            "pos-poster-composition",
+            "pos-tailwind-poster-responsive-proof"
+          ],
+          "assertions": [
+            "tailwind-poster-contract",
+            "tight-leading-contract",
+            "extreme-scale-code",
+            "tailwind-grid-contract"
+          ]
+        }
       ],
-      "applies_to_cases": []
+      "applies_to_cases": [],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "## Six Principles"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-gotchas",
       "removed_component": "gotchas",
       "expected_regressions": [
-        "Allows scroll, excessive rotation, multiple accents."
+        {
+          "summary": "Allows scroll, excessive rotation, multiple accents, or inaccessible touch targets.",
+          "cases": [
+            "neg-multi-accent-gradient",
+            "neg-excessive-rotation",
+            "neg-horizontal-scroll",
+            "neg-inaccessible-touch"
+          ],
+          "assertions": [
+            "avoid-multi-accent-gradient",
+            "avoid-excessive-rotation",
+            "reject-horizontal-scroll",
+            "avoid-inaccessible-touch"
+          ]
+        }
       ],
-      "applies_to_cases": []
+      "applies_to_cases": [],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "## Gotchas"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-components",
       "removed_component": "Tailwind component references",
       "expected_regressions": [
-        "Output is vague prose not implementable classes."
+        {
+          "summary": "Output becomes vague prose instead of implementable Tailwind/HTML components.",
+          "cases": [
+            "pos-component-set",
+            "pos-poster-composition"
+          ],
+          "assertions": [
+            "detect-component-set",
+            "tailwind-poster-contract"
+          ]
+        }
       ],
-      "applies_to_cases": []
+      "applies_to_cases": [],
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target.",
+      "mechanism": "asset",
+      "class": "resource",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "path": "references/components.md"
+      }
     },
     {
       "id": "no-tokens",
       "removed_component": "design-system tokens",
       "expected_regressions": [
-        "Palette/type drift."
+        {
+          "summary": "Palette/type token discipline drifts.",
+          "cases": [
+            "pos-dark-mode",
+            "pos-palette-lineage-lake-travel",
+            "neg-multi-accent-gradient"
+          ],
+          "assertions": [
+            "detect-dark-mode",
+            "period-genre-oracle",
+            "avoid-multi-accent-gradient"
+          ]
+        }
       ],
-      "applies_to_cases": []
+      "applies_to_cases": [],
+      "components": [
+        {
+          "mechanism": "section",
+          "class": "instructions",
+          "target": {
+            "skill_root": "swiss-poster/SKILL.md",
+            "heading": "## Color System"
+          }
+        },
+        {
+          "mechanism": "asset",
+          "class": "resource",
+          "target": {
+            "skill_root": "swiss-poster/SKILL.md",
+            "path": "references/design-system.md"
+          }
+        },
+        {
+          "mechanism": "asset",
+          "class": "resource",
+          "target": {
+            "skill_root": "swiss-poster/SKILL.md",
+            "path": "references/tailwind-config.md"
+          }
+        }
+      ],
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-research",
       "removed_component": "designer research",
       "expected_regressions": [
-        "Style becomes generic SaaS or Swiss-minimal only."
+        {
+          "summary": "Style becomes generic SaaS or one default Swiss-minimal mode.",
+          "cases": [
+            "pos-historical-rhythm-public-concert",
+            "pos-historical-figure-ground-theatre",
+            "round10-audit-after-image-defects"
+          ],
+          "assertions": [
+            "historical-grounding-oracle",
+            "historical-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-dramatic-event-poster",
@@ -2674,48 +2799,119 @@
         "pos-masked-photo-poster",
         "pos-semantic-legible-jazz",
         "round10-audit-after-image-defects"
-      ]
+      ],
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target.",
+      "mechanism": "asset",
+      "class": "resource",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "path": "references/research.md"
+      }
     },
     {
       "id": "no-output-contract",
       "removed_component": "Output contract for web/UI tasks",
       "expected_regressions": [
-        "Returns SVG-only or prose instead of implementable Tailwind/HTML; misses 320px/no-scroll/accessibility gates."
+        {
+          "summary": "Returns SVG-only/prose or misses Tailwind/HTML, 320px, no-scroll, accessibility gates.",
+          "cases": [
+            "pos-poster-composition",
+            "pos-tailwind-poster-responsive-proof",
+            "round3-fixture-poster-html-audit"
+          ],
+          "assertions": [
+            "tailwind-poster-contract",
+            "not-svg-only",
+            "mobile-no-scroll",
+            "fixture-script-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-poster-composition",
         "pos-tailwind-poster-responsive-proof",
         "pos-dramatic-event-poster"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "## Output contract for web/UI tasks"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-dramatic-recipe",
       "removed_component": "Dramatic poster recipe",
       "expected_regressions": [
-        "Output becomes tidy Swiss minimalism: centered hero, small accent line, weak edge pressure, no dominant anchor or microtype."
+        {
+          "summary": "Output becomes tidy web minimalism rather than a dominant poster event.",
+          "cases": [
+            "pos-dramatic-event-poster",
+            "pos-masked-photo-poster"
+          ],
+          "assertions": [
+            "drama-oracle",
+            "photo-treatment"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-dramatic-event-poster",
         "pos-masked-photo-poster"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "## Dramatic poster recipe"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-anti-slop",
       "removed_component": "Anti-Slop",
       "expected_regressions": [
-        "Allows gradient text, purple/cyan palette drift, rounded card grids, soft shadows, and generic SaaS chrome."
+        {
+          "summary": "Allows gradient/SaaS palette/card slop.",
+          "cases": [
+            "neg-multi-accent-gradient",
+            "pos-masked-photo-poster"
+          ],
+          "assertions": [
+            "reject-gradient-saas",
+            "reject-rounded-photo-card"
+          ]
+        }
       ],
       "applies_to_cases": [
         "neg-multi-accent-gradient",
         "pos-dramatic-event-poster",
         "pos-masked-photo-poster"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "## Anti-Slop"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-communication-before-spectacle",
       "removed_component": "Communication before spectacle / No illegible drama",
       "expected_regressions": [
-        "Allows unreadable overlaps, arbitrary giant dates/numerals, and decorative anchors that do not communicate the subject."
+        {
+          "summary": "Allows unreadable or arbitrary drama that fails to communicate the subject.",
+          "cases": [
+            "pos-semantic-legible-jazz",
+            "round6-audit-unreadable-drama"
+          ],
+          "assertions": [
+            "semantic-legibility-oracle",
+            "semantic-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-historical-figure-ground-theatre",
@@ -2723,13 +2919,31 @@
         "pos-semantic-legible-jazz",
         "pos-source-ledger-thread-recap",
         "round6-audit-unreadable-drama"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-communication-before-spectacle.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-subject-archetype-selection",
       "removed_component": "Choose by subject, not by default",
       "expected_regressions": [
-        "Model reuses the same dark-right-field/red-bar/cropped-word/ring-line recipe instead of selecting object, route-map, data-diagram, typographic-specimen, photomontage, or civic-safety archetypes by subject."
+        {
+          "summary": "Reuses one default motif instead of selecting subject-specific archetypes.",
+          "cases": [
+            "pos-object-poster-archetype",
+            "pos-route-map-archetype",
+            "pos-data-diagram-archetype",
+            "pos-civic-safety-archetype"
+          ],
+          "assertions": [
+            "motif-archetype-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-civic-safety-archetype",
@@ -2740,13 +2954,30 @@
         "pos-route-map-archetype",
         "pos-typographic-specimen-archetype",
         "round10-audit-after-image-defects"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Choose by subject, not by default"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-protected-reading-zone",
       "removed_component": "Protected reading zone heuristic",
       "expected_regressions": [
-        "Allows dramatic anchors, route lines, trust-boundary bars, diagrams, or giant type to overlap critical title/body/CTA text, producing unreadable poster drama."
+        {
+          "summary": "Critical title/body/CTA text becomes obscured by dramatic anchors.",
+          "cases": [
+            "pos-protected-reading-zone-credential",
+            "round8-audit-overlapped-critical-text"
+          ],
+          "assertions": [
+            "protected-reading-oracle",
+            "protected-reading-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-historical-figure-ground-theatre",
@@ -2757,13 +2988,30 @@
         "round6-audit-unreadable-drama",
         "round8-audit-overlapped-critical-text",
         "pos-flue-framework-poster"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Protected reading zone heuristic"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-contrast-channel-discipline",
       "removed_component": "Contrast-channel discipline",
       "expected_regressions": [
-        "Model either reduces poster drama into a polite readable layout or lets high-contrast dramatic anchors compete with title/body/CTA in the same reading zone."
+        {
+          "summary": "Poster either becomes polite or lets high-contrast anchors compete with critical copy.",
+          "cases": [
+            "pos-contrast-channel-night-closure",
+            "round8-audit-overlapped-critical-text"
+          ],
+          "assertions": [
+            "contrast-channel-oracle",
+            "protected-reading-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-contrast-channel-night-closure",
@@ -2772,13 +3020,31 @@
         "pos-protected-reading-zone-credential",
         "round8-audit-overlapped-critical-text",
         "pos-flue-framework-poster"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Contrast-channel discipline"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-artifact-fidelity",
       "removed_component": "Artifact fidelity / source ledger / image-role / diagram-encoding rules",
       "expected_regressions": [
-        "Model collapses source material into generic slogans, uses images as wallpaper, prints prompt metadata, or draws diagrams whose marks do not encode source facts."
+        {
+          "summary": "Source material collapses into generic slogans, wallpaper images, or fake diagrams.",
+          "cases": [
+            "pos-source-ledger-thread-recap",
+            "pos-encoded-diagram-moq",
+            "round10-audit-after-image-defects"
+          ],
+          "assertions": [
+            "artifact-integrity-oracle",
+            "historical-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-source-ledger-thread-recap",
@@ -2786,13 +3052,31 @@
         "round10-audit-after-image-defects",
         "pos-flue-framework-poster",
         "round13-audit-flue-readability-cta"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Artifact fidelity before style"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-historical-grounding",
       "removed_component": "Historical grounding / designer-to-move mapping",
       "expected_regressions": [
-        "Model name-drops Swiss designers or repeats generic default motifs instead of translating historical references into subject-matched visual carriers."
+        {
+          "summary": "Historical references become name-drops or generic default motifs.",
+          "cases": [
+            "pos-historical-rhythm-public-concert",
+            "pos-historical-figure-ground-theatre",
+            "round10-audit-after-image-defects"
+          ],
+          "assertions": [
+            "historical-grounding-oracle",
+            "historical-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-historical-rhythm-public-concert",
@@ -2800,131 +3084,342 @@
         "round10-audit-after-image-defects",
         "pos-semantic-legible-jazz",
         "pos-photomontage-archetype"
-      ]
+      ],
+      "components": [
+        {
+          "mechanism": "section",
+          "class": "instructions",
+          "target": {
+            "skill_root": "swiss-poster/SKILL.md",
+            "heading": "### Historical period and genre selection"
+          }
+        },
+        {
+          "mechanism": "section",
+          "class": "instructions",
+          "target": {
+            "skill_root": "swiss-poster/SKILL.md",
+            "heading": "### Academic literature cautions"
+          }
+        }
+      ],
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-period-lineage-selection",
       "removed_component": "Historical period/lineage selection",
       "expected_regressions": [
-        "Outputs default to late-1960s/1980s black-white-red typographic disruption regardless of subject."
+        {
+          "summary": "Outputs default to late New-Wave black/white/red disruption regardless of subject.",
+          "cases": [
+            "pos-period-lineage-travel-photomontage",
+            "pos-genre-breadth-geigy-scientific"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-period-lineage-travel-photomontage"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Historical period and genre selection"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-palette-lineage-breadth",
       "removed_component": "Palette breadth by lineage",
       "expected_regressions": [
-        "Outputs default to black/white/red or Cloudflare-orange even when another Swiss lineage calls for lake, alpine, lithographic, or analytical color."
+        {
+          "summary": "Palette defaults to red/orange even when lineage calls for another disciplined accent.",
+          "cases": [
+            "pos-palette-lineage-lake-travel"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-palette-lineage-lake-travel"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Color discipline can be richer than one red accent"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-object-poster-restraint",
       "removed_component": "Object-poster / Sachplakat restraint",
       "expected_regressions": [
-        "Product/object posters become giant-type collision posters instead of object-led direct communication."
+        {
+          "summary": "Object/product posters become giant-type collision posters instead of object-led communication.",
+          "cases": [
+            "pos-object-poster-typographic-restraint",
+            "pos-object-poster-archetype"
+          ],
+          "assertions": [
+            "period-genre-oracle",
+            "motif-archetype-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-object-poster-typographic-restraint"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-object-poster-restraint.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-print-proportion-audit",
       "removed_component": "Print proportion instead of web grid",
       "expected_regressions": [
-        "Outputs expose web/card/dashboard scaffolding instead of using grid as invisible print proportion."
+        {
+          "summary": "Outputs expose web/card/dashboard scaffolding instead of print proportion.",
+          "cases": [
+            "pos-print-proportion-no-web-grid"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-print-proportion-no-web-grid",
         "pos-flue-framework-poster"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-print-proportion-audit.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-material-process-surface",
       "removed_component": "Material print-process surface",
       "expected_regressions": [
-        "Outputs remain flat digital CSS slabs with no lithographic, halftone, overprint, paper, or screenprint surface where relevant."
+        {
+          "summary": "Outputs remain flat digital slabs without lineage-appropriate print surface.",
+          "cases": [
+            "pos-material-process-lithographic-market"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-material-process-lithographic-market"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-material-process-surface.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-diagram-restraint",
       "removed_component": "Diagram restraint by genre",
       "expected_regressions": [
-        "Routes, nodes, axes, quadrants, and diagrams appear on subjects that need figure-ground, object, image, or typographic solutions."
+        {
+          "summary": "Diagram motifs appear on subjects that need figure-ground/object/image grammar.",
+          "cases": [
+            "pos-diagram-restraint-theatre-figure-ground"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-diagram-restraint-theatre-figure-ground"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-diagram-restraint.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-embodied-reference-discipline",
       "removed_component": "Embodied reference instead of visible citation",
       "expected_regressions": [
-        "Outputs name-drop designers visibly instead of embodying the historical move through layout carriers."
+        {
+          "summary": "Visible designer citations replace embodied historical composition.",
+          "cases": [
+            "pos-embodied-reference-no-visible-citation",
+            "round10-audit-after-image-defects"
+          ],
+          "assertions": [
+            "period-genre-oracle",
+            "historical-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-embodied-reference-no-visible-citation"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Historical grounding is embodied, not named"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-photomontage-authorship",
       "removed_component": "Photomontage authorship and image roles",
       "expected_regressions": [
-        "Images become wallpaper, cards, or decorative strips instead of authored crops with place/person/evidence/sequence roles."
+        {
+          "summary": "Images become wallpaper/cards instead of authored crops with roles.",
+          "cases": [
+            "pos-photomontage-authorship-editorial",
+            "pos-photomontage-archetype"
+          ],
+          "assertions": [
+            "period-genre-oracle",
+            "motif-archetype-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-photomontage-authorship-editorial"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Image authorship"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-restraint-as-drama",
       "removed_component": "Hofmann/Ruder restraint as drama",
       "expected_regressions": [
-        "Outputs add too many effects and miss the drama of limited contrast axes and negative space."
+        {
+          "summary": "Hofmann/Ruder restraint gets overstuffed and misses limited-axis drama.",
+          "cases": [
+            "pos-hofmann-restraint-two-contrasts"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-hofmann-restraint-two-contrasts"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-restraint-as-drama.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-genre-breadth-selection",
       "removed_component": "Swiss poster genre breadth",
       "expected_regressions": [
-        "Scientific/object/travel/public-notice prompts collapse into the same tech-event or typographic disruption poster genre."
+        {
+          "summary": "Scientific/object/travel/public-notice prompts collapse into one tech/event poster genre.",
+          "cases": [
+            "pos-genre-breadth-geigy-scientific",
+            "pos-object-poster-typographic-restraint"
+          ],
+          "assertions": [
+            "period-genre-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-genre-breadth-geigy-scientific"
-      ]
+      ],
+      "mechanism": "patch",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "patch": "evals/ablations/no-genre-breadth-selection.patch"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-rendered-poster-proof",
       "removed_component": "Rendered poster proof / image-level critical text validation",
       "expected_regressions": [
-        "Model satisfies HTML/token rules but critical text is clipped, covered, too small, outside the canvas, or creates horizontal overflow in the rendered poster."
+        {
+          "summary": "HTML/token compliance passes while rendered critical text is clipped/covered/unreadable.",
+          "cases": [
+            "pos-rendered-critical-text-civic-notice",
+            "pos-flue-framework-poster"
+          ],
+          "assertions": [
+            "rendered-critical-text-oracle",
+            "flue-framework-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-rendered-critical-text-civic-notice",
         "pos-flue-framework-poster",
         "round13-audit-flue-readability-cta"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Rendered poster proof, not metadata compliance"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     },
     {
       "id": "no-web-cta-filter",
       "removed_component": "Poster-source CTA filtering / website navigation-to-poster-copy discipline",
       "expected_regressions": [
-        "Website navigation or button labels such as 'View Documentation', 'Get Started', or 'Read the docs' are copied into poster CTAs even when the subject calls for a print artifact rather than web UI."
+        {
+          "summary": "Website navigation/button copy leaks into poster CTA copy.",
+          "cases": [
+            "pos-flue-framework-poster",
+            "round13-audit-flue-readability-cta"
+          ],
+          "assertions": [
+            "flue-framework-oracle",
+            "flue-audit-oracle"
+          ]
+        }
       ],
       "applies_to_cases": [
         "pos-flue-framework-poster",
         "round13-audit-flue-readability-cta"
-      ]
+      ],
+      "mechanism": "section",
+      "class": "instructions",
+      "target": {
+        "skill_root": "swiss-poster/SKILL.md",
+        "heading": "### Avoid UI/product language unless the subject is UI"
+      },
+      "notes": "Materialized removal: runner-visible skill tree is altered by the declared mechanism/target."
     }
   ]
 }

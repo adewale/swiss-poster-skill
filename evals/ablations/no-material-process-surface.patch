@@ -1,0 +1,4 @@
+@@ -113,1 +113,0 @@
+-Use non-visible audit markers when helpful: `data-lineage="geigy-scientific"`, `data-period="1950s-zurich"`, `data-genre="object-poster"`, `data-print-process="lithographic-overprint"`, `data-contrast="large-small"`. These must reflect real layout decisions. Do not show the markers as poster copy.
+@@ -120,1 +120,0 @@
+-- **Material process:** choose a print surface when relevant — overprint, halftone, duotone, misregistration, ink trap, lithographic grain, screenprint slab, paper tone — without making texture obscure critical copy.
