@@ -8,6 +8,7 @@ other elements. If tesseract is installed, future OCR checks can be layered in;
 this script does not require OCR to run in CI.
 """
 from __future__ import annotations
+
 import html
 import json
 import re
@@ -21,7 +22,7 @@ from PIL import Image
 
 
 def extract_html(text: str) -> str:
-    m = re.search(r"```(?:html)?\s*(.*?)```", text, re.S | re.I)
+    m = re.search(r"```(?:html)?\s*(.*?)```", text, re.DOTALL | re.IGNORECASE)
     if m:
         text = m.group(1)
     idx = text.lower().find("<!doctype")
@@ -96,16 +97,16 @@ AUDIT_SCRIPT = r"""
 
 def inject(html_text: str) -> str:
     if "</body>" in html_text.lower():
-        return re.sub(r"</body>", lambda _m: AUDIT_SCRIPT + "</body>", html_text, flags=re.I)
+        return re.sub(r"</body>", lambda _m: AUDIT_SCRIPT + "</body>", html_text, flags=re.IGNORECASE)
     return html_text + AUDIT_SCRIPT
 
 
 def add_hidden_critical_style(html_text: str) -> str:
     style = "<style>[data-critical]{visibility:hidden!important}</style>"
     if "</head>" in html_text.lower():
-        return re.sub(r"</head>", lambda _m: style + "</head>", html_text, flags=re.I)
+        return re.sub(r"</head>", lambda _m: style + "</head>", html_text, flags=re.IGNORECASE)
     if "</body>" in html_text.lower():
-        return re.sub(r"</body>", lambda _m: style + "</body>", html_text, flags=re.I)
+        return re.sub(r"</body>", lambda _m: style + "</body>", html_text, flags=re.IGNORECASE)
     return style + html_text
 
 
@@ -146,7 +147,7 @@ def audit_render(html_text: str, width: int = 840, height: int = 1200) -> dict:
         proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
         if proc.returncode != 0:
             raise RuntimeError(proc.stderr[-1000:])
-        m = re.search(r'<script[^>]+id=["\']render-audit-json["\'][^>]*>(.*?)</script>', proc.stdout, re.S | re.I)
+        m = re.search(r'<script[^>]+id=["\']render-audit-json["\'][^>]*>(.*?)</script>', proc.stdout, re.DOTALL | re.IGNORECASE)
         if not m:
             raise RuntimeError("render audit JSON not found in dumped DOM")
         audit = json.loads(html.unescape(m.group(1)))
@@ -193,7 +194,7 @@ def percentile(vals: list[float], p: float) -> float:
     if not vals:
         return 0.0
     vals = sorted(vals)
-    idx = min(len(vals) - 1, max(0, int(round((len(vals) - 1) * p))))
+    idx = min(len(vals) - 1, max(0, round((len(vals) - 1) * p)))
     return vals[idx]
 
 

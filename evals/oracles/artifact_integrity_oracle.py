@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Artifact fidelity and historical-grounding oracles for swiss-poster outputs."""
 from __future__ import annotations
+
 import json
 import re
 import sys
@@ -15,11 +16,11 @@ def read_output(output_dir: Path) -> str:
 
 
 def has(pattern: str, text: str) -> bool:
-    return re.search(pattern, text, re.I | re.M | re.S) is not None
+    return re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL) is not None
 
 
 def count(pattern: str, text: str) -> int:
-    return len(re.findall(pattern, text, re.I | re.M | re.S))
+    return len(re.findall(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL))
 
 
 def group_failures(text: str, groups: dict[str, list[str]]) -> list[str]:
@@ -46,8 +47,8 @@ PROMPT_LEAKS = [
 
 
 def visible_text(text: str) -> str:
-    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
-    text = re.sub(r"<style.*?</style>|<script.*?</script>", " ", text, flags=re.S | re.I)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.DOTALL)
+    text = re.sub(r"<style.*?</style>|<script.*?</script>", " ", text, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r"<[^>]+>", " ", text)
     return re.sub(r"\s+", " ", text)
 

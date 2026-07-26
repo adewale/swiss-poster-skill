@@ -31,14 +31,14 @@ def read_output(output_dir: Path) -> str:
 
 
 def visible_text(html_text: str) -> str:
-    text = re.sub(r"<!--.*?-->", " ", html_text, flags=re.S)
-    text = re.sub(r"<style.*?</style>|<script.*?</script>", " ", text, flags=re.S | re.I)
+    text = re.sub(r"<!--.*?-->", " ", html_text, flags=re.DOTALL)
+    text = re.sub(r"<style.*?</style>|<script.*?</script>", " ", text, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r"<[^>]+>", " ", text)
     return re.sub(r"\s+", " ", html.unescape(text)).strip()
 
 
 def has(pattern: str, text: str) -> bool:
-    return re.search(pattern, text, re.I | re.M | re.S) is not None
+    return re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL) is not None
 
 
 def group_failures(text: str, groups: dict[str, list[str]]) -> list[str]:
@@ -118,7 +118,7 @@ HIDE_TEXT_TARGETS = r"""
 
 def inject_script(html_text: str, script: str) -> str:
     if "</body>" in html_text.lower():
-        return re.sub(r"</body>", lambda _m: script + "</body>", html_text, flags=re.I)
+        return re.sub(r"</body>", lambda _m: script + "</body>", html_text, flags=re.IGNORECASE)
     return html_text + script
 
 
@@ -146,7 +146,7 @@ def via_cli_pixel_failures(html_text: str, width: int = 840, height: int = 1200)
         proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
         if proc.returncode != 0:
             raise RuntimeError(proc.stderr[-1000:])
-        m = re.search(r'<script[^>]+id=["\']flue-text-target-audit-json["\'][^>]*>(.*?)</script>', proc.stdout, re.S | re.I)
+        m = re.search(r'<script[^>]+id=["\']flue-text-target-audit-json["\'][^>]*>(.*?)</script>', proc.stdout, re.DOTALL | re.IGNORECASE)
         if not m:
             raise RuntimeError("Flue text-target audit JSON not found")
         audit = json.loads(html.unescape(m.group(1)))
