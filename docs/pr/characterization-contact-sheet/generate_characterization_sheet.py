@@ -10,8 +10,6 @@ The script fails if any baseline row is not an actual PNG in origin/main:posters
 from __future__ import annotations
 
 import concurrent.futures as cf
-import html
-import io
 import json
 import os
 import re
@@ -250,7 +248,7 @@ def validate_manifest() -> None:
 
 
 def extract_html(text: str) -> str:
-    m = re.search(r"```(?:html)?\s*(.*?)```", text, re.S | re.I)
+    m = re.search(r"```(?:html)?\s*(.*?)```", text, re.DOTALL | re.IGNORECASE)
     if m:
         text = m.group(1)
     idx = text.lower().find("<!doctype")

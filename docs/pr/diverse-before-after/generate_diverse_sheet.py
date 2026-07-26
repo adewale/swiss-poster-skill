@@ -9,13 +9,11 @@ from __future__ import annotations
 
 import concurrent.futures as cf
 import html
-import io
 import json
 import os
 import re
 import shutil
 import subprocess
-import tempfile
 import textwrap
 from pathlib import Path
 
@@ -240,7 +238,7 @@ def materialize_old_skill() -> Path:
 
 
 def extract_html(text: str) -> str:
-    m = re.search(r"```(?:html)?\s*(.*?)```", text, re.S | re.I)
+    m = re.search(r"```(?:html)?\s*(.*?)```", text, re.DOTALL | re.IGNORECASE)
     if m:
         text = m.group(1)
     idx = text.lower().find("<!doctype")

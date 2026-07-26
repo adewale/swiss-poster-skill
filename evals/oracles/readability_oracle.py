@@ -7,6 +7,7 @@ It is intentionally text/code based; it catches whether the output contains the
 implementation carriers and audit language that prevent illegible drama.
 """
 from __future__ import annotations
+
 import json
 import re
 import sys
@@ -21,7 +22,7 @@ def read_output(output_dir: Path) -> str:
 
 
 def has(pattern: str, text: str) -> bool:
-    return re.search(pattern, text, re.I | re.M | re.S) is not None
+    return re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL) is not None
 
 
 def check_groups(text: str, groups: dict[str, list[str]]) -> list[str]:

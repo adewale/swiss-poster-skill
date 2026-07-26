@@ -7,6 +7,7 @@ lack the code/text carriers that usually produce actually dramatic posters:
 no SaaS/card slop, and mobile/overflow safety.
 """
 from __future__ import annotations
+
 import json
 import re
 import sys
@@ -49,11 +50,11 @@ def main() -> int:
     failures: list[str] = []
 
     for label, patterns in REQUIRED_GROUPS.items():
-        if not any(re.search(p, text, re.I | re.M | re.S) for p in patterns):
+        if not any(re.search(p, text, re.IGNORECASE | re.MULTILINE | re.DOTALL) for p in patterns):
             failures.append(f"missing drama carrier: {label}")
 
     for label, pattern in FORBIDDEN.items():
-        if re.search(pattern, text, re.I | re.M | re.S):
+        if re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL):
             failures.append(f"forbidden {label}")
 
     print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))

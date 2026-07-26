@@ -5,6 +5,7 @@ Before = tidy, low-drama web layout.
 After = same content, transformed into Swiss-poster treatment.
 """
 from __future__ import annotations
+
 from pathlib import Path
 
 PAIRS = [
@@ -167,7 +168,7 @@ def motif_css(m: str) -> str:
 def write() -> None:
     base = Path(__file__).parent
     for p in PAIRS:
-        meta_joined = " / ".join(p["meta"])
+        " / ".join(p["meta"])
         meta_lines = "<br>".join(p["meta"])
         before_items = "".join(f'<div class="card">{item}<span>{p["title"]}</span></div>' for item in p["items"])
         after_items = "".join(f"<span>{item}</span>" for item in p["items"])

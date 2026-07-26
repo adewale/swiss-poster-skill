@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 import importlib.util
 import json
 import os
-from pathlib import Path
 import sys
 import time
 import traceback
+from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 WORKSPACE_ROOT = REPO_ROOT.parent

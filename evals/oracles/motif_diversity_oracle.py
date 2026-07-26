@@ -12,6 +12,7 @@ The goal is to catch template collapse: every output looking like the same
 right-dark-field + red bar + cropped word + ring/line-field composition.
 """
 from __future__ import annotations
+
 import argparse
 import json
 import re
@@ -27,11 +28,11 @@ def read_output(output_dir: Path) -> str:
 
 
 def has(pattern: str, text: str) -> bool:
-    return re.search(pattern, text, re.I | re.M | re.S) is not None
+    return re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL) is not None
 
 
 def count(pattern: str, text: str) -> int:
-    return len(re.findall(pattern, text, re.I | re.M | re.S))
+    return len(re.findall(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL))
 
 
 def visible_large_number(text: str) -> bool:
