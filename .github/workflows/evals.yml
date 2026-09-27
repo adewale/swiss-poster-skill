@@ -1,0 +1,64 @@
+name: evals
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  oracle-selftests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # The rendered oracles only load local HTML files they wrote themselves; skip
+      # Chrome's sandbox so an unprivileged-user-namespace restriction on the runner
+      # cannot turn into an "unavailable" oracle.
+      SWISS_POSTER_CHROME_NO_SANDBOX: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow (rendered oracles)
+        run: python3 -m pip install 'pillow==11.3.0'
+      # ubuntu-latest ships Google Chrome; the oracles find it as `google-chrome`.
+      - name: Show Chrome version
+        run: google-chrome --version
+      - name: Oracle self-tests (known-good passes, defective fails for the stated reason)
+        run: python3 evals/oracles/selftest/run_selftests.py
+
+  eval-manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v9.0.0
+      # Model-free and key-free: manifest shape, regex compilation, prompt leakage,
+      # ablation targets, and audit blockers, with the harness version pinned.
+      - name: Validate shared benchmark manifest (skill-eval-harness 0.6.0)
+        run: uvx --from skill-eval-harness==0.6.0 skill-benchmark validate --strict-leakage --check-ablations evals/shared-benchmark.json
+      - name: Audit shared benchmark manifest
+        run: uvx --from skill-eval-harness==0.6.0 skill-benchmark audit-manifest evals/shared-benchmark.json --fail-on-blockers
+
+  website-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      # Bundles the Worker and reads the assets directory without uploading anything.
+      # Needs no Cloudflare credentials.
+      - name: wrangler deploy --dry-run
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx wrangler deploy --dry-run --outdir "$RUNNER_TEMP/website-dry-run"
