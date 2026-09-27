@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Anti-Slop Writing — sharp detail beats inflated significance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<!--
+  Weltformat F4 (89.5 × 128 cm), rendered 1260 × 1800 CSS px.
+  Lineage: Weingart-era typographic poster printed as a proof sheet in four
+  flat stencil inks. Each ink has one editing role and keeps it everywhere:
+    pink   = inflated significance, marked to cut
+    yellow = a detector hit, to check against its sentence
+    blue   = the concrete mechanism, i.e. the rewrite
+    green  = the relation or mechanism that earns a word
+  Overprints are multiply blends, so pink over yellow prints orange.
+
+  Source ledger: github.com/adewale/anti-slop-writing — README.md,
+  skills/anti-slop-writing/SKILL.md, references/*.md, examples/cards/*.md.
+  Every example sentence, list entry and quoted rule is verbatim.
+-->
+<style>
+  :root {
+    --paper:  #f5f1e8;   /* uncoated stock */
+    --ink:    #1c1917;
+    --ink-2:  #44403c;
+    --pink:   #ff48b0;   /* fluorescent pink */
+    --yellow: #ffe800;
+    --blue:   #0078bf;
+    --green:  #00a95c;
+    --display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    --sans:    'Barlow', 'Helvetica Neue', Arial, sans-serif;
+    --serif:   'IBM Plex Serif', Georgia, serif;
+    --mono:    'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; }
+  .grid {
+    position: absolute; left: 64px; right: 64px;
+    display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px;
+  }
+  .micro {
+    font-family: var(--mono); font-size: 11px; line-height: 1.5;
+    letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
+  }
+  .label {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+  /* Proof marks. Backgrounds sit behind the letters, so marked text stays black. */
+  .cut  { background: linear-gradient(transparent 46%, var(--pink) 46%, var(--pink) 74%, transparent 74%);
+          -webkit-box-decoration-break: clone; box-decoration-break: clone; mix-blend-mode: multiply; }
+  .flag { background: linear-gradient(transparent 8%, var(--yellow) 8%, var(--yellow) 94%, transparent 94%);
+          -webkit-box-decoration-break: clone; box-decoration-break: clone; mix-blend-mode: multiply; }
+  .rel  { border: 2.5px solid var(--green); border-radius: 50%; padding: 0 0.28em; margin: 0 -0.08em; }
+
+  /* ── Header ── */
+  .head { top: 30px; }
+  .head .l { grid-column: 1 / span 6; }
+  .head .r { grid-column: 7 / span 6; text-align: right; }
+
+  /* ── Title + core rule ── */
+  .title { top: 70px; }
+  .title h1 {
+    grid-column: 1 / -1;
+    font-family: var(--display); font-weight: 800;
+    font-size: 153px; line-height: 0.8; letter-spacing: -0.005em;
+    text-transform: uppercase; white-space: nowrap;
+    margin-left: -0.035em;
+  }
+  .title h1 .slop { background: linear-gradient(transparent 36%, var(--pink) 36%, var(--pink) 64%, transparent 64%); mix-blend-mode: multiply; padding: 0 0.03em; }
+  .lede { top: 206px; }
+  .lede .rule { grid-column: 1 / span 7; }
+  .lede .ask  { grid-column: 8 / span 5; }
+  .lede .label { margin-bottom: 8px; display: block; }
+  .lede blockquote {
+    font-family: var(--serif); font-weight: 500; font-size: 46px; line-height: 1.04;
+    letter-spacing: -0.015em;
+  }
+  .qs { list-style: none; counter-reset: q; border-top: 1px solid var(--ink); padding-top: 6px; }
+  .qs li { font-size: 16.5px; line-height: 1.28; padding: 2px 0 2px 26px; position: relative; font-weight: 500; }
+  .qs li::before { counter-increment: q; content: counter(q); position: absolute; left: 0; top: 4px; font-family: var(--mono); font-size: 11px; font-weight: 600; }
+
+  /* ── The flip: type size = amount ── */
+  .band { position: absolute; left: 0; right: 0; overflow: hidden; }
+  .band .label { position: absolute; left: 64px; top: 14px; }
+  .band .row { position: absolute; left: 64px; bottom: 16px; display: flex; align-items: baseline; white-space: nowrap; }
+  .fail { top: 356px; height: 176px; background: var(--pink); }
+  .fail .small { font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1; margin-right: 20px; }
+  .fail .big {
+    font-family: var(--display); font-weight: 800; font-size: 150px; line-height: 0.74;
+    letter-spacing: 0.005em; text-transform: uppercase;
+    display: inline-block; transform: scaleX(1.36); transform-origin: 0 50%;
+    position: relative;
+  }
+  .fail .big::before {              /* yellow plate, printed out of register */
+    content: attr(data-word); position: absolute; left: 6px; top: 5px;
+    color: var(--yellow); mix-blend-mode: multiply; z-index: -1;
+  }
+  .fix { top: 532px; height: 232px; background: var(--blue); color: var(--paper); }
+  .fix .label { color: var(--paper); }
+  .fix .small { font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1; }
+  .fix .big {
+    font-family: var(--display); font-weight: 800; font-size: 222px; line-height: 0.74;
+    letter-spacing: -0.012em; text-transform: uppercase;
+    margin: 0 18px 0 14px;
+  }
+
+  /* ── Ink key ── */
+  .key { top: 780px; align-items: center; }
+  .key div { grid-column: span 3; display: flex; align-items: center; gap: 10px; font-size: 14.5px; line-height: 1.2; font-weight: 500; white-space: nowrap; }
+  .key i { flex: 0 0 26px; height: 18px; display: block; }
+
+  /* ── Proof sheet ── */
+  .proofs { top: 822px; row-gap: 18px; }
+  .card { grid-column: span 4; position: relative; border-top: 3px solid var(--ink); padding-top: 8px; }
+  .card h2 { display: flex; gap: 10px; margin-bottom: 9px; }
+  .card h2 span:first-child { font-weight: 600; }
+  .card .tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 2px 6px 1px; margin-right: 8px; vertical-align: 2px;
+  }
+  .tag.before { background: var(--pink); color: var(--ink); }
+  .tag.after  { background: var(--blue); color: var(--paper); }
+  .card .b { font-family: var(--serif); font-size: 15.5px; line-height: 1.4; margin-bottom: 8px; }
+  .card .a { font-family: var(--serif); font-weight: 500; font-size: 17px; line-height: 1.3; color: var(--blue); margin-bottom: 8px; }
+  .card .why { font-size: 13px; line-height: 1.34; color: var(--ink-2); }
+  .card .why b { font-weight: 600; color: var(--ink); }
+
+  .stamp {
+    position: absolute; z-index: 5;
+    font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    line-height: 1; padding: 6px 12px 4px; border: 3px solid var(--ink);
+    color: var(--ink);
+  }
+  .stamp.keep { background: var(--green); font-size: 40px; right: -2px; bottom: -8px; transform: rotate(-6deg); }
+  .card .why.room { padding-right: 132px; }
+  .stamp.ask  { background: var(--yellow); font-size: 28px; right: -2px; top: -8px; transform: rotate(-5deg); }
+
+  /* ── Detector field ── */
+  .yellow { position: absolute; left: 0; right: 0; top: 1290px; height: 318px; background: var(--yellow); }
+  .detect { top: 1310px; }   /* no z-index: marks must multiply with the yellow */
+  .detect .col-a { grid-column: 1 / span 6; }
+  .detect .col-b { grid-column: 7 / span 3; }
+  .detect .col-c { grid-column: 10 / span 3; }
+  .detect .label { margin-bottom: 8px; display: block; }
+  .phrases, .words { list-style: none; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; }
+  .phrases li, .words li { display: inline; }
+  .phrases li:not(:last-child)::after, .words li:not(:last-child)::after { content: '\00a0· '; }
+  .phrases .cut { background: linear-gradient(transparent 50%, var(--pink) 50%, var(--pink) 76%, transparent 76%); }
+  .words { font-size: 13px; }
+  .note { margin-top: 10px; font-size: 14px; line-height: 1.35; font-weight: 500; }
+  .form { font-family: var(--mono); font-size: 12.5px; line-height: 1; }
+  .form div { display: flex; align-items: baseline; gap: 8px; padding: 6px 0 5px; border-bottom: 1px solid var(--ink); }
+  .form div span:first-child { font-weight: 600; white-space: nowrap; }
+  .form .v { display: flex; flex-wrap: wrap; gap: 5px; border-bottom-width: 2px; padding-bottom: 7px; }
+  .form .v em { font-style: normal; font-weight: 600; padding: 3px 6px 2px; border: 1.5px solid var(--ink); }
+  .v .k { background: var(--green); }
+  .v .r { background: var(--blue); color: var(--paper); }
+  .v .a { background: var(--paper); }
+  .v .x { background: var(--pink); }
+
+  /* ── Flow + install ── */
+  .black { position: absolute; left: 0; right: 0; top: 1608px; bottom: 0; background: var(--ink); }
+  .foot { top: 1634px; color: var(--paper); }
+  .foot .flow { grid-column: 1 / span 8; }
+  .foot .flow .label { color: #a8a29e; display: block; margin-bottom: 6px; }
+  .foot .flow p { font-family: var(--serif); font-size: 18px; line-height: 1.3; margin-bottom: 10px; }
+  .hinges { font-family: var(--display); font-weight: 700; font-size: 31px; line-height: 1; color: var(--green); letter-spacing: 0.01em; white-space: nowrap; }
+  .hinges span + span::before { content: ' / '; color: #57534e; font-weight: 500; }
+  .foot .inst { grid-column: 9 / span 4; }
+  .foot .inst .label { color: #a8a29e; display: block; margin-bottom: 6px; }
+  .foot .inst code { display: block; font-family: var(--mono); font-size: 13.5px; font-weight: 500; color: var(--ink); background: var(--paper); padding: 8px 10px 7px; margin-bottom: 12px; white-space: nowrap; }
+  .foot .inst p { font-family: var(--serif); font-style: italic; font-size: 18px; line-height: 1.3; }
+</style>
+</head>
+<body>
+<main class="poster"
+      data-lineage="weingart-typographic"
+      data-reference="weingart-controlled-disruption"
+      data-genre="typographic-proof-sheet"
+      data-palette="four-stencil-inks"
+      data-print-process="stencil-overprint"
+      data-contrast="large-small">
+
+  <!-- Header -->
+  <div class="grid head micro">
+    <div class="l">Anti-Slop Writing · An Agent Skill<br>for prose that reads like generic LLM output</div>
+    <div class="r">github.com/adewale/anti-slop-writing · MIT<br>Pi · Claude Code · Codex · OpenCode · Gemini CLI</div>
+  </div>
+
+  <!-- Title + core rule -->
+  <div class="grid title">
+    <h1 data-critical="title">Anti-<span class="slop">Slop</span> Writing</h1>
+  </div>
+  <div class="grid lede" data-source="SKILL.md › Core principle; Before writing">
+    <div class="rule">
+      <span class="label">Core rule</span>
+      <blockquote data-critical="body">Sharp detail beats<br>inflated significance.</blockquote>
+    </div>
+    <div class="ask">
+      <span class="label">Before writing, answer</span>
+      <ol class="qs" data-critical="body">
+        <li>What is the exact point?</li>
+        <li>What concrete detail proves it?</li>
+        <li>What sentence machinery is making it feel true?</li>
+        <li>What should the reader remember?</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- The flip -->
+  <section class="band fail" data-source="SKILL.md › Core principle"
+           data-encoding="type size → amount; inflated width → inflated significance">
+    <div class="label">AI writing often fails by doing this</div>
+    <div class="row" data-reference="odermatt-tissi-type-image">
+      <span class="small">less detail, more</span>
+      <span class="big" data-word="importance">importance</span>
+    </div>
+  </section>
+  <section class="band fix" data-source="SKILL.md › Core principle"
+           data-encoding="type size → amount">
+    <div class="label">Fix by doing this</div>
+    <div class="row" data-critical="body">
+      <span class="small">more</span>
+      <span class="big">detail,</span>
+      <span class="small">earned importance</span>
+    </div>
+  </section>
+
+  <!-- Ink key -->
+  <div class="grid key">
+    <div><i style="background:var(--pink)"></i>Inflated significance: cut</div>
+    <div><i style="background:var(--yellow)"></i>Detector hit: check the sentence</div>
+    <div><i style="background:var(--blue)"></i>Mechanism: write this instead</div>
+    <div><i style="border:2.5px solid var(--green);border-radius:50%"></i>Relation that earns the word</div>
+  </div>
+
+  <!-- Proof sheet: example cards, verbatim -->
+  <div class="grid proofs" data-source="examples/cards; SKILL.md › False-positive restraint">
+    <article class="card" data-beat="generic-importance">
+      <h2 class="label"><span>01</span><span>Replace importance with mechanism</span></h2>
+      <p class="b"><span class="tag before">Before</span>This <span class="cut"><span class="flag">underscores</span> the importance of</span> durable execution.</p>
+      <p class="a" data-critical="body"><span class="tag after">After</span>The workflow can fail on step 4, retry only that step, and keep the previous outputs.</p>
+      <p class="why">The rewrite names the behavior that makes execution durable.</p>
+    </article>
+
+    <article class="card" data-beat="safe-essay-voice">
+      <h2 class="label"><span>02</span><span>Cut safe essay voice</span></h2>
+      <p class="b"><span class="tag before">Before</span><span class="cut">In today’s rapidly evolving landscape,</span> teams need <span class="flag">robust</span> solutions that empower developers to build <span class="flag">seamless</span> experiences.</p>
+      <p class="a"><span class="tag after">After</span>A frontend developer can ship a shared cart without running a sync service.</p>
+      <p class="why">The rewrite names an actor, an action, and a concrete result.</p>
+    </article>
+
+    <article class="card" data-beat="false-positive-restraint">
+      <span class="stamp keep" aria-hidden="true">Keep</span>
+      <h2 class="label"><span>03</span><span>Treat hits as hypotheses</span></h2>
+      <p class="b" style="font-size:17px;line-height:1.36">“The queue is <span class="flag">robust</span> <span class="rel">because</span> each job has an idempotency key, a retry receipt, and a dead-letter cutoff.”</p>
+      <p class="why room"><b>Why:</b> “robust” is an engineering qualifier earned by the deduplication, retry-tracking, and dead-letter mechanisms.</p>
+    </article>
+
+    <article class="card" data-beat="decorative-contrast">
+      <h2 class="label"><span>04</span><span>Replace rhythm with relation</span></h2>
+      <p class="b"><span class="tag before">Before</span><span class="cut">The point is not the pelicans. The point is the process.</span></p>
+      <p class="a"><span class="tag after">After</span>The pelican is useful <span class="rel">because</span> it gives the process a small, inspectable carrier.</p>
+      <p class="why">Decorative antithesis: neither side is evidenced. The rewrite keeps the concrete example and explains how it supports the larger claim.</p>
+    </article>
+
+    <article class="card" data-beat="rewrite-reuses-flagged-pattern">
+      <span class="stamp ask" aria-hidden="true">Ask-author</span>
+      <h2 class="label"><span>05</span><span>Ask the author</span></h2>
+      <p class="b"><span class="tag before">Before</span><span class="cut">Claude Code</span> turned the cover-image generator from a someday-item into an afternoon.</p>
+      <p class="a"><span class="tag after">After</span>Ask author: which coding tool? Cursor, Claude Code, Copilot, Aider, other?</p>
+      <p class="why">The source never names the tool. The rewrite picked one and shipped it as fact.</p>
+    </article>
+
+    <article class="card" data-beat="weak-conclusion">
+      <h2 class="label"><span>06</span><span>Return to the carrier</span></h2>
+      <p class="b"><span class="tag before">Before</span>A benchmark is stronger when you can inspect the run that produced it.</p>
+      <p class="a" style="font-size:15.5px"><span class="tag after">After</span><span class="rel">Because</span> the pelican project is small enough to inspect and strange enough to remember, it works as a compact carrier for the larger claim: a benchmark is stronger when you can inspect the run that produced it.</p>
+      <p class="why">The conclusion returns to the memorable object before stating the transferable claim.</p>
+    </article>
+  </div>
+
+  <!-- Detector field -->
+  <div class="yellow" aria-hidden="true"></div>
+  <div class="grid detect" data-source="SKILL.md › Avoid by default; Critique output format">
+    <div class="col-a">
+      <span class="label">Avoid by default</span>
+      <ul class="phrases">
+        <li><span class="cut">In today’s rapidly evolving landscape</span></li><li><span class="cut">In the realm of</span></li><li><span class="cut">When it comes to</span></li><li><span class="cut">At its core</span></li><li><span class="cut">Let’s dive into</span></li><li><span class="cut">It’s worth noting that</span></li><li><span class="cut">It’s important to note that</span></li><li><span class="cut">A testament to</span></li><li><span class="cut">Not just X, but Y</span></li><li><span class="cut">Not only X, but also Y</span></li><li><span class="cut">Same X. Same Y. Different Z.</span></li><li><span class="cut">Not X. Y.</span></li><li><span class="cut">This is where X comes in</span></li><li><span class="cut">Whether you’re X or Y</span></li><li><span class="cut">While X, Y is also important</span></li><li><span class="cut">Despite ongoing challenges, X continues to thrive</span></li><li><span class="cut">Looking ahead, X will play an increasingly pivotal role</span></li><li><span class="cut">In conclusion</span></li><li><span class="cut">Overall</span></li><li><span class="cut">Ultimately</span></li><li><span class="cut">I hope this helps</span></li>
+      </ul>
+      <p class="note">The lists are time-dated. Re-profile them against a current human-vs-LLM corpus: “delve” dropped sharply in LLM output during 2025.</p>
+    </div>
+    <div class="col-b">
+      <span class="label">Words to review</span>
+      <ul class="words">
+        <li>delve</li><li>realm</li><li>landscape as metaphor</li><li>tapestry</li><li>testament</li><li>pivotal</li><li>crucial</li><li>underscore</li><li>intricate</li><li>meticulous</li><li>multifaceted</li><li>nuanced as filler</li><li>foster</li><li>bolster</li><li>garner</li><li>showcase</li><li>highlight</li><li>emphasize</li><li>encompass</li><li>utilize</li><li>facilitate</li><li>transformative</li><li>groundbreaking</li><li>seamless</li><li>robust outside engineering context</li>
+      </ul>
+    </div>
+    <div class="col-c">
+      <span class="label">Critique output format</span>
+      <div class="form">
+        <div class="v"><span>Verdict:</span><em class="k">keep</em><em class="r">revise</em><em class="a">ask-author</em><em class="x">reject</em></div>
+        <div><span>Slop tells:</span></div>
+        <div><span>Specificity missing:</span></div>
+        <div><span>Inflated claim:</span></div>
+        <div><span>Flow break:</span></div>
+        <div><span>Concrete rewrite:</span></div>
+        <div><span>Rewrite check:</span></div>
+        <div><span>Remembered line:</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flow + install -->
+  <div class="black" aria-hidden="true"></div>
+  <div class="grid foot" data-source="references/flow-by-relation.md; README.md; references/rewrite-patterns.md">
+    <div class="flow">
+      <span class="label">Flow by relation</span>
+      <p>Flow improves when each paragraph makes the next question possible. At a section boundary, name the relation:</p>
+      <div class="hinges"><span>because</span><span>although</span><span>without</span><span>once</span><span>where</span><span>at that level</span></div>
+    </div>
+    <div class="inst">
+      <span class="label">Install</span>
+      <code data-critical="cta">npx skills add adewale/anti-slop-writing</code>
+      <p data-critical="body">Rewrites must pass the same detectors as the source.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>
