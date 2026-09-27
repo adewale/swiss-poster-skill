@@ -13,7 +13,6 @@ const POSTERS = [
   { html: 'ten-principles-for-bad-design.html',   png: 'ten-principles-for-bad-design.png' },
   { html: 'flue.html',                            png: 'flue.png' },
   { html: 'flux-review.html',                     png: 'flux-review.png' },
-  { html: 'anti-slop-writing.html',               png: 'anti-slop-writing.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name
