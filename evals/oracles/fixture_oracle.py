@@ -7,6 +7,11 @@ import re
 import sys
 from pathlib import Path
 
+# Reporting class (see evals/shared-harness.md, "Oracle classes"): this oracle checks
+# compliance with the skill's vocabulary, not an outcome of the artifact.
+# Substring checks for the skill's own phrases ("grid-cols-12", "single accent", "320px").
+ORACLE_CLASS = "compliance"
+
 CHECKS = {
   "round3-fixture-poster-html-audit": {
     "all": [
@@ -71,7 +76,7 @@ def main() -> int:
         if re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL):
             failures.append(f"forbidden regex present: {pattern}")
     score = max(checks - len(failures), 0)
-    print(json.dumps({"score": score, "max_score": checks or 1, "case_id": case_id}))
+    print(json.dumps({"score": score, "max_score": checks or 1, "case_id": case_id, "oracle_class": ORACLE_CLASS}))
     if failures:
         print("FAIL fixture oracle")
         for failure in failures:
