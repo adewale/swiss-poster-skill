@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The FLUX Review Signposts, 2021–2026 — a wheel of 1,205 clues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<!--
+  Weltformat F4 (89.5 × 128 cm), rendered 1260 × 1800 CSS px.
+  Lineage: Geigy scientific plate, the second in the FLUX series. One wheel
+  holds every Signpost the newsletter has published; the solar items stand
+  out from its rim as rays.
+
+  Colour has one job: topic. Eight inks, validated for adjacent-pair
+  colour-blindness separation in the stacking order used (Government,
+  Society, Money, Science, Health, Climate, AI, Energy from the hub out).
+
+  Source ledger: every Signpost in The FLUX Review, Ep. 01 (6 May 2021) to
+  Ep. 252 (24 Sep 2026), 1,205 items. Each was read and given one of eight
+  topics; "solar" marks items substantially about solar power. WEDGES holds
+  the per-quarter topic counts, SOLAR the solar items with their position in
+  the sequence, YEARS each topic's yearly share. Lens and Postcard text is
+  verbatim from the issues cited.
+-->
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --sans:  'Hanken Grotesk', 'Helvetica Neue', Arial, system-ui, sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, monospace;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50); color: var(--stone-900);
+    font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; }
+  .grid { position: absolute; left: 64px; right: 64px; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+  .micro { font-family: var(--mono); font-size: 11px; line-height: 1.5; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; }
+  .quiet { color: var(--stone-500); }
+  h2.k { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+
+  .head { top: 36px; }
+  .head .l { grid-column: 1 / span 6; }
+  .head .r { grid-column: 7 / span 6; text-align: right; }
+
+  /* ── Left column ── */
+  .left { position: absolute; left: 64px; top: 92px; width: 290px; }
+  .left h1 { font-weight: 800; font-size: 58px; line-height: 0.9; letter-spacing: -0.04em; margin-left: -0.04em; white-space: nowrap; }
+  .left .sub { font-weight: 700; font-size: 19px; line-height: 1.15; letter-spacing: -0.01em; margin: 8px 0 12px; }
+  .left p { font-size: 14px; line-height: 1.38; margin-bottom: 12px; }
+  .left h2.k { padding-top: 8px; border-top: 1px solid var(--stone-900); margin: 14px 0 8px; }
+  .legend { width: 100%; border-collapse: collapse; }
+  .legend td { padding: 2px 0; vertical-align: middle; font-size: 13px; line-height: 1.2; }
+  .legend td.sw { width: 20px; }
+  .legend td.sw i { display: block; width: 12px; height: 12px; }
+  .legend td.n { font-family: var(--mono); font-size: 11px; text-align: right; width: 44px; color: var(--stone-600); }
+  .legend td.sp { width: 86px; padding-left: 10px; }
+  .legend svg { display: block; }
+  .legend tr.hi td { font-weight: 700; }
+  .note { font-size: 12.5px; line-height: 1.36; color: var(--stone-600); }
+  .note b { color: var(--stone-900); font-weight: 600; }
+
+  #wheel { position: absolute; left: 352px; top: 84px; width: 844px; height: 800px; overflow: visible; }
+
+  /* ── Solar thread ── */
+  .thread { top: 878px; }
+  .thread .h { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; border-top: 3px solid var(--stone-900); padding-top: 8px; margin-bottom: 8px; }
+  .thread .h h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1; }
+  .thread .h h2 span { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-left: 14px; color: var(--stone-600); }
+  .thread .h p { font-size: 14px; max-width: 520px; text-align: right; line-height: 1.35; }
+  .thread ol { grid-column: span 4; list-style: none; }
+  .thread li { display: grid; grid-template-columns: 22px 44px 1fr; column-gap: 6px; font-size: 10px; line-height: 1.22; padding: 2px 0; border-bottom: 1px solid var(--stone-200); align-items: baseline; }
+  .thread li .no { font-family: var(--mono); font-size: 9.5px; font-weight: 600; }
+  .thread li .d { font-family: var(--mono); font-size: 9.5px; color: var(--stone-600); letter-spacing: 0.02em; }
+  .thread li.m { font-weight: 700; }
+  .thread li.m .no { background: var(--stone-900); color: var(--stone-50); border-radius: 50%; width: 15px; height: 15px; line-height: 15px; text-align: center; font-size: 8.5px; }
+
+  /* ── Lenses ── */
+  .lenses { top: 1356px; }
+  .lenses .h { grid-column: 1 / -1; border-top: 3px solid var(--stone-900); padding-top: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+  .lenses .h h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1; }
+  .lenses .h p { font-size: 14px; max-width: 560px; text-align: right; line-height: 1.35; }
+  .lens { grid-column: span 3; }
+  .lens .ep { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-600); margin-bottom: 4px; }
+  .lens h3 { font-family: var(--serif); font-weight: 500; font-size: 20px; line-height: 1.1; margin-bottom: 6px; }
+  .lens p { font-family: var(--serif); font-size: 12px; line-height: 1.36; color: var(--stone-800); }
+
+  /* ── Postcards ── */
+  .dark { position: absolute; left: 0; right: 0; top: 1578px; bottom: 0; background: var(--stone-900); }
+  .cards { top: 1594px; color: var(--stone-50); }
+  .cards .h { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .cards .h h2 { font-weight: 800; font-size: 22px; letter-spacing: -0.02em; line-height: 1; white-space: nowrap; }
+  .cards .h p { font-size: 13px; color: var(--stone-300); max-width: 640px; text-align: right; line-height: 1.35; }
+  .card { grid-column: span 4; }
+  .card .ep { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 5px; }
+  .card p { font-family: var(--serif); font-size: 13px; line-height: 1.38; color: var(--stone-100); }
+  .foot { bottom: 20px; color: var(--stone-400); }
+  .foot .l { grid-column: 1 / span 8; }
+  .foot .r { grid-column: 9 / span 4; text-align: right; }
+</style>
+</head>
+<body>
+<main class="poster"
+      data-lineage="geigy-scientific"
+      data-reference="muller-brockmann-rhythm"
+      data-genre="scientific-plate"
+      data-palette="eight-validated-inks"
+      data-contrast="large-small">
+
+  <div class="grid head micro">
+    <div class="l">The FLUX Review · Signposts, sliced by topic<br><span class="quiet">By the FLUX Collective · read.fluxcollective.org</span></div>
+    <div class="r">1,205 Signposts, Ep. 01 → Ep. 252<br><span class="quiet">6 May 2021 → 24 Sep 2026</span></div>
+  </div>
+
+  <div class="left" data-source="Signposts, all issues; topic given by reading each item">
+    <h1 data-critical="title">Signposts</h1>
+    <div class="sub" data-critical="title">2021 → 2026, every clue on one wheel</div>
+    <p data-critical="body">Each issue opens its Signposts with the line “clues that point to where our changing world might lead us.” This wheel holds all 1,205 of them, read and sorted into eight topics. Energy was 7% of the 2021 clues and 23% of the 2026 clues; 40 of the energy items are about solar power, 3 from 2021 and 8 from the first nine months of 2026.</p>
+    <h2 class="k">Eight topics · share by year, 2021 → 2026</h2>
+    <table class="legend" data-encoding="topic → ink; yearly share → bar height; count → number">
+      <tr class="hi"><td class="sw"><i style="background:#eda100"></i></td><td>Energy</td><td class="n">165</td><td class="sp"><svg id="sp-ENERGY" data-ink="#eda100" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#2a78d6"></i></td><td>AI & computing</td><td class="n">381</td><td class="sp"><svg id="sp-AI" data-ink="#2a78d6" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#008300"></i></td><td>Climate & nature</td><td class="n">113</td><td class="sp"><svg id="sp-CLIMATE" data-ink="#008300" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#e87ba4"></i></td><td>Health</td><td class="n">51</td><td class="sp"><svg id="sp-HEALTH" data-ink="#e87ba4" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#1baf7a"></i></td><td>Science & space</td><td class="n">31</td><td class="sp"><svg id="sp-SCIENCE" data-ink="#1baf7a" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#eb6834"></i></td><td>Money & markets</td><td class="n">215</td><td class="sp"><svg id="sp-MONEY" data-ink="#eb6834" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#4a3aa7"></i></td><td>Society & work</td><td class="n">172</td><td class="sp"><svg id="sp-SOCIETY" data-ink="#4a3aa7" width="82" height="20"></svg></td></tr>
+      <tr><td class="sw"><i style="background:#e34948"></i></td><td>Government & war</td><td class="n">77</td><td class="sp"><svg id="sp-GOVERNMENT" data-ink="#e34948" width="82" height="20"></svg></td></tr>
+    </table>
+    <h2 class="k">How to read the wheel</h2>
+    <p class="note">Time runs clockwise from the top, Ep. 01 to Ep. 252. Each Signpost gets the same slice of angle, so a wide wedge is a busy quarter. Within a wedge, the bands show that quarter's topic mix, Government at the hub and Energy at the rim. <b>Each ray is a Signpost about solar power</b>; the numbered ones are listed below.</p>
+  </div>
+
+  <svg id="wheel" viewBox="0 0 844 800"
+       data-encoding="Signpost order → angle (equal angle per item, clockwise from top); quarter → wedge; topic share within quarter → radial band length; solar item → rim ray"
+       data-variable="1,205 Signposts, 22 quarters, 8 topics"
+       role="img" aria-label="A wheel of all 1,205 Signposts in order, clockwise from May 2021, as 22 quarter wedges stacked by topic. Energy, at the rim, grows from 7% in 2021 to 23% in 2026; AI, next to it, from 19% to 33%; Health shrinks from 8% to 2%. 40 solar Signposts stand out from the rim as rays, twelve of them numbered."></svg>
+
+  <div class="grid thread" data-source="Signposts marked solar, verbatim headlines">
+    <div class="h">
+      <h2 data-critical="body">The solar thread<span>40 Signposts</span></h2>
+      <p>In September 2021 the Signposts logged a record year for US solar installations. By May 2026 they logged wind and solar beating natural gas worldwide. The twelve numbered items mark the records in between; the rest are the same story told from rooftops, canals, sheep pastures and balconies.</p>
+    </div>
+    <ol><li class="m" data-beat="21.3"><span class="no">1</span><span class="d">Sep 21</span><span>US solar installations are on track for a record year, again</span></li><li data-beat="27.2"><span class="no"></span><span class="d">Nov 21</span><span>Researchers have invented a way to make hydrocarbons with solar energy</span></li><li data-beat="32.5"><span class="no"></span><span class="d">Dec 21</span><span>Texas farmers are installing vast fields of solar panels to earn extra cash</span></li><li data-beat="34.6"><span class="no"></span><span class="d">Jan 22</span><span>“Nailable solar shingles” aim to make solar roofing easier to install</span></li><li data-beat="53.1"><span class="no"></span><span class="d">May 22</span><span>Portable solar generators are helping Ukrainian hospitals keep the lights on</span></li><li data-beat="57.3"><span class="no"></span><span class="d">Jun 22</span><span>Scientists developed a solar-powered desalination device that uses 10x less energy</span></li><li data-beat="65.5"><span class="no"></span><span class="d">Aug 22</span><span>A pilot program will convert solar energy into clean jet fuel</span></li><li data-beat="75.4"><span class="no"></span><span class="d">Nov 22</span><span>In France, large parking lots will need to be covered in solar panels</span></li><li class="m" data-beat="85.2"><span class="no">2</span><span class="d">Feb 23</span><span>Wind and solar were the EU’s top electricity source in 2022 — for the first time ever</span></li><li data-beat="86.2"><span class="no"></span><span class="d">Feb 23</span><span>Old EV batteries are being reused for solar power storage in California</span></li><li data-beat="103.5"><span class="no"></span><span class="d">Jun 23</span><span>Switzerland is putting solar panels between its train tracks</span></li><li class="m" data-beat="105.3"><span class="no">3</span><span class="d">Jun 23</span><span>Wind and solar generated more power than coal in the US</span></li><li data-beat="110.4"><span class="no"></span><span class="d">Jul 23</span><span>Solar-panel-covered canals are spreading across the world’s arid areas</span></li><li data-beat="122.2"><span class="no"></span><span class="d">Oct 23</span><span>A solar-powered, off-road SUV drove across Morocco</span></li></ol>
+    <ol><li class="m" data-beat="123.3"><span class="no">4</span><span class="d">Oct 23</span><span>Solar is forecasted to become the world’s dominant energy source by 2050</span></li><li data-beat="131.4"><span class="no"></span><span class="d">Feb 24</span><span>FEMA will pay states to install solar panels and heat pumps after disasters</span></li><li data-beat="142.2"><span class="no"></span><span class="d">Apr 24</span><span>The solar eclipse blocked 30 nuclear reactors’ worth of solar power</span></li><li class="m" data-beat="144.1"><span class="no">5</span><span class="d">May 24</span><span>California powered its entire grid with renewable energy for 9 hours in a day</span></li><li data-beat="156.1"><span class="no"></span><span class="d">Aug 24</span><span>Germans are installing plug-and-play solar panels on their houses</span></li><li class="m" data-beat="157.4"><span class="no">6</span><span class="d">Aug 24</span><span>Wind and solar power have overtaken coal in China</span></li><li data-beat="159.2"><span class="no"></span><span class="d">Aug 24</span><span>Australia will build the world’s largest solar project &amp; send the power to Singapore</span></li><li data-beat="162.4"><span class="no"></span><span class="d">Sep 24</span><span>The EU now generates more power from wind and solar than fossil fuels</span></li><li data-beat="166.2"><span class="no"></span><span class="d">Oct 24</span><span>Solar generators are helping victims of Hurricane Helene</span></li><li data-beat="173.4"><span class="no"></span><span class="d">Jan 25</span><span>All of Chicago’s government buildings now run on 100% clean power</span></li><li data-beat="175.1"><span class="no"></span><span class="d">Jan 25</span><span>“Solar grazing” is booming as sheep and solar panels work in tandem</span></li><li data-beat="182.4"><span class="no"></span><span class="d">Mar 25</span><span>Wind and solar finally overtook coal power in the US</span></li><li data-beat="189.2"><span class="no"></span><span class="d">May 25</span><span>In England, all new homes will have solar panels by 2027</span></li><li data-beat="196.1"><span class="no"></span><span class="d">Jun 25</span><span>Solar panels and microgrids are helping Puerto Rican towns avoid blackouts</span></li></ol>
+    <ol><li data-beat="199.4"><span class="no"></span><span class="d">Jul 25</span><span>IKEA has started selling balcony solar kits</span></li><li class="m" data-beat="204.2"><span class="no">7</span><span class="d">Aug 25</span><span>Across Africa, solar panel imports from China are booming</span></li><li class="m" data-beat="210.1"><span class="no">8</span><span class="d">Oct 25</span><span>Renewable energy is now the world’s biggest source of electricity</span></li><li class="m" data-beat="214.1"><span class="no">9</span><span class="d">Nov 25</span><span>Australians will get 3 hours of free electricity a day thanks to solar power</span></li><li class="m" data-beat="219.1"><span class="no">10</span><span class="d">Jan 26</span><span>Local solar power is booming in Nigeria, replacing diesel generators</span></li><li data-beat="227.3"><span class="no"></span><span class="d">Mar 26</span><span>Pakistan’s solar boom is protecting the country from oil &amp; gas shortages</span></li><li data-beat="229.2"><span class="no"></span><span class="d">Apr 26</span><span>California plans to build the world’s largest solar project</span></li><li data-beat="233.3"><span class="no"></span><span class="d">May 26</span><span>“Unfounded” health and safety concerns are derailing American solar growth</span></li><li class="m" data-beat="237.2"><span class="no">11</span><span class="d">May 26</span><span>Wind and solar now generate more power than natural gas globally</span></li><li data-beat="243.2"><span class="no"></span><span class="d">Jul 26</span><span>Solar-powered tricycles are taking over Cuba amidst a fuel crisis</span></li><li data-beat="248.2"><span class="no"></span><span class="d">Aug 26</span><span>Solar panels helped Europe meet power demand during recent heat waves</span></li><li class="m" data-beat="249.3"><span class="no">12</span><span class="d">Aug 26</span><span>American solar generation is up 20% year-over-year</span></li></ol>
+  </div>
+
+  <div class="grid lenses" data-source="Lens of the week, verbatim">
+    <div class="h">
+      <h2>Four lenses for a curve</h2>
+      <p>FLUX never made solar a lens, but four of its lenses fit the solar thread: growth that meets a ceiling, a loop that compounds, efficiency that creates demand, and layers that move at different speeds.</p>
+    </div>
+    <div class="lens">
+      <div class="ep">Ep. 02 · May 2021</div>
+      <h3>the S-curve</h3>
+      <p>“Any process with positive feedback loops and growth ceilings will end up exhibiting sigmoid, or ‘S,’ curves… The sooner we accept that the shape of this curve is set, the more nimble we can be about finding the next one.”</p>
+    </div>
+    <div class="lens">
+      <div class="ep">Ep. 34 · Jan 2022</div>
+      <h3>compounding loops</h3>
+      <p>“Every time we see a metric line starting to curve, chances are we’re seeing a compounding loop at work… After all, it’s better to ride the compounding loop than be ridden by it.”</p>
+    </div>
+    <div class="lens">
+      <div class="ep">Ep. 184 · Apr 2025</div>
+      <h3>Jevons paradox</h3>
+      <p>“Efficiency reduces the cost of action, which can expand the domain of action itself… When evaluating improvements, ask not just what they save, but what they enable.”</p>
+    </div>
+    <div class="lens">
+      <div class="ep">Ep. 74 · Nov 2022</div>
+      <h3>Pace Layers</h3>
+      <p>“Fast-adapting layers act as buffers to help absorb change, only letting changes filter down to lower layers if they stand the test of time and scale.”</p>
+    </div>
+  </div>
+
+  <div class="dark" aria-hidden="true"></div>
+  <div class="grid cards" data-source="Postcard from the future, verbatim">
+    <div class="h">
+      <h2>Postcards from the future</h2>
+      <p>Three entries from the collective's speculative-fiction section, written in 2021 and 2022, imagined the grid going solar before most of the Signposts above were published.</p>
+    </div>
+    <div class="card">
+      <div class="ep">Ep. 12 · Jul 2021</div>
+      <p>“There were so many problems with power generation in the 2020s that the decade became known as the ‘brownout’ decade… This led to an explosion of community and personal power grid investment.”</p>
+    </div>
+    <div class="card">
+      <div class="ep">Ep. 36 · Jan 2022</div>
+      <p>“August — EU achieves 40% of energy coming from renewable sources (compared to 22.1% in 2020). EU announces a moratorium on all imported natural gas by end of 2023.”</p>
+    </div>
+    <div class="card">
+      <div class="ep">Ep. 73 · Nov 2022</div>
+      <p>“2028 - More than 40% of households get power from solar farms, due to fallout from the Russian / Iran / Nato conflict triggering $150 barrels of oil”</p>
+    </div>
+  </div>
+  <div class="grid foot micro">
+    <div class="l">Every Signpost read and given one topic · Solar items flagged by the same reading</div>
+    <div class="r">read.fluxcollective.org</div>
+  </div>
+</main>
+
+<script>
+const TOPICS = [["GOVERNMENT", "Government & war", "#e34948"], ["SOCIETY", "Society & work", "#4a3aa7"], ["MONEY", "Money & markets", "#eb6834"], ["SCIENCE", "Science & space", "#1baf7a"], ["HEALTH", "Health", "#e87ba4"], ["CLIMATE", "Climate & nature", "#008300"], ["AI", "AI & computing", "#2a78d6"], ["ENERGY", "Energy", "#eda100"]];      // [key, name, ink], hub → rim
+const WEDGES = [
+  ["2021Q2", 0, 56, {"GOVERNMENT": 1, "SOCIETY": 20, "MONEY": 13, "HEALTH": 8, "CLIMATE": 2, "AI": 10, "ENERGY": 2}],
+  ["2021Q3", 56, 83, {"GOVERNMENT": 5, "SOCIETY": 14, "MONEY": 30, "HEALTH": 6, "CLIMATE": 11, "AI": 12, "ENERGY": 5}],
+  ["2021Q4", 139, 76, {"GOVERNMENT": 1, "SOCIETY": 11, "MONEY": 26, "SCIENCE": 2, "HEALTH": 4, "CLIMATE": 6, "AI": 18, "ENERGY": 8}],
+  ["2022Q1", 215, 82, {"GOVERNMENT": 9, "SOCIETY": 8, "MONEY": 21, "SCIENCE": 4, "HEALTH": 5, "CLIMATE": 4, "AI": 22, "ENERGY": 9}],
+  ["2022Q2", 297, 89, {"GOVERNMENT": 14, "SOCIETY": 13, "MONEY": 17, "SCIENCE": 2, "HEALTH": 5, "CLIMATE": 6, "AI": 18, "ENERGY": 14}],
+  ["2022Q3", 386, 74, {"GOVERNMENT": 4, "SOCIETY": 8, "MONEY": 14, "SCIENCE": 3, "HEALTH": 7, "CLIMATE": 8, "AI": 23, "ENERGY": 7}],
+  ["2022Q4", 460, 54, {"GOVERNMENT": 4, "SOCIETY": 3, "MONEY": 10, "SCIENCE": 1, "HEALTH": 2, "CLIMATE": 6, "AI": 21, "ENERGY": 7}],
+  ["2023Q1", 514, 66, {"GOVERNMENT": 1, "SOCIETY": 10, "MONEY": 11, "HEALTH": 3, "CLIMATE": 6, "AI": 24, "ENERGY": 11}],
+  ["2023Q2", 580, 56, {"GOVERNMENT": 5, "SOCIETY": 7, "MONEY": 8, "SCIENCE": 1, "CLIMATE": 9, "AI": 19, "ENERGY": 7}],
+  ["2023Q3", 636, 52, {"GOVERNMENT": 5, "SOCIETY": 9, "MONEY": 4, "SCIENCE": 1, "CLIMATE": 7, "AI": 20, "ENERGY": 6}],
+  ["2023Q4", 688, 28, {"GOVERNMENT": 3, "SOCIETY": 3, "MONEY": 3, "SCIENCE": 1, "AI": 13, "ENERGY": 5}],
+  ["2024Q1", 716, 51, {"GOVERNMENT": 2, "SOCIETY": 5, "MONEY": 4, "SCIENCE": 2, "HEALTH": 2, "CLIMATE": 5, "AI": 21, "ENERGY": 10}],
+  ["2024Q2", 767, 52, {"SOCIETY": 3, "MONEY": 4, "SCIENCE": 2, "HEALTH": 3, "CLIMATE": 9, "AI": 24, "ENERGY": 7}],
+  ["2024Q3", 819, 42, {"GOVERNMENT": 2, "SOCIETY": 4, "MONEY": 2, "SCIENCE": 2, "HEALTH": 1, "CLIMATE": 5, "AI": 18, "ENERGY": 8}],
+  ["2024Q4", 861, 32, {"GOVERNMENT": 6, "SOCIETY": 2, "MONEY": 2, "SCIENCE": 2, "CLIMATE": 4, "AI": 13, "ENERGY": 3}],
+  ["2025Q1", 893, 48, {"GOVERNMENT": 1, "SOCIETY": 14, "MONEY": 5, "SCIENCE": 2, "HEALTH": 1, "CLIMATE": 3, "AI": 13, "ENERGY": 9}],
+  ["2025Q2", 941, 50, {"GOVERNMENT": 3, "SOCIETY": 10, "MONEY": 11, "SCIENCE": 3, "CLIMATE": 2, "AI": 19, "ENERGY": 2}],
+  ["2025Q3", 991, 41, {"GOVERNMENT": 2, "SOCIETY": 8, "MONEY": 7, "SCIENCE": 1, "HEALTH": 1, "CLIMATE": 3, "AI": 14, "ENERGY": 5}],
+  ["2025Q4", 1032, 28, {"SOCIETY": 4, "MONEY": 3, "CLIMATE": 3, "AI": 11, "ENERGY": 7}],
+  ["2026Q1", 1060, 50, {"GOVERNMENT": 4, "SOCIETY": 3, "MONEY": 10, "SCIENCE": 1, "HEALTH": 2, "CLIMATE": 1, "AI": 19, "ENERGY": 10}],
+  ["2026Q2", 1110, 47, {"GOVERNMENT": 2, "SOCIETY": 5, "MONEY": 8, "CLIMATE": 5, "AI": 14, "ENERGY": 13}],
+  ["2026Q3", 1157, 48, {"GOVERNMENT": 3, "SOCIETY": 8, "MONEY": 2, "SCIENCE": 1, "HEALTH": 1, "CLIMATE": 8, "AI": 15, "ENERGY": 10}]
+];      // [quarter label, start index, count, {topic: count}]
+const SOLAR  = [
+  [134, "2021-09", "US solar installations are on track for a record year, again", 1],
+  [174, "2021-11", "Researchers have invented a way to make hydrocarbons with solar energy", 0],
+  [212, "2021-12", "Texas farmers are installing vast fields of solar panels to earn extra cash", 0],
+  [226, "2022-01", "“Nailable solar shingles” aim to make solar roofing easier to install", 0],
+  [353, "2022-05", "Portable solar generators are helping Ukrainian hospitals keep the lights on", 0],
+  [382, "2022-06", "Scientists developed a solar-powered desalination device that uses 10x less energy", 0],
+  [430, "2022-08", "A pilot program will convert solar energy into clean jet fuel", 0],
+  [492, "2022-11", "In France, large parking lots will need to be covered in solar panels", 0],
+  [536, "2023-02", "Wind and solar were the EU’s top electricity source in 2022 — for the first time ever", 2],
+  [541, "2023-02", "Old EV batteries are being reused for solar power storage in California", 0],
+  [622, "2023-06", "Switzerland is putting solar panels between its train tracks", 0],
+  [630, "2023-06", "Wind and solar generated more power than coal in the US", 3],
+  [651, "2023-07", "Solar-panel-covered canals are spreading across the world’s arid areas", 0],
+  [697, "2023-10", "A solar-powered, off-road SUV drove across Morocco", 0],
+  [702, "2023-10", "Solar is forecasted to become the world’s dominant energy source by 2050", 4],
+  [735, "2024-02", "FEMA will pay states to install solar panels and heat pumps after disasters", 0],
+  [776, "2024-04", "The solar eclipse blocked 30 nuclear reactors’ worth of solar power", 0],
+  [783, "2024-05", "California powered its entire grid with renewable energy for 9 hours in a day", 5],
+  [831, "2024-08", "Germans are installing plug-and-play solar panels on their houses", 0],
+  [838, "2024-08", "Wind and solar power have overtaken coal in China", 6],
+  [843, "2024-08", "Australia will build the world’s largest solar project & send the power to Singapore", 0],
+  [856, "2024-09", "The EU now generates more power from wind and solar than fossil fuels", 0],
+  [870, "2024-10", "Solar generators are helping victims of Hurricane Helene", 0],
+  [900, "2025-01", "All of Chicago’s government buildings now run on 100% clean power", 0],
+  [905, "2025-01", "“Solar grazing” is booming as sheep and solar panels work in tandem", 0],
+  [936, "2025-03", "Wind and solar finally overtook coal power in the US", 0],
+  [961, "2025-05", "In England, all new homes will have solar panels by 2027", 0],
+  [987, "2025-06", "Solar panels and microgrids are helping Puerto Rican towns avoid blackouts", 0],
+  [1002, "2025-07", "IKEA has started selling balcony solar kits", 0],
+  [1015, "2025-08", "Across Africa, solar panel imports from China are booming", 7],
+  [1036, "2025-10", "Renewable energy is now the world’s biggest source of electricity", 8],
+  [1048, "2025-11", "Australians will get 3 hours of free electricity a day thanks to solar power", 9],
+  [1068, "2026-01", "Local solar power is booming in Nigeria, replacing diesel generators", 10],
+  [1102, "2026-03", "Pakistan’s solar boom is protecting the country from oil & gas shortages", 0],
+  [1111, "2026-04", "California plans to build the world’s largest solar project", 0],
+  [1128, "2026-05", "“Unfounded” health and safety concerns are derailing American solar growth", 0],
+  [1143, "2026-05", "Wind and solar now generate more power than natural gas globally", 11],
+  [1166, "2026-07", "Solar-powered tricycles are taking over Cuba amidst a fuel crisis", 0],
+  [1186, "2026-08", "Solar panels helped Europe meet power demand during recent heat waves", 0],
+  [1191, "2026-08", "American solar generation is up 20% year-over-year", 12]
+];       // [index, 'YYYY-MM', headline, milestone no or 0]
+const YEARS  = {"GOVERNMENT": [3.3, 10.4, 6.9, 5.6, 3.6, 6.2], "SOCIETY": [20.9, 10.7, 14.4, 7.9, 21.6, 11.0], "MONEY": [32.1, 20.7, 12.9, 6.8, 15.6, 13.8], "SCIENCE": [0.9, 3.3, 1.5, 4.5, 3.6, 1.4], "HEALTH": [8.4, 6.4, 1.5, 3.4, 1.2, 2.1], "CLIMATE": [8.8, 8.0, 10.9, 13.0, 6.6, 9.7], "AI": [18.6, 28.1, 37.6, 42.9, 34.1, 33.1], "ENERGY": [7.0, 12.4, 14.4, 15.8, 13.8, 22.8]};       // {topic: [share 2021 … 2026]}
+const N = 1205;
+
+const NS = 'http://www.w3.org/2000/svg';
+const INK = '#1c1917', PAPER = '#fafaf9';
+function el(name, attrs, parent) {
+  const n = document.createElementNS(NS, name);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function label(parent, x, y, text, attrs = {}) {
+  const t = el('text', Object.assign({ x, y, 'font-family': 'IBM Plex Mono', 'font-size': 10.5, 'font-weight': 600, fill: INK }, attrs), parent);
+  t.textContent = text;
+  return t;
+}
+
+(() => {
+  const svg = document.getElementById('wheel');
+  const CX = 422, CY = 404;
+  const R_HUB = 92, R_IN = 124, R_OUT = 312, R_RAY = 334, R_NO = 350;
+  const INK_OF = Object.fromEntries(TOPICS.map(t => [t[0], t[2]]));
+  const ang = (i) => 2 * Math.PI * i / N;                 // i = cumulative item index
+  const pt = (a, r) => [CX + r * Math.sin(a), CY - r * Math.cos(a)];
+  const arc = (a0, a1, r0, r1) => {
+    const [x0, y0] = pt(a0, r1), [x1, y1] = pt(a1, r1), [x2, y2] = pt(a1, r0), [x3, y3] = pt(a0, r0);
+    const big = (a1 - a0) > Math.PI ? 1 : 0;
+    return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r1} ${r1} 0 ${big} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}L${x2.toFixed(2)} ${y2.toFixed(2)}A${r0} ${r0} 0 ${big} 0 ${x3.toFixed(2)} ${y3.toFixed(2)}Z`;
+  };
+
+  const bands = el('g', {}, svg);
+  const scale = el('g', { 'aria-hidden': 'true' }, svg);
+  const rays = el('g', {}, svg);
+  const labels = el('g', {}, svg);
+
+  // Wedges: one per quarter; bands stacked hub → rim by topic share
+  for (const [q, start, n, counts] of WEDGES) {
+    const a0 = ang(start), a1 = ang(start + n);
+    let r = R_IN;
+    for (const [key] of TOPICS) {
+      const c = counts[key] || 0;
+      if (!c) continue;
+      const h = (R_OUT - R_IN) * c / n;
+      el('path', { d: arc(a0, a1, r, r + h), fill: INK_OF[key], stroke: PAPER, 'stroke-width': 1.5, 'stroke-linejoin': 'round', 'data-quarter': q, 'data-topic': key, 'data-count': c }, bands);
+      r += h;
+    }
+  }
+
+  // Year spokes and labels
+  const years = {};
+  for (const [q, start, n] of WEDGES) { const y = q.slice(0, 4); years[y] = years[y] || { s: start, e: start }; years[y].e = start + n; }
+  for (const y of Object.keys(years)) {
+    const { s, e } = years[y];
+    const a = ang(s);
+    const [x1, y1] = pt(a, R_HUB + 2), [x2, y2] = pt(a, R_OUT + 6);
+    el('line', { x1, y1, x2, y2, stroke: INK, 'stroke-width': y === '2021' ? 1.5 : 1 }, scale);
+    // year label set along the dial, between the hub and the ring; flipped in the lower half so it reads upright
+    const am = ang((s + e) / 2), lower = Math.sin(am) * 0 + Math.cos(am) < 0;
+    const rl = lower ? R_HUB + 10 : R_HUB + 17, span = 0.6;
+    const [px0, py0] = pt(am - (lower ? -span : span), rl), [px1, py1] = pt(am + (lower ? -span : span), rl);
+    const path = el('path', { id: 'yr-' + y, d: `M${px0.toFixed(2)} ${py0.toFixed(2)}A${rl} ${rl} 0 0 ${lower ? 0 : 1} ${px1.toFixed(2)} ${py1.toFixed(2)}`, fill: 'none' }, scale);
+    const tx = el('text', { 'font-family': 'IBM Plex Mono', 'font-size': 9.5, 'font-weight': 600, 'letter-spacing': '0.06em', fill: INK }, labels);
+    const tp = el('textPath', { href: '#yr-' + y, startOffset: '50%', 'text-anchor': 'middle' }, tx);
+    tp.textContent = `${y} · ${e - s}`;
+  }
+  el('circle', { cx: CX, cy: CY, r: R_OUT + 1, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.5 }, scale);
+  el('circle', { cx: CX, cy: CY, r: R_HUB, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.5 }, scale);
+
+  // Hub
+  const hub = el('g', {}, labels);
+  label(hub, CX, CY - 14, '1,205', { 'text-anchor': 'middle', 'font-family': 'Hanken Grotesk', 'font-size': 40, 'font-weight': 800, 'letter-spacing': '-0.03em' });
+  label(hub, CX, CY + 8, 'SIGNPOSTS', { 'text-anchor': 'middle', 'font-size': 10, 'letter-spacing': '0.2em' });
+  label(hub, CX, CY + 24, 'MAY 2021 → SEP 2026', { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
+  label(hub, CX, CY + 37, 'CLOCKWISE', { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
+
+  // Solar rays at the rim; numbered milestones
+  for (const [i, ym, head, no] of SOLAR) {
+    const a = ang(i + 0.5);
+    const [x1, y1] = pt(a, R_OUT + 2), [x2, y2] = pt(a, no ? R_RAY + 4 : R_RAY - 6);
+    el('line', { x1, y1, x2, y2, stroke: INK, 'stroke-width': no ? 2.2 : 1.4, 'stroke-linecap': 'round', 'data-solar': ym }, rays);
+    if (no) {
+      const [cx, cy] = pt(a, R_NO + 6);
+      el('circle', { cx, cy, r: 9, fill: INK }, rays);
+      label(rays, cx, cy + 0.5, no, { 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 9.5, fill: PAPER });
+    }
+  }
+})();
+
+// Legend sparklines
+(() => {
+  const MAX = Math.max(...Object.values(YEARS).flat());
+  for (const [key] of TOPICS) {
+    const svg = document.getElementById('sp-' + key);
+    if (!svg) continue;
+    const v = YEARS[key];
+    v.forEach((s, i) => {
+      const h = Math.max(1, 18 * s / MAX);
+      el('rect', { x: i * 14, y: 19 - h, width: 10, height: h, fill: svg.dataset.ink }, svg);
+    });
+  }
+})();
+</script>
+</body>
+</html>
