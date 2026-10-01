@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The FLUX Review, 2021–2026 — themes and trajectory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<!--
+  Weltformat F4 (89.5 × 128 cm), rendered 1260 × 1800 CSS px.
+  Lineage: Geigy scientific plate. The anchor is FLUX's own 🌀 mark rebuilt
+  from data, one mark per issue.
+
+  Colour has one job: news topic. Three validated inks plus neutrals.
+    FLUX blue  #0050D8  AI       (the brand blue, flattened)
+    red        #e34948  COVID
+    gold       #eda100  crypto
+    stone-300           every other Signpost, for scale
+  The same inks colour the spiral dots, the chart lines, and the field behind
+  each period below (its most frequent of the three topics that year).
+
+  Source ledger: every issue of The FLUX Review, Ep. 01 (6 May 2021) to
+  Ep. 252 (24 Sep 2026), read from read.fluxcollective.org.
+    · ISSUES rows are [episode, publish date, lead-essay AI class, Signpost topics].
+    · AI class: A = AI/LLMs/agents is a central subject of the lead essay,
+      P = mentioned in passing, N = not at all. Each essay was read and
+      classified by hand; the lead essay only, not special sections.
+    · Signpost topics, one letter per item, by keyword match (spot-checked):
+      a = AI, c = COVID, k = crypto, o = other. An item that names AI and
+      another topic counts as AI; COVID beats crypto.
+    · Year shares in the chart count every item that names a topic.
+    · Lens names are the "This week’s lens" line of each Lens of the week.
+-->
+<style>
+  :root {
+    --stone-50:  #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --stone-950: #0c0a09;
+    --ai:     #0050D8;
+    --covid:  #e34948;
+    --crypto: #eda100;
+    --other:  #d6d3d1;
+    --sans:  'Hanken Grotesk', 'Helvetica Neue', Arial, system-ui, sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, monospace;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1260px; height: 1800px;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .poster { position: relative; width: 1260px; height: 1800px; overflow: hidden; }
+  /* 12-column construction grid: 64px margins, 24px gutters. */
+  .grid {
+    position: absolute; left: 64px; right: 64px;
+    display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px;
+  }
+  .micro {
+    font-family: var(--mono); font-size: 11px; line-height: 1.5;
+    letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
+  }
+  .quiet { color: var(--stone-500); }
+  h2.k {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+  /* ── Header ── */
+  .head { top: 36px; }
+  .head .l { grid-column: 1 / span 6; }
+  .head .r { grid-column: 7 / span 6; text-align: right; }
+
+  /* ── Title ── */
+  .title { top: 84px; align-items: end; }
+  .title .word {
+    grid-column: 1 / span 7;
+    font-weight: 800; font-size: 318px; line-height: 0.74;
+    letter-spacing: -0.065em;
+    margin-left: -0.075em;          /* optical: F stem on the margin */
+  }
+  .title .deck { grid-column: 8 / span 5; padding-left: 22px; padding-bottom: 2px; }
+  .title .deck .name { font-weight: 700; font-size: 25px; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .title .deck p { font-size: 17px; line-height: 1.36; }
+  .rule-top { position: absolute; left: 64px; right: 64px; top: 346px; height: 3px; background: var(--stone-900); }
+
+  /* ── Plate: key column + spiral ── */
+  .plate { top: 366px; }
+  .key { grid-column: 1 / span 4; position: relative; z-index: 3; }
+  .key h2.k { padding-top: 8px; border-top: 1px solid var(--stone-900); margin-bottom: 11px; }
+  .legend { list-style: none; margin-bottom: 8px; }
+  .legend li { display: grid; grid-template-columns: 30px 1fr; align-items: center; font-size: 14px; line-height: 1.3; margin-bottom: 5px; }
+  .legend svg { display: block; }
+  .legend .n { font-family: var(--mono); font-size: 11px; color: var(--stone-600); }
+  .topics { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 12px; margin: 2px 0 0 30px; }
+  .topics span { display: flex; align-items: center; gap: 7px; font-size: 14px; }
+  .topics i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .topics .n { margin-left: auto; }
+
+  .ways { list-style: none; margin-bottom: 16px; }
+  .ways li { display: grid; grid-template-columns: 14px 36px 1fr auto; align-items: baseline; padding: 2px 0 3px; border-bottom: 1px solid var(--stone-200); }
+  .ways .ep { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .ways .t { font-family: var(--serif); font-style: italic; font-size: 14.5px; line-height: 1.2; }
+  .ways .d { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--stone-600); text-transform: uppercase; padding-left: 8px; white-space: nowrap; }
+  .ways li::before { content: ''; width: 3px; height: 12px; background: var(--stone-900); align-self: center; }
+  .ways li.ai::before { width: 4px; background: var(--ai); }
+  .ways li.pass::before { width: 4px; background: var(--ai); opacity: 0.38; }
+
+  .chart .cap { font-size: 14.5px; line-height: 1.34; font-weight: 500; margin-bottom: 6px; }
+  .chart svg { display: block; overflow: visible; }
+
+  #spiral { position: absolute; left: 425px; top: 370px; width: 835px; height: 790px; z-index: 1; overflow: visible; }
+
+  /* ── Periods: each printed on its news topic's ink ── */
+  .field { position: absolute; top: 1130px; height: 420px; }
+  .field.covid  { left: 0;     width: 341px; background: var(--covid); }
+  .field.crypto { left: 341px; width: 289px; background: var(--crypto); }
+  .field.ai     { left: 630px; right: 0;     background: var(--ai); }
+  .periods { top: 1148px; z-index: 2; }
+  .period { grid-column: span 3; color: var(--stone-950); }
+  .period.on-blue { color: var(--stone-50); }
+  .period h2.k { height: 14px; line-height: 14px; margin-bottom: 12px; white-space: nowrap; }
+  .period .when {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 8px; line-height: 14px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+    padding-top: 7px; border-top: 2px solid currentColor;
+  }
+  .period .when b { font-weight: 600; }
+  .period h3 { font-weight: 800; font-size: 30px; line-height: 1; letter-spacing: -0.02em; margin: 12px 0 10px; white-space: nowrap; }
+  .period h3 small { display: block; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; margin-top: 6px; }
+  .period p { font-size: 14.5px; line-height: 1.38; margin-bottom: 12px; min-height: 164px; max-width: 34em; }
+  .period blockquote { font-family: var(--serif); font-size: 16px; line-height: 1.3; }
+  .period cite { display: block; font-family: var(--mono); font-style: normal; font-size: 11px; letter-spacing: 0.1em; margin-top: 6px; text-transform: uppercase; }
+
+  /* ── Lens index ── */
+  .lens-band { position: absolute; left: 0; right: 0; top: 1550px; bottom: 0; background: var(--stone-900); }
+  .lenses { top: 1566px; z-index: 2; }
+  .lenses h2.k { grid-column: 1 / -1; color: var(--stone-400); margin-bottom: 7px; display: flex; justify-content: space-between; }
+  .lenses p { grid-column: 1 / -1; font-size: 9px; line-height: 1.27; color: var(--stone-200); }
+  .lenses p b { font-weight: 500; color: var(--stone-400); font-family: var(--mono); font-size: 8.2px; }
+</style>
+</head>
+<body>
+<main class="poster"
+      data-lineage="geigy-scientific"
+      data-reference="muller-brockmann-rhythm"
+      data-genre="scientific-plate"
+      data-palette="three-flat-inks"
+      data-contrast="large-small">
+
+  <!-- Header -->
+  <div class="grid head micro">
+    <div class="l">The FLUX Review · A systems-thinking newsletter<br><span class="quiet">By the FLUX Collective · read.fluxcollective.org</span></div>
+    <div class="r">Weekly since 6 May 2021<br><span class="quiet">Ep. 01 → Ep. 252 · 24 Sep 2026</span></div>
+  </div>
+
+  <!-- Title -->
+  <div class="grid title">
+    <h1 class="word" data-critical="title">FLUX</h1>
+    <div class="deck">
+      <div class="name" data-critical="title">The FLUX Review, 2021–2026</div>
+      <p data-critical="body">Since May 2021, a “ragtag band of systems thinkers” has sent a weekly issue: an essay, about five news items called Signposts, and usually a Lens of the week. In 2021, more than a quarter of the Signposts were about COVID. From 2023, close to a third were about AI, and by 2026 so were nearly a third of the essays.</p>
+    </div>
+  </div>
+  <div class="rule-top" aria-hidden="true"></div>
+
+  <!-- Plate -->
+  <div class="grid plate">
+    <div class="key">
+      <h2 class="k">How to read the spiral</h2>
+      <ul class="legend">
+        <li><svg width="22" height="22" aria-hidden="true"><rect x="9.5" y="3" width="3" height="16" fill="#1c1917"/></svg>
+            <span>One mark per issue. Ep. 01 is at the centre; each turn is a year, with January at the top.</span></li>
+        <li><svg width="22" height="22" aria-hidden="true"><rect x="9" y="3" width="4" height="16" fill="#0050D8"/></svg>
+            <span>Lead essay about AI <span class="n">28</span></span></li>
+        <li><svg width="22" height="22" aria-hidden="true"><rect x="9" y="3" width="4" height="16" fill="#0050D8" fill-opacity="0.38"/></svg>
+            <span>AI mentioned in passing <span class="n">13</span></span></li>
+        <li><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="5" r="1.8" fill="#e34948"/><circle cx="11" cy="10" r="1.8" fill="#eda100"/><circle cx="11" cy="15" r="1.8" fill="#0050D8"/></svg>
+            <span>Outward dots: one per Signpost, by topic</span></li>
+      </ul>
+      <div class="topics" style="margin-top:-2px;margin-bottom:16px">
+        <span><i style="background:var(--covid)"></i>COVID<span class="n">110</span></span>
+        <span><i style="background:var(--crypto)"></i>Crypto<span class="n">121</span></span>
+        <span><i style="background:var(--ai)"></i>AI<span class="n">239</span></span>
+        <span><i style="background:var(--other)"></i>Everything else<span class="n">735</span></span>
+      </div>
+
+      <h2 class="k">Ten essays marked on the spiral</h2>
+      <ol class="ways" data-source="essay titles, verbatim">
+        <li data-beat="22"><span class="ep">22</span><span class="t">To thrive in flux</span><span class="d">Oct 2021</span></li>
+        <li data-beat="52"><span class="ep">52</span><span class="t">Lens hygiene</span><span class="d">May 2022</span></li>
+        <li data-beat="64" class="ai"><span class="ep">64</span><span class="t">A muse, rather than an assistant</span><span class="d">Aug 2022</span></li>
+        <li data-beat="109"><span class="ep">109</span><span class="t">Trust is a long game</span><span class="d">Jul 2023</span></li>
+        <li data-beat="137"><span class="ep">137</span><span class="t">The profound network value of trust</span><span class="d">Mar 2024</span></li>
+        <li data-beat="143" class="ai"><span class="ep">143</span><span class="t">LLM vibes</span><span class="d">Apr 2024</span></li>
+        <li data-beat="181" class="ai"><span class="ep">181</span><span class="t">Shifting the craft</span><span class="d">Mar 2025</span></li>
+        <li data-beat="223" class="ai"><span class="ep">223</span><span class="t">No neck to wring</span><span class="d">Feb 2026</span></li>
+        <li data-beat="231" class="ai"><span class="ep">231</span><span class="t">The prompt test</span><span class="d">Apr 2026</span></li>
+        <li data-beat="252" class="pass"><span class="ep">252</span><span class="t">Forced lens swaps</span><span class="d">Sep 2026</span></li>
+      </ol>
+
+      <div class="chart">
+        <h2 class="k" style="border:0;padding:0;margin-bottom:6px">Share of each year’s items</h2>
+        <p class="cap" data-critical="body">AI’s share of the Signposts rose from 2% in 2021 to 28% in 2023, about where COVID had been in 2021. The lead essays did not reach that share until 2026.</p>
+        <svg id="lines" width="361" height="124"
+             data-encoding="year → x; share of items → y; topic → ink; Signposts solid, lead essays dashed"
+             role="img" aria-label="Share of items by year, 2021 to 2026. COVID Signposts: 27, 10, 5, 5, 6, 3 percent. Crypto Signposts: 16, 17, 8, 5, 10, 3. AI Signposts: 2, 9, 28, 32, 29, 31. Lead essays about AI: 3, 2, 11, 2, 20, 31."></svg>
+      </div>
+    </div>
+  </div>
+
+  <svg id="spiral" viewBox="0 0 835 790"
+       data-encoding="publish date → angle (one turn per year, January at twelve o’clock); time since Ep. 01 → radius; lead-essay AI class → mark ink; each Signpost → one outward dot, topic → ink"
+       data-variable="252 issues, 1,205 Signposts"
+       role="img" aria-label="Spiral of all 252 issues of The FLUX Review. Red COVID dots cluster in the inner 2021 ring, gold crypto dots in 2021 and 2022, and blue AI dots fill the outer rings from 2023. Blue essay marks become common only in 2025 and 2026."></svg>
+
+  <!-- Periods -->
+  <div class="field covid" aria-hidden="true"></div>
+  <div class="field crypto" aria-hidden="true"></div>
+  <div class="field ai" aria-hidden="true"></div>
+  <div class="grid periods" data-source="lead essays, read in full, grouped by year">
+    <section class="period" data-beat="2021">
+      <h2 class="k">What the essays were about</h2>
+      <div class="when"><b>2021 · Ep. 01–32</b><span>COVID 27%</span></div>
+      <h3>To thrive in flux<small>Ep. 22</small></h3>
+      <p>Written in October 2021, as COVID cases climbed again, Ep. 22 asks readers to learn their “flux budget”: how much unpredictability they can take. Ep. 13 reads outrage as a sign that a story is using you as its “memetic host”.</p>
+      <blockquote>“With exponential curves, once you see the change, it’s almost always too late”<cite>Ep. 18</cite></blockquote>
+    </section>
+
+    <section class="period" data-beat="2022">
+      <h2 class="k" aria-hidden="true"></h2>
+      <div class="when"><b>2022 · Ep. 33–80</b><span>Crypto 17%</span></div>
+      <h3>Lens hygiene<small>Ep. 52</small></h3>
+      <p>Although crypto led the tracked news, the essays turned to the lenses themselves. Ep. 52 sorts a team’s lenses into a 2×2, with a “parts bin” of unused ones for when the team must reorient. Ep. 79 calls slide decks “at best” sketches of strategy.</p>
+      <blockquote>“…when you don’t know what lenses you’re wearing, you cannot distinguish the effect of the lens from reality.”<cite>Ep. 54</cite></blockquote>
+    </section>
+
+    <section class="period on-blue" data-beat="2023-2024">
+      <h2 class="k" aria-hidden="true"></h2>
+      <div class="when"><b>2023–24 · Ep. 81–171</b><span>AI 28–32%</span></div>
+      <h3>Trust is a long game<small>Ep. 109</small></h3>
+      <p>After ChatGPT, AI outgrew COVID and crypto in the Signposts, yet only six lead essays in two years were about it. Ep. 137 prices distrust with a leaky gutter: several quotes, then weeks of waiting. Ep. 152 uses schadenfreude as a tripwire for flattening people into cartoons.</p>
+      <blockquote>“One way to think about LLMs is as upscalers of vibes.”<cite>Ep. 143</cite></blockquote>
+    </section>
+
+    <section class="period on-blue" data-beat="2025-2026">
+      <h2 class="k" aria-hidden="true"></h2>
+      <div class="when"><b>2025–26 · Ep. 172–252</b><span>AI 29–31%</span></div>
+      <h3>No neck to wring<small>Ep. 223</small></h3>
+      <p>AI moved into the essays: 20 of the 81 written since January 2025. Ep. 231 notes that orders like “Increase velocity” would fail as AI prompts; people guess instead, and the guesses compound. Ep. 223 asks who answers for an agent’s mistake after its session closes.</p>
+      <blockquote>“Accountability has always required something persistent to be held against.”<cite>Ep. 223</cite></blockquote>
+    </section>
+  </div>
+
+  <!-- Lens index -->
+  <div class="lens-band" aria-hidden="true"></div>
+  <div class="grid lenses" data-source="Lens of the week, Ep. 02–252">
+    <h2 class="k"><span>All 182 Lenses of the week, in order</span><span>Ep. 02 → Ep. 252</span></h2>
+    <p id="lens-list"></p>
+  </div>
+</main>
+
+<script>
+/* [episode, publish date, lead-essay AI class, Signpost topics: c COVID, k crypto, a AI, o other] */
+const ISSUES = [
+  [1,'2021-05-06','N','ccccc'], [2,'2021-05-14','N','ccccaooo'], [3,'2021-05-21','A','ccckaooo'], [4,'2021-05-28','N','ckooooo'], [5,'2021-06-04','N','cccccko'], [6,'2021-06-11','N','cckoooo'],
+  [7,'2021-06-18','N','ccooooo'], [8,'2021-06-25','N','cccoooo'], [9,'2021-07-02','N','ckooooo'], [10,'2021-07-09','N',''], [11,'2021-07-16','N','cckoooo'], [12,'2021-07-23','N','ccckooo'],
+  [13,'2021-07-30','N','ccckooo'], [14,'2021-08-06','N','cckoooo'], [15,'2021-08-13','N','cckoooo'], [16,'2021-08-20','N','cckoooo'], [17,'2021-08-27','N','cckaooo'], [18,'2021-09-03','N','ccooooo'],
+  [19,'2021-09-10','N','cooooo'], [20,'2021-09-17','N','ckkoooo'], [21,'2021-09-24','N','ckkoooo'], [22,'2021-10-01','N','ckooooo'], [23,'2021-10-08','N','cckkooo'], [24,'2021-10-15','N','ckkoooo'],
+  [25,'2021-10-22','N','ckooooo'], [26,'2021-10-29','N','ckkaoo'], [27,'2021-11-05','N','ooooooo'], [28,'2021-11-12','N','cckkooo'], [29,'2021-11-19','N','kkooooo'], [30,'2021-12-03','N','ckooooo'],
+  [31,'2021-12-10','N','kkaoooo'], [32,'2021-12-17','N','ckkoooo'], [33,'2022-01-07','N','cckkoo'], [34,'2022-01-14','N','ckkoooo'], [35,'2022-01-21','N','kkooooo'], [36,'2022-01-28','N','cckkooo'],
+  [37,'2022-02-04','N','ccckkoo'], [38,'2022-02-11','N','kkkaooo'], [39,'2022-02-18','N','coooooo'], [40,'2022-02-25','N','ckkoooo'], [41,'2022-03-04','N','kkooooo'], [42,'2022-03-11','N','kkooooo'],
+  [43,'2022-03-18','N','ckooooo'], [44,'2022-03-25','N','kaoooo'], [45,'2022-04-01','N','ckkaooo'], [46,'2022-04-08','N','ckooooo'], [47,'2022-04-15','N','ckooooo'], [48,'2022-04-22','N','koooooo'],
+  [49,'2022-04-29','N','koooooo'], [50,'2022-05-06','N','ckooooo'], [51,'2022-05-13','N','ckooooo'], [52,'2022-05-20','N','ckooooo'], [53,'2022-05-27','N','kaoooo'], [54,'2022-06-03','N','koooooo'],
+  [55,'2022-06-10','N','koooooo'], [56,'2022-06-17','N','kkooooo'], [57,'2022-06-24','N','oooooo'], [58,'2022-07-01','N','ckkoooo'], [59,'2022-07-15','N','kaooo'], [60,'2022-07-22','N','aoooooo'],
+  [61,'2022-07-29','N','ckooo'], [62,'2022-08-05','N','ckaaoo'], [63,'2022-08-12','N','kaao'], [64,'2022-08-19','A','aaaaao'], [65,'2022-08-26','N','aoooooo'], [66,'2022-09-02','N','kaaooo'],
+  [67,'2022-09-16','N','cckoooo'], [68,'2022-09-23','N','kaooooo'], [69,'2022-09-30','N','ckaoooo'], [70,'2022-10-07','N','cckkaao'], [71,'2022-10-14','N','kkooooo'], [72,'2022-10-21','N','aoooo'],
+  [73,'2022-10-28','N','coooo'], [74,'2022-11-04','N','kaooo'], [75,'2022-11-11','N','ooooo'], [76,'2022-11-18','N','aoooo'], [77,'2022-12-02','N','ooooo'], [78,'2022-12-09','N','aoooo'],
+  [79,'2022-12-16','N','ckaoo'], [80,'2022-12-23','P',''], [81,'2023-01-06','N','ckkoo'], [82,'2023-01-13','N','caooo'], [83,'2023-01-20','N','ooooo'], [84,'2023-01-27','N','aooooo'],
+  [85,'2023-02-03','N','aoooo'], [86,'2023-02-10','N','kaooo'], [87,'2023-02-17','N','kaooo'], [88,'2023-02-24','N','kaaoo'], [89,'2023-03-03','N','ckooo'], [90,'2023-03-10','N','caaao'],
+  [91,'2023-03-17','A','aaooo'], [92,'2023-03-24','N','aoooo'], [93,'2023-03-31','N','aaooo'], [94,'2023-04-07','N','kaooo'], [95,'2023-04-14','N','aaooo'], [96,'2023-04-21','N','caaoo'],
+  [97,'2023-04-28','N','aaooo'], [98,'2023-05-05','N','aoooo'], [99,'2023-05-12','N','aaooo'], [100,'2023-05-19','P',''], [101,'2023-05-26','A','kaoo'], [102,'2023-06-02','N','aooo'],
+  [103,'2023-06-09','A','aaooo'], [104,'2023-06-16','N','koooo'], [105,'2023-06-23','N','aooo'], [106,'2023-06-30','N','kooo'], [107,'2023-07-07','N','aaooo'], [108,'2023-07-14','A','aaoo'],
+  [109,'2023-07-21','N','aoo'], [110,'2023-07-28','N','caoo'], [111,'2023-08-04','N','aooo'], [112,'2023-08-11','N','kaao'], [113,'2023-08-18','N','oooo'], [114,'2023-08-25','N','kaoo'],
+  [115,'2023-09-01','N','aooo'], [116,'2023-09-08','A','aaao'], [117,'2023-09-15','N','kaoo'], [118,'2023-09-22','N','cooo'], [119,'2023-09-29','N','aooo'], [120,'2023-10-06','N','aaao'],
+  [121,'2023-10-13','N','aooo'], [122,'2023-10-20','N','kaoo'], [123,'2023-10-27','N','aooo'], [124,'2023-11-03','N','ckao'], [125,'2023-11-10','N','aooo'], [126,'2023-11-17','P','caao'],
+  [127,'2024-01-05','N','kaoo'], [128,'2024-01-12','N','kaoo'], [129,'2024-01-19','N','aooo'], [130,'2024-01-26','N','caoo'], [131,'2024-02-02','N','aaao'], [132,'2024-02-09','N','aooo'],
+  [133,'2024-02-16','N','cooo'], [134,'2024-02-23','N','aaoo'], [135,'2024-03-01','N','aooo'], [136,'2024-03-08','N','kaao'], [137,'2024-03-15','N','aaoo'], [138,'2024-03-22','P','aao'],
+  [139,'2024-03-29','N','aooo'], [140,'2024-04-05','P','aooo'], [141,'2024-04-12','N','ckoo'], [142,'2024-04-19','N','kaoo'], [143,'2024-04-26','A','aaao'], [144,'2024-05-03','N','aooo'],
+  [145,'2024-05-10','N','aooo'], [146,'2024-05-17','N','aooo'], [147,'2024-05-24','N','aaoo'], [148,'2024-05-31','N','aooo'], [149,'2024-06-07','N','aooo'], [150,'2024-06-14','N','aaoo'],
+  [151,'2024-06-21','N','aooo'], [152,'2024-06-28','N','aaoo'], [153,'2024-07-12','N','aooo'], [154,'2024-07-19','N','aaoo'], [155,'2024-07-26','N','aooo'], [156,'2024-08-02','N','aooo'],
+  [157,'2024-08-09','N','aooo'], [158,'2024-08-16','N','kao'], [159,'2024-08-23','N','aooo'], [160,'2024-08-30','N','aao'], [161,'2024-09-13','N','aooo'], [162,'2024-09-20','N','cooo'],
+  [163,'2024-09-27','N','kaao'], [164,'2024-10-04','N','aaoo'], [165,'2024-10-11','N','caoo'], [166,'2024-10-18','N','aooo'], [167,'2024-10-25','N','caoo'], [168,'2024-11-01','N','oooo'],
+  [169,'2024-11-08','N','cooo'], [170,'2024-11-15','N','aaao'], [171,'2024-11-22','N','aooo'], [172,'2025-01-03','N','kooo'], [173,'2025-01-10','N','aooo'], [174,'2025-01-17','P','aooo'],
+  [175,'2025-01-24','N','oooo'], [176,'2025-02-07','N','aaao'], [177,'2025-02-14','A','kooo'], [178,'2025-02-21','A','aooo'], [179,'2025-02-28','N','kooo'], [180,'2025-03-07','N','kooo'],
+  [181,'2025-03-14','A','oooo'], [182,'2025-03-21','N','cooo'], [183,'2025-03-28','N','kaoo'], [184,'2025-04-04','N','cooo'], [185,'2025-04-11','N','ooo'], [186,'2025-04-18','N','aaoo'],
+  [187,'2025-04-25','N','aaoo'], [188,'2025-05-02','A','aooo'], [189,'2025-05-09','N','oooo'], [190,'2025-05-16','A','aooo'], [191,'2025-05-23','N','aaoo'], [192,'2025-05-30','N','aaoo'],
+  [193,'2025-06-06','A','ccao'], [194,'2025-06-13','N','aao'], [195,'2025-06-20','N','aooo'], [196,'2025-06-27','A','kaoo'], [197,'2025-07-11','N','aaao'], [198,'2025-07-18','N','kaoo'],
+  [199,'2025-07-25','N','kooo'], [200,'2025-08-01','N',''], [201,'2025-08-08','A','aaoo'], [202,'2025-08-15','N','aaa'], [203,'2025-08-22','N','aaoo'], [204,'2025-08-29','P','coo'],
+  [205,'2025-09-05','N','aaoo'], [206,'2025-09-12','N','aoo'], [207,'2025-09-19','P','kaoo'], [208,'2025-09-26','N','ccao'], [209,'2025-10-03','N','aooo'], [210,'2025-10-10','N','aooo'],
+  [211,'2025-10-17','A',''], [212,'2025-10-24','P','aaao'], [213,'2025-10-31','N','aaao'], [214,'2025-11-07','N','kaoo'], [215,'2025-11-14','N','aaoo'], [216,'2025-11-21','N','kooo'],
+  [217,'2026-01-10','A','aaoo'], [218,'2026-01-16','P','aaoo'], [219,'2026-01-23','P','kaoo'], [220,'2026-01-30','N','aaoo'], [221,'2026-02-06','N','aaoo'], [222,'2026-02-13','N','aooo'],
+  [223,'2026-02-20','A','aaoo'], [224,'2026-02-27','A','caao'], [225,'2026-03-06','A','kaao'], [226,'2026-03-13','N','aooo'], [227,'2026-03-20','N','aoooo'], [228,'2026-03-27','N','aoooo'],
+  [229,'2026-04-03','N','oooo'], [230,'2026-04-10','A','kooo'], [231,'2026-04-17','A','aooo'], [232,'2026-04-24','N','aooo'], [233,'2026-05-01','A','oooo'], [234,'2026-05-08','N','kaoo'],
+  [235,'2026-05-15','A','aaoo'], [236,'2026-05-22','N','aooo'], [237,'2026-05-29','N','aooo'], [238,'2026-06-07','N','aooo'], [239,'2026-06-16','A','aao'], [240,'2026-06-19','N','aaoo'],
+  [241,'2026-07-03','N','aaoo'], [242,'2026-07-10','A','caoo'], [243,'2026-07-17','N','cooo'], [244,'2026-07-24','N','oooo'], [245,'2026-07-31','P','oooo'], [246,'2026-08-07','N','aaoo'],
+  [247,'2026-08-14','N','aooo'], [248,'2026-08-21','N','aooo'], [249,'2026-08-28','A','aooo'], [250,'2026-09-11','N','aaoo'], [251,'2026-09-18','N','aaoo'], [252,'2026-09-25','P','aaoo']
+];
+const LENSES = [
+  [2, "the S-curve"], [3, "The Hollow Face Effect"], [4, "Thermoclines of Information"], [5, "Bisociation"], [6, "Intention vs. Impact"], [7, "Mindset"],
+  [8, "horizontal and vertical learning"], [9, "Unknown Unknowns"], [11, "Situation-Behavior-Impact"], [12, "Explore vs. Exploit"], [13, "Kobayashi Maru"], [14, "What would it take to succeed?"],
+  [15, "Getting “over the hump”"], [16, "Approach or avoid"], [17, "The Wile E. Coyote moment"], [18, "Snarl slogans"], [19, "the OODA Loop"], [20, "Static and dynamic equilibrium"],
+  [21, "Thinking Space"], [22, "Proof of work"], [23, "The undercurrent"], [24, "the thinking hat"], [25, "the subject-object shift"], [26, "Hormesis"],
+  [27, "Reversal of the causal arrow"], [28, "Forest Debris"], [29, "The hedgehog and the fox"], [30, "Plan Voisin"], [31, "simple rules"], [32, "Stepping stones"],
+  [33, "Bartle’s Four Player Types"], [34, "compounding loops"], [35, "Behavior over time graph (BOTG)"], [36, "Watermelon status"], [37, "Benchmark islands"], [38, "Dowsing rods"],
+  [39, "Key ingredients"], [40, "ruderal species"], [41, "convergent and divergent narratives"], [42, "what you will not do"], [43, "the balcony and the dance floor"], [44, "lens types"],
+  [45, "whale fall"], [46, "farrago"], [47, "the two types of hard"], [48, "Sagan’s Pie"], [49, "Getting lost"], [50, "Reversibility"],
+  [51, "Drawing a distinction"], [52, "Expanding a distinction"], [53, "Developmental stages"], [54, "the “I don’t care” meter"], [55, "wound healing"], [56, "the Everything Bagel"],
+  [57, "I would simply"], [58, "the Activity Trap"], [59, "Zeroth Principles"], [60, "footguns"], [61, "candle focus"], [62, "lens portmanteau"],
+  [63, "the katana deficit principle"], [64, "slum clearance"], [66, "the cobra effect"], [69, "vetocracy"], [70, "dandelions and elephants"], [71, "time horizons"],
+  [73, "Responsibility Laundering (CYA)"], [74, "Pace Layers"], [77, "technology innovation versus product innovation"], [79, "Mechanical Sympathy"], [80, "Stoicism and gratitude"], [83, "Puzzles and Mysteries"],
+  [84, "the bullwhip effect"], [85, "the highway pothole effect"], [86, "over-adaptation"], [88, "Confabulation"], [89, "the Product Development Flashlight"], [90, "the revealed specialist"],
+  [91, "Moat Digging and Moat Filling"], [92, "the sloping floor"], [94, "organizational misalignment breeding Texas sharpshooters"], [95, "whale fall, redux"], [96, "Schelling Traps"], [97, "Intentional farming"],
+  [99, "Crumple Zones"], [101, "responsibility laundering"], [103, "reality distortion fields"], [104, "Zeno’s project"], [106, "NPCs and Live Players"], [107, "The Snake Oil Test"],
+  [111, "hysteresis"], [112, "regression to the mean"], [113, "Load-bearing beliefs"], [114, "kayfabe and cargo cults"], [116, "Peanut buttering"], [117, "composable alphabets"],
+  [118, "the adjacent possible"], [119, "Chesterton’s fence"], [120, "steelmanning"], [121, "Hidden keystones"], [122, "legibility"], [123, "sour spots"],
+  [124, "extrusion"], [125, "stop energy"], [127, "nemawashi"], [128, "Newtonian wrongness"], [129, "Schroedinger’s project"], [130, "the starter option"],
+  [131, "Tamagotchi quality"], [132, "N-ply thinking"], [134, "coming home"], [135, "Crystallized Imagination"], [137, "Socratic humility"], [138, "The Impossible Squirrel"],
+  [140, "data lenses (induction, abduction, and deduction)"], [142, "thoughtfully selective truth"], [144, "trading zones"], [145, "tourists and residents"], [148, "theory of change"], [149, "reasoning by analogy"],
+  [150, "Trilemma"], [151, "API-defining assumptions"], [152, "the adjacent possible mirage"], [153, "care-ing capacity"], [154, "topological transformations"], [155, "the rock tumbler"],
+  [157, "dissolving the problem"], [158, "Conway’s mirror"], [159, "commitment device"], [160, "recursive de-risking"], [161, "the Eye of Sauron"], [162, "scenario planning"],
+  [163, "conceptual integrity"], [164, "the cone of uncertainty"], [167, "antennas and probes"], [168, "scissor statements"], [169, "constructed reality"], [170, "disaster mapping"],
+  [171, "the illusion of efficacy"], [173, "challenge questions"], [174, "the Shaper"], [175, "embassies of insight"], [176, "commitment"], [178, "causal graph"],
+  [179, "the automation trap"], [181, "the fixed pie"], [183, "beginner’s mind"], [184, "Jevons paradox"], [186, "Interpretive Transparency"], [188, "the innovator’s… trilemma?"],
+  [190, "tradition and convention"], [191, "the robustness principle"], [192, "couture"], [193, "Machiavellian empathy"], [194, "prestige & dominance"], [196, "pace layer atavism"],
+  [197, "Inversion"], [198, "loose coupling"], [201, "emotive conjugation (aka Russell’s conjugation)"], [202, "one-way lens"], [203, "bigness trap"], [208, "contextual asymmetry"],
+  [210, "the XY problem"], [212, "atomic tools"], [215, "frame wizardry"], [216, "Risk of ruin"], [217, "resonance"], [223, "diminishing returns"],
+  [228, "accidental and essential complexity"], [231, "plausible deniability"], [233, "edges of the box"], [234, "the Baumol effect"], [235, "the context-free reader"], [238, "lens stacking"],
+  [240, "transaction costs"], [241, "prognosis vs. diagnosis"], [242, "accountability"], [243, "stag hunt"], [244, "terminus post quem and terminus ante quem"], [246, "repugnant transactions"],
+  [251, "resolution asymmetry"], [252, "fit for purpose"]
+];
+const WAYPOINTS = [22, 52, 64, 109, 137, 143, 181, 223, 231, 252];
+
+const NS = 'http://www.w3.org/2000/svg';
+const INK = '#1c1917', BLUE = '#0050D8', PAPER = '#fafaf9';
+const TOPIC = { c: '#e34948', k: '#eda100', a: '#0050D8', o: '#d6d3d1' };
+function el(name, attrs, parent) {
+  const n = document.createElementNS(NS, name);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function label(parent, x, y, text, attrs = {}) {
+  const t = el('text', Object.assign({ x, y, 'font-family': 'IBM Plex Mono', 'font-size': 10.5, 'font-weight': 600, fill: INK }, attrs), parent);
+  t.textContent = text;
+  return t;
+}
+
+/* ── Spiral ── */
+(() => {
+  const svg = document.getElementById('spiral');
+  const CX = 375, CY = 382;
+  const tOf = (iso) => {
+    const d = new Date(iso + 'T12:00:00Z');
+    const y = d.getUTCFullYear();
+    const a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1);
+    return (y - 2021) + (d - a) / (b - a);
+  };
+  const T0 = tOf(ISSUES[0][1]), T1 = tOf(ISSUES[ISSUES.length - 1][1]);
+  const R_START = 58, R_END = 316;
+  const K = (R_END - R_START) / (T1 - T0);
+  const R0 = R_START - K * T0;
+  const rOf = (t) => R0 + K * t;
+  const pt = (t, r) => { const th = 2 * Math.PI * t; return [CX + r * Math.sin(th), CY - r * Math.cos(th)]; };
+
+  const scale = el('g', { 'aria-hidden': 'true' }, svg);
+  const dots = el('g', {}, svg);
+  const marks = el('g', {}, svg);
+  const labels = el('g', {}, svg);
+
+  // Month scale around the outside
+  const RM = R_END + 32;
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el('circle', { cx: CX, cy: CY, r: RM, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.5 }, scale);
+  for (let m = 0; m < 12; m++) {
+    const [x1, y1] = pt(m / 12, RM), [x2, y2] = pt(m / 12, RM + 8);
+    el('line', { x1, y1, x2, y2, stroke: INK, 'stroke-width': 1 }, scale);
+    const [lx, ly] = pt(m / 12 + 1 / 24, RM + 16);
+    label(scale, lx, ly, MONTHS[m].toUpperCase(), { 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 10, 'font-weight': 500, 'letter-spacing': '0.12em' });
+  }
+  el('line', { x1: CX, y1: CY - 20, x2: CX, y2: CY - RM, stroke: INK, 'stroke-width': 0.75, 'stroke-dasharray': '2 3', 'stroke-opacity': 0.6 }, scale);
+
+  let d = '';
+  for (let t = T0; t <= T1 + 1e-6; t += 0.002) {
+    const [x, y] = pt(t, rOf(t));
+    d += (d ? 'L' : 'M') + x.toFixed(2) + ' ' + y.toFixed(2);
+  }
+  el('path', { d, fill: 'none', stroke: INK, 'stroke-width': 0.8, 'stroke-opacity': 0.3 }, scale);
+
+  for (let y = 2022; y <= 2026; y++) {
+    label(labels, CX + 6, CY - rOf(y - 2021) - 5, y, { 'letter-spacing': '0.06em', stroke: PAPER, 'stroke-width': 3, 'paint-order': 'stroke' });
+  }
+  label(labels, CX, CY + 4, '2021', { 'text-anchor': 'middle', 'letter-spacing': '0.06em' });
+
+  // One mark per issue; one outward dot per Signpost
+  const pos = {};
+  for (const [ep, date, cls, topics] of ISSUES) {
+    const t = tOf(date), r = rOf(t);
+    const th = 2 * Math.PI * t;
+    const ux = Math.sin(th), uy = -Math.cos(th);
+    const x = CX + r * ux, y = CY + r * uy;
+    pos[ep] = { x, y, ux, uy };
+    const len = 6.5;
+    el('line', { x1: x - ux * len, y1: y - uy * len, x2: x + ux * len, y2: y + uy * len,
+      stroke: cls === 'N' ? INK : BLUE, 'stroke-opacity': cls === 'P' ? 0.38 : 1, 'stroke-width': cls === 'N' ? 2.6 : 3.6 }, marks);
+    [...topics].forEach((c, k) => {
+      const rr = len + 4.5 + k * 4.25;
+      el('circle', { cx: x + ux * rr, cy: y + uy * rr, r: c === 'o' ? 1.35 : 1.75, fill: TOPIC[c] }, dots);
+    });
+  }
+
+  for (const ep of WAYPOINTS) {
+    const p = pos[ep];
+    el('circle', { cx: p.x, cy: p.y, r: 10, fill: 'none', stroke: INK, 'stroke-width': 1.1 }, labels);
+    label(labels, p.x - p.ux * 23, p.y - p.uy * 23, ep, { 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 11,
+      stroke: PAPER, 'stroke-width': 3.5, 'paint-order': 'stroke' });
+  }
+  const p1 = pos[1];
+  label(labels, p1.x + 11, p1.y + 4, '01', { 'font-size': 10, 'font-weight': 500, stroke: PAPER, 'stroke-width': 3, 'paint-order': 'stroke' });
+})();
+
+/* ── Lines: share of each year's items ── */
+(() => {
+  const svg = document.getElementById('lines');
+  const W = 361, TOP = 4, H = 98, LEFT = 22, RIGHT = 16;
+  const MAX = 35;
+  const X = (i) => LEFT + i * (W - LEFT - RIGHT) / 5;
+  const Y = (v) => TOP + H - v / MAX * H;
+  for (const v of [0, 10, 20, 30]) {
+    el('line', { x1: LEFT, x2: W - RIGHT + 6, y1: Y(v), y2: Y(v), stroke: v ? '#e7e5e4' : INK, 'stroke-width': 1 }, svg);
+    label(svg, LEFT - 5, Y(v) + 3.5, v, { 'text-anchor': 'end', 'font-size': 9.5, 'font-weight': 500, fill: '#57534e' });
+  }
+  ['’21','’22','’23','’24','’25','’26'].forEach((y, i) =>
+    label(svg, X(i), TOP + H + 15, y, { 'text-anchor': 'middle', 'font-size': 10, 'font-weight': 500 }));
+  const SERIES = [
+    { v: [27, 10, 5, 5, 6, 3],    c: '#e34948', name: 'COVID',            at: 0, dx: 8,  dy: 4 },
+    { v: [16, 17, 8, 5, 10, 3],   c: '#eda100', name: 'Crypto',           at: 1, dx: 0,  dy: -9 },
+    { v: [2, 9, 28, 32, 29, 31],  c: '#0050D8', name: 'AI, Signposts',    at: 3, dx: 0,  dy: -9 },
+    { v: [3, 2, 11, 2, 20, 31],   c: '#0050D8', name: 'AI, lead essays',  at: 4, dx: 8,  dy: 13, dash: '4 3' },
+  ];
+  for (const s of SERIES) {
+    el('polyline', { points: s.v.map((v, i) => `${X(i)},${Y(v)}`).join(' '), fill: 'none', stroke: s.c, 'stroke-width': 2.25,
+      'stroke-linejoin': 'round', 'stroke-dasharray': s.dash || 'none' }, svg);
+    s.v.forEach((v, i) => el('circle', { cx: X(i), cy: Y(v), r: 2.6, fill: s.dash ? PAPER : s.c, stroke: s.c, 'stroke-width': 1.5 }, svg));
+    const x = X(s.at) + s.dx, y = Y(s.v[s.at]) + s.dy;
+    label(svg, x, y, s.name, { 'text-anchor': s.dx ? 'start' : 'middle', 'font-family': 'Hanken Grotesk', 'font-size': 12, 'font-weight': 700,
+      stroke: PAPER, 'stroke-width': 3, 'paint-order': 'stroke' });
+  }
+})();
+
+/* ── Lens list ── */
+(() => {
+  const p = document.getElementById('lens-list');
+  p.innerHTML = LENSES.map(([ep, name]) => `<b>${ep}</b>&#8201;${name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}`).join(' &nbsp;·&nbsp; ');
+})();
+</script>
+</body>
+</html>
