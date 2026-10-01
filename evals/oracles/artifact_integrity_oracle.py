@@ -7,6 +7,12 @@ import re
 import sys
 from pathlib import Path
 
+# Reporting class (see evals/shared-harness.md, "Oracle classes"): this oracle checks
+# compliance with the skill's vocabulary, not an outcome of the artifact.
+# Requires the skill's data-* markers (data-critical, data-beat, data-reference, data-lineage,
+# ...) and grid-cols-12; the prompt-leak checks are the only artifact-level checks.
+ORACLE_CLASS = "compliance"
+
 
 def read_output(output_dir: Path) -> str:
     p = output_dir / "output.md"
@@ -305,7 +311,7 @@ def main() -> int:
         print(f"unknown artifact-integrity case id: {case_id}", file=sys.stderr)
         return 2
     failures = check(read_output(output_dir))
-    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id, "oracle_class": ORACLE_CLASS}))
     if failures:
         print(f"FAIL artifact integrity oracle: {case_id}")
         for failure in failures:

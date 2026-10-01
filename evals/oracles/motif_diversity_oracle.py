@@ -19,6 +19,12 @@ import re
 import sys
 from pathlib import Path
 
+# Reporting class (see evals/shared-harness.md, "Oracle classes"): this oracle checks
+# compliance with the skill's vocabulary, not an outcome of the artifact.
+# core_checks require "#C8102E"/"Swiss red" and grid-cols-12; motif checks detect the skill's
+# own default recipe.
+ORACLE_CLASS = "compliance"
+
 
 def read_output(output_dir: Path) -> str:
     p = output_dir / "output.md"
@@ -232,10 +238,10 @@ def main() -> int:
             oracle_case_id = resolve_case_id(public_case_id, answer_ref)
             failures = check_case(read_output(output_dir), oracle_case_id)
         except Exception as exc:
-            print(f"FAIL motif diversity oracle: {public_case_id}")
-            print(f"- {exc}")
+            # Missing output/private answer spec or unknown case: not a verdict on the output.
+            print(f"UNAVAILABLE motif diversity oracle: {public_case_id}: {exc}")
             return 2
-        print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": public_case_id}))
+        print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": public_case_id, "oracle_class": ORACLE_CLASS}))
         if failures:
             print(f"FAIL motif diversity oracle: {public_case_id}")
             for f in failures:
