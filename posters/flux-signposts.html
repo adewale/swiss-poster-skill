@@ -8,21 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <!--
   Weltformat F4 (89.5 × 128 cm), rendered 1260 × 1800 CSS px.
-  Lineage: Geigy scientific plate, the second in the FLUX series. One wheel
-  holds every Signpost the newsletter has published. The same data is then
-  unrolled into a strip, ranked by year, and opened into eight category
-  cards, so the story the clues tell can be read four ways.
+  Lineage: Geigy scientific plate, the second in the FLUX series, with a
+  flow chart after Minard's Carte figurative: band width is the count of
+  Signposts in each quarter, and a second line beneath carries the solar
+  count the way Minard's carried temperature.
+
+  Rays carry two jobs. On the main wheel, black rays are Signposts about
+  solar power (twelve numbered) and coloured rays are each topic's first
+  and latest Signpost. Each small wheel is made only of rays: one per
+  Signpost of that topic, at its position in the sequence, its length the
+  topic's share of that quarter.
 
   Colour has one job: topic. Eight inks, validated for adjacent-pair
   colour-blindness separation in the stacking order used (Government,
   Society, Money, Science, Health, Climate, AI, Energy from the hub out).
 
   Source ledger: every Signpost in The FLUX Review, Ep. 01 (6 May 2021) to
-  Ep. 252 (24 Sep 2026), 1,205 items. Each was read and given one of eight
+  Ep. 252 (24 Sep 2026), 1,205 items, each read and given one of eight
   topics; "solar" marks items substantially about solar power. WEDGES holds
-  the per-quarter topic counts, SOLAR the numbered solar milestones with
-  their position in the sequence, RANKS each topic's yearly count and rank.
-  Headlines and lens text are verbatim from the issues cited.
+  per-quarter topic counts, ITEMS each topic's item positions, SOLAR the
+  solar items, RANKS yearly count and rank. Headlines verbatim.
 -->
 <style>
   :root {
@@ -53,7 +58,7 @@
   .bar { display: flex; justify-content: space-between; align-items: baseline; border-top: 3px solid var(--stone-900); padding-top: 8px; }
   .bar h2 { font-weight: 800; font-size: 24px; letter-spacing: -0.02em; line-height: 1; white-space: nowrap; }
   .bar h2 span { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-left: 14px; color: var(--stone-600); }
-  .bar p { font-size: 13.5px; line-height: 1.35; text-align: right; }
+  .bar p { font-size: 13.5px; line-height: 1.35; text-align: right; margin-left: 28px; }
 
   .head { top: 36px; }
   .head .l { grid-column: 1 / span 6; }
@@ -63,49 +68,50 @@
   .left { position: absolute; left: 64px; top: 92px; width: 292px; }
   .left h1 { font-weight: 800; font-size: 58px; line-height: 0.9; letter-spacing: -0.04em; margin-left: -0.04em; white-space: nowrap; }
   .left .sub { font-weight: 700; font-size: 19px; line-height: 1.15; letter-spacing: -0.01em; margin: 8px 0 12px; }
-  .left p { font-size: 14px; line-height: 1.38; margin-bottom: 10px; }
-  .left h2.k { padding-top: 8px; border-top: 1px solid var(--stone-900); margin: 14px 0 8px; }
+  .left p { font-size: 13.5px; line-height: 1.36; margin-bottom: 10px; }
+  .left h2.k { padding-top: 8px; border-top: 1px solid var(--stone-900); margin: 12px 0 8px; }
   #ranks { display: block; overflow: visible; }
-  .note { font-size: 12.5px; line-height: 1.36; color: var(--stone-600); }
+  .note { font-size: 12.5px; line-height: 1.34; color: var(--stone-600); }
   .note b { color: var(--stone-900); font-weight: 600; }
 
-  #wheel { position: absolute; left: 352px; top: 84px; width: 844px; height: 800px; overflow: visible; }
+  #wheel { position: absolute; left: 352px; top: 84px; width: 844px; height: 704px; overflow: visible; }
 
-  /* ── Unrolled strip ── */
-  .strip { position: absolute; left: 64px; right: 64px; top: 874px; }
-  .strip .bar p { max-width: 560px; }
-  #river { display: block; margin-top: 10px; overflow: visible; }
+  /* ── Flow after Minard ── */
+  .flow { position: absolute; left: 64px; right: 64px; top: 812px; }
+  .flow .bar p { max-width: 760px; }
+  #minard { display: block; margin-top: 6px; overflow: visible; }
 
-  /* ── Category cards ── */
-  .cats { top: 1100px; row-gap: 12px; }
+  /* ── Topic cells: small wheel + firsts and lasts ── */
+  .cats { top: 1214px; row-gap: 6px; }
   .cats .bar { grid-column: 1 / -1; margin-bottom: 2px; }
-  .cats .bar p { max-width: 760px; }
-  .cat { grid-column: span 3; border-top: 2px solid var(--ink); padding-top: 6px; }
-  .cat .nm { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
-  .cat .nm b { font-weight: 800; font-size: 16px; letter-spacing: -0.01em; }
+  .cats .bar p { max-width: 820px; }
+  .cat { grid-column: span 3; border-top: 2px solid var(--ink); padding-top: 5px; }
+  .cat .nm { display: flex; align-items: baseline; justify-content: space-between; }
+  .cat .nm b { font-weight: 800; font-size: 15px; letter-spacing: -0.01em; }
   .cat .nm b i { display: inline-block; width: 10px; height: 10px; background: var(--ink); margin-right: 6px; }
   .cat .nm span { font-family: var(--mono); font-size: 10.5px; font-weight: 600; }
-  .cat .mv { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--stone-600); margin-bottom: 6px; }
+  .cat .mv { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.04em; color: var(--stone-600); margin: 2px 0 4px; }
   .cat .mv b { color: var(--stone-900); font-weight: 600; }
-  .cat dl { font-size: 10.5px; line-height: 1.25; }
-  .cat dt { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-600); margin-top: 3px; }
-  .cat dd { font-family: var(--serif); font-size: 10.5px; line-height: 1.26; }
+  .cat .body { display: grid; grid-template-columns: 92px 1fr; column-gap: 10px; align-items: start; }
+  .cat .mini { display: block; overflow: visible; }
+  .cat dt { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-600); margin-top: 2px; }
+  .cat dd { font-family: var(--serif); font-size: 10.2px; line-height: 1.22; margin-bottom: 3px; }
   .cat dd span { font-family: var(--mono); font-size: 9px; color: var(--stone-600); margin-right: 4px; }
 
-  /* ── Dark band: solar milestones + lenses ── */
-  .dark { position: absolute; left: 0; right: 0; top: 1564px; bottom: 0; background: var(--stone-900); }
-  .sun { top: 1576px; color: var(--stone-50); }
+  /* ── Dark band: solar milestones ── */
+  .dark { position: absolute; left: 0; right: 0; top: 1604px; bottom: 0; background: var(--stone-900); }
+  .sun { top: 1616px; color: var(--stone-50); }
   .sun .bar { grid-column: 1 / -1; border-top: 0; padding-top: 0; }
   .sun .bar h2 span { color: var(--stone-400); }
   .sun .bar p { color: var(--stone-300); max-width: 900px; }
   .sun ol { grid-column: span 4; list-style: none; margin-top: 6px; }
-  .sun li { display: grid; grid-template-columns: 18px 46px 1fr; column-gap: 6px; font-size: 10px; line-height: 1.2; padding: 2px 0; border-bottom: 1px solid var(--stone-800); align-items: baseline; color: var(--stone-100); }
+  .sun li { display: grid; grid-template-columns: 18px 46px 1fr; column-gap: 6px; font-size: 9.5px; line-height: 1.2; padding: 1.5px 0; border-bottom: 1px solid var(--stone-800); align-items: baseline; color: var(--stone-100); }
   .sun li .no { background: var(--stone-50); color: var(--stone-900); border-radius: 50%; width: 15px; height: 15px; line-height: 15px; text-align: center; font-family: var(--mono); font-size: 8.5px; font-weight: 600; }
   .sun li .d { font-family: var(--mono); font-size: 9.5px; color: var(--stone-400); }
   .lensline { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--stone-300); white-space: nowrap; }
   .lensline b { color: var(--stone-50); font-weight: 600; }
   .lensline i { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--stone-50); }
-  .foot { bottom: 16px; color: var(--stone-400); align-items: baseline; }
+  .foot { bottom: 12px; color: var(--stone-400); align-items: baseline; }
   .foot .l { grid-column: 1 / span 9; }
   .foot .r { grid-column: 10 / span 3; text-align: right; }
 </style>
@@ -126,114 +132,130 @@
   <div class="left" data-source="Signposts, all issues; topic given by reading each item">
     <h1 data-critical="title">Signposts</h1>
     <div class="sub" data-critical="title">2021 → 2026, every clue on one wheel</div>
-    <p data-critical="body">Each issue opens its Signposts with the line “clues that point to where our changing world might lead us.” Read all 1,205 together, each sorted into one of eight topics, and they tell a story nobody set out to write. In 2021 the biggest topic was Money: lumber, house prices, Dogecoin. From 2022 AI was first and stayed first. Energy climbed from sixth to second, 7% of the clues to 23%. Health, 18 items in 2021, fell to 3 in 2023 and never recovered.</p>
+    <p data-critical="body">Each issue opens its Signposts with the line “clues that point to where our changing world might lead us.” Sort all 1,205 into eight topics and they tell a story nobody set out to write. In 2021 the biggest topic was Money: lumber, house prices, Dogecoin. From 2022 AI was first and stayed first. Energy climbed from sixth to second, 7% of the clues to 23%. Health, 18 items in 2021, fell to 3 in 2023 and never recovered.</p>
     <h2 class="k">Rank of each topic, by year</h2>
-    <svg id="ranks" width="292" height="214"
-         data-encoding="year → x; rank among the eight topics → y; topic → ink; count → label"
+    <svg id="ranks" width="292" height="188"
+         data-encoding="year → x; rank among the eight topics → y; topic → ink"
          role="img" aria-label="Rank of each topic by year. Government & war: 2021 7th (7), 2022 5th (31), 2023 6th (14), 2024 6th (10), 2025 7th (6), 2026 6th (9). Society & work: 2021 2nd (45), 2022 4th (32), 2023 3rd (29), 2024 4th (14), 2025 2nd (36), 2026 4th (16). Money & markets: 2021 1st (69), 2022 2nd (62), 2023 4th (26), 2024 5th (12), 2025 3rd (26), 2026 3rd (20). Science & space: 2021 8th (2), 2022 8th (10), 2023 8th (3), 2024 7th (8), 2025 6th (6), 2026 8th (2). Health: 2021 5th (18), 2022 7th (19), 2023 7th (3), 2024 8th (6), 2025 8th (2), 2026 7th (3). Climate & nature: 2021 4th (19), 2022 6th (24), 2023 5th (22), 2024 3rd (23), 2025 5th (11), 2026 5th (14). AI & computing: 2021 3rd (40), 2022 1st (84), 2023 1st (76), 2024 1st (76), 2025 1st (57), 2026 1st (48). Energy: 2021 6th (15), 2022 3rd (37), 2023 2nd (29), 2024 2nd (28), 2025 4th (23), 2026 2nd (33)."></svg>
     <h2 class="k">How to read the wheel</h2>
-    <p class="note">Time runs clockwise from the top, Ep. 01 to Ep. 252. Each Signpost gets the same slice of angle, so a wide wedge is a busy quarter. The bands are the quarter's topic mix, Government at the hub, Energy at the rim. <b>Each ray is a Signpost about solar power</b>; the twelve numbered are listed at the foot.</p>
+    <p class="note">Time runs clockwise from the top, Ep. 01 to Ep. 252; each Signpost gets the same slice of angle, so a wide wedge is a busy quarter. Bands are the quarter's topic mix, Government at the hub, Energy at the rim. <b>Black rays</b> are Signposts about solar power, twelve numbered. <b>Coloured rays</b> are each topic's first and latest.</p>
   </div>
 
-  <svg id="wheel" viewBox="0 0 844 800"
-       data-encoding="Signpost order → angle (equal angle per item, clockwise from top); quarter → wedge; topic share within quarter → radial band length; solar item → rim ray"
+  <svg id="wheel" viewBox="0 0 844 704"
+       data-encoding="Signpost order → angle (equal angle per item, clockwise from top); quarter → wedge; topic share within quarter → radial band length; solar item → black rim ray; topic first/latest item → coloured rim ray"
        data-variable="1,205 Signposts, 22 quarters, 8 topics"
-       role="img" aria-label="A wheel of all 1,205 Signposts in order, clockwise from May 2021, as 22 quarter wedges stacked by topic. Energy, at the rim, grows from 7% in 2021 to 23% in 2026; AI from 19% to 33%; Health shrinks from 8% to 2%. 40 solar Signposts stand out from the rim as rays, twelve numbered."></svg>
+       role="img" aria-label="A wheel of all 1,205 Signposts in order, clockwise from May 2021, as 22 quarter wedges stacked by topic. Energy, at the rim, grows from 7% in 2021 to 23% in 2026; AI from 19% to 33%; Health shrinks from 8% to 2%. 40 solar Signposts stand out from the rim as black rays, twelve numbered; coloured rays mark each topic's first and latest Signpost."></svg>
 
-  <div class="strip" data-source="same per-quarter counts as the wheel">
+  <div class="flow" data-source="per-quarter counts; solar items; busiest quarters per topic">
     <div class="bar">
-      <h2>The wheel, unrolled<span>share of each quarter's Signposts</span></h2>
-      <p>Cut the ring at the top and lay it flat: the same 22 quarters, left to right, with each topic's share stacked in the same order. The Energy band at the top thickens; the Health band near the bottom all but disappears after 2022.</p>
+      <h2>Carte figurative<span>after Minard</span></h2>
+      <p>The same 22 quarters with their true width: the band is as wide as the number of Signposts in the quarter, from 89 in Q2 2022 to 28 in Q4 2025, and the bands inside it are the topics, stacked as on the wheel. The line beneath counts the Signposts about solar power, with the twelve numbered milestones.</p>
     </div>
-    <svg id="river" width="1132" height="160"
-         data-encoding="quarter → x; topic share of the quarter → band height, stacked hub-to-rim order; topic → ink"
-         role="img" aria-label="The wheel unrolled as a stacked strip of 22 quarters, Q2 2021 to Q3 2026. Government & war 3% of 2021 to 6% of 2026. Society & work 21% of 2021 to 11% of 2026. Money & markets 32% of 2021 to 14% of 2026. Science & space 1% of 2021 to 1% of 2026. Health 8% of 2021 to 2% of 2026. Climate & nature 9% of 2021 to 10% of 2026. AI & computing 19% of 2021 to 33% of 2026. Energy 7% of 2021 to 23% of 2026."></svg>
+    <svg id="minard" width="1132" height="322"
+         data-encoding="quarter → x; Signposts in the quarter → band width; topic → stacked band and ink; solar Signposts in the quarter → line beneath; numbered milestones → circles"
+         role="img" aria-label="A flow chart of the 22 quarters, Q2 2021 to Q3 2026; band width is the number of Signposts in the quarter, from 89 in Q2 2022 to 28 in 2025Q4, stacked by topic. Beneath, a line of solar Signposts per quarter, rising from none in Q2 2021 to three a quarter in 2026, with the twelve numbered milestones."></svg>
   </div>
 
-  <div class="grid cats" data-source="first, peak-quarter and latest Signpost in each topic, verbatim headlines">
+  <div class="grid cats" data-source="first and latest Signpost in each topic, verbatim headlines; item positions">
     <div class="bar">
-      <h2>The eight topics<span>first clue · busiest quarter · latest clue</span></h2>
-      <p>In 2026 rank order. Read down a card and the subject changes under the same label: Money starts with a lumber shortage and ends with tariffs; Health starts with India's COVID surge and ends with a bug the US stopped monitoring.</p>
+      <h2>Firsts and lasts<span>one small wheel per topic, made of its rays</span></h2>
+      <p>Each small wheel carries one ray per Signpost of that topic, at its place in the sequence; the ray is longer when the topic took a bigger share of that quarter. The black rays are the first and latest clue, printed beside it. In 2026 rank order.</p>
     </div>
         <article class="cat" style="--ink:#2a78d6" data-beat="ai">
       <div class="nm"><b><i></i>AI & computing</b><span>381</span></div>
       <div class="mv"><b>3rd → 1st</b> · 19% of 2021 → 33% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>May 21</span>Japan is opening its first esports gym</dd>
-        <dt>Busiest quarter · Q1 2023 · 24 items</dt><dd><span>Jan 23</span>Artists filed a class-action copyright infringement lawsuit against AI art companies</dd>
-        <dt>Latest</dt><dd><span>Sep 26</span>A ChatGPT-using lawyer cited fake quotes from fake witnesses</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="AI" width="92" height="92" role="img" aria-label="AI & computing: 381 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · May 21</dt><dd>Japan is opening its first esports gym</dd>
+          <dt>Latest · Sep 26</dt><dd>A ChatGPT-using lawyer cited fake quotes from fake witnesses</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#eda100" data-beat="energy">
       <div class="nm"><b><i></i>Energy</b><span>165</span></div>
       <div class="mv"><b>6th → 2nd</b> · 7% of 2021 → 23% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>May 21</span>Batteries are powering a not-so-green “lithium rush”</dd>
-        <dt>Busiest quarter · Q2 2022 · 14 items</dt><dd><span>Apr 22</span>Wind energy briefly became the US’s #2 source of electricity</dd>
-        <dt>Latest</dt><dd><span>Sep 26</span>California got through a brutal heatwave with no rolling blackouts</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="ENERGY" width="92" height="92" role="img" aria-label="Energy: 165 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · May 21</dt><dd>Batteries are powering a not-so-green “lithium rush”</dd>
+          <dt>Latest · Sep 26</dt><dd>California got through a brutal heatwave with no rolling blackouts</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#eb6834" data-beat="money">
       <div class="nm"><b><i></i>Money & markets</b><span>215</span></div>
       <div class="mv"><b>1st → 3rd</b> · 32% of 2021 → 14% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>May 21</span>A lumber shortage is gripping the US</dd>
-        <dt>Busiest quarter · Q3 2021 · 30 items</dt><dd><span>Jul 21</span>A crypto “stablecoin” fell to $0.00 after getting hacked</dd>
-        <dt>Latest</dt><dd><span>Aug 26</span>Canada’s retaliatory tariffs are targeting states with upcoming Senate elections</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="MONEY" width="92" height="92" role="img" aria-label="Money & markets: 215 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · May 21</dt><dd>A lumber shortage is gripping the US</dd>
+          <dt>Latest · Aug 26</dt><dd>Canada’s retaliatory tariffs are targeting states with upcoming Senate elections</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#4a3aa7" data-beat="society">
       <div class="nm"><b><i></i>Society & work</b><span>172</span></div>
       <div class="mv"><b>2nd → 4th</b> · 21% of 2021 → 11% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>May 21</span>Women’s job recovery is still lagging</dd>
-        <dt>Busiest quarter · Q2 2021 · 20 items</dt><dd><span>May 21</span>Chipotle attracted 24,000 applicants through an online job fair</dd>
-        <dt>Latest</dt><dd><span>Sep 26</span>A Panama Canal transit slot went for nearly 100x its normal price</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="SOCIETY" width="92" height="92" role="img" aria-label="Society & work: 172 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · May 21</dt><dd>Women’s job recovery is still lagging</dd>
+          <dt>Latest · Sep 26</dt><dd>A Panama Canal transit slot went for nearly 100x its normal price</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#008300" data-beat="climate">
       <div class="nm"><b><i></i>Climate & nature</b><span>113</span></div>
       <div class="mv"><b>4th → 5th</b> · 9% of 2021 → 10% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>Jun 21</span>The American West is facing a “mega-drought” ahead of fire season</dd>
-        <dt>Busiest quarter · Q3 2021 · 11 items</dt><dd><span>Jul 21</span>Ground temperatures hit 118 ºF (48 ºC) in the Arctic Circle</dd>
-        <dt>Latest</dt><dd><span>Sep 26</span>Newfoundland’s cod stock has recovered, 34 years after its infamous collapse</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="CLIMATE" width="92" height="92" role="img" aria-label="Climate & nature: 113 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · Jun 21</dt><dd>The American West is facing a “mega-drought” ahead of fire season</dd>
+          <dt>Latest · Sep 26</dt><dd>Newfoundland’s cod stock has recovered, 34 years after its infamous collapse</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#e34948" data-beat="government">
       <div class="nm"><b><i></i>Government & war</b><span>77</span></div>
       <div class="mv"><b>7th → 6th</b> · 3% of 2021 → 6% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>Jun 21</span>American soldiers leaked nuclear secrets via flashcard apps</dd>
-        <dt>Busiest quarter · Q2 2022 · 14 items</dt><dd><span>Apr 22</span>Ukrainians using “Find my iPhone” discovered Russian troop movements</dd>
-        <dt>Latest</dt><dd><span>Sep 26</span>China took stealth aircraft parts after a plane was diverted to Hong Kong</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="GOVERNMENT" width="92" height="92" role="img" aria-label="Government & war: 77 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · Jun 21</dt><dd>American soldiers leaked nuclear secrets via flashcard apps</dd>
+          <dt>Latest · Sep 26</dt><dd>China took stealth aircraft parts after a plane was diverted to Hong Kong</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#e87ba4" data-beat="health">
       <div class="nm"><b><i></i>Health</b><span>51</span></div>
       <div class="mv"><b>5th → 7th</b> · 8% of 2021 → 2% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>May 21</span>India’s COVID-19 surge has spread to Southeast Asia</dd>
-        <dt>Busiest quarter · Q2 2021 · 8 items</dt><dd><span>May 21</span>Ohio is launching a $1 million vaccine lottery</dd>
-        <dt>Latest</dt><dd><span>Jul 26</span>The US stopped monitoring the “explosive diarrhea” bug last year</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="HEALTH" width="92" height="92" role="img" aria-label="Health: 51 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · May 21</dt><dd>India’s COVID-19 surge has spread to Southeast Asia</dd>
+          <dt>Latest · Jul 26</dt><dd>The US stopped monitoring the “explosive diarrhea” bug last year</dd>
+        </dl>
+      </div>
     </article>
     <article class="cat" style="--ink:#1baf7a" data-beat="science">
       <div class="nm"><b><i></i>Science & space</b><span>31</span></div>
       <div class="mv"><b>8th → 8th</b> · 1% of 2021 → 1% of 2026</div>
-      <dl>
-        <dt>First</dt><dd><span>Oct 21</span>A TikTok teenager broke thousands of scientific studies with a viral video</dd>
-        <dt>Busiest quarter · Q1 2022 · 4 items</dt><dd><span>Jan 22</span>Scientists found a carbon signature on Mars that could be connected to life</dd>
-        <dt>Latest</dt><dd><span>Aug 26</span>Physics PhDs are leaving the US at record rates</dd>
-      </dl>
+      <div class="body">
+        <svg class="mini" data-topic="SCIENCE" width="92" height="92" role="img" aria-label="Science & space: 31 Signposts as rays around a small wheel"></svg>
+        <dl>
+          <dt>First · Oct 21</dt><dd>A TikTok teenager broke thousands of scientific studies with a viral video</dd>
+          <dt>Latest · Aug 26</dt><dd>Physics PhDs are leaving the US at record rates</dd>
+        </dl>
+      </div>
     </article>
   </div>
 
   <div class="dark" aria-hidden="true"></div>
-  <div class="grid sun" data-source="Signposts marked solar; Lens of the week, verbatim">
+  <div class="grid sun" data-source="Signposts marked solar, verbatim">
     <div class="bar">
-      <h2 data-critical="body">The solar thread<span>40 Signposts, 12 numbered on the wheel</span></h2>
-      <p>A record year for US solar installations in September 2021; wind and solar beating natural gas worldwide by May 2026. These twelve are the records in between; the other 28 rays tell the same story from rooftops, canals, sheep pastures and balconies.</p>
+      <h2 data-critical="body">The solar thread<span>40 Signposts, 12 numbered</span></h2>
+      <p>A record year for US solar installations in September 2021; wind and solar beating natural gas worldwide by May 2026; 28 more rays from rooftops, canals, sheep pastures and balconies.</p>
     </div>
     <ol><li data-beat="21.3"><span class="no">1</span><span class="d">Sep 21</span><span>US solar installations are on track for a record year, again</span></li><li data-beat="85.2"><span class="no">2</span><span class="d">Feb 23</span><span>Wind and solar were the EU’s top electricity source in 2022 — for the first time ever</span></li><li data-beat="105.3"><span class="no">3</span><span class="d">Jun 23</span><span>Wind and solar generated more power than coal in the US</span></li><li data-beat="123.3"><span class="no">4</span><span class="d">Oct 23</span><span>Solar is forecasted to become the world’s dominant energy source by 2050</span></li></ol>
     <ol><li data-beat="144.1"><span class="no">5</span><span class="d">May 24</span><span>California powered its entire grid with renewable energy for 9 hours in a day</span></li><li data-beat="157.4"><span class="no">6</span><span class="d">Aug 24</span><span>Wind and solar power have overtaken coal in China</span></li><li data-beat="204.2"><span class="no">7</span><span class="d">Aug 25</span><span>Across Africa, solar panel imports from China are booming</span></li><li data-beat="210.1"><span class="no">8</span><span class="d">Oct 25</span><span>Renewable energy is now the world’s biggest source of electricity</span></li></ol>
@@ -313,14 +335,15 @@ const SOLAR  = [
   [1186, "2026-08", "Solar panels helped Europe meet power demand during recent heat waves", 0],
   [1191, "2026-08", "American solar generation is up 20% year-over-year", 12]
 ];       // [index, 'YYYY-MM', headline, milestone no]
+const ITEMS  = {"GOVERNMENT": [39, 58, 87, 112, 121, 128, 199, 245, 265, 272, 277, 279, 284, 286, 289, 294, 297, 301, 304, 311, 312, 333, 334, 336, 340, 342, 346, 369, 371, 384, 393, 395, 401, 454, 468, 481, 484, 500, 535, 581, 586, 600, 604, 632, 641, 653, 661, 662, 663, 691, 709, 711, 726, 742, 821, 851, 865, 868, 869, 873, 879, 883, 928, 949, 970, 985, 1024, 1026, 1086, 1087, 1088, 1108, 1138, 1149, 1169, 1185, 1202], "SOCIETY": [5, 7, 15, 22, 23, 24, 28, 29, 31, 32, 40, 42, 43, 45, 46, 47, 49, 50, 51, 52, 57, 65, 70, 71, 74, 78, 92, 98, 100, 103, 107, 115, 123, 127, 146, 149, 154, 155, 160, 163, 166, 191, 195, 209, 210, 222, 229, 235, 239, 252, 259, 264, 267, 319, 321, 330, 343, 348, 350, 354, 359, 361, 362, 366, 383, 385, 406, 413, 420, 427, 429, 432, 442, 449, 474, 487, 499, 516, 519, 524, 525, 529, 532, 533, 538, 548, 573, 580, 598, 602, 603, 613, 616, 623, 640, 646, 654, 659, 665, 670, 678, 681, 682, 693, 705, 708, 716, 725, 728, 743, 766, 780, 796, 805, 844, 850, 853, 855, 872, 876, 893, 894, 899, 902, 904, 914, 917, 925, 927, 929, 930, 934, 935, 939, 941, 944, 945, 965, 968, 969, 972, 977, 980, 990, 1006, 1007, 1008, 1013, 1018, 1022, 1028, 1030, 1034, 1037, 1050, 1055, 1082, 1092, 1106, 1113, 1120, 1145, 1148, 1154, 1164, 1167, 1168, 1171, 1174, 1176, 1182, 1193], "MONEY": [4, 10, 12, 14, 18, 20, 21, 27, 30, 34, 36, 38, 44, 60, 62, 67, 69, 75, 76, 79, 80, 82, 86, 90, 97, 101, 102, 104, 106, 110, 111, 114, 116, 118, 119, 122, 126, 129, 130, 131, 133, 135, 138, 142, 144, 145, 147, 150, 152, 153, 156, 157, 159, 162, 165, 171, 172, 177, 185, 186, 190, 193, 196, 197, 200, 202, 205, 207, 211, 220, 223, 225, 227, 230, 234, 240, 242, 246, 248, 249, 253, 255, 257, 263, 266, 273, 280, 281, 290, 295, 300, 303, 310, 317, 323, 331, 337, 339, 341, 345, 352, 358, 365, 367, 368, 372, 376, 389, 391, 392, 397, 405, 409, 411, 419, 426, 444, 445, 448, 458, 459, 464, 466, 471, 473, 478, 488, 497, 502, 506, 509, 518, 528, 534, 544, 553, 554, 555, 556, 559, 561, 569, 584, 594, 606, 611, 625, 627, 634, 635, 657, 667, 675, 679, 695, 699, 712, 718, 720, 746, 749, 767, 774, 778, 812, 820, 860, 864, 889, 913, 923, 924, 926, 940, 942, 946, 952, 955, 956, 958, 959, 964, 978, 986, 988, 995, 997, 999, 1014, 1019, 1025, 1031, 1047, 1049, 1059, 1060, 1064, 1071, 1073, 1080, 1081, 1090, 1095, 1104, 1105, 1114, 1117, 1126, 1132, 1139, 1142, 1146, 1147, 1158, 1189], "SCIENCE": [139, 194, 233, 260, 275, 282, 332, 370, 428, 437, 451, 482, 589, 683, 715, 737, 747, 775, 782, 847, 852, 878, 891, 912, 918, 950, 974, 979, 1001, 1075, 1181], "HEALTH": [0, 1, 2, 3, 6, 8, 13, 35, 64, 73, 77, 84, 85, 105, 169, 180, 183, 213, 215, 217, 238, 244, 287, 298, 306, 313, 329, 374, 386, 387, 396, 410, 423, 439, 456, 460, 510, 514, 549, 579, 731, 758, 806, 810, 814, 845, 906, 1021, 1063, 1100, 1165], "CLIMATE": [37, 48, 56, 59, 66, 81, 88, 96, 99, 108, 117, 125, 137, 168, 182, 188, 201, 203, 208, 221, 236, 243, 261, 335, 338, 349, 364, 375, 381, 398, 403, 435, 436, 440, 441, 447, 450, 463, 467, 475, 477, 491, 507, 523, 526, 531, 539, 543, 557, 583, 593, 596, 599, 608, 615, 617, 620, 624, 639, 644, 648, 650, 660, 671, 686, 738, 739, 741, 751, 759, 777, 788, 795, 797, 802, 804, 811, 815, 817, 826, 828, 833, 836, 858, 881, 882, 884, 887, 895, 903, 911, 967, 983, 1000, 1010, 1016, 1033, 1054, 1057, 1069, 1110, 1116, 1124, 1130, 1141, 1173, 1177, 1179, 1184, 1187, 1192, 1194, 1203], "AI": [9, 11, 16, 17, 25, 26, 33, 41, 53, 55, 61, 68, 72, 89, 91, 93, 95, 109, 120, 124, 132, 136, 141, 148, 151, 167, 170, 173, 175, 176, 178, 179, 181, 184, 187, 189, 198, 204, 206, 214, 218, 219, 224, 231, 232, 237, 241, 254, 258, 262, 268, 271, 274, 276, 278, 283, 285, 288, 291, 292, 293, 296, 299, 305, 307, 309, 314, 320, 322, 324, 325, 326, 347, 351, 355, 357, 363, 377, 378, 380, 390, 394, 399, 400, 402, 404, 408, 412, 415, 416, 417, 418, 422, 424, 425, 431, 433, 434, 438, 443, 446, 453, 457, 461, 462, 465, 470, 476, 480, 483, 485, 489, 490, 493, 494, 495, 498, 501, 503, 504, 505, 508, 511, 513, 517, 520, 521, 530, 537, 540, 542, 545, 550, 552, 560, 562, 564, 565, 566, 567, 568, 570, 571, 572, 574, 575, 577, 578, 582, 585, 587, 588, 590, 591, 595, 597, 601, 605, 607, 610, 612, 614, 618, 619, 621, 628, 629, 636, 637, 638, 642, 643, 645, 647, 649, 652, 656, 664, 668, 669, 672, 674, 677, 680, 684, 685, 687, 688, 689, 690, 694, 696, 698, 700, 703, 704, 706, 707, 710, 713, 722, 723, 724, 729, 732, 733, 734, 736, 744, 745, 748, 750, 752, 753, 754, 755, 756, 757, 761, 764, 765, 768, 769, 771, 772, 773, 779, 781, 784, 785, 786, 787, 789, 790, 791, 792, 798, 799, 801, 803, 808, 809, 813, 816, 818, 819, 823, 825, 827, 829, 830, 832, 834, 835, 837, 840, 841, 842, 846, 848, 849, 857, 859, 861, 862, 866, 867, 871, 874, 875, 877, 880, 885, 886, 890, 892, 896, 897, 898, 901, 908, 909, 910, 916, 919, 931, 932, 937, 938, 943, 947, 948, 951, 953, 954, 957, 960, 962, 963, 966, 971, 973, 975, 976, 981, 982, 984, 989, 991, 992, 994, 998, 1003, 1004, 1005, 1009, 1011, 1012, 1017, 1020, 1027, 1029, 1032, 1038, 1039, 1040, 1041, 1044, 1045, 1046, 1051, 1052, 1053, 1061, 1062, 1065, 1067, 1070, 1072, 1076, 1077, 1078, 1083, 1084, 1085, 1089, 1091, 1093, 1094, 1099, 1101, 1109, 1121, 1123, 1125, 1129, 1131, 1133, 1135, 1137, 1140, 1144, 1150, 1152, 1155, 1156, 1157, 1160, 1161, 1170, 1172, 1178, 1180, 1188, 1190, 1195, 1196, 1198, 1199, 1201, 1204], "ENERGY": [19, 54, 63, 83, 94, 113, 134, 140, 143, 158, 161, 164, 174, 192, 212, 216, 226, 228, 247, 250, 251, 256, 269, 270, 302, 308, 315, 316, 318, 327, 328, 344, 353, 356, 360, 373, 379, 382, 388, 407, 414, 421, 430, 452, 455, 469, 472, 479, 486, 492, 496, 512, 515, 522, 527, 536, 541, 546, 547, 551, 558, 563, 576, 592, 609, 622, 626, 630, 631, 633, 651, 655, 658, 666, 673, 676, 692, 697, 701, 702, 714, 717, 719, 721, 727, 730, 735, 740, 760, 762, 763, 770, 776, 783, 793, 794, 800, 807, 822, 824, 831, 838, 839, 843, 854, 856, 863, 870, 888, 900, 905, 907, 915, 920, 921, 922, 933, 936, 961, 987, 993, 996, 1002, 1015, 1023, 1035, 1036, 1042, 1043, 1048, 1056, 1058, 1066, 1068, 1074, 1079, 1096, 1097, 1098, 1102, 1103, 1107, 1111, 1112, 1115, 1118, 1119, 1122, 1127, 1128, 1134, 1136, 1143, 1151, 1153, 1159, 1162, 1163, 1166, 1175, 1183, 1186, 1191, 1197, 1200]};       // {topic: [item index …]}
 const RANKS  = {"GOVERNMENT": [[7, 7], [31, 5], [14, 6], [10, 6], [6, 7], [9, 6]], "SOCIETY": [[45, 2], [32, 4], [29, 3], [14, 4], [36, 2], [16, 4]], "MONEY": [[69, 1], [62, 2], [26, 4], [12, 5], [26, 3], [20, 3]], "SCIENCE": [[2, 8], [10, 8], [3, 8], [8, 7], [6, 6], [2, 8]], "HEALTH": [[18, 5], [19, 7], [3, 7], [6, 8], [2, 8], [3, 7]], "CLIMATE": [[19, 4], [24, 6], [22, 5], [23, 3], [11, 5], [14, 5]], "AI": [[40, 3], [84, 1], [76, 1], [76, 1], [57, 1], [48, 1]], "ENERGY": [[15, 6], [37, 3], [29, 2], [28, 2], [23, 4], [33, 2]]};       // {topic: [[count, rank] × 6 years]}
+const NOTES  = [[1, 0, "Q3 2021 · Money's busiest quarter, 30 items", "used cars above sticker, a stablecoin at $0.00"], [4, 280, "Q2 2022 · the widest quarter, 89 items", "Government peaks at 14; “Find my iPhone” finds troops"], [7, 565, "Q1 2023 · AI's busiest quarter, 24 items", "a bill-negotiating chatbot; artists sue AI art firms"], [18, 835, "Q4 2025 · thinnest, 28 items", "eight issues, then none 21 Nov → 10 Jan"]];       // [[quarter index, label x, line 1, line 2]]
 const N = 1205;
 const YEARS = ['2021', '2022', '2023', '2024', '2025', '2026'];
 
 const NS = 'http://www.w3.org/2000/svg';
 const INK = '#1c1917', PAPER = '#fafaf9';
 const INK_OF = Object.fromEntries(TOPICS.map(t => [t[0], t[2]]));
-const NAME_OF = Object.fromEntries(TOPICS.map(t => [t[0], t[1]]));
 function el(name, attrs, parent) {
   const n = document.createElementNS(NS, name);
   for (const k in attrs) n.setAttribute(k, attrs[k]);
@@ -332,12 +355,17 @@ function label(parent, x, y, text, attrs = {}) {
   t.textContent = text;
   return t;
 }
+// quarter index and topic share for any item index
+const Q_OF = new Array(N);
+WEDGES.forEach((w, qi) => { for (let i = w[1]; i < w[1] + w[2]; i++) Q_OF[i] = qi; });
+const SHARE = (qi, key) => (WEDGES[qi][3][key] || 0) / WEDGES[qi][2];
+const FIRST_LAST = Object.fromEntries(Object.entries(ITEMS).map(([k, v]) => [k, [v[0], v[v.length - 1]]]));
 
 /* ── Wheel ── */
 (() => {
   const svg = document.getElementById('wheel');
-  const CX = 422, CY = 404;
-  const R_HUB = 92, R_IN = 124, R_OUT = 312, R_RAY = 334, R_NO = 350;
+  const CX = 422, CY = 352;
+  const R_HUB = 84, R_IN = 112, R_OUT = 278, R_RAY = 300, R_NO = 318;
   const ang = (i) => 2 * Math.PI * i / N;
   const pt = (a, r) => [CX + r * Math.sin(a), CY - r * Math.cos(a)];
   const arc = (a0, a1, r0, r1) => {
@@ -368,22 +396,31 @@ function label(parent, x, y, text, attrs = {}) {
     const a = ang(s);
     const [x1, y1] = pt(a, R_HUB + 2), [x2, y2] = pt(a, R_OUT + 6);
     el('line', { x1, y1, x2, y2, stroke: INK, 'stroke-width': y === '2021' ? 1.5 : 1 }, scale);
-    // year label set along the dial, between the hub and the ring; flipped in the lower half so it reads upright
     const am = ang((s + e) / 2), lower = Math.cos(am) < 0;
-    const rl = lower ? R_HUB + 10 : R_HUB + 17, span = 0.6;
+    const rl = lower ? R_HUB + 9 : R_HUB + 16, span = 0.6;
     const [px0, py0] = pt(am - (lower ? -span : span), rl), [px1, py1] = pt(am + (lower ? -span : span), rl);
     el('path', { id: 'yr-' + y, d: `M${px0.toFixed(2)} ${py0.toFixed(2)}A${rl} ${rl} 0 0 ${lower ? 0 : 1} ${px1.toFixed(2)} ${py1.toFixed(2)}`, fill: 'none' }, scale);
-    const tx = el('text', { 'font-family': 'IBM Plex Mono', 'font-size': 9.5, 'font-weight': 600, 'letter-spacing': '0.06em', fill: INK }, labels);
+    const tx = el('text', { 'font-family': 'IBM Plex Mono', 'font-size': 9, 'font-weight': 600, 'letter-spacing': '0.06em', fill: INK }, labels);
     const tp = el('textPath', { href: '#yr-' + y, startOffset: '50%', 'text-anchor': 'middle' }, tx);
     tp.textContent = `${y} · ${e - s}`;
   }
   el('circle', { cx: CX, cy: CY, r: R_OUT + 1, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.5 }, scale);
   el('circle', { cx: CX, cy: CY, r: R_HUB, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.5 }, scale);
   const hub = el('g', {}, labels);
-  label(hub, CX, CY - 14, '1,205', { 'text-anchor': 'middle', 'font-family': 'Hanken Grotesk', 'font-size': 40, 'font-weight': 800, 'letter-spacing': '-0.03em' });
-  label(hub, CX, CY + 8, 'SIGNPOSTS', { 'text-anchor': 'middle', 'font-size': 10, 'letter-spacing': '0.2em' });
-  label(hub, CX, CY + 24, 'MAY 2021 → SEP 2026', { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
-  label(hub, CX, CY + 37, 'CLOCKWISE', { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
+  label(hub, CX, CY - 12, '1,205', { 'text-anchor': 'middle', 'font-family': 'Hanken Grotesk', 'font-size': 36, 'font-weight': 800, 'letter-spacing': '-0.03em' });
+  label(hub, CX, CY + 8, 'SIGNPOSTS', { 'text-anchor': 'middle', 'font-size': 9.5, 'letter-spacing': '0.2em' });
+  label(hub, CX, CY + 22, 'MAY 2021 → SEP 2026', { 'text-anchor': 'middle', 'font-size': 8, 'font-weight': 500, 'letter-spacing': '0.1em', fill: '#57534e' });
+  label(hub, CX, CY + 34, 'CLOCKWISE', { 'text-anchor': 'middle', 'font-size': 8, 'font-weight': 500, 'letter-spacing': '0.1em', fill: '#57534e' });
+
+  // coloured rays: each topic's first and latest Signpost
+  for (const [key] of TOPICS) {
+    for (const i of FIRST_LAST[key]) {
+      const a = ang(i + 0.5);
+      const [x1, y1] = pt(a, R_OUT + 2), [x2, y2] = pt(a, R_RAY - 2);
+      el('line', { x1, y1, x2, y2, stroke: INK_OF[key], 'stroke-width': 2.6, 'stroke-linecap': 'round', 'data-topic': key, 'data-item': i }, rays);
+    }
+  }
+  // black rays: solar Signposts; numbered milestones
   for (const [i, ym, head, no] of SOLAR) {
     const a = ang(i + 0.5);
     const [x1, y1] = pt(a, R_OUT + 2), [x2, y2] = pt(a, no ? R_RAY + 4 : R_RAY - 6);
@@ -399,56 +436,109 @@ function label(parent, x, y, text, attrs = {}) {
 /* ── Rank chart ── */
 (() => {
   const svg = document.getElementById('ranks');
-  const L = 84, R = 292 - 96, TOP = 16, STEP = 23;
+  const L = 84, R = 292 - 96, TOP = 14, STEP = 20;
   const X = (i) => L + i * (R - L) / 5;
   const Y = (rank) => TOP + (rank - 1) * STEP;
-  YEARS.forEach((y, i) => label(svg, X(i), 6, "’" + y.slice(2), { 'text-anchor': 'middle', 'font-size': 9, 'font-weight': 500, fill: '#57534e' }));
+  YEARS.forEach((y, i) => label(svg, X(i), 4, "’" + y.slice(2), { 'text-anchor': 'middle', 'font-size': 9, 'font-weight': 500, fill: '#57534e' }));
   for (const [key, name, ink] of TOPICS) {
     const pts = RANKS[key].map(([c, r], i) => [X(i), Y(r)]);
     el('polyline', { points: pts.map(p => p.join(',')).join(' '), fill: 'none', stroke: ink, 'stroke-width': 2.25, 'stroke-linejoin': 'round' }, svg);
     pts.forEach(([x, y]) => el('circle', { cx: x, cy: y, r: 2.6, fill: ink, stroke: PAPER, 'stroke-width': 1.5 }, svg));
-    const first = RANKS[key][0], last = RANKS[key][5];
-    label(svg, L - 8, Y(first[1]) + 3.5, name, { 'text-anchor': 'end', 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 600 });
-    label(svg, R + 8, Y(last[1]) + 3.5, `${name} ${last[0] + first[0] ? '' : ''}`, { 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 600 });
+    label(svg, L - 8, Y(RANKS[key][0][1]) + 3.5, name, { 'text-anchor': 'end', 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 600 });
+    label(svg, R + 8, Y(RANKS[key][5][1]) + 3.5, name, { 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 600 });
   }
-  label(svg, L - 8, Y(8) + 18, '2021 RANK', { 'text-anchor': 'end', 'font-size': 8, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
-  label(svg, R + 8, Y(8) + 18, '2026 RANK', { 'font-size': 8, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
+  label(svg, L - 8, Y(8) + 17, '2021 RANK', { 'text-anchor': 'end', 'font-size': 8, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
+  label(svg, R + 8, Y(8) + 17, '2026 RANK', { 'font-size': 8, 'font-weight': 500, 'letter-spacing': '0.12em', fill: '#57534e' });
 })();
 
-/* ── Unrolled strip ── */
+/* ── Carte figurative ── */
 (() => {
-  const svg = document.getElementById('river');
-  const W = 1132, L = 0, R = W - 120, TOP = 6, H = 128, BASE = TOP + H;
-  const totals = WEDGES.map(w => w[2]);
+  const svg = document.getElementById('minard');
+  const W = 1132, L = 18, R = W - 118;
+  const MAXN = Math.max(...WEDGES.map(w => w[2]));
+  const T_MAX = 160, MID = 42 + T_MAX / 2;              // band centre line
   const X = (i) => L + i * (R - L) / (WEDGES.length - 1);
-  // cumulative share hub → rim, drawn bottom → top
-  const cum = WEDGES.map(w => { let acc = 0; const o = {}; for (const [key] of TOPICS) { const s = (w[3][key] || 0) / w[2]; o[key] = [acc, acc + s]; acc += s; } return o; });
+  const thick = (i) => T_MAX * WEDGES[i][2] / MAXN;
+  // stacked offsets, bottom (hub) → top (rim)
+  const edges = WEDGES.map((w, i) => { let y = MID + thick(i) / 2; const o = {}; for (const [key] of TOPICS) { const h = thick(i) * (w[3][key] || 0) / w[2]; o[key] = [y, y - h]; y -= h; } return o; });
   for (const [key, name, ink] of TOPICS) {
-    const top = cum.map((c, i) => `${X(i).toFixed(1)},${(BASE - c[key][1] * H).toFixed(1)}`);
-    const bot = cum.map((c, i) => `${X(i).toFixed(1)},${(BASE - c[key][0] * H).toFixed(1)}`).reverse();
+    const top = edges.map((e, i) => `${X(i).toFixed(1)},${e[key][1].toFixed(1)}`);
+    const bot = edges.map((e, i) => `${X(i).toFixed(1)},${e[key][0].toFixed(1)}`).reverse();
     el('path', { d: 'M' + top.join('L') + 'L' + bot.join('L') + 'Z', fill: ink, stroke: PAPER, 'stroke-width': 1.25, 'stroke-linejoin': 'round', 'data-topic': key }, svg);
   }
-  // right-hand labels: anchored at each band's end midpoint, then pushed apart so none overlap
-  const ends = TOPICS.map(([key, name, ink]) => { const c = cum[cum.length - 1][key]; return { key, name, ink, y0: BASE - (c[0] + c[1]) / 2 * H }; })
-    .sort((a, b) => a.y0 - b.y0);
-  const GAP = 13;
+  // band labels at the right end, pushed apart
+  const last = edges[edges.length - 1];
+  const ends = TOPICS.map(([key, name, ink]) => ({ name, ink, y0: (last[key][0] + last[key][1]) / 2 })).sort((a, b) => a.y0 - b.y0);
   ends.forEach(e => e.y = e.y0);
   for (let pass = 0; pass < 20; pass++) {
-    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < GAP) ends[i].y = ends[i - 1].y + GAP;
-    for (let i = ends.length - 2; i >= 0; i--) if (ends[i + 1].y - ends[i].y < GAP) ends[i].y = ends[i + 1].y - GAP;
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 12.5) ends[i].y = ends[i - 1].y + 12.5;
+    for (let i = ends.length - 2; i >= 0; i--) if (ends[i + 1].y - ends[i].y < 12.5) ends[i].y = ends[i + 1].y - 12.5;
   }
   for (const e of ends) {
     el('polyline', { points: `${R + 2},${e.y0} ${R + 9},${e.y0} ${R + 16},${e.y} ${R + 22},${e.y}`, fill: 'none', stroke: e.ink, 'stroke-width': 1.75 }, svg);
     label(svg, R + 26, e.y + 3.5, e.name, { 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 600 });
   }
-  // year ticks at the first quarter of each year
+  // quarter counts written under the band, as Minard wrote the army's strength
+  WEDGES.forEach((w, i) => {
+    const yb = MID + thick(i) / 2;
+    label(svg, X(i), yb + 11, w[2], { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 500, fill: '#57534e' });
+  });
+  // year ticks from the band down to the solar line, labels on the axis
+  const S_TOP = 262, S_H = 38, S_BASE = S_TOP + S_H;
   WEDGES.forEach((w, i) => {
     if (!w[0].endsWith('Q1') && i) return;
     const x = X(i);
-    el('line', { x1: x, x2: x, y1: TOP - 4, y2: BASE + 4, stroke: INK, 'stroke-width': 1 }, svg);
-    label(svg, x + 4, BASE + 16, i ? w[0].slice(0, 4) : 'Q2 2021', { 'font-size': 9.5, 'letter-spacing': '0.06em' });
+    el('line', { x1: x, x2: x, y1: MID - thick(i) / 2 - 4, y2: S_BASE + 4, stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.55 }, svg);
+    label(svg, x + 4, S_BASE + 15, i ? w[0].slice(0, 4) : 'Q2 2021', { 'font-size': 9.5, 'letter-spacing': '0.06em' });
   });
-  label(svg, R, BASE + 16, 'Q3 2026', { 'text-anchor': 'end', 'font-size': 9.5, 'letter-spacing': '0.06em' });
+  label(svg, R, S_BASE + 15, 'Q3 2026', { 'text-anchor': 'end', 'font-size': 9.5, 'letter-spacing': '0.06em' });
+  // annotations above the band
+  for (const [qi, lx, l1, l2] of NOTES) {
+    const ax = X(qi), ay = MID - thick(qi) / 2 - 3;
+    label(svg, lx, 10, l1, { 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 700 });
+    label(svg, lx, 22, l2, { 'font-family': 'Hanken Grotesk', 'font-size': 10, 'font-weight': 500, fill: '#44403c' });
+    el('line', { x1: lx + 2, y1: 26, x2: ax, y2: ay, stroke: INK, 'stroke-width': 0.75 }, svg);
+    el('circle', { cx: ax, cy: ay, r: 2, fill: INK }, svg);
+  }
+  // the line beneath: solar Signposts per quarter, with the numbered milestones
+  const solarQ = WEDGES.map(() => 0);
+  const ms = [];
+  for (const [i, ym, head, no] of SOLAR) { solarQ[Q_OF[i]]++; if (no) ms.push([Q_OF[i], no]); }
+  const SMAX = Math.max(...solarQ);
+  const SY = (v) => S_BASE - v / SMAX * S_H;
+  el('line', { x1: L, x2: R + 6, y1: S_BASE, y2: S_BASE, stroke: INK, 'stroke-width': 1 }, svg);
+  el('polyline', { points: solarQ.map((v, i) => `${X(i)},${SY(v)}`).join(' '), fill: 'none', stroke: INK, 'stroke-width': 1.75, 'stroke-linejoin': 'round' }, svg);
+  solarQ.forEach((v, i) => { el('circle', { cx: X(i), cy: SY(v), r: 2.4, fill: INK }, svg); if (v) label(svg, X(i), SY(v) - 6, v, { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 500, fill: '#57534e' }); });
+  label(svg, R + 26, S_BASE + 3.5, 'solar, per quarter', { 'font-family': 'Hanken Grotesk', 'font-size': 10.5, 'font-weight': 600 });
+  // milestone circles stacked when two share a quarter
+  const stack = {};
+  for (const [qi, no] of ms) {
+    const k = stack[qi] = (stack[qi] || 0) + 1;
+    const cx = X(qi), cy = S_TOP - 14 - (k - 1) * 20;
+    el('line', { x1: cx, y1: cy + 9, x2: cx, y2: SY(solarQ[qi]) - 10, stroke: INK, 'stroke-width': 0.75, 'stroke-opacity': 0.6 }, svg);
+    el('circle', { cx, cy, r: 9, fill: INK }, svg);
+    label(svg, cx, cy + 0.5, no, { 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 9.5, fill: PAPER });
+  }
+})();
+
+/* ── Small wheels: rays only ── */
+(() => {
+  for (const svg of document.querySelectorAll('svg.mini')) {
+    const key = svg.dataset.topic, ink = INK_OF[key];
+    const C = 46, R0 = 16, LMAX = 28;
+    const pt = (a, r) => [C + r * Math.sin(a), C - r * Math.cos(a)];
+    el('circle', { cx: C, cy: C, r: R0 - 2, fill: 'none', stroke: INK, 'stroke-width': 0.6, 'stroke-opacity': 0.5 }, svg);
+    el('line', { x1: C, y1: C - R0 + 2, x2: C, y2: C - R0 - LMAX - 2, stroke: INK, 'stroke-width': 0.6, 'stroke-dasharray': '1.5 2', 'stroke-opacity': 0.6 }, svg);
+    const [f, l] = FIRST_LAST[key];
+    for (const i of ITEMS[key]) {
+      const a = 2 * Math.PI * (i + 0.5) / N;
+      const len = 3 + (LMAX - 3) * Math.min(1, SHARE(Q_OF[i], key) / 0.5);
+      const fl = (i === f || i === l);
+      const [x1, y1] = pt(a, R0), [x2, y2] = pt(a, R0 + (fl ? LMAX + 2 : len));
+      el('line', { x1, y1, x2, y2, stroke: fl ? INK : ink, 'stroke-width': fl ? 1.8 : 1.1, 'stroke-linecap': 'round' }, svg);
+    }
+    label(svg, C, C + 3.5, ITEMS[key].length, { 'text-anchor': 'middle', 'font-size': 10, 'font-weight': 600 });
+  }
 })();
 </script>
 </body>
