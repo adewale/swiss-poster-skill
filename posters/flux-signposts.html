@@ -104,9 +104,8 @@
   .sun li .no { background: var(--stone-900); color: var(--stone-50); border-radius: 50%; width: 12px; height: 12px; line-height: 12px; text-align: center; font-family: var(--mono); font-size: 7.5px; font-weight: 600; }
   .sun li .d { font-family: var(--mono); font-size: 8.5px; color: var(--stone-600); }
   .foot { position: absolute; left: 64px; right: 64px; bottom: 7px; display: flex; justify-content: space-between; align-items: baseline; color: var(--stone-500); }
-  .lensline { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
-  .lensline b { color: var(--stone-900); font-weight: 600; }
-  .lensline i { font-style: normal; color: var(--stone-900); }
+  .lensline { font-family: var(--serif); font-style: italic; font-size: 10.5px; color: var(--stone-800); white-space: nowrap; }
+  .lensline span { font-family: var(--mono); font-style: normal; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-500); margin-left: 4px; }
 </style>
 </head>
 <body>
@@ -139,8 +138,8 @@
 
   <div class="flowbar" data-source="per-quarter counts; solar items; busiest quarters per topic">
     <div class="bar">
-      <h2>Carte figurative<span>after Minard</span></h2>
-      <p>The same 22 quarters, with width now standing for count: 89 Signposts in Q2 2022, 28 in Q4 2025, stacked by topic in the wheel's order. The line beneath counts the solar Signposts in each quarter; the circles are the twelve milestones.</p>
+      <h2>Each quarter at its true size<span>22 quarters, Q2 2021 → Q3 2026</span></h2>
+      <p>Width now stands for count: 89 Signposts in Q2 2022, 28 in Q4 2025, stacked by topic in the wheel's order. The line beneath counts solar Signposts per quarter; the circles are the twelve milestones.</p>
     </div>
   </div>
   <svg id="minard" viewBox="0 0 1260 272"
@@ -240,8 +239,7 @@
     </div>
   </div>
   <div class="foot">
-    <div class="lensline" data-source="Lens of the week"><b>Four FLUX lenses for the solar line</b> &nbsp;·&nbsp; <i>the S-curve</i> Ep. 02 &nbsp;·&nbsp; <i>compounding loops</i> Ep. 34 &nbsp;·&nbsp; <i>Pace Layers</i> Ep. 74 &nbsp;·&nbsp; <i>Jevons paradox</i> Ep. 184</div>
-    <div class="micro">read.fluxcollective.org</div>
+    <div class="lensline" data-source="Lens of the week, verbatim">“Any process with positive feedback loops and growth ceilings will end up exhibiting sigmoid, or ‘S,’ curves” <span>the S-curve · Ep. 02</span> &nbsp;·&nbsp; “Efficiency reduces the cost of action, which can expand the domain of action itself” <span>Jevons paradox · Ep. 184</span></div>
   </div>
 </main>
 
