@@ -282,8 +282,10 @@ def failures_for(audit: dict) -> list[str]:
         pix = by_role_pixel.get(str(role))
         if pix:
             ink_ratio = pix.get("inkRatio", 0)
-            # The hidden render also hides descendants, so a zero diff means no text
-            # pixels reached the screen (same colour as its backing, or covered).
+            # Zero diff inside the element's box (or an empty crop, which has no
+            # inkRatio) means no glyphs were drawn there: same colour as the backing
+            # behind the element, covered, outside the box, or not yet animated in.
+            # The element's own background is hidden too, so it can count as ink.
             if ink_ratio < 0.006:
                 failures.append(f"{role}: too few visible text pixels; text may be hidden or same-color as backing")
             if ink_ratio > 0:

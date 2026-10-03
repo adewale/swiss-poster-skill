@@ -65,16 +65,20 @@ class RenderedPosterOracleOutcomes(unittest.TestCase):
         self.assertEqual(len(audit["pixel"]["critical"]), 3)
 
     def test_light_text_on_a_dark_quiet_field_passes(self):
-        # Near miss for the invisible-text check: white text is fine on a dark backing.
-        _, failures = verdict(poster(title=BASE_CSS["title"] + ";color:#fff;background:#111"))
+        # Near miss for the invisible-text check: white text on a dark field painted by
+        # another layer. (The hidden render hides the critical element's own background
+        # too, so a field on the element itself would not exercise the glyph diff.)
+        field = "position:absolute;left:0;top:40px;width:840px;height:220px;background:#111"
+        _, failures = verdict(poster(extra_css=f"body::before{{content:'';{field}}}", title=BASE_CSS["title"] + ";color:#fff"))
         self.assertEqual(failures, [])
 
     def test_text_the_same_colour_as_its_background_fails(self):
         self.assert_fails_only_on(poster(title=BASE_CSS["title"] + ";color:#fff"), "title", "too few visible text pixels")
 
     def test_visible_text_in_a_child_that_sets_its_own_visibility_passes(self):
-        # The hidden render must hide descendants too; otherwise this child shows in both
-        # renders, the diff is empty, and legible text reads as zero ink.
+        # The hidden render must hide descendants too; otherwise this child is drawn in the
+        # "hidden" render, its glyphs are sampled as background, and legible text fails as
+        # crossing a high-variance background.
         html_text = poster(extra_css=".title span{visibility:visible}").replace(">JAZZ NIGHT<", "><span>JAZZ NIGHT</span><")
         _, failures = verdict(html_text)
         self.assertEqual(failures, [])
