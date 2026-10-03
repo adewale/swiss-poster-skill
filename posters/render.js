@@ -14,7 +14,7 @@ const POSTERS = [
   { html: 'flue.html',                            png: 'flue.png' },
   { html: 'flux-review.html',                     png: 'flux-review.png' },
   { html: 'flux-signposts.html',                  png: 'flux-signposts.png' },
-  { html: 'flux-every-signpost.html',             png: 'flux-every-signpost.png' },
+  { html: 'flux-signpost-words.html',             png: 'flux-signpost-words.png' },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name
