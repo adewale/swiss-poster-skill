@@ -69,6 +69,16 @@ class RenderedPosterOracleOutcomes(unittest.TestCase):
         _, failures = verdict(poster(title=BASE_CSS["title"] + ";color:#fff;background:#111"))
         self.assertEqual(failures, [])
 
+    def test_text_the_same_colour_as_its_background_fails(self):
+        self.assert_fails_only_on(poster(title=BASE_CSS["title"] + ";color:#fff"), "title", "too few visible text pixels")
+
+    def test_visible_text_in_a_child_that_sets_its_own_visibility_passes(self):
+        # The hidden render must hide descendants too; otherwise this child shows in both
+        # renders, the diff is empty, and legible text reads as zero ink.
+        html_text = poster(extra_css=".title span{visibility:visible}").replace(">JAZZ NIGHT<", "><span>JAZZ NIGHT</span><")
+        _, failures = verdict(html_text)
+        self.assertEqual(failures, [])
+
     def test_low_contrast_text_fails(self):
         self.assert_fails_only_on(poster(title=BASE_CSS["title"] + ";color:#e6e6e6"), "title", "low median pixel contrast")
 

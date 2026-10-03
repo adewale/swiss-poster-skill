@@ -102,7 +102,7 @@ def inject(html_text: str) -> str:
 
 
 def add_hidden_critical_style(html_text: str) -> str:
-    style = "<style>[data-critical]{visibility:hidden!important}</style>"
+    style = "<style>[data-critical],[data-critical] *{visibility:hidden!important}</style>"
     if "</head>" in html_text.lower():
         return re.sub(r"</head>", lambda _m: style + "</head>", html_text, flags=re.IGNORECASE)
     if "</body>" in html_text.lower():
@@ -282,12 +282,11 @@ def failures_for(audit: dict) -> list[str]:
         pix = by_role_pixel.get(str(role))
         if pix:
             ink_ratio = pix.get("inkRatio", 0)
-            # Some browser/CSS combinations can make the hidden-text differential
-            # unstable for nested CTA text. Use pixel checks when the diff mask is
-            # present; rely on DOM bounds/coverage otherwise.
+            # The hidden render also hides descendants, so a zero diff means no text
+            # pixels reached the screen (same colour as its backing, or covered).
+            if ink_ratio < 0.006:
+                failures.append(f"{role}: too few visible text pixels; text may be hidden or same-color as backing")
             if ink_ratio > 0:
-                if ink_ratio < 0.006:
-                    failures.append(f"{role}: too few visible text pixels; text may be hidden or same-color as backing")
                 if pix.get("medianContrast", 0) < 3.0:
                     failures.append(f"{role}: low median pixel contrast ({pix.get('medianContrast'):.2f})")
                 if pix.get("lowContrastShare", 1) > 0.35:
