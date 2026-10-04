@@ -2,6 +2,7 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 const path = require('path');
 
 // Weltformat F4 — 89.5 × 128 cm (1 : 1.4302). 1260 × 1800 px @ 2x DPR.
+// Landscape entries carry their own size (3 : 2, 1800 × 1200 px).
 const POSTERS = [
   { html: 'breaking-the-35.html',                 png: 'breaking-the-35.png' },
   { html: 'fork-the-planet.html',                 png: 'fork-the-planet.png' },
@@ -13,7 +14,7 @@ const POSTERS = [
   { html: 'ten-principles-for-bad-design.html',   png: 'ten-principles-for-bad-design.png' },
   { html: 'flue.html',                            png: 'flue.png' },
   { html: 'flux-review.html',                     png: 'flux-review.png' },
-  { html: 'flux-signposts.html',                  png: 'flux-signposts.png' },
+  { html: 'flux-signposts.html',                  png: 'flux-signposts.png', width: 1800, height: 1200 },
 ];
 
 const ONLY = process.argv[2]; // optional: render a single html file by name
@@ -28,6 +29,7 @@ const ONLY = process.argv[2]; // optional: render a single html file by name
 
   for (const p of POSTERS) {
     if (ONLY && p.html !== ONLY) continue;
+    await page.setViewportSize({ width: p.width || 1260, height: p.height || 1800 });
     const url = 'file://' + path.resolve(__dirname, p.html);
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
