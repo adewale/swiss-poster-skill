@@ -1,0 +1,28 @@
+name: rendered-oracle
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  rendered-oracle-outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python3 -m pip install 'pillow==11.3.0'
+      # Ubuntu 24.04 blocks the unprivileged user namespaces Chrome's sandbox uses.
+      - name: Allow Chrome's sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Show Chrome version
+        run: google-chrome --version
+      - name: Rendered poster oracle against known-good and single-defect posters
+        run: python3 evals/tests/test_rendered_poster_oracle.py
