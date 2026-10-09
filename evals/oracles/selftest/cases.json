@@ -1,0 +1,38 @@
+{
+  "description": "Oracle self-tests: every script oracle in evals/oracles/ must pass a known-good output and fail a defective one for the stated reason. Run: python3 evals/oracles/selftest/run_selftests.py (the rendered cases need Chrome/Chromium and Pillow).",
+  "cases": [
+    {"oracle": "drama_oracle.py", "args": ["pos-dramatic-event-poster"], "input": "drama-good.md", "expect_exit": 0},
+    {"oracle": "drama_oracle.py", "args": ["pos-dramatic-event-poster"], "input": "drama-bad-saas-chrome.md", "expect_exit": 1, "reason": "forbidden soft SaaS chrome"},
+    {"oracle": "drama_oracle.py", "args": ["pos-dramatic-event-poster"], "input": "drama-characterization-blue-accent.md", "expect_exit": 1, "reason": "missing drama carrier: single accent token", "characterization": "compliance: the same poster with a non-house accent colour fails"},
+    {"oracle": "drama_oracle.py", "args": ["pos-dramatic-event-poster"], "input": "drama-characterization-mobile-safe-other-words.md", "expect_exit": 1, "reason": "missing drama carrier: mobile safety", "characterization": "compliance: overflow-hidden + a 48px target is mobile-safe, but not in the oracle's words (320px / 44px / overflow-x-hidden)"},
+
+    {"oracle": "fixture_oracle.py", "args": ["round3-fixture-poster-html-audit"], "input": "fixture-good.md", "expect_exit": 0},
+    {"oracle": "fixture_oracle.py", "args": ["round3-fixture-poster-html-audit"], "input": "fixture-bad-no-grid.md", "expect_exit": 1, "reason": "missing required text: 'grid-cols-12'"},
+
+    {"oracle": "readability_oracle.py", "args": ["round8-audit-overlapped-critical-text"], "input": "readability-good.md", "expect_exit": 0},
+    {"oracle": "readability_oracle.py", "args": ["round8-audit-overlapped-critical-text"], "input": "readability-bad-no-reading-zone.md", "expect_exit": 1, "reason": "missing requires protected/quiet reading zone"},
+
+    {"oracle": "semantic_drama_oracle.py", "args": ["pos-semantic-legible-jazz"], "input": "semantic-good.md", "expect_exit": 0},
+    {"oracle": "semantic_drama_oracle.py", "args": ["pos-semantic-legible-jazz"], "input": "semantic-bad-giant-date.md", "expect_exit": 1, "reason": "uses a giant visible numeral/date"},
+
+    {"oracle": "artifact_integrity_oracle.py", "args": ["pos-historical-figure-ground-theatre"], "input": "artifact-figure-ground-good.md", "expect_exit": 0},
+    {"oracle": "artifact_integrity_oracle.py", "args": ["pos-historical-figure-ground-theatre"], "input": "artifact-figure-ground-bad-prompt-leak.md", "expect_exit": 1, "reason": "visible/prompt-shaped leakage"},
+    {"oracle": "artifact_integrity_oracle.py", "args": ["pos-embodied-reference-no-visible-citation"], "input": "artifact-figure-ground-good.md", "expect_exit": 0},
+    {"oracle": "artifact_integrity_oracle.py", "args": ["pos-embodied-reference-no-visible-citation"], "input": "artifact-embodied-bad-visible-designer.md", "expect_exit": 1, "reason": "designer names appear as visible citation"},
+
+    {"oracle": "motif_diversity_oracle.py", "args": ["pos-route-map-archetype"], "input": "motif-route-good.md", "expect_exit": 0},
+    {"oracle": "motif_diversity_oracle.py", "args": ["pos-route-map-archetype"], "input": "motif-route-bad-right-dark-split.md", "expect_exit": 1, "reason": "uses the default right-side dark split"},
+    {"oracle": "motif_diversity_oracle.py", "args": ["pos-route-map-archetype", "holdout/does-not-exist.json"], "input": "motif-route-good.md", "expect_exit": 2, "reason": "UNAVAILABLE motif diversity oracle"},
+
+    {"oracle": "flue_framework_oracle.py", "args": ["round13-audit-flue-readability-cta"], "input": "flue-audit-good.md", "expect_exit": 0},
+    {"oracle": "flue_framework_oracle.py", "args": ["round13-audit-flue-readability-cta"], "input": "flue-audit-bad-no-reference.md", "expect_exit": 1, "reason": "missing compares against PR 13 reference"},
+    {"oracle": "flue_framework_oracle.py", "args": ["pos-flue-framework-poster"], "input": "flue-poster-good.md", "expect_exit": 0, "needs_chrome": true},
+    {"oracle": "flue_framework_oracle.py", "args": ["pos-flue-framework-poster"], "input": "flue-poster-bad-web-cta.md", "expect_exit": 1, "reason": "website documentation CTA leaked into visible poster copy", "needs_chrome": true},
+    {"oracle": "flue_framework_oracle.py", "args": ["pos-flue-framework-poster"], "input": "flue-poster-good.md", "expect_exit": 3, "reason": "UNAVAILABLE Flue Framework oracle", "env": {"SWISS_POSTER_CHROME": "/nonexistent/chrome"}},
+
+    {"oracle": "rendered_poster_oracle.py", "args": ["840", "1200"], "input": "rendered-good.md", "expect_exit": 0, "needs_chrome": true},
+    {"oracle": "rendered_poster_oracle.py", "args": ["840", "1200"], "input": "rendered-bad-title-covered.md", "expect_exit": 1, "reason": "title: center covered", "needs_chrome": true},
+    {"oracle": "rendered_poster_oracle.py", "args": ["840", "1200"], "input": "rendered-bad-horizontal-overflow.md", "expect_exit": 1, "reason": "horizontal overflow", "needs_chrome": true},
+    {"oracle": "rendered_poster_oracle.py", "args": ["840", "1200"], "input": "rendered-good.md", "expect_exit": 3, "reason": "UNAVAILABLE rendered poster oracle", "env": {"SWISS_POSTER_CHROME": "/nonexistent/chrome"}}
+  ]
+}

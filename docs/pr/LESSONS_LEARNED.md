@@ -1,5 +1,19 @@
 # Lessons learned
 
+## 2026-10-03 — An oracle guard that skips checks when its measurement is empty passes the worst case
+
+### Answer
+
+`rendered_poster_oracle.py` ran its pixel checks only `if ink_ratio > 0`. Text drawn the same colour as its backing changes no pixels, so its ink ratio is 0 and every pixel check was skipped: a `#fff` title on `#fff` passed. The guard existed to tolerate an unstable hidden-text differential, which was itself a bug: the hidden render hid only `[data-critical]`, so a child with `visibility:visible` stayed drawn and was sampled as background.
+
+### Enforced by
+
+`evals/tests/test_rendered_poster_oracle.py` (a manual check; see `evals/shared-harness.md`) renders a known-good poster and single-defect variants in real Chrome. The invisible-title and visible-child cases fail on the old oracle and pass on the fixed one.
+
+### Rule
+
+When a check is guarded by "only if the measurement is non-empty", ask what the empty case means. If it means the defect at its most extreme, it must fail, and the oracle needs a known-bad sample that reaches it.
+
 ## 2026-06-16 — Rebasing should preserve evidence, not just compile
 
 ### Answer

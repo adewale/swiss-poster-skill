@@ -12,7 +12,6 @@ import html
 import importlib.util
 import json
 import re
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -133,19 +132,7 @@ def via_cli_pixel_failures(html_text: str, width: int = 840, height: int = 1200)
         normal_html.write_text(inject_script(html_text, TEXT_TARGET_AUDIT), encoding="utf-8")
         hidden_html.write_text(inject_script(html_text, HIDE_TEXT_TARGETS), encoding="utf-8")
         chrome = rendered.chrome_path()
-        cmd = [
-            chrome,
-            "--headless=new",
-            "--disable-gpu",
-            "--hide-scrollbars",
-            "--virtual-time-budget=1500",
-            f"--window-size={width},{height}",
-            "--dump-dom",
-            f"file://{normal_html}",
-        ]
-        proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
-        if proc.returncode != 0:
-            raise RuntimeError(proc.stderr[-1000:])
+        proc = rendered.run_chrome([chrome, *rendered.chrome_flags(width, height), "--dump-dom", f"file://{normal_html}"])
         m = re.search(r'<script[^>]+id=["\']flue-text-target-audit-json["\'][^>]*>(.*?)</script>', proc.stdout, re.DOTALL | re.IGNORECASE)
         if not m:
             raise RuntimeError("Flue text-target audit JSON not found")
@@ -192,6 +179,8 @@ def check_flue_positive(output_dir: Path) -> list[str]:
         audit = rendered.audit_render(html_text, 840, 1200)
         failures.extend(rendered.failures_for(audit))
         failures.extend(via_cli_pixel_failures(html_text, 840, 1200))
+    except rendered.OracleUnavailable:
+        raise  # no browser / browser crashed: not a verdict on the poster (main exits 3)
     except Exception as exc:  # fail closed; rendering is the point of this eval.
         failures.append(f"rendering/readability audit failed: {exc}")
     return failures
@@ -214,6 +203,13 @@ CHECKS = {
     "pos-flue-framework-poster": check_flue_positive,
     "round13-audit-flue-readability-cta": check_flue_audit,
 }
+# The poster case mixes source-fact fidelity and rendered readability (outcomes) with
+# required data-source/data-critical markers (the skill's vocabulary); the audit case
+# is keyword-graded prose. Neither counts as a pure outcome oracle.
+ORACLE_CLASS = {
+    "pos-flue-framework-poster": "mixed",
+    "round13-audit-flue-readability-cta": "compliance",
+}
 
 
 def main() -> int:
@@ -226,8 +222,12 @@ def main() -> int:
     if check is None:
         print(f"unknown Flue oracle case id: {case_id}", file=sys.stderr)
         return 2
-    failures = check(output_dir)
-    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))
+    try:
+        failures = check(output_dir)
+    except rendered.OracleUnavailable as exc:
+        print(f"UNAVAILABLE Flue Framework oracle: {case_id}: {exc}")
+        return rendered.UNAVAILABLE_EXIT
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id, "oracle_class": ORACLE_CLASS[case_id]}))
     if failures:
         print(f"FAIL Flue Framework oracle: {case_id}")
         for failure in failures:
