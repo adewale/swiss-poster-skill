@@ -14,6 +14,10 @@ rejects unknown fields on assertions.)
 
 Exit 0 = all green; 1 = a self-test or coverage check failed; 3 = a Chrome-dependent case
 could not run (no browser): that is reported as UNAVAILABLE, never as a pass.
+
+`--skip-chrome` skips the cases marked `needs_chrome` and says so (CI runs this mode; the
+Chrome-rendered cases are a manual check). The coverage check still requires every oracle to
+have a passing and a failing case in cases.json, run or skipped.
 """
 from __future__ import annotations
 
@@ -94,13 +98,18 @@ def run_case(case: dict) -> tuple[str, str]:
     return "ok", ""
 
 
-def main() -> int:
+def main(argv: list[str]) -> int:
+    skip_chrome = "--skip-chrome" in argv
     spec = json.loads((HERE / "cases.json").read_text(encoding="utf-8"))
     cases = spec["cases"]
     classes, problems = manifest_classes()
-    results = {"ok": 0, "fail": 0, "unavailable": 0}
+    results = {"ok": 0, "fail": 0, "unavailable": 0, "skipped": 0}
     for case in cases:
         label = f"{case['oracle']} {' '.join(case.get('args', []))} <- {case['input']} (expect exit {case['expect_exit']})"
+        if skip_chrome and case.get("needs_chrome"):
+            results["skipped"] += 1
+            print(f"SKIP {label}  [needs Chrome; run without --skip-chrome]")
+            continue
         status, detail = run_case(case)
         if status == "ok" and "_class" in case:
             # The manifest key is the first argument after {output_dir}: the case id, or
@@ -123,7 +132,7 @@ def main() -> int:
     for problem in problems:
         print(f"FAIL {problem}")
 
-    print(f"\n{results['ok']} ok, {results['fail']} failed, {results['unavailable']} unavailable; {len(problems)} coverage problem(s)")
+    print(f"\n{results['ok']} ok, {results['fail']} failed, {results['unavailable']} unavailable, {results['skipped']} skipped (Chrome); {len(problems)} coverage problem(s)")
     if results["fail"] or problems:
         return 1
     if results["unavailable"]:
@@ -133,4 +142,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))
