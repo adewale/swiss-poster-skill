@@ -12,12 +12,20 @@ Install the pinned harness from PyPI with [uv](https://docs.astral.sh/uv/):
 uv tool install skill-eval-harness==0.6.0
 ```
 
-CI (`.github/workflows/evals.yml`) runs the model-free gate and the oracle self-tests on every push and PR; no model or API key is involved:
+CI (the `install-boundary` job in `.github/workflows/install-boundary.yml`) runs the model-free gate and the text-oracle self-tests on every push and PR; no model, API key or browser is involved, and the steps add a few seconds:
 
 ```sh
 uvx --from skill-eval-harness==0.6.0 skill-benchmark validate --strict-leakage --check-ablations evals/shared-benchmark.json
 uvx --from skill-eval-harness==0.6.0 skill-benchmark audit-manifest evals/shared-benchmark.json --fail-on-blockers
-python3 evals/oracles/selftest/run_selftests.py   # needs Pillow and Chrome/Chromium for the rendered cases
+python3 evals/oracles/selftest/run_selftests.py --skip-chrome
+```
+
+The Chrome-rendered checks are manual. Run them before merging a change to `evals/oracles/`, with Pillow installed and Chrome/Chromium on `PATH` (or `SWISS_POSTER_CHROME` set); each takes under a minute:
+
+```sh
+python3 evals/oracles/selftest/run_selftests.py          # all self-tests, including the 5 Chrome cases
+python3 evals/tests/test_rendered_poster_oracle.py       # rendered oracle vs known-good and single-defect posters
+(cd website && npm ci --no-audit --no-fund && WRANGLER_SEND_METRICS=false npx wrangler deploy --dry-run --outdir /tmp/website-dry-run)   # site bundles; uploads nothing, needs no credentials
 ```
 
 ## Oracle self-tests

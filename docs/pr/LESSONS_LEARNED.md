@@ -8,7 +8,7 @@
 
 ### Enforced by
 
-`evals/tests/test_rendered_poster_oracle.py` (CI job `rendered-oracle`) renders a known-good poster and single-defect variants in real Chrome. The invisible-title and visible-child cases fail on the old oracle and pass on the fixed one.
+`evals/tests/test_rendered_poster_oracle.py` (a manual check; see `evals/shared-harness.md`) renders a known-good poster and single-defect variants in real Chrome. The invisible-title and visible-child cases fail on the old oracle and pass on the fixed one.
 
 ### Rule
 
