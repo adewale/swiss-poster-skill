@@ -4,7 +4,7 @@
   "harness": {
     "name": "skill-eval-harness",
     "url": "https://github.com/adewale/skill-eval-harness",
-    "version": ">=0.4.0"
+    "version": "==0.6.0"
   },
   "skill_paths": [
     "swiss-poster/SKILL.md"
@@ -617,7 +617,8 @@
       "success_goals": [
         "trigger"
       ],
-      "trigger_type": "implicit"
+      "trigger_type": "implicit",
+      "should_trigger": true
     },
     {
       "id": "trig-poster-energy",
@@ -643,7 +644,8 @@
       "success_goals": [
         "trigger"
       ],
-      "trigger_type": "implicit"
+      "trigger_type": "implicit",
+      "should_trigger": true
     },
     {
       "id": "trig-break-grid",
@@ -669,7 +671,8 @@
       "success_goals": [
         "trigger"
       ],
-      "trigger_type": "implicit"
+      "trigger_type": "implicit",
+      "should_trigger": true
     },
     {
       "id": "trig-geography",
@@ -695,7 +698,8 @@
       "success_goals": [
         "trigger"
       ],
-      "trigger_type": "negative-near-miss"
+      "trigger_type": "negative-near-miss",
+      "should_trigger": false
     },
     {
       "id": "trig-translation",
@@ -721,7 +725,8 @@
       "success_goals": [
         "trigger"
       ],
-      "trigger_type": "negative-near-miss"
+      "trigger_type": "negative-near-miss",
+      "should_trigger": false
     },
     {
       "id": "trig-neutral-cleanup",
@@ -747,7 +752,8 @@
       "success_goals": [
         "trigger"
       ],
-      "trigger_type": "negative-near-miss"
+      "trigger_type": "negative-near-miss",
+      "should_trigger": false
     },
     {
       "id": "pos-dramatic-event-poster",
@@ -807,7 +813,8 @@
       "tags": [
         "round-6",
         "dramatic-poster",
-        "inspiration-gap"
+        "inspiration-gap",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "core",
@@ -871,7 +878,8 @@
       "tags": [
         "round-6",
         "dramatic-poster",
-        "image-treatment"
+        "image-treatment",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -935,7 +943,8 @@
       "tags": [
         "round-6",
         "semantic-drama",
-        "legibility"
+        "legibility",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "core",
@@ -984,7 +993,8 @@
         "round-6",
         "fixture-backed",
         "semantic-drama",
-        "legibility"
+        "legibility",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1028,7 +1038,8 @@
       "tags": [
         "round-7",
         "motif-diversity",
-        "object-poster"
+        "object-poster",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1072,7 +1083,8 @@
       "tags": [
         "round-7",
         "motif-diversity",
-        "route-map"
+        "route-map",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1116,7 +1128,8 @@
       "tags": [
         "round-7",
         "motif-diversity",
-        "data-diagram"
+        "data-diagram",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1160,7 +1173,8 @@
       "tags": [
         "round-7",
         "motif-diversity",
-        "typographic-specimen"
+        "typographic-specimen",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1204,7 +1218,8 @@
       "tags": [
         "round-7",
         "motif-diversity",
-        "photomontage"
+        "photomontage",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1248,7 +1263,8 @@
       "tags": [
         "round-7",
         "motif-diversity",
-        "civic-safety"
+        "civic-safety",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1294,7 +1310,8 @@
         "round-8",
         "readability",
         "protected-reading-zone",
-        "credential-broker"
+        "credential-broker",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1344,7 +1361,8 @@
         "round-8",
         "readability",
         "fixture",
-        "protected-reading-zone"
+        "protected-reading-zone",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1392,7 +1410,8 @@
         "readability",
         "contrast-channel",
         "transit",
-        "protected-reading-zone"
+        "protected-reading-zone",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1438,7 +1457,8 @@
         "round-10",
         "source-ledger",
         "thread",
-        "artifact-fidelity"
+        "artifact-fidelity",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1484,7 +1504,8 @@
         "round-10",
         "diagram",
         "source-encoding",
-        "moq"
+        "moq",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1530,7 +1551,8 @@
         "round-10",
         "historical-grounding",
         "public-reading",
-        "music"
+        "music",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1576,7 +1598,8 @@
         "round-10",
         "historical-grounding",
         "figure-ground",
-        "protected-reading-zone"
+        "protected-reading-zone",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1626,7 +1649,8 @@
         "historical-grounding",
         "artifact-fidelity",
         "fixture",
-        "style-audit"
+        "style-audit",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1673,7 +1697,8 @@
         "period-genre",
         "time-period",
         "travel",
-        "photomontage"
+        "photomontage",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1719,7 +1744,8 @@
         "round-11",
         "period-genre",
         "palette-breadth",
-        "travel"
+        "travel",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1765,7 +1791,8 @@
         "round-11",
         "period-genre",
         "object-poster",
-        "typographic-restraint"
+        "typographic-restraint",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1811,7 +1838,8 @@
         "round-11",
         "period-genre",
         "print-proportion",
-        "no-web-grid"
+        "no-web-grid",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1857,7 +1885,8 @@
         "round-11",
         "period-genre",
         "material-process",
-        "lithographic"
+        "lithographic",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1904,7 +1933,8 @@
         "period-genre",
         "diagram-restraint",
         "theatre",
-        "figure-ground"
+        "figure-ground",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1950,7 +1980,8 @@
         "round-11",
         "period-genre",
         "embodied-reference",
-        "no-name-dropping"
+        "no-name-dropping",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -1996,7 +2027,8 @@
         "round-11",
         "period-genre",
         "photomontage-authorship",
-        "image-roles"
+        "image-roles",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -2043,7 +2075,8 @@
         "period-genre",
         "restraint",
         "hofmann",
-        "contrast-axes"
+        "contrast-axes",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -2090,7 +2123,8 @@
         "period-genre",
         "genre-breadth",
         "geigy",
-        "scientific"
+        "scientific",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -2139,7 +2173,8 @@
         "rendered-validation",
         "pixel",
         "civic",
-        "public-notice"
+        "public-notice",
+        "oracle-class:outcome"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -2192,7 +2227,8 @@
         "flue",
         "rendered-validation",
         "cta-leakage",
-        "source-readability"
+        "source-readability",
+        "oracle-class:mixed"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -2247,7 +2283,8 @@
         "audit",
         "readability",
         "cta-leakage",
-        "source-fidelity"
+        "source-fidelity",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",
@@ -2272,7 +2309,8 @@
           "rubric": [
             "Rendered visual hierarchy",
             "Viewport containment"
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [],
@@ -2302,7 +2340,8 @@
             "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
             "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
             "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2336,7 +2375,8 @@
             "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
             "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
             "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2370,7 +2410,8 @@
             "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
             "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
             "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2404,7 +2445,8 @@
             "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
             "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
             "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2438,7 +2480,8 @@
             "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
             "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
             "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2472,7 +2515,8 @@
             "The output should infer the semantic poster archetype from the subject without the archetype name appearing in the prompt.",
             "The output should avoid repeating the default dark-field/red-bar/cropped-word/ring-line template.",
             "The output should keep the primary reading path legible and implementable in Tailwind/HTML."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2503,7 +2547,8 @@
           "type": "judge",
           "rubric": [
             "Use the private answer key; do not rely on public manifest wording."
-          ]
+          ],
+          "gate": true
         }
       ],
       "tags": [
@@ -2636,7 +2681,8 @@
       "tags": [
         "round-3",
         "fixture-backed",
-        "audit-manifest"
+        "audit-manifest",
+        "oracle-class:compliance"
       ],
       "domain": "poster-design",
       "difficulty": "extended",

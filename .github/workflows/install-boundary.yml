@@ -15,3 +15,14 @@ jobs:
           python-version: '3.x'
       - name: Check installable skill boundary
         run: python3 scripts/check_install_boundary.py
+      # Model-free, key-free, no browser: under a second locally. The Chrome-rendered
+      # cases are a manual check (evals/shared-harness.md, "Oracle self-tests").
+      - name: Oracle self-tests (text oracles; Chrome cases skipped)
+        run: python3 evals/oracles/selftest/run_selftests.py --skip-chrome
+      - uses: astral-sh/setup-uv@v9.0.0
+      # Manifest shape, regex compilation, prompt leakage, ablation targets and audit
+      # blockers, with the harness version pinned. A few seconds.
+      - name: Validate shared benchmark manifest (skill-eval-harness 0.6.0)
+        run: uvx --from skill-eval-harness==0.6.0 skill-benchmark validate --strict-leakage --check-ablations evals/shared-benchmark.json
+      - name: Audit shared benchmark manifest
+        run: uvx --from skill-eval-harness==0.6.0 skill-benchmark audit-manifest evals/shared-benchmark.json --fail-on-blockers
