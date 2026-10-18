@@ -12,6 +12,12 @@ import re
 import sys
 from pathlib import Path
 
+# Reporting class (see evals/shared-harness.md, "Oracle classes"): this oracle checks
+# compliance with the skill's vocabulary, not an outcome of the artifact.
+# Keyword groups that include the skill's implementation tokens (grid-cols-12, 44px/min-h-11);
+# only the giant-numeral check looks at the artifact itself.
+ORACLE_CLASS = "compliance"
+
 
 def read_output(output_dir: Path) -> str:
     p = output_dir / "output.md"
@@ -94,7 +100,7 @@ def main() -> int:
         return 2
     text = read_output(output_dir)
     failures = check(text)
-    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id, "oracle_class": ORACLE_CLASS}))
     if failures:
         print(f"FAIL semantic drama oracle: {case_id}")
         for failure in failures:

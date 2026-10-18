@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -18,7 +19,28 @@ import sys
 import tempfile
 from pathlib import Path
 
-from PIL import Image
+# This oracle measures the rendered artifact (overflow, occlusion, contrast, size),
+# not whether the output uses the skill's own vocabulary.
+ORACLE_CLASS = "outcome"
+# Exit code for "the oracle could not run" (no browser, browser crashed or timed out).
+# Distinct from 1 (the output failed) so an infrastructure problem never reads as a
+# verdict on the poster. The harness still counts it as not passed; the stdout line
+# "UNAVAILABLE ..." and exit=3 in the assertion evidence say why.
+UNAVAILABLE_EXIT = 3
+
+
+class OracleUnavailable(RuntimeError):
+    """The rendering infrastructure failed; this is not a verdict on the output."""
+
+
+def pil_image():
+    # Imported lazily so a missing Pillow reports UNAVAILABLE instead of crashing with
+    # exit 1, and so text-only checks in flue_framework_oracle need no Pillow.
+    try:
+        from PIL import Image
+    except ImportError as exc:
+        raise OracleUnavailable("Pillow is not installed (pip install pillow)") from exc
+    return Image
 
 
 def extract_html(text: str) -> str:
@@ -34,13 +56,41 @@ def extract_html(text: str) -> str:
 
 
 def chrome_path() -> str:
+    override = os.environ.get("SWISS_POSTER_CHROME")
+    if override:
+        if not (Path(override).is_file() and os.access(override, os.X_OK)):
+            raise OracleUnavailable(f"SWISS_POSTER_CHROME={override!r} is not an executable file")
+        return override
     mac = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     if mac.exists():
         return str(mac)
     found = shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chrome")
     if not found:
-        raise RuntimeError("Chrome/Chromium not found for rendered oracle")
+        raise OracleUnavailable("Chrome/Chromium not found for rendered oracle (install one or set SWISS_POSTER_CHROME)")
     return found
+
+
+def chrome_flags(width: int, height: int) -> list[str]:
+    flags = ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--virtual-time-budget=1500", f"--window-size={width},{height}"]
+    # Chrome refuses to start as root unless its sandbox is disabled, and some CI
+    # kernels block the unprivileged user namespaces the sandbox needs. The oracle only
+    # loads a local file it wrote itself, so it drops the sandbox in those cases.
+    as_root = hasattr(os, "geteuid") and os.geteuid() == 0
+    if as_root or os.environ.get("SWISS_POSTER_CHROME_NO_SANDBOX") == "1":
+        flags.append("--no-sandbox")
+    return flags
+
+
+def run_chrome(args: list[str], timeout: float = 30) -> subprocess.CompletedProcess:
+    try:
+        proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        raise OracleUnavailable(f"Chrome timed out after {timeout:g}s") from exc
+    except OSError as exc:
+        raise OracleUnavailable(f"Chrome could not start: {exc}") from exc
+    if proc.returncode != 0:
+        raise OracleUnavailable(f"Chrome exited {proc.returncode}: {proc.stderr[-800:].strip()}")
+    return proc
 
 
 AUDIT_SCRIPT = r"""
@@ -102,7 +152,7 @@ def inject(html_text: str) -> str:
 
 
 def add_hidden_critical_style(html_text: str) -> str:
-    style = "<style>[data-critical]{visibility:hidden!important}</style>"
+    style = "<style>[data-critical],[data-critical] *{visibility:hidden!important}</style>"
     if "</head>" in html_text.lower():
         return re.sub(r"</head>", lambda _m: style + "</head>", html_text, flags=re.IGNORECASE)
     if "</body>" in html_text.lower():
@@ -111,19 +161,9 @@ def add_hidden_critical_style(html_text: str) -> str:
 
 
 def render_png(chrome: str, html_path: Path, out_path: Path, width: int, height: int) -> None:
-    cmd = [
-        chrome,
-        "--headless=new",
-        "--disable-gpu",
-        "--hide-scrollbars",
-        "--virtual-time-budget=1500",
-        f"--window-size={width},{height}",
-        f"--screenshot={out_path}",
-        f"file://{html_path}",
-    ]
-    proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
-    if proc.returncode != 0:
-        raise RuntimeError(proc.stderr[-1000:])
+    run_chrome([chrome, *chrome_flags(width, height), f"--screenshot={out_path}", f"file://{html_path}"])
+    if not out_path.exists():
+        raise OracleUnavailable(f"Chrome exited 0 but wrote no screenshot to {out_path.name}")
 
 
 def audit_render(html_text: str, width: int = 840, height: int = 1200) -> dict:
@@ -134,19 +174,7 @@ def audit_render(html_text: str, width: int = 840, height: int = 1200) -> dict:
         path.write_text(inject(html_text), encoding="utf-8")
         hidden_path.write_text(inject(add_hidden_critical_style(html_text)), encoding="utf-8")
         chrome = chrome_path()
-        cmd = [
-            chrome,
-            "--headless=new",
-            "--disable-gpu",
-            "--hide-scrollbars",
-            "--virtual-time-budget=1500",
-            f"--window-size={width},{height}",
-            "--dump-dom",
-            f"file://{path}",
-        ]
-        proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
-        if proc.returncode != 0:
-            raise RuntimeError(proc.stderr[-1000:])
+        proc = run_chrome([chrome, *chrome_flags(width, height), "--dump-dom", f"file://{path}"])
         m = re.search(r'<script[^>]+id=["\']render-audit-json["\'][^>]*>(.*?)</script>', proc.stdout, re.DOTALL | re.IGNORECASE)
         if not m:
             raise RuntimeError("render audit JSON not found in dumped DOM")
@@ -156,7 +184,8 @@ def audit_render(html_text: str, width: int = 840, height: int = 1200) -> dict:
         render_png(chrome, path, normal_png, width, height)
         render_png(chrome, hidden_path, hidden_png, width, height)
         audit["pixel"] = pixel_audit(audit, normal_png, hidden_png)
-        audit["renderedSize"] = {"width": Image.open(normal_png).width, "height": Image.open(normal_png).height}
+        rendered = pil_image().open(normal_png)
+        audit["renderedSize"] = {"width": rendered.width, "height": rendered.height}
         return audit
 
 
@@ -199,8 +228,9 @@ def percentile(vals: list[float], p: float) -> float:
 
 
 def pixel_audit(audit: dict, normal_png: Path, hidden_png: Path) -> dict:
-    normal = Image.open(normal_png).convert("RGB")
-    hidden = Image.open(hidden_png).convert("RGB")
+    image = pil_image()
+    normal = image.open(normal_png).convert("RGB")
+    hidden = image.open(hidden_png).convert("RGB")
     out = []
     W, H = normal.size
     for c in audit.get("critical", []):
@@ -282,12 +312,13 @@ def failures_for(audit: dict) -> list[str]:
         pix = by_role_pixel.get(str(role))
         if pix:
             ink_ratio = pix.get("inkRatio", 0)
-            # Some browser/CSS combinations can make the hidden-text differential
-            # unstable for nested CTA text. Use pixel checks when the diff mask is
-            # present; rely on DOM bounds/coverage otherwise.
+            # Zero diff inside the element's box (or an empty crop, which has no
+            # inkRatio) means no glyphs were drawn there: same colour as the backing
+            # behind the element, covered, outside the box, or not yet animated in.
+            # The element's own background is hidden too, so it can count as ink.
+            if ink_ratio < 0.006:
+                failures.append(f"{role}: too few visible text pixels; text may be hidden or same-color as backing")
             if ink_ratio > 0:
-                if ink_ratio < 0.006:
-                    failures.append(f"{role}: too few visible text pixels; text may be hidden or same-color as backing")
                 if pix.get("medianContrast", 0) < 3.0:
                     failures.append(f"{role}: low median pixel contrast ({pix.get('medianContrast'):.2f})")
                 if pix.get("lowContrastShare", 1) > 0.35:
@@ -304,14 +335,18 @@ def main() -> int:
     out = Path(sys.argv[1]) / "output.md"
     html_text = extract_html(out.read_text(encoding="utf-8", errors="replace"))
     if "<" not in html_text:
-        print(json.dumps({"score": 0, "max_score": 1, "case_id": "rendered-poster"}))
+        print(json.dumps({"score": 0, "max_score": 1, "case_id": "rendered-poster", "oracle_class": ORACLE_CLASS}))
         print("FAIL rendered oracle: no HTML found")
         return 1
     width = int(sys.argv[2]) if len(sys.argv) == 4 else 840
     height = int(sys.argv[3]) if len(sys.argv) == 4 else 1200
-    audit = audit_render(html_text, width, height)
+    try:
+        audit = audit_render(html_text, width, height)
+    except OracleUnavailable as exc:
+        print(f"UNAVAILABLE rendered poster oracle: {exc}")
+        return UNAVAILABLE_EXIT
     failures = failures_for(audit)
-    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": "rendered-poster"}))
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": "rendered-poster", "oracle_class": ORACLE_CLASS}))
     if failures:
         print("FAIL rendered poster oracle")
         for failure in failures:

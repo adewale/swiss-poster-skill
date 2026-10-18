@@ -13,6 +13,14 @@ import re
 import sys
 from pathlib import Path
 
+# Reporting class (see evals/shared-harness.md, "Oracle classes"): this oracle checks
+# compliance with the skill's vocabulary, not an outcome of the artifact.
+# REQUIRED_GROUPS require the skill's own tokens (#C8102E/--poster-accent, bg-stone-900,
+# grid-cols-12) and the literal "320px" / "no horizontal scroll" as "mobile safety". A poster
+# with a different accent colour, or one that is mobile-safe without saying "320px", fails.
+# That measures use of the house vocabulary, not a better poster.
+ORACLE_CLASS = "compliance"
+
 REQUIRED_GROUPS: dict[str, list[str]] = {
     "12-column grid": [r"grid-cols-12"],
     "fluid/mega anchor": [r"text-\[clamp\(", r"clamp\([^)]*(?:1[2-9]|2\d|3\d)vw", r"text-\[(?:1[0-9]|2[0-9]|3[0-9])rem\]"],
@@ -57,7 +65,7 @@ def main() -> int:
         if re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL):
             failures.append(f"forbidden {label}")
 
-    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id}))
+    print(json.dumps({"score": 0 if failures else 1, "max_score": 1, "case_id": case_id, "oracle_class": ORACLE_CLASS}))
     if failures:
         print(f"FAIL drama oracle: {case_id}")
         for f in failures:
